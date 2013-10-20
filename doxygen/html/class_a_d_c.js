@@ -1,0 +1,25 @@
+var class_a_d_c =
+[
+    [ "ADC", "class_a_d_c.html#a60b6e21403b1f30984f63832c0562960", null ],
+    [ "~ADC", "class_a_d_c.html#aefd878291d0c14aa524df99af5a63148", null ],
+    [ "analogRead", "class_a_d_c.html#a67ad2a6883cfffb1e4876e678ba7bb8a", null ],
+    [ "analogReadContinuous", "class_a_d_c.html#a03e9af3db07ad97e401045a848aabf17", null ],
+    [ "analogReadDifferential", "class_a_d_c.html#ad3a40837cf36ad7c7c1efe635523c4c4", null ],
+    [ "disableCompare", "class_a_d_c.html#ad48e3b4b69170965fc4fe70ef042c099", null ],
+    [ "disableDMA", "class_a_d_c.html#a58af22e8f95c1d2b1560153f906d1038", null ],
+    [ "disableInterrupts", "class_a_d_c.html#ad8acae7988973bdede138deea567623a", null ],
+    [ "enableCompare", "class_a_d_c.html#a5bc29134a1079cc1c232a436c3778f88", null ],
+    [ "enableCompareRange", "class_a_d_c.html#aee940d66774b13a343e85c358ee6cd45", null ],
+    [ "enableDMA", "class_a_d_c.html#a10b9e674ed487b81160687e38fafbb59", null ],
+    [ "enableInterrupts", "class_a_d_c.html#a66a26ded71b7b938e3fc8826c4579092", null ],
+    [ "getMaxValue", "class_a_d_c.html#a0a02587e3678afab6c0398f3c7c56b93", null ],
+    [ "getResolution", "class_a_d_c.html#acf222ac0d18e3d6b47d95f9b8a46c226", null ],
+    [ "isComplete", "class_a_d_c.html#a2b2a0d93a661310922f72606b9ddaa03", null ],
+    [ "isConverting", "class_a_d_c.html#a9ac9c98cd656c5f4d34616d49c91385f", null ],
+    [ "setAveraging", "class_a_d_c.html#a6a3fed0d7bfea66dd4b4cd8f2f539c29", null ],
+    [ "setReference", "class_a_d_c.html#a3871e90219238c6319c8b6bf801b5fd7", null ],
+    [ "setResolution", "class_a_d_c.html#a79b5cb42cb1829a1de3f377664701c6e", null ],
+    [ "startContinuous", "class_a_d_c.html#a332029f903b3d92cb52d2d8b1efe5ed6", null ],
+    [ "startContinuousDifferential", "class_a_d_c.html#a013c9c109b7ccd038a5939866fe777ee", null ],
+    [ "stopContinuous", "class_a_d_c.html#a05857ba731f9b2b0ae35bef5c5cddd9e", null ]
+];
