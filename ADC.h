@@ -143,6 +143,9 @@ class ADC
         //! Reads the differential analog value of two pins (pinP - pinN).
         /** It waits until the value is read and then returns the result.
         * If a comparison has been set up and fails, it will return ADC_ERROR_DIFF_VALUE.
+        * \param pinP must be A10 or A12.
+        * \param pinN must be A11 (if pinP=A10) or A13 (if pinP=A12).
+        * Other pins will return ADC_ERROR_DIFF_VALUE.
         */
         int analogReadDifferential(uint8_t pinP, uint8_t pinN);
 
@@ -154,6 +157,9 @@ class ADC
 
         //! Starts continuous conversion between the pins (pinP-pinN).
         /** It returns as soon as the ADC is set, use analogReadContinuous() to read the value.
+        * \param pinP must be A10 or A12.
+        * \param pinN must be A11 (if pinP=A10) or A13 (if pinP=A12).
+        * Other pins will return ADC_ERROR_DIFF_VALUE.
         */
         void startContinuousDifferential(uint8_t pinP, uint8_t pinN);
 

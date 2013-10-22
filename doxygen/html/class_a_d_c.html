@@ -279,6 +279,13 @@ Public Member Functions</h2></td></tr>
 
 <p>Reads the differential analog value of two pins (pinP - pinN). </p>
 <p>It waits until the value is read and then returns the result. If a comparison has been set up and fails, it will return ADC_ERROR_DIFF_VALUE. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pinP</td><td>must be A10 or A12. </td></tr>
+    <tr><td class="paramname">pinN</td><td>must be A11 (if pinP=A10) or A13 (if pinP=A12). Other pins will return ADC_ERROR_DIFF_VALUE. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -358,7 +365,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Enable the compare function to a single value. </p>
-<p>A conversion will be completed only when the <a class="el" href="class_a_d_c.html">ADC</a> value is &gt;= compValue (greaterThan=1) or &lt; compValue (greaterThan=0) Call it after changing the resolution Use with interrupts or poll conversion completion with isADC_Complete() </p>
+<p>A conversion will be completed only when the <a class="el" href="class_a_d_c.html">ADC</a> value is &gt;= compValue (greaterThan=1) or &lt; compValue (greaterThan=0) Call it after changing the resolution Use with interrupts or poll conversion completion with <a class="el" href="class_a_d_c.html#a2b2a0d93a661310922f72606b9ddaa03" title="Is an ADC conversion ready? ">isComplete()</a> </p>
 
 </div>
 </div>
@@ -626,6 +633,13 @@ Public Member Functions</h2></td></tr>
 
 <p>Starts continuous conversion between the pins (pinP-pinN). </p>
 <p>It returns as soon as the <a class="el" href="class_a_d_c.html">ADC</a> is set, use <a class="el" href="class_a_d_c.html#a03e9af3db07ad97e401045a848aabf17" title="Reads the analog value of a continuous conversion. ">analogReadContinuous()</a> to read the value. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pinP</td><td>must be A10 or A12. </td></tr>
+    <tr><td class="paramname">pinN</td><td>must be A11 (if pinP=A10) or A13 (if pinP=A12). Other pins will return ADC_ERROR_DIFF_VALUE. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -656,7 +670,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_a_d_c.html">ADC</a></li>
-    <li class="footer">Generated on Sun Oct 20 2013 16:03:44 for ADC by
+    <li class="footer">Generated on Tue Oct 22 2013 19:35:06 for ADC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>
