@@ -221,3 +221,11 @@ pip-log.txt
 
 .gitignore
 .gitattributes
+
+
+###########
+## Code::Blocks
+###########
+
+.cbp
+.layout
