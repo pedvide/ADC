@@ -219,13 +219,13 @@ pip-log.txt
 ## github
 ###########
 
-.gitignore
-.gitattributes
+*.gitignore
+*.gitattributes
 
 
 ###########
 ## Code::Blocks
 ###########
 
-.cbp
-.layout
+*.cbp
+*.layout
