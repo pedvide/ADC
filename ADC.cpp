@@ -451,7 +451,7 @@ void ADC::startContinuousDifferential(uint8_t pinP, uint8_t pinN)
 	} else if ( (pinP == A12) && (pinN == A13) ) { // DAD3 selected, pins 36 and 37
 	    ADC0_SC1A = ADC_SC1_DIFF + 0x3 + var_enableInterrupts*ADC_SC1_AIEN;
 	} else {
-        return;
+        return ADC_ERROR_DIFF_VALUE;
     }
 
 }
