@@ -45,6 +45,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -68,7 +69,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
       <li><a href="files.html"><span>File&#160;List</span></a></li>
-      <li><a href="globals.html"><span>File&#160;Members</span></a></li>
     </ul>
   </div>
 </div><!-- top -->
@@ -91,7 +91,7 @@ $(document).ready(function(){initNavTree('_a_d_c_8h_source.html','');});
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Macros</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -105,7 +105,7 @@ $(document).ready(function(){initNavTree('_a_d_c_8h_source.html','');});
 <div class="title">ADC.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="_a_d_c_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160; <span class="comment">/* ADC Library created by Pedro Villanueva</span></div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160; <span class="comment">/* ADC Library created by Pedro Villanueva</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> * It implements all functions of the Teensy 3.0 internal ADC</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> * Some of the code was extracted from the file analog.c included in the distribution of Teensduino by PJRC.COM</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> *</span></div>
@@ -121,163 +121,267 @@ $(document).ready(function(){initNavTree('_a_d_c_8h_source.html','');});
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">// include pow()</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &lt;math.h&gt;</span></div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">// the alternate clock is connected to OSCERCLK (16 MHz).</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">// datasheet says ADC clock should be 2 to 12 MHz for 16 bit mode</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">// datasheet says ADC clock should be 1 to 18 MHz for 8-12 bit mode</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#if F_BUS == 48000000</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC0_CFG1_6MHZ   ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1) // Clock divide select: 2=div4 + Input clock: 1=bus/2</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC0_CFG1_12MHZ  ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1) // Clock divide select: 1=div2 Input clock: 1=bus/2</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC0_CFG1_24MHZ  ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(1) // Clock divide select: 0=direct + Input clock: 1=bus/2</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#elif F_BUS == 24000000</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC0_CFG1_6MHZ   ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(0) // Clock divide select: 2=div4 + Input clock: 0=bus</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC0_CFG1_12MHZ  ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(0) // Clock divide select: 1=div2 + Input clock: 0=bus</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC0_CFG1_24MHZ  ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(0) // Clock divide select: 0=direct + Input clock: 0=bus</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#error</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="comment">// ADCx_SC2[REFSEL] bit selects the voltage reference sources for ADC.</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment">//   VREFH/VREFL - connected as the primary reference option</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="comment">//   1.2 V VREF_OUT - connected as the VALT reference option</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="_a_d_c_8h.html#a3da44afeba217135a680a7477b5e3ce3">   36</a></span>&#160;<span class="preprocessor">#define DEFAULT         0</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="_a_d_c_8h.html#a02c5e2eafaed44878fd8e6c54c8dde4d">   37</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define INTERNAL        2</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="_a_d_c_8h.html#ade90e2ab8528c36fd37e2c0ae653f704">   38</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define INTERNAL1V2     2</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="_a_d_c_8h.html#a56000ad2fa885e1acdbb06da63ded9bb">   39</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define INTERNAL1V1     2</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="_a_d_c_8h.html#af3fe37c1cda80aa7202b5a3bb7557dc9">   40</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define EXTERNAL        0</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="comment">// Error codes for analogRead and analogReadDifferential</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="_a_d_c_8h.html#a810b46bdaa73057d834142229111adc5">   44</a></span>&#160;<span class="preprocessor">#define ADC_ERROR_VALUE -1</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="_a_d_c_8h.html#af181c4b5c617516517400c427494e7e7">   45</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_ERROR_DIFF_VALUE -70000</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="class_a_d_c.html">   50</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_a_d_c.html">ADC</a></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;{</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">// include new and delete</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;Arduino.h&gt;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">// include the circular buffer</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &lt;RingBuffer.h&gt;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">// and IntervalTimer</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &lt;IntervalTimer.h&gt;</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment">// number of interval timers we can have</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#define MAX_ANALOG_TIMERS 3</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="comment">// the alternate clock is connected to OSCERCLK (16 MHz).</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="comment">// datasheet says ADC clock should be 2 to 12 MHz for 16 bit mode</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="comment">// datasheet says ADC clock should be 1 to 18 MHz for 8-12 bit mode</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#if F_BUS == 48000000</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC0_CFG1_6MHZ   ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1) // Clock divide select: 2=div4 + Input clock: 1=bus/2</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC0_CFG1_12MHZ  ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1) // Clock divide select: 1=div2 Input clock: 1=bus/2</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC0_CFG1_24MHZ  ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(1) // Clock divide select: 0=direct + Input clock: 1=bus/2</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#elif F_BUS == 24000000</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC0_CFG1_6MHZ   ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(0) // Clock divide select: 2=div4 + Input clock: 0=bus</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC0_CFG1_12MHZ  ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(0) // Clock divide select: 1=div2 + Input clock: 0=bus</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC0_CFG1_24MHZ  ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(0) // Clock divide select: 0=direct + Input clock: 0=bus</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#error</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment">// ADCx_SC2[REFSEL] bit selects the voltage reference sources for ADC.</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment">//   VREFH/VREFL - connected as the primary reference option</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="comment">//   1.2 V VREF_OUT - connected as the VALT reference option</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor">#define DEFAULT         0</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define INTERNAL        2</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define INTERNAL1V2     2</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define INTERNAL1V1     2</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define EXTERNAL        0</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <a class="code" href="class_a_d_c.html#a60b6e21403b1f30984f63832c0562960">ADC</a>();</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <a class="code" href="class_a_d_c.html#aefd878291d0c14aa524df99af5a63148">~ADC</a>();</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c.html#a3871e90219238c6319c8b6bf801b5fd7">setReference</a>(uint8_t type);</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c.html#a79b5cb42cb1829a1de3f377664701c6e">setResolution</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> bits);</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="class_a_d_c.html#acf222ac0d18e3d6b47d95f9b8a46c226">getResolution</a>();</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <span class="keywordtype">double</span> <a class="code" href="class_a_d_c.html#a0a02587e3678afab6c0398f3c7c56b93">getMaxValue</a>();</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="comment">// Error codes for analogRead and analogReadDifferential</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="preprocessor">#define ADC_ERROR_DIFF_VALUE -70000</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_ERROR_VALUE ADC_ERROR_DIFF_VALUE</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="comment">// Error codes for startAnalogTimer</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="preprocessor">#define ANALOG_TIMER_ERROR -1</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00064"></a><span class="lineno"><a class="line" href="class_a_d_c.html">   64</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_a_d_c.html">ADC</a></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;{</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <a class="code" href="class_a_d_c.html#a60b6e21403b1f30984f63832c0562960">ADC</a>();</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <a class="code" href="class_a_d_c.html#aefd878291d0c14aa524df99af5a63148">~ADC</a>();</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c.html#a3871e90219238c6319c8b6bf801b5fd7">setReference</a>(uint8_t type);</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c.html#a6a3fed0d7bfea66dd4b4cd8f2f539c29">setAveraging</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> num);</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c.html#a66a26ded71b7b938e3fc8826c4579092">enableInterrupts</a>();</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c.html#ad8acae7988973bdede138deea567623a">disableInterrupts</a>();</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="class_a_d_c.html#a79b5cb42cb1829a1de3f377664701c6e">setResolution</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> bits);</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="class_a_d_c.html#acf222ac0d18e3d6b47d95f9b8a46c226">getResolution</a>();</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        uint32_t <a class="code" href="class_a_d_c.html#a254cfc7c511bc29447d2a692433efe24">getMaxValue</a>();</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c.html#a10b9e674ed487b81160687e38fafbb59">enableDMA</a>();</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c.html#a58af22e8f95c1d2b1560153f906d1038">disableDMA</a>();</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c.html#a6a3fed0d7bfea66dd4b4cd8f2f539c29">setAveraging</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> num);</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;</div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c.html#a5bc29134a1079cc1c232a436c3778f88">enableCompare</a>(int16_t compValue, <span class="keywordtype">int</span> greaterThan);</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="class_a_d_c.html#a66a26ded71b7b938e3fc8826c4579092">enableInterrupts</a>();</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="class_a_d_c.html#ad8acae7988973bdede138deea567623a">disableInterrupts</a>();</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;</div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c.html#aee940d66774b13a343e85c358ee6cd45">enableCompareRange</a>(int16_t lowerLimit, int16_t upperLimit, <span class="keywordtype">int</span> insideRange, <span class="keywordtype">int</span> inclusive);</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c.html#a10b9e674ed487b81160687e38fafbb59">enableDMA</a>();</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c.html#a58af22e8f95c1d2b1560153f906d1038">disableDMA</a>();</div>
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c.html#ad48e3b4b69170965fc4fe70ef042c099">disableCompare</a>();</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;</div>
 <div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;</div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="class_a_d_c.html#a67ad2a6883cfffb1e4876e678ba7bb8a">analogRead</a>(uint8_t pin);</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="class_a_d_c.html#ad3a40837cf36ad7c7c1efe635523c4c4">analogReadDifferential</a>(uint8_t pinP, uint8_t pinN);</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c.html#a5bc29134a1079cc1c232a436c3778f88">enableCompare</a>(int16_t compValue, <span class="keywordtype">int</span> greaterThan);</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c.html#aee940d66774b13a343e85c358ee6cd45">enableCompareRange</a>(int16_t lowerLimit, int16_t upperLimit, <span class="keywordtype">int</span> insideRange, <span class="keywordtype">int</span> inclusive);</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c.html#ad48e3b4b69170965fc4fe70ef042c099">disableCompare</a>();</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;</div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c.html#a332029f903b3d92cb52d2d8b1efe5ed6">startContinuous</a>(uint8_t pin);</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c.html#a013c9c109b7ccd038a5939866fe777ee">startContinuousDifferential</a>(uint8_t pinP, uint8_t pinN);</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="class_a_d_c.html#a03e9af3db07ad97e401045a848aabf17">analogReadContinuous</a>();</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="class_a_d_c.html#a67ad2a6883cfffb1e4876e678ba7bb8a">analogRead</a>(uint8_t pin);</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="class_a_d_c.html#ad3a40837cf36ad7c7c1efe635523c4c4">analogReadDifferential</a>(uint8_t pinP, uint8_t pinN);</div>
 <div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c.html#a05857ba731f9b2b0ae35bef5c5cddd9e">stopContinuous</a>();</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="class_a_d_c.html#a9ac9c98cd656c5f4d34616d49c91385f">isConverting</a>();</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="class_a_d_c.html#a7759873f09a8369e41f12280234a383b">startSingleRead</a>(uint8_t pin);</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;</div>
 <div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="class_a_d_c.html#a2b2a0d93a661310922f72606b9ddaa03">isComplete</a>();</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="class_a_d_c.html#a6780adeda5597efe5c09e6dfb5f49ae1">startSingleDifferential</a>(uint8_t pinP, uint8_t pinN);</div>
 <div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;    <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        uint8_t calibrating;</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;        uint8_t analog_config_bits;</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="class_a_d_c.html#ae97b6fffe4527e799006c11a9426f468">readSingle</a>();</div>
 <div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;</div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;        <span class="keywordtype">double</span> analog_max_val;</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;        uint8_t analog_num_average;</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;        uint8_t analog_reference_internal;</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c.html#a332029f903b3d92cb52d2d8b1efe5ed6">startContinuous</a>(uint8_t pin);</div>
 <div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;        uint8_t var_enableInterrupts;</div>
 <div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;        <span class="keywordtype">void</span> analog_init(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;        <span class="keywordtype">void</span> wait_for_cal(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;        <span class="comment">// translate pin number to SC1A nomenclature</span></div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;        uint8_t channel2sc1a[16]= {</div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;            5, 14, 8, 9, 13, 12, 6, 7, 15, 4,</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;            0, 19, 3, 21, 26, 22};</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c.html#a013c9c109b7ccd038a5939866fe777ee">startContinuousDifferential</a>(uint8_t pinP, uint8_t pinN);</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="class_a_d_c.html#a03e9af3db07ad97e401045a848aabf17">analogReadContinuous</a>();</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c.html#a05857ba731f9b2b0ae35bef5c5cddd9e">stopContinuous</a>();</div>
 <div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;};</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;<span class="preprocessor">#endif // ADC_H</span></div>
-<div class="ttc" id="class_a_d_c_html_a332029f903b3d92cb52d2d8b1efe5ed6"><div class="ttname"><a href="class_a_d_c.html#a332029f903b3d92cb52d2d8b1efe5ed6">ADC::startContinuous</a></div><div class="ttdeci">void startContinuous(uint8_t pin)</div><div class="ttdoc">Starts continuous conversion on the pin. </div><div class="ttdef"><b>Definition:</b> ADC.cpp:387</div></div>
-<div class="ttc" id="class_a_d_c_html_a60b6e21403b1f30984f63832c0562960"><div class="ttname"><a href="class_a_d_c.html#a60b6e21403b1f30984f63832c0562960">ADC::ADC</a></div><div class="ttdeci">ADC()</div><div class="ttdef"><b>Definition:</b> ADC.cpp:19</div></div>
-<div class="ttc" id="class_a_d_c_html_a2b2a0d93a661310922f72606b9ddaa03"><div class="ttname"><a href="class_a_d_c.html#a2b2a0d93a661310922f72606b9ddaa03">ADC::isComplete</a></div><div class="ttdeci">int isComplete()</div><div class="ttdoc">Is an ADC conversion ready? </div><div class="ttdef"><b>Definition:</b> ADC.cpp:499</div></div>
-<div class="ttc" id="class_a_d_c_html_ad48e3b4b69170965fc4fe70ef042c099"><div class="ttname"><a href="class_a_d_c.html#ad48e3b4b69170965fc4fe70ef042c099">ADC::disableCompare</a></div><div class="ttdeci">void disableCompare()</div><div class="ttdoc">Disable the compare function. </div><div class="ttdef"><b>Definition:</b> ADC.cpp:278</div></div>
-<div class="ttc" id="class_a_d_c_html_a9ac9c98cd656c5f4d34616d49c91385f"><div class="ttname"><a href="class_a_d_c.html#a9ac9c98cd656c5f4d34616d49c91385f">ADC::isConverting</a></div><div class="ttdeci">int isConverting()</div><div class="ttdoc">Is the ADC converting at the moment? </div><div class="ttdef"><b>Definition:</b> ADC.cpp:488</div></div>
-<div class="ttc" id="class_a_d_c_html_a6a3fed0d7bfea66dd4b4cd8f2f539c29"><div class="ttname"><a href="class_a_d_c.html#a6a3fed0d7bfea66dd4b4cd8f2f539c29">ADC::setAveraging</a></div><div class="ttdeci">void setAveraging(unsigned int num)</div><div class="ttdoc">Set the number of averages. </div><div class="ttdef"><b>Definition:</b> ADC.cpp:183</div></div>
-<div class="ttc" id="class_a_d_c_html"><div class="ttname"><a href="class_a_d_c.html">ADC</a></div><div class="ttdef"><b>Definition:</b> ADC.h:50</div></div>
-<div class="ttc" id="class_a_d_c_html_a5bc29134a1079cc1c232a436c3778f88"><div class="ttname"><a href="class_a_d_c.html#a5bc29134a1079cc1c232a436c3778f88">ADC::enableCompare</a></div><div class="ttdeci">void enableCompare(int16_t compValue, int greaterThan)</div><div class="ttdoc">Enable the compare function to a single value. </div><div class="ttdef"><b>Definition:</b> ADC.cpp:242</div></div>
-<div class="ttc" id="class_a_d_c_html_aefd878291d0c14aa524df99af5a63148"><div class="ttname"><a href="class_a_d_c.html#aefd878291d0c14aa524df99af5a63148">ADC::~ADC</a></div><div class="ttdeci">~ADC()</div><div class="ttdef"><b>Definition:</b> ADC.cpp:32</div></div>
-<div class="ttc" id="class_a_d_c_html_a67ad2a6883cfffb1e4876e678ba7bb8a"><div class="ttname"><a href="class_a_d_c.html#a67ad2a6883cfffb1e4876e678ba7bb8a">ADC::analogRead</a></div><div class="ttdeci">int analogRead(uint8_t pin)</div><div class="ttdoc">Returns the analog value of the pin. </div><div class="ttdef"><b>Definition:</b> ADC.cpp:288</div></div>
-<div class="ttc" id="class_a_d_c_html_a05857ba731f9b2b0ae35bef5c5cddd9e"><div class="ttname"><a href="class_a_d_c.html#a05857ba731f9b2b0ae35bef5c5cddd9e">ADC::stopContinuous</a></div><div class="ttdeci">void stopContinuous()</div><div class="ttdoc">Stops continuous conversion. </div><div class="ttdef"><b>Definition:</b> ADC.cpp:476</div></div>
-<div class="ttc" id="class_a_d_c_html_acf222ac0d18e3d6b47d95f9b8a46c226"><div class="ttname"><a href="class_a_d_c.html#acf222ac0d18e3d6b47d95f9b8a46c226">ADC::getResolution</a></div><div class="ttdeci">int getResolution()</div><div class="ttdoc">Returns the resolution of the ADC. </div><div class="ttdef"><b>Definition:</b> ADC.cpp:168</div></div>
-<div class="ttc" id="class_a_d_c_html_aee940d66774b13a343e85c358ee6cd45"><div class="ttname"><a href="class_a_d_c.html#aee940d66774b13a343e85c358ee6cd45">ADC::enableCompareRange</a></div><div class="ttdeci">void enableCompareRange(int16_t lowerLimit, int16_t upperLimit, int insideRange, int inclusive)</div><div class="ttdoc">Enable the compare function to a range. </div><div class="ttdef"><b>Definition:</b> ADC.cpp:254</div></div>
-<div class="ttc" id="class_a_d_c_html_a58af22e8f95c1d2b1560153f906d1038"><div class="ttname"><a href="class_a_d_c.html#a58af22e8f95c1d2b1560153f906d1038">ADC::disableDMA</a></div><div class="ttdeci">void disableDMA()</div><div class="ttdoc">Disable ADC DMA request. </div><div class="ttdef"><b>Definition:</b> ADC.cpp:232</div></div>
-<div class="ttc" id="class_a_d_c_html_a013c9c109b7ccd038a5939866fe777ee"><div class="ttname"><a href="class_a_d_c.html#a013c9c109b7ccd038a5939866fe777ee">ADC::startContinuousDifferential</a></div><div class="ttdeci">void startContinuousDifferential(uint8_t pinP, uint8_t pinN)</div><div class="ttdoc">Starts continuous conversion between the pins (pinP-pinN). </div><div class="ttdef"><b>Definition:</b> ADC.cpp:427</div></div>
-<div class="ttc" id="class_a_d_c_html_a66a26ded71b7b938e3fc8826c4579092"><div class="ttname"><a href="class_a_d_c.html#a66a26ded71b7b938e3fc8826c4579092">ADC::enableInterrupts</a></div><div class="ttdeci">void enableInterrupts()</div><div class="ttdoc">Enable interrupts. </div><div class="ttdef"><b>Definition:</b> ADC.cpp:210</div></div>
-<div class="ttc" id="class_a_d_c_html_a03e9af3db07ad97e401045a848aabf17"><div class="ttname"><a href="class_a_d_c.html#a03e9af3db07ad97e401045a848aabf17">ADC::analogReadContinuous</a></div><div class="ttdeci">int analogReadContinuous()</div><div class="ttdoc">Reads the analog value of a continuous conversion. </div><div class="ttdef"><b>Definition:</b> ADC.cpp:462</div></div>
-<div class="ttc" id="class_a_d_c_html_a0a02587e3678afab6c0398f3c7c56b93"><div class="ttname"><a href="class_a_d_c.html#a0a02587e3678afab6c0398f3c7c56b93">ADC::getMaxValue</a></div><div class="ttdeci">double getMaxValue()</div><div class="ttdoc">Returns the maximum value for a measurement, that is: 2^resolution. </div><div class="ttdef"><b>Definition:</b> ADC.cpp:175</div></div>
-<div class="ttc" id="class_a_d_c_html_ad8acae7988973bdede138deea567623a"><div class="ttname"><a href="class_a_d_c.html#ad8acae7988973bdede138deea567623a">ADC::disableInterrupts</a></div><div class="ttdeci">void disableInterrupts()</div><div class="ttdoc">Disable interrupts. </div><div class="ttdef"><b>Definition:</b> ADC.cpp:217</div></div>
-<div class="ttc" id="class_a_d_c_html_ad3a40837cf36ad7c7c1efe635523c4c4"><div class="ttname"><a href="class_a_d_c.html#ad3a40837cf36ad7c7c1efe635523c4c4">ADC::analogReadDifferential</a></div><div class="ttdeci">int analogReadDifferential(uint8_t pinP, uint8_t pinN)</div><div class="ttdoc">Reads the differential analog value of two pins (pinP - pinN). </div><div class="ttdef"><b>Definition:</b> ADC.cpp:338</div></div>
-<div class="ttc" id="class_a_d_c_html_a3871e90219238c6319c8b6bf801b5fd7"><div class="ttname"><a href="class_a_d_c.html#a3871e90219238c6319c8b6bf801b5fd7">ADC::setReference</a></div><div class="ttdeci">void setReference(uint8_t type)</div><div class="ttdoc">Set the voltage reference you prefer, default is vcc. </div><div class="ttdef"><b>Definition:</b> ADC.cpp:120</div></div>
-<div class="ttc" id="class_a_d_c_html_a79b5cb42cb1829a1de3f377664701c6e"><div class="ttname"><a href="class_a_d_c.html#a79b5cb42cb1829a1de3f377664701c6e">ADC::setResolution</a></div><div class="ttdeci">void setResolution(unsigned int bits)</div><div class="ttdoc">Change the resolution of the measurement. </div><div class="ttdef"><b>Definition:</b> ADC.cpp:146</div></div>
-<div class="ttc" id="class_a_d_c_html_a10b9e674ed487b81160687e38fafbb59"><div class="ttname"><a href="class_a_d_c.html#a10b9e674ed487b81160687e38fafbb59">ADC::enableDMA</a></div><div class="ttdeci">void enableDMA()</div><div class="ttdoc">Enable DMA request. </div><div class="ttdef"><b>Definition:</b> ADC.cpp:225</div></div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="class_a_d_c.html#afee4db084de383fab3bd820755386d57">startAnalogTimer</a>(uint8_t pin, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> period);</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="class_a_d_c.html#af837a08b2967789a7cd40cdb9db999b0">startAnalogTimerDifferential</a>(uint8_t pinP, uint8_t pinN, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> period);</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c.html#abff12774fa2c93383e37c8bcf7ae5bfb">stopAnalogTimer</a>(uint8_t pin);</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="class_a_d_c.html#ac46fe3df35b3f92398f1d0d6bd2a72ac">getTimerValue</a>(uint8_t pin);</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="class_a_d_c.html#af708e6ce19d316f38343d14141c01a16">isTimerLastValue</a>(uint8_t pin);</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="class_a_d_c.html#a9ac9c98cd656c5f4d34616d49c91385f">isConverting</a>();</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="class_a_d_c.html#a2b2a0d93a661310922f72606b9ddaa03">isComplete</a>();</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="class_a_d_c.html#af11cf56440a925d143842e020b9b7f79">isDifferential</a>();</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="class_a_d_c.html#a745c898a53d1caf5f05e5116faa597e2">isContinuous</a>();</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;</div>
+<div class="line"><a name="l00281"></a><span class="lineno"><a class="line" href="class_a_d_c.html#a782af0c9fd657695f3a573e30c67ba65">  281</a></span>&#160;        <span class="keyword">static</span> void (*<a class="code" href="class_a_d_c.html#a782af0c9fd657695f3a573e30c67ba65">analogTimerCallbackFP</a>)(void);</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> uint8_t ledPin;</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;        <span class="keyword">static</span> uint8_t calibrating;</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;        <span class="keyword">static</span> uint8_t analog_config_bits;</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;        <span class="keyword">static</span> uint32_t analog_max_val;</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;        <span class="keyword">static</span> uint8_t analog_num_average;</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;        <span class="keyword">static</span> uint8_t analog_reference_internal;</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;        <span class="keyword">static</span> uint8_t var_enableInterrupts;</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">void</span> analog_init(uint32_t config=0);</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">void</span> wait_for_cal(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">void</span> ADC_callback();</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">void</span> voidFunction();</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;        <span class="comment">// translate pin number to SC1A nomenclature and viceversa</span></div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> uint8_t channel2sc1a[16];</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> uint8_t sc1a2channel[27];</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">int</span> pinNumber[MAX_ANALOG_TIMERS]; <span class="comment">// the timer&#39;s pin</span></div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;        <span class="keyword">static</span> IntervalTimer *timer[MAX_ANALOG_TIMERS]; <span class="comment">// timer</span></div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;        <span class="keyword">static</span> <a class="code" href="class_ring_buffer.html">RingBuffer</a> *buffer[MAX_ANALOG_TIMERS]; <span class="comment">// circular buffer to store analog values</span></div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;</div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;        <span class="comment">// function callback for the analog timers</span></div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">void</span> analogTimerCallback();</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">int</span> temp_timerPin; <span class="comment">// temporal pin number for the timer callback function</span></div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;        <span class="comment">// struct to store the config of the adc</span></div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;        <span class="keyword">typedef</span> <span class="keyword">struct </span>{</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;            uint32_t savedSC1A, savedSC2, savedSC3, savedCFG1, savedCFG2, savedRes;</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;            uint8_t diffRes; <span class="comment">// is the new resolution different from the old one?</span></div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;        } ADC_CONFIG;</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;        <span class="keyword">static</span> ADC_CONFIG adc_config;</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;        <span class="keyword">static</span> uint8_t adcWasInUse; <span class="comment">// was the adc in use before an analog timer call?</span></div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;};</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;<span class="preprocessor">#endif // ADC_H</span></div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;<span class="comment">/* PDB SKETCH FROM SERVO.CPP</span></div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;<span class="comment"></span></div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;<span class="comment">if (!(SIM_SCGC6 &amp; SIM_SCGC6_PDB)) {</span></div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;<span class="comment">    SIM_SCGC6 |= SIM_SCGC6_PDB; // TODO: use bitband for atomic bitset // enable pdb clock</span></div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;<span class="comment">    PDB0_MOD = 0xFFFF; // max period of counter, max 65535.</span></div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;<span class="comment">    PDB0_CNT = 0; // current value of the counter, is supposed to be read-only....</span></div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;<span class="comment">    PDB0_IDLY = 0; // the pdb interrupt happens when IDLY is equal to CNT</span></div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;<span class="comment">    PDB0_SC = PDB_CONFIG; // software trigger, pdb and interrupts enabled, continuous mode, clock = bus/4</span></div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;<span class="comment">    // TODO: maybe this should be a higher priority than most</span></div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;<span class="comment">    // other interrupts (init all to some default?)</span></div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;<span class="comment">    PDB0_SC = PDB_CONFIG | PDB_SC_SWTRIG; // start the counter!</span></div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;<span class="comment">    // i think the pdb interrupt goes off at 183.11 Hz</span></div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;<span class="comment">}</span></div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;<span class="comment">NVIC_ENABLE_IRQ(IRQ_PDB);</span></div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;<span class="comment"></span></div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;<span class="comment"></span></div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;<span class="comment">*/</span></div>
+<div class="ttc" id="class_a_d_c_html_a332029f903b3d92cb52d2d8b1efe5ed6"><div class="ttname"><a href="class_a_d_c.html#a332029f903b3d92cb52d2d8b1efe5ed6">ADC::startContinuous</a></div><div class="ttdeci">void startContinuous(uint8_t pin)</div><div class="ttdoc">Starts continuous conversion on the pin. </div><div class="ttdef"><b>Definition:</b> <a href="_a_d_c_8cpp_source.html#l00717">ADC.cpp:717</a></div></div>
+<div class="ttc" id="class_a_d_c_html_a60b6e21403b1f30984f63832c0562960"><div class="ttname"><a href="class_a_d_c.html#a60b6e21403b1f30984f63832c0562960">ADC::ADC</a></div><div class="ttdeci">ADC()</div><div class="ttdef"><b>Definition:</b> <a href="_a_d_c_8cpp_source.html#l00063">ADC.cpp:63</a></div></div>
+<div class="ttc" id="class_a_d_c_html_a2b2a0d93a661310922f72606b9ddaa03"><div class="ttname"><a href="class_a_d_c.html#a2b2a0d93a661310922f72606b9ddaa03">ADC::isComplete</a></div><div class="ttdeci">static int isComplete()</div><div class="ttdoc">Is an ADC conversion ready? </div><div class="ttdef"><b>Definition:</b> <a href="_a_d_c_8cpp_source.html#l00991">ADC.cpp:991</a></div></div>
+<div class="ttc" id="class_a_d_c_html_a745c898a53d1caf5f05e5116faa597e2"><div class="ttname"><a href="class_a_d_c.html#a745c898a53d1caf5f05e5116faa597e2">ADC::isContinuous</a></div><div class="ttdeci">static int isContinuous()</div><div class="ttdoc">Is the ADC in continuous mode? </div><div class="ttdef"><b>Definition:</b> <a href="_a_d_c_8cpp_source.html#l01001">ADC.cpp:1001</a></div></div>
+<div class="ttc" id="class_a_d_c_html_a782af0c9fd657695f3a573e30c67ba65"><div class="ttname"><a href="class_a_d_c.html#a782af0c9fd657695f3a573e30c67ba65">ADC::analogTimerCallbackFP</a></div><div class="ttdeci">static void(* analogTimerCallbackFP)(void)</div><div class="ttdoc">Ppoints to the function that takes care of the analogTimers. </div><div class="ttdef"><b>Definition:</b> <a href="_a_d_c_8h_source.html#l00281">ADC.h:281</a></div></div>
+<div class="ttc" id="class_a_d_c_html_ad48e3b4b69170965fc4fe70ef042c099"><div class="ttname"><a href="class_a_d_c.html#ad48e3b4b69170965fc4fe70ef042c099">ADC::disableCompare</a></div><div class="ttdeci">void disableCompare()</div><div class="ttdoc">Disable the compare function. </div><div class="ttdef"><b>Definition:</b> <a href="_a_d_c_8cpp_source.html#l00346">ADC.cpp:346</a></div></div>
+<div class="ttc" id="class_a_d_c_html_a9ac9c98cd656c5f4d34616d49c91385f"><div class="ttname"><a href="class_a_d_c.html#a9ac9c98cd656c5f4d34616d49c91385f">ADC::isConverting</a></div><div class="ttdeci">static int isConverting()</div><div class="ttdoc">Is the ADC converting at the moment? </div><div class="ttdef"><b>Definition:</b> <a href="_a_d_c_8cpp_source.html#l00980">ADC.cpp:980</a></div></div>
+<div class="ttc" id="class_a_d_c_html_a6a3fed0d7bfea66dd4b4cd8f2f539c29"><div class="ttname"><a href="class_a_d_c.html#a6a3fed0d7bfea66dd4b4cd8f2f539c29">ADC::setAveraging</a></div><div class="ttdeci">void setAveraging(unsigned int num)</div><div class="ttdoc">Set the number of averages. </div><div class="ttdef"><b>Definition:</b> <a href="_a_d_c_8cpp_source.html#l00249">ADC.cpp:249</a></div></div>
+<div class="ttc" id="class_a_d_c_html_a7759873f09a8369e41f12280234a383b"><div class="ttname"><a href="class_a_d_c.html#a7759873f09a8369e41f12280234a383b">ADC::startSingleRead</a></div><div class="ttdeci">static int startSingleRead(uint8_t pin)</div><div class="ttdoc">Starts an analog measurement on the pin and enables interrupts. </div><div class="ttdef"><b>Definition:</b> <a href="_a_d_c_8cpp_source.html#l00599">ADC.cpp:599</a></div></div>
+<div class="ttc" id="class_a_d_c_html"><div class="ttname"><a href="class_a_d_c.html">ADC</a></div><div class="ttdef"><b>Definition:</b> <a href="_a_d_c_8h_source.html#l00064">ADC.h:64</a></div></div>
+<div class="ttc" id="class_a_d_c_html_a5bc29134a1079cc1c232a436c3778f88"><div class="ttname"><a href="class_a_d_c.html#a5bc29134a1079cc1c232a436c3778f88">ADC::enableCompare</a></div><div class="ttdeci">void enableCompare(int16_t compValue, int greaterThan)</div><div class="ttdoc">Enable the compare function to a single value. </div><div class="ttdef"><b>Definition:</b> <a href="_a_d_c_8cpp_source.html#l00310">ADC.cpp:310</a></div></div>
+<div class="ttc" id="class_a_d_c_html_af11cf56440a925d143842e020b9b7f79"><div class="ttname"><a href="class_a_d_c.html#af11cf56440a925d143842e020b9b7f79">ADC::isDifferential</a></div><div class="ttdeci">static int isDifferential()</div><div class="ttdoc">Is the ADC in differential mode? </div><div class="ttdef"><b>Definition:</b> <a href="_a_d_c_8cpp_source.html#l00997">ADC.cpp:997</a></div></div>
+<div class="ttc" id="class_a_d_c_html_a6780adeda5597efe5c09e6dfb5f49ae1"><div class="ttname"><a href="class_a_d_c.html#a6780adeda5597efe5c09e6dfb5f49ae1">ADC::startSingleDifferential</a></div><div class="ttdeci">static int startSingleDifferential(uint8_t pinP, uint8_t pinN)</div><div class="ttdoc">Start a differential conversion between two pins (pinP - pinN) and enables interrupts. </div><div class="ttdef"><b>Definition:</b> <a href="_a_d_c_8cpp_source.html#l00656">ADC.cpp:656</a></div></div>
+<div class="ttc" id="class_a_d_c_html_af837a08b2967789a7cd40cdb9db999b0"><div class="ttname"><a href="class_a_d_c.html#af837a08b2967789a7cd40cdb9db999b0">ADC::startAnalogTimerDifferential</a></div><div class="ttdeci">int startAnalogTimerDifferential(uint8_t pinP, uint8_t pinN, unsigned int period)</div><div class="ttdoc">Starts a periodic measurement using the IntervalTimer library. </div></div>
+<div class="ttc" id="class_a_d_c_html_a254cfc7c511bc29447d2a692433efe24"><div class="ttname"><a href="class_a_d_c.html#a254cfc7c511bc29447d2a692433efe24">ADC::getMaxValue</a></div><div class="ttdeci">uint32_t getMaxValue()</div><div class="ttdoc">Returns the maximum value for a measurement. </div><div class="ttdef"><b>Definition:</b> <a href="_a_d_c_8cpp_source.html#l00241">ADC.cpp:241</a></div></div>
+<div class="ttc" id="class_a_d_c_html_aefd878291d0c14aa524df99af5a63148"><div class="ttname"><a href="class_a_d_c.html#aefd878291d0c14aa524df99af5a63148">ADC::~ADC</a></div><div class="ttdeci">~ADC()</div><div class="ttdef"><b>Definition:</b> <a href="_a_d_c_8cpp_source.html#l00088">ADC.cpp:88</a></div></div>
+<div class="ttc" id="class_a_d_c_html_a67ad2a6883cfffb1e4876e678ba7bb8a"><div class="ttname"><a href="class_a_d_c.html#a67ad2a6883cfffb1e4876e678ba7bb8a">ADC::analogRead</a></div><div class="ttdeci">static int analogRead(uint8_t pin)</div><div class="ttdoc">Returns the analog value of the pin. </div><div class="ttdef"><b>Definition:</b> <a href="_a_d_c_8cpp_source.html#l00356">ADC.cpp:356</a></div></div>
+<div class="ttc" id="class_a_d_c_html_ac46fe3df35b3f92398f1d0d6bd2a72ac"><div class="ttname"><a href="class_a_d_c.html#ac46fe3df35b3f92398f1d0d6bd2a72ac">ADC::getTimerValue</a></div><div class="ttdeci">int getTimerValue(uint8_t pin)</div><div class="ttdoc">Returns the oldest value of the ring buffer where the periodic measurements go. </div><div class="ttdef"><b>Definition:</b> <a href="_a_d_c_8cpp_source.html#l00951">ADC.cpp:951</a></div></div>
+<div class="ttc" id="class_a_d_c_html_a05857ba731f9b2b0ae35bef5c5cddd9e"><div class="ttname"><a href="class_a_d_c.html#a05857ba731f9b2b0ae35bef5c5cddd9e">ADC::stopContinuous</a></div><div class="ttdeci">void stopContinuous()</div><div class="ttdoc">Stops continuous conversion. </div><div class="ttdef"><b>Definition:</b> <a href="_a_d_c_8cpp_source.html#l00810">ADC.cpp:810</a></div></div>
+<div class="ttc" id="class_a_d_c_html_acf222ac0d18e3d6b47d95f9b8a46c226"><div class="ttname"><a href="class_a_d_c.html#acf222ac0d18e3d6b47d95f9b8a46c226">ADC::getResolution</a></div><div class="ttdeci">static int getResolution()</div><div class="ttdoc">Returns the resolution of the ADC. </div><div class="ttdef"><b>Definition:</b> <a href="_a_d_c_8cpp_source.html#l00234">ADC.cpp:234</a></div></div>
+<div class="ttc" id="class_a_d_c_html_af708e6ce19d316f38343d14141c01a16"><div class="ttname"><a href="class_a_d_c.html#af708e6ce19d316f38343d14141c01a16">ADC::isTimerLastValue</a></div><div class="ttdeci">int isTimerLastValue(uint8_t pin)</div><div class="ttdoc">Is the oldest value also the last one? </div><div class="ttdef"><b>Definition:</b> <a href="_a_d_c_8cpp_source.html#l00963">ADC.cpp:963</a></div></div>
+<div class="ttc" id="class_a_d_c_html_ae97b6fffe4527e799006c11a9426f468"><div class="ttname"><a href="class_a_d_c.html#ae97b6fffe4527e799006c11a9426f468">ADC::readSingle</a></div><div class="ttdeci">static int readSingle()</div><div class="ttdoc">Reads the analog value of a single conversion. </div><div class="ttdef"><b>Definition:</b> <a href="_a_d_c_8cpp_source.html#l00708">ADC.cpp:708</a></div></div>
+<div class="ttc" id="class_a_d_c_html_aee940d66774b13a343e85c358ee6cd45"><div class="ttname"><a href="class_a_d_c.html#aee940d66774b13a343e85c358ee6cd45">ADC::enableCompareRange</a></div><div class="ttdeci">void enableCompareRange(int16_t lowerLimit, int16_t upperLimit, int insideRange, int inclusive)</div><div class="ttdoc">Enable the compare function to a range. </div><div class="ttdef"><b>Definition:</b> <a href="_a_d_c_8cpp_source.html#l00322">ADC.cpp:322</a></div></div>
+<div class="ttc" id="class_a_d_c_html_a58af22e8f95c1d2b1560153f906d1038"><div class="ttname"><a href="class_a_d_c.html#a58af22e8f95c1d2b1560153f906d1038">ADC::disableDMA</a></div><div class="ttdeci">void disableDMA()</div><div class="ttdoc">Disable ADC DMA request. </div><div class="ttdef"><b>Definition:</b> <a href="_a_d_c_8cpp_source.html#l00300">ADC.cpp:300</a></div></div>
+<div class="ttc" id="class_ring_buffer_html"><div class="ttname"><a href="class_ring_buffer.html">RingBuffer</a></div><div class="ttdef"><b>Definition:</b> <a href="_ring_buffer_8h_source.html#l00017">RingBuffer.h:17</a></div></div>
+<div class="ttc" id="class_a_d_c_html_a013c9c109b7ccd038a5939866fe777ee"><div class="ttname"><a href="class_a_d_c.html#a013c9c109b7ccd038a5939866fe777ee">ADC::startContinuousDifferential</a></div><div class="ttdeci">void startContinuousDifferential(uint8_t pinP, uint8_t pinN)</div><div class="ttdoc">Starts continuous conversion between the pins (pinP-pinN). </div><div class="ttdef"><b>Definition:</b> <a href="_a_d_c_8cpp_source.html#l00754">ADC.cpp:754</a></div></div>
+<div class="ttc" id="class_a_d_c_html_a66a26ded71b7b938e3fc8826c4579092"><div class="ttname"><a href="class_a_d_c.html#a66a26ded71b7b938e3fc8826c4579092">ADC::enableInterrupts</a></div><div class="ttdeci">static void enableInterrupts()</div><div class="ttdoc">Enable interrupts. </div><div class="ttdef"><b>Definition:</b> <a href="_a_d_c_8cpp_source.html#l00276">ADC.cpp:276</a></div></div>
+<div class="ttc" id="class_a_d_c_html_afee4db084de383fab3bd820755386d57"><div class="ttname"><a href="class_a_d_c.html#afee4db084de383fab3bd820755386d57">ADC::startAnalogTimer</a></div><div class="ttdeci">int startAnalogTimer(uint8_t pin, unsigned int period)</div><div class="ttdoc">Starts a periodic measurement using the IntervalTimer library. </div><div class="ttdef"><b>Definition:</b> <a href="_a_d_c_8cpp_source.html#l00871">ADC.cpp:871</a></div></div>
+<div class="ttc" id="class_a_d_c_html_a03e9af3db07ad97e401045a848aabf17"><div class="ttname"><a href="class_a_d_c.html#a03e9af3db07ad97e401045a848aabf17">ADC::analogReadContinuous</a></div><div class="ttdeci">static int analogReadContinuous()</div><div class="ttdoc">Reads the analog value of a continuous conversion. </div><div class="ttdef"><b>Definition:</b> <a href="_a_d_c_8cpp_source.html#l00796">ADC.cpp:796</a></div></div>
+<div class="ttc" id="class_a_d_c_html_abff12774fa2c93383e37c8bcf7ae5bfb"><div class="ttname"><a href="class_a_d_c.html#abff12774fa2c93383e37c8bcf7ae5bfb">ADC::stopAnalogTimer</a></div><div class="ttdeci">void stopAnalogTimer(uint8_t pin)</div><div class="ttdoc">Stops the periodic measurement. </div><div class="ttdef"><b>Definition:</b> <a href="_a_d_c_8cpp_source.html#l00922">ADC.cpp:922</a></div></div>
+<div class="ttc" id="class_a_d_c_html_ad8acae7988973bdede138deea567623a"><div class="ttname"><a href="class_a_d_c.html#ad8acae7988973bdede138deea567623a">ADC::disableInterrupts</a></div><div class="ttdeci">static void disableInterrupts()</div><div class="ttdoc">Disable interrupts. </div><div class="ttdef"><b>Definition:</b> <a href="_a_d_c_8cpp_source.html#l00284">ADC.cpp:284</a></div></div>
+<div class="ttc" id="class_a_d_c_html_ad3a40837cf36ad7c7c1efe635523c4c4"><div class="ttname"><a href="class_a_d_c.html#ad3a40837cf36ad7c7c1efe635523c4c4">ADC::analogReadDifferential</a></div><div class="ttdeci">static int analogReadDifferential(uint8_t pinP, uint8_t pinN)</div><div class="ttdoc">Reads the differential analog value of two pins (pinP - pinN). </div><div class="ttdef"><b>Definition:</b> <a href="_a_d_c_8cpp_source.html#l00476">ADC.cpp:476</a></div></div>
+<div class="ttc" id="class_a_d_c_html_a3871e90219238c6319c8b6bf801b5fd7"><div class="ttname"><a href="class_a_d_c.html#a3871e90219238c6319c8b6bf801b5fd7">ADC::setReference</a></div><div class="ttdeci">void setReference(uint8_t type)</div><div class="ttdoc">Set the voltage reference you prefer, default is vcc. </div><div class="ttdef"><b>Definition:</b> <a href="_a_d_c_8cpp_source.html#l00166">ADC.cpp:166</a></div></div>
+<div class="ttc" id="class_a_d_c_html_a79b5cb42cb1829a1de3f377664701c6e"><div class="ttname"><a href="class_a_d_c.html#a79b5cb42cb1829a1de3f377664701c6e">ADC::setResolution</a></div><div class="ttdeci">static void setResolution(unsigned int bits)</div><div class="ttdoc">Change the resolution of the measurement. </div><div class="ttdef"><b>Definition:</b> <a href="_a_d_c_8cpp_source.html#l00192">ADC.cpp:192</a></div></div>
+<div class="ttc" id="class_a_d_c_html_a10b9e674ed487b81160687e38fafbb59"><div class="ttname"><a href="class_a_d_c.html#a10b9e674ed487b81160687e38fafbb59">ADC::enableDMA</a></div><div class="ttdeci">void enableDMA()</div><div class="ttdoc">Enable DMA request. </div><div class="ttdef"><b>Definition:</b> <a href="_a_d_c_8cpp_source.html#l00293">ADC.cpp:293</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="_a_d_c_8h.html">ADC.h</a></li>
-    <li class="footer">Generated on Tue Oct 22 2013 19:35:06 for ADC by
+    <li class="navelem"><b>ADC.h</b></li>
+    <li class="footer">Generated on Sun Nov 17 2013 22:54:03 for ADC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

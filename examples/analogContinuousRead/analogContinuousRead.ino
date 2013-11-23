@@ -21,8 +21,8 @@ void setup() {
   Serial.begin(38400);
 
   adc.setAveraging(4);
-  adc.setResolution(10); // call this before the compare function!!
-  adc.enableCompare(1.0/3.3*adc.getMaxValue(), 0); // true if value < 1.0V
+  adc.setResolution(16); // call this before the compare function!!
+  //adc.enableCompare(1.0/3.3*adc.getMaxValue(), 0); // true if value < 1.0V
   //adc.enableCompareRange(-1.0*adc.getMaxValue()/3.3, 1.0*adc.getMaxValue()/3.3, 0, 1);
 
   adc.startContinuous(readPin);
@@ -40,7 +40,7 @@ void loop() {
       Serial.print("True");
 
       // the test results below were obtained commenting out all Serial communications and the delay() lines
-      GPIOC_PTOR = 1<<5;
+      //GPIOC_PTOR = 1<<5;
   } else {
       Serial.print("False");
   }
@@ -63,7 +63,7 @@ void loop() {
     } else if(c=='t') { // conversion complete?
         Serial.print("True? ");
         Serial.println(adc.isComplete());
-    } else if(c=='r') { // conversion complete?
+    } else if(c=='r') { // restart conversion
         Serial.print("Restarting conversions ");
         adc.startContinuous(readPin);
         delay(100);
@@ -74,12 +74,11 @@ void loop() {
 }
 
 // RESULTS OF THE TEST
-// Measure continuously the voltage on a voltage divider. Result true if less than 1.0 V
+// Measure continuously the voltage on a voltage divider.
 // Measurement pin A9 (23). Clock speed 96 Mhz. Default options for analog_init. Only toggling led code on loop(){}, no Serial communications nor delay.
 
-// ADC resolution     Measurement frequency (1 Hz uncertainty)    Num. averages
-//     16  bits           153.924 kHz                               1
-//     12  bits           227.150 kHz                               1
-//     10  bits           198.155 kHz*                              1
-//      8  bits           342.009 kHz                               1
-// * double-checked. No idea wtf is happening...
+// ADC resolution     Measurement frequency                     Num. averages
+//     16  bits           325.500 kHz                               1
+//     12  bits           345.620 kHz                               1
+//     10  bits           364.230 kHz                               1
+//      8  bits           772.274 kHz                               1

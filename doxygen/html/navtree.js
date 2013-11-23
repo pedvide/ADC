@@ -1,27 +1,25 @@
 var NAVTREE =
 [
   [ "ADC", "index.html", [
+    [ "ADC", "md__c_1__users__user__arduino_libraries__a_d_c__r_e_a_d_m_e.html", null ],
     [ "Classes", null, [
       [ "Class List", "annotated.html", "annotated" ],
       [ "Class Index", "classes.html", null ],
       [ "Class Members", "functions.html", [
         [ "All", "functions.html", null ],
-        [ "Functions", "functions_func.html", null ]
+        [ "Functions", "functions_func.html", null ],
+        [ "Variables", "functions_vars.html", null ]
       ] ]
     ] ],
     [ "Files", null, [
-      [ "File List", "files.html", "files" ],
-      [ "File Members", "globals.html", [
-        [ "All", "globals.html", null ],
-        [ "Macros", "globals_defs.html", null ]
-      ] ]
+      [ "File List", "files.html", "files" ]
     ] ]
   ] ]
 ];
 
 var NAVTREEINDEX =
 [
-"_a_d_c_8cpp.html"
+"_a_d_c_8cpp_source.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

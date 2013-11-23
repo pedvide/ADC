@@ -45,6 +45,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -92,7 +93,7 @@ $(document).ready(function(){initNavTree('class_a_d_c.html','');});
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Macros</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -103,7 +104,10 @@ $(document).ready(function(){initNavTree('class_a_d_c.html','');});
 
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="class_a_d_c-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">ADC Class Reference</div>  </div>
@@ -121,29 +125,19 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3871e90219238c6319c8b6bf801b5fd7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a3871e90219238c6319c8b6bf801b5fd7">setReference</a> (uint8_t type)</td></tr>
 <tr class="memdesc:a3871e90219238c6319c8b6bf801b5fd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the voltage reference you prefer, default is vcc.  <a href="#a3871e90219238c6319c8b6bf801b5fd7">More...</a><br/></td></tr>
 <tr class="separator:a3871e90219238c6319c8b6bf801b5fd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a79b5cb42cb1829a1de3f377664701c6e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a79b5cb42cb1829a1de3f377664701c6e">setResolution</a> (unsigned int bits)</td></tr>
-<tr class="memdesc:a79b5cb42cb1829a1de3f377664701c6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change the resolution of the measurement.  <a href="#a79b5cb42cb1829a1de3f377664701c6e">More...</a><br/></td></tr>
-<tr class="separator:a79b5cb42cb1829a1de3f377664701c6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acf222ac0d18e3d6b47d95f9b8a46c226"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#acf222ac0d18e3d6b47d95f9b8a46c226">getResolution</a> ()</td></tr>
-<tr class="memdesc:acf222ac0d18e3d6b47d95f9b8a46c226"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the resolution of the <a class="el" href="class_a_d_c.html">ADC</a>.  <a href="#acf222ac0d18e3d6b47d95f9b8a46c226">More...</a><br/></td></tr>
-<tr class="separator:acf222ac0d18e3d6b47d95f9b8a46c226"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a02587e3678afab6c0398f3c7c56b93"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a0a02587e3678afab6c0398f3c7c56b93">getMaxValue</a> ()</td></tr>
-<tr class="memdesc:a0a02587e3678afab6c0398f3c7c56b93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the maximum value for a measurement, that is: 2^resolution.  <a href="#a0a02587e3678afab6c0398f3c7c56b93">More...</a><br/></td></tr>
-<tr class="separator:a0a02587e3678afab6c0398f3c7c56b93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a254cfc7c511bc29447d2a692433efe24"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a254cfc7c511bc29447d2a692433efe24"></a>
+uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a254cfc7c511bc29447d2a692433efe24">getMaxValue</a> ()</td></tr>
+<tr class="memdesc:a254cfc7c511bc29447d2a692433efe24"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the maximum value for a measurement. <br/></td></tr>
+<tr class="separator:a254cfc7c511bc29447d2a692433efe24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6a3fed0d7bfea66dd4b4cd8f2f539c29"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a6a3fed0d7bfea66dd4b4cd8f2f539c29">setAveraging</a> (unsigned int num)</td></tr>
 <tr class="memdesc:a6a3fed0d7bfea66dd4b4cd8f2f539c29"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the number of averages.  <a href="#a6a3fed0d7bfea66dd4b4cd8f2f539c29">More...</a><br/></td></tr>
 <tr class="separator:a6a3fed0d7bfea66dd4b4cd8f2f539c29"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66a26ded71b7b938e3fc8826c4579092"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a66a26ded71b7b938e3fc8826c4579092">enableInterrupts</a> ()</td></tr>
-<tr class="memdesc:a66a26ded71b7b938e3fc8826c4579092"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable interrupts.  <a href="#a66a26ded71b7b938e3fc8826c4579092">More...</a><br/></td></tr>
-<tr class="separator:a66a26ded71b7b938e3fc8826c4579092"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8acae7988973bdede138deea567623a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#ad8acae7988973bdede138deea567623a">disableInterrupts</a> ()</td></tr>
-<tr class="memdesc:ad8acae7988973bdede138deea567623a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable interrupts.  <a href="#ad8acae7988973bdede138deea567623a">More...</a><br/></td></tr>
-<tr class="separator:ad8acae7988973bdede138deea567623a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a10b9e674ed487b81160687e38fafbb59"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a10b9e674ed487b81160687e38fafbb59">enableDMA</a> ()</td></tr>
 <tr class="memdesc:a10b9e674ed487b81160687e38fafbb59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable DMA request.  <a href="#a10b9e674ed487b81160687e38fafbb59">More...</a><br/></td></tr>
 <tr class="separator:a10b9e674ed487b81160687e38fafbb59"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a58af22e8f95c1d2b1560153f906d1038"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a58af22e8f95c1d2b1560153f906d1038">disableDMA</a> ()</td></tr>
-<tr class="memdesc:a58af22e8f95c1d2b1560153f906d1038"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable <a class="el" href="class_a_d_c.html">ADC</a> DMA request.  <a href="#a58af22e8f95c1d2b1560153f906d1038">More...</a><br/></td></tr>
+<tr class="memitem:a58af22e8f95c1d2b1560153f906d1038"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a58af22e8f95c1d2b1560153f906d1038"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a58af22e8f95c1d2b1560153f906d1038">disableDMA</a> ()</td></tr>
+<tr class="memdesc:a58af22e8f95c1d2b1560153f906d1038"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable <a class="el" href="class_a_d_c.html">ADC</a> DMA request. <br/></td></tr>
 <tr class="separator:a58af22e8f95c1d2b1560153f906d1038"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5bc29134a1079cc1c232a436c3778f88"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a5bc29134a1079cc1c232a436c3778f88">enableCompare</a> (int16_t compValue, int greaterThan)</td></tr>
 <tr class="memdesc:a5bc29134a1079cc1c232a436c3778f88"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable the compare function to a single value.  <a href="#a5bc29134a1079cc1c232a436c3778f88">More...</a><br/></td></tr>
@@ -151,36 +145,95 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aee940d66774b13a343e85c358ee6cd45"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#aee940d66774b13a343e85c358ee6cd45">enableCompareRange</a> (int16_t lowerLimit, int16_t upperLimit, int insideRange, int inclusive)</td></tr>
 <tr class="memdesc:aee940d66774b13a343e85c358ee6cd45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable the compare function to a range.  <a href="#aee940d66774b13a343e85c358ee6cd45">More...</a><br/></td></tr>
 <tr class="separator:aee940d66774b13a343e85c358ee6cd45"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad48e3b4b69170965fc4fe70ef042c099"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#ad48e3b4b69170965fc4fe70ef042c099">disableCompare</a> ()</td></tr>
-<tr class="memdesc:ad48e3b4b69170965fc4fe70ef042c099"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable the compare function.  <a href="#ad48e3b4b69170965fc4fe70ef042c099">More...</a><br/></td></tr>
+<tr class="memitem:ad48e3b4b69170965fc4fe70ef042c099"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad48e3b4b69170965fc4fe70ef042c099"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#ad48e3b4b69170965fc4fe70ef042c099">disableCompare</a> ()</td></tr>
+<tr class="memdesc:ad48e3b4b69170965fc4fe70ef042c099"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable the compare function. <br/></td></tr>
 <tr class="separator:ad48e3b4b69170965fc4fe70ef042c099"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a67ad2a6883cfffb1e4876e678ba7bb8a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a67ad2a6883cfffb1e4876e678ba7bb8a">analogRead</a> (uint8_t pin)</td></tr>
-<tr class="memdesc:a67ad2a6883cfffb1e4876e678ba7bb8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the analog value of the pin.  <a href="#a67ad2a6883cfffb1e4876e678ba7bb8a">More...</a><br/></td></tr>
-<tr class="separator:a67ad2a6883cfffb1e4876e678ba7bb8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad3a40837cf36ad7c7c1efe635523c4c4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#ad3a40837cf36ad7c7c1efe635523c4c4">analogReadDifferential</a> (uint8_t pinP, uint8_t pinN)</td></tr>
-<tr class="memdesc:ad3a40837cf36ad7c7c1efe635523c4c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads the differential analog value of two pins (pinP - pinN).  <a href="#ad3a40837cf36ad7c7c1efe635523c4c4">More...</a><br/></td></tr>
-<tr class="separator:ad3a40837cf36ad7c7c1efe635523c4c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a332029f903b3d92cb52d2d8b1efe5ed6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a332029f903b3d92cb52d2d8b1efe5ed6">startContinuous</a> (uint8_t pin)</td></tr>
 <tr class="memdesc:a332029f903b3d92cb52d2d8b1efe5ed6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts continuous conversion on the pin.  <a href="#a332029f903b3d92cb52d2d8b1efe5ed6">More...</a><br/></td></tr>
 <tr class="separator:a332029f903b3d92cb52d2d8b1efe5ed6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a013c9c109b7ccd038a5939866fe777ee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a013c9c109b7ccd038a5939866fe777ee">startContinuousDifferential</a> (uint8_t pinP, uint8_t pinN)</td></tr>
 <tr class="memdesc:a013c9c109b7ccd038a5939866fe777ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts continuous conversion between the pins (pinP-pinN).  <a href="#a013c9c109b7ccd038a5939866fe777ee">More...</a><br/></td></tr>
 <tr class="separator:a013c9c109b7ccd038a5939866fe777ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a03e9af3db07ad97e401045a848aabf17"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a03e9af3db07ad97e401045a848aabf17">analogReadContinuous</a> ()</td></tr>
+<tr class="memitem:a05857ba731f9b2b0ae35bef5c5cddd9e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a05857ba731f9b2b0ae35bef5c5cddd9e"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a05857ba731f9b2b0ae35bef5c5cddd9e">stopContinuous</a> ()</td></tr>
+<tr class="memdesc:a05857ba731f9b2b0ae35bef5c5cddd9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stops continuous conversion. <br/></td></tr>
+<tr class="separator:a05857ba731f9b2b0ae35bef5c5cddd9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afee4db084de383fab3bd820755386d57"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#afee4db084de383fab3bd820755386d57">startAnalogTimer</a> (uint8_t pin, unsigned int period)</td></tr>
+<tr class="memdesc:afee4db084de383fab3bd820755386d57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts a periodic measurement using the IntervalTimer library.  <a href="#afee4db084de383fab3bd820755386d57">More...</a><br/></td></tr>
+<tr class="separator:afee4db084de383fab3bd820755386d57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af837a08b2967789a7cd40cdb9db999b0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#af837a08b2967789a7cd40cdb9db999b0">startAnalogTimerDifferential</a> (uint8_t pinP, uint8_t pinN, unsigned int period)</td></tr>
+<tr class="memdesc:af837a08b2967789a7cd40cdb9db999b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts a periodic measurement using the IntervalTimer library.  <a href="#af837a08b2967789a7cd40cdb9db999b0">More...</a><br/></td></tr>
+<tr class="separator:af837a08b2967789a7cd40cdb9db999b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abff12774fa2c93383e37c8bcf7ae5bfb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#abff12774fa2c93383e37c8bcf7ae5bfb">stopAnalogTimer</a> (uint8_t pin)</td></tr>
+<tr class="memdesc:abff12774fa2c93383e37c8bcf7ae5bfb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stops the periodic measurement.  <a href="#abff12774fa2c93383e37c8bcf7ae5bfb">More...</a><br/></td></tr>
+<tr class="separator:abff12774fa2c93383e37c8bcf7ae5bfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac46fe3df35b3f92398f1d0d6bd2a72ac"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac46fe3df35b3f92398f1d0d6bd2a72ac"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#ac46fe3df35b3f92398f1d0d6bd2a72ac">getTimerValue</a> (uint8_t pin)</td></tr>
+<tr class="memdesc:ac46fe3df35b3f92398f1d0d6bd2a72ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the oldest value of the ring buffer where the periodic measurements go. <br/></td></tr>
+<tr class="separator:ac46fe3df35b3f92398f1d0d6bd2a72ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af708e6ce19d316f38343d14141c01a16"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af708e6ce19d316f38343d14141c01a16"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#af708e6ce19d316f38343d14141c01a16">isTimerLastValue</a> (uint8_t pin)</td></tr>
+<tr class="memdesc:af708e6ce19d316f38343d14141c01a16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is the oldest value also the last one? <br/></td></tr>
+<tr class="separator:af708e6ce19d316f38343d14141c01a16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a79b5cb42cb1829a1de3f377664701c6e"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a79b5cb42cb1829a1de3f377664701c6e">setResolution</a> (unsigned int bits)</td></tr>
+<tr class="memdesc:a79b5cb42cb1829a1de3f377664701c6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change the resolution of the measurement.  <a href="#a79b5cb42cb1829a1de3f377664701c6e">More...</a><br/></td></tr>
+<tr class="separator:a79b5cb42cb1829a1de3f377664701c6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf222ac0d18e3d6b47d95f9b8a46c226"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acf222ac0d18e3d6b47d95f9b8a46c226"></a>
+static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#acf222ac0d18e3d6b47d95f9b8a46c226">getResolution</a> ()</td></tr>
+<tr class="memdesc:acf222ac0d18e3d6b47d95f9b8a46c226"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the resolution of the <a class="el" href="class_a_d_c.html">ADC</a>. <br/></td></tr>
+<tr class="separator:acf222ac0d18e3d6b47d95f9b8a46c226"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66a26ded71b7b938e3fc8826c4579092"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a66a26ded71b7b938e3fc8826c4579092">enableInterrupts</a> ()</td></tr>
+<tr class="memdesc:a66a26ded71b7b938e3fc8826c4579092"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable interrupts.  <a href="#a66a26ded71b7b938e3fc8826c4579092">More...</a><br/></td></tr>
+<tr class="separator:a66a26ded71b7b938e3fc8826c4579092"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8acae7988973bdede138deea567623a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad8acae7988973bdede138deea567623a"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#ad8acae7988973bdede138deea567623a">disableInterrupts</a> ()</td></tr>
+<tr class="memdesc:ad8acae7988973bdede138deea567623a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable interrupts. <br/></td></tr>
+<tr class="separator:ad8acae7988973bdede138deea567623a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67ad2a6883cfffb1e4876e678ba7bb8a"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a67ad2a6883cfffb1e4876e678ba7bb8a">analogRead</a> (uint8_t pin)</td></tr>
+<tr class="memdesc:a67ad2a6883cfffb1e4876e678ba7bb8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the analog value of the pin.  <a href="#a67ad2a6883cfffb1e4876e678ba7bb8a">More...</a><br/></td></tr>
+<tr class="separator:a67ad2a6883cfffb1e4876e678ba7bb8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3a40837cf36ad7c7c1efe635523c4c4"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#ad3a40837cf36ad7c7c1efe635523c4c4">analogReadDifferential</a> (uint8_t pinP, uint8_t pinN)</td></tr>
+<tr class="memdesc:ad3a40837cf36ad7c7c1efe635523c4c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads the differential analog value of two pins (pinP - pinN).  <a href="#ad3a40837cf36ad7c7c1efe635523c4c4">More...</a><br/></td></tr>
+<tr class="separator:ad3a40837cf36ad7c7c1efe635523c4c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7759873f09a8369e41f12280234a383b"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a7759873f09a8369e41f12280234a383b">startSingleRead</a> (uint8_t pin)</td></tr>
+<tr class="memdesc:a7759873f09a8369e41f12280234a383b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts an analog measurement on the pin and enables interrupts.  <a href="#a7759873f09a8369e41f12280234a383b">More...</a><br/></td></tr>
+<tr class="separator:a7759873f09a8369e41f12280234a383b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6780adeda5597efe5c09e6dfb5f49ae1"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a6780adeda5597efe5c09e6dfb5f49ae1">startSingleDifferential</a> (uint8_t pinP, uint8_t pinN)</td></tr>
+<tr class="memdesc:a6780adeda5597efe5c09e6dfb5f49ae1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start a differential conversion between two pins (pinP - pinN) and enables interrupts.  <a href="#a6780adeda5597efe5c09e6dfb5f49ae1">More...</a><br/></td></tr>
+<tr class="separator:a6780adeda5597efe5c09e6dfb5f49ae1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae97b6fffe4527e799006c11a9426f468"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#ae97b6fffe4527e799006c11a9426f468">readSingle</a> ()</td></tr>
+<tr class="memdesc:ae97b6fffe4527e799006c11a9426f468"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads the analog value of a single conversion.  <a href="#ae97b6fffe4527e799006c11a9426f468">More...</a><br/></td></tr>
+<tr class="separator:ae97b6fffe4527e799006c11a9426f468"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03e9af3db07ad97e401045a848aabf17"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a03e9af3db07ad97e401045a848aabf17">analogReadContinuous</a> ()</td></tr>
 <tr class="memdesc:a03e9af3db07ad97e401045a848aabf17"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads the analog value of a continuous conversion.  <a href="#a03e9af3db07ad97e401045a848aabf17">More...</a><br/></td></tr>
 <tr class="separator:a03e9af3db07ad97e401045a848aabf17"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a05857ba731f9b2b0ae35bef5c5cddd9e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a05857ba731f9b2b0ae35bef5c5cddd9e">stopContinuous</a> ()</td></tr>
-<tr class="memdesc:a05857ba731f9b2b0ae35bef5c5cddd9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stops continuous conversion.  <a href="#a05857ba731f9b2b0ae35bef5c5cddd9e">More...</a><br/></td></tr>
-<tr class="separator:a05857ba731f9b2b0ae35bef5c5cddd9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9ac9c98cd656c5f4d34616d49c91385f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a9ac9c98cd656c5f4d34616d49c91385f">isConverting</a> ()</td></tr>
+<tr class="memitem:a9ac9c98cd656c5f4d34616d49c91385f"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a9ac9c98cd656c5f4d34616d49c91385f">isConverting</a> ()</td></tr>
 <tr class="memdesc:a9ac9c98cd656c5f4d34616d49c91385f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is the <a class="el" href="class_a_d_c.html">ADC</a> converting at the moment?  <a href="#a9ac9c98cd656c5f4d34616d49c91385f">More...</a><br/></td></tr>
 <tr class="separator:a9ac9c98cd656c5f4d34616d49c91385f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2b2a0d93a661310922f72606b9ddaa03"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a2b2a0d93a661310922f72606b9ddaa03">isComplete</a> ()</td></tr>
+<tr class="memitem:a2b2a0d93a661310922f72606b9ddaa03"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a2b2a0d93a661310922f72606b9ddaa03">isComplete</a> ()</td></tr>
 <tr class="memdesc:a2b2a0d93a661310922f72606b9ddaa03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is an <a class="el" href="class_a_d_c.html">ADC</a> conversion ready?  <a href="#a2b2a0d93a661310922f72606b9ddaa03">More...</a><br/></td></tr>
 <tr class="separator:a2b2a0d93a661310922f72606b9ddaa03"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af11cf56440a925d143842e020b9b7f79"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#af11cf56440a925d143842e020b9b7f79">isDifferential</a> ()</td></tr>
+<tr class="memdesc:af11cf56440a925d143842e020b9b7f79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is the <a class="el" href="class_a_d_c.html">ADC</a> in differential mode?  <a href="#af11cf56440a925d143842e020b9b7f79">More...</a><br/></td></tr>
+<tr class="separator:af11cf56440a925d143842e020b9b7f79"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a745c898a53d1caf5f05e5116faa597e2"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a745c898a53d1caf5f05e5116faa597e2">isContinuous</a> ()</td></tr>
+<tr class="memdesc:a745c898a53d1caf5f05e5116faa597e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is the <a class="el" href="class_a_d_c.html">ADC</a> in continuous mode?  <a href="#a745c898a53d1caf5f05e5116faa597e2">More...</a><br/></td></tr>
+<tr class="separator:a745c898a53d1caf5f05e5116faa597e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a782af0c9fd657695f3a573e30c67ba65"><td class="memItemLeft" align="right" valign="top">static void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a782af0c9fd657695f3a573e30c67ba65">analogTimerCallbackFP</a> )(void)</td></tr>
+<tr class="memdesc:a782af0c9fd657695f3a573e30c67ba65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ppoints to the function that takes care of the analogTimers.  <a href="#a782af0c9fd657695f3a573e30c67ba65">More...</a><br/></td></tr>
+<tr class="separator:a782af0c9fd657695f3a573e30c67ba65"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class <a class="el" href="class_a_d_c.html">ADC</a>: Implements all functions of the Teensy 3.0 analog to digital converter </p>
+
+<p>Definition at line <a class="el" href="_a_d_c_8h_source.html#l00064">64</a> of file <a class="el" href="_a_d_c_8h_source.html">ADC.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a60b6e21403b1f30984f63832c0562960"></a>
 <div class="memitem">
@@ -195,6 +248,8 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Constructor </p>
+
+<p>Definition at line <a class="el" href="_a_d_c_8cpp_source.html#l00063">63</a> of file <a class="el" href="_a_d_c_8cpp_source.html">ADC.cpp</a>.</p>
 
 </div>
 </div>
@@ -212,12 +267,17 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Destructor </p>
 
+<p>Definition at line <a class="el" href="_a_d_c_8cpp_source.html#l00088">88</a> of file <a class="el" href="_a_d_c_8cpp_source.html">ADC.cpp</a>.</p>
+
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="a67ad2a6883cfffb1e4876e678ba7bb8a"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">int ADC::analogRead </td>
@@ -227,16 +287,26 @@ Public Member Functions</h2></td></tr>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Returns the analog value of the pin. </p>
-<p>It waits until the value is read and then returns the result. If a comparison has been set up and fails, it will return ADC_ERROR_VALUE. </p>
+<p>It waits until the value is read and then returns the result. If a comparison has been set up and fails, it will return ADC_ERROR_VALUE. This function is interrupt safe, so it will restore the adc to the state it was before being called </p>
+
+<p>Definition at line <a class="el" href="_a_d_c_8cpp_source.html#l00356">356</a> of file <a class="el" href="_a_d_c_8cpp_source.html">ADC.cpp</a>.</p>
 
 </div>
 </div>
 <a class="anchor" id="a03e9af3db07ad97e401045a848aabf17"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">int ADC::analogReadContinuous </td>
@@ -245,17 +315,27 @@ Public Member Functions</h2></td></tr>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Reads the analog value of a continuous conversion. </p>
-<p>Set the continuous conversion with with analogStartContinuous(pin) or startContinuousDifferential(pinP, pinN) </p>
+<p>Set the continuous conversion with with analogStartContinuous(pin) or startContinuousDifferential(pinP, pinN). </p>
 <dl class="section return"><dt>Returns</dt><dd>the last converted value. </dd></dl>
+
+<p>Definition at line <a class="el" href="_a_d_c_8cpp_source.html#l00796">796</a> of file <a class="el" href="_a_d_c_8cpp_source.html">ADC.cpp</a>.</p>
 
 </div>
 </div>
 <a class="anchor" id="ad3a40837cf36ad7c7c1efe635523c4c4"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">int ADC::analogReadDifferential </td>
@@ -275,6 +355,11 @@ Public Member Functions</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Reads the differential analog value of two pins (pinP - pinN). </p>
@@ -282,61 +367,12 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">pinP</td><td>must be A10 or A12. </td></tr>
-    <tr><td class="paramname">pinN</td><td>must be A11 (if pinP=A10) or A13 (if pinP=A12). Other pins will return ADC_ERROR_DIFF_VALUE. </td></tr>
+    <tr><td class="paramname">pinN</td><td>must be A11 (if pinP=A10) or A13 (if pinP=A12). Other pins will return ADC_ERROR_DIFF_VALUE. This function is interrupt safe, so it will restore the adc to the state it was before being called </td></tr>
   </table>
   </dd>
 </dl>
 
-</div>
-</div>
-<a class="anchor" id="ad48e3b4b69170965fc4fe70ef042c099"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void ADC::disableCompare </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Disable the compare function. </p>
-
-</div>
-</div>
-<a class="anchor" id="a58af22e8f95c1d2b1560153f906d1038"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void ADC::disableDMA </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Disable <a class="el" href="class_a_d_c.html">ADC</a> DMA request. </p>
-
-</div>
-</div>
-<a class="anchor" id="ad8acae7988973bdede138deea567623a"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void ADC::disableInterrupts </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Disable interrupts. </p>
+<p>Definition at line <a class="el" href="_a_d_c_8cpp_source.html#l00476">476</a> of file <a class="el" href="_a_d_c_8cpp_source.html">ADC.cpp</a>.</p>
 
 </div>
 </div>
@@ -366,6 +402,8 @@ Public Member Functions</h2></td></tr>
 
 <p>Enable the compare function to a single value. </p>
 <p>A conversion will be completed only when the <a class="el" href="class_a_d_c.html">ADC</a> value is &gt;= compValue (greaterThan=1) or &lt; compValue (greaterThan=0) Call it after changing the resolution Use with interrupts or poll conversion completion with <a class="el" href="class_a_d_c.html#a2b2a0d93a661310922f72606b9ddaa03" title="Is an ADC conversion ready? ">isComplete()</a> </p>
+
+<p>Definition at line <a class="el" href="_a_d_c_8cpp_source.html#l00310">310</a> of file <a class="el" href="_a_d_c_8cpp_source.html">ADC.cpp</a>.</p>
 
 </div>
 </div>
@@ -408,6 +446,8 @@ Public Member Functions</h2></td></tr>
 <p>Enable the compare function to a range. </p>
 <p>A conversion will be completed only when the <a class="el" href="class_a_d_c.html">ADC</a> value is inside (insideRange=1) or outside (=0) the range given by (lowerLimit, upperLimit),including (inclusive=1) the limits or not (inclusive=0). See Table 31-78, p. 617 of the freescale manual. Call it after changing the resolution Use with interrupts or poll conversion completion with <a class="el" href="class_a_d_c.html#a2b2a0d93a661310922f72606b9ddaa03" title="Is an ADC conversion ready? ">isComplete()</a> </p>
 
+<p>Definition at line <a class="el" href="_a_d_c_8cpp_source.html#l00322">322</a> of file <a class="el" href="_a_d_c_8cpp_source.html">ADC.cpp</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a10b9e674ed487b81160687e38fafbb59"></a>
@@ -426,11 +466,16 @@ Public Member Functions</h2></td></tr>
 <p>Enable DMA request. </p>
 <p>An <a class="el" href="class_a_d_c.html">ADC</a> DMA request will be raised when the conversion is completed (including hardware averages and if the comparison (if any) is true). </p>
 
+<p>Definition at line <a class="el" href="_a_d_c_8cpp_source.html#l00293">293</a> of file <a class="el" href="_a_d_c_8cpp_source.html">ADC.cpp</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a66a26ded71b7b938e3fc8826c4579092"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void ADC::enableInterrupts </td>
@@ -439,50 +484,26 @@ Public Member Functions</h2></td></tr>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Enable interrupts. </p>
 <p>An IRQ_ADC0 Interrupt will be raised when the conversion is completed (including hardware averages and if the comparison (if any) is true). </p>
 
-</div>
-</div>
-<a class="anchor" id="a0a02587e3678afab6c0398f3c7c56b93"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">double ADC::getMaxValue </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Returns the maximum value for a measurement, that is: 2^resolution. </p>
-
-</div>
-</div>
-<a class="anchor" id="acf222ac0d18e3d6b47d95f9b8a46c226"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int ADC::getResolution </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Returns the resolution of the <a class="el" href="class_a_d_c.html">ADC</a>. </p>
+<p>Definition at line <a class="el" href="_a_d_c_8cpp_source.html#l00276">276</a> of file <a class="el" href="_a_d_c_8cpp_source.html">ADC.cpp</a>.</p>
 
 </div>
 </div>
 <a class="anchor" id="a2b2a0d93a661310922f72606b9ddaa03"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">int ADC::isComplete </td>
@@ -491,16 +512,54 @@ Public Member Functions</h2></td></tr>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Is an <a class="el" href="class_a_d_c.html">ADC</a> conversion ready? </p>
 <dl class="section return"><dt>Returns</dt><dd>1 if yes, 0 if not. When a value is read this function returns 0 until a new value exists So it only makes sense to call it before <a class="el" href="class_a_d_c.html#a67ad2a6883cfffb1e4876e678ba7bb8a" title="Returns the analog value of the pin. ">analogRead()</a>, <a class="el" href="class_a_d_c.html#a03e9af3db07ad97e401045a848aabf17" title="Reads the analog value of a continuous conversion. ">analogReadContinuous()</a> or <a class="el" href="class_a_d_c.html#ad3a40837cf36ad7c7c1efe635523c4c4" title="Reads the differential analog value of two pins (pinP - pinN). ">analogReadDifferential()</a> </dd></dl>
+
+<p>Definition at line <a class="el" href="_a_d_c_8cpp_source.html#l00991">991</a> of file <a class="el" href="_a_d_c_8cpp_source.html">ADC.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a745c898a53d1caf5f05e5116faa597e2"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int ADC::isContinuous </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Is the <a class="el" href="class_a_d_c.html">ADC</a> in continuous mode? </p>
+<dl class="section return"><dt>Returns</dt><dd>1 if yes, 0 if not. </dd></dl>
+
+<p>Definition at line <a class="el" href="_a_d_c_8cpp_source.html#l01001">1001</a> of file <a class="el" href="_a_d_c_8cpp_source.html">ADC.cpp</a>.</p>
 
 </div>
 </div>
 <a class="anchor" id="a9ac9c98cd656c5f4d34616d49c91385f"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">int ADC::isConverting </td>
@@ -509,10 +568,74 @@ Public Member Functions</h2></td></tr>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Is the <a class="el" href="class_a_d_c.html">ADC</a> converting at the moment? </p>
 <dl class="section return"><dt>Returns</dt><dd>1 if yes, 0 if not </dd></dl>
+
+<p>Definition at line <a class="el" href="_a_d_c_8cpp_source.html#l00980">980</a> of file <a class="el" href="_a_d_c_8cpp_source.html">ADC.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af11cf56440a925d143842e020b9b7f79"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int ADC::isDifferential </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Is the <a class="el" href="class_a_d_c.html">ADC</a> in differential mode? </p>
+<dl class="section return"><dt>Returns</dt><dd>1 if yes, 0 if not. </dd></dl>
+
+<p>Definition at line <a class="el" href="_a_d_c_8cpp_source.html#l00997">997</a> of file <a class="el" href="_a_d_c_8cpp_source.html">ADC.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae97b6fffe4527e799006c11a9426f468"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int ADC::readSingle </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reads the analog value of a single conversion. </p>
+<p>Set the conversion with with startSingleRead(pin) or startSingleDifferential(pinP, pinN). </p>
+<dl class="section return"><dt>Returns</dt><dd>the converted value. </dd></dl>
+
+<p>Definition at line <a class="el" href="_a_d_c_8cpp_source.html#l00708">708</a> of file <a class="el" href="_a_d_c_8cpp_source.html">ADC.cpp</a>.</p>
 
 </div>
 </div>
@@ -538,6 +661,8 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
+<p>Definition at line <a class="el" href="_a_d_c_8cpp_source.html#l00249">249</a> of file <a class="el" href="_a_d_c_8cpp_source.html">ADC.cpp</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a3871e90219238c6319c8b6bf801b5fd7"></a>
@@ -557,16 +682,21 @@ Public Member Functions</h2></td></tr>
 <p>Set the voltage reference you prefer, default is vcc. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">type</td><td>can be DEFAULT, EXTERNAL or INTERNAL </td></tr>
+    <tr><td class="paramname">type</td><td>can be DEFAULT, EXTERNAL or INTERNAL. It needs to recalibrate. </td></tr>
   </table>
   </dd>
 </dl>
+
+<p>Definition at line <a class="el" href="_a_d_c_8cpp_source.html#l00166">166</a> of file <a class="el" href="_a_d_c_8cpp_source.html">ADC.cpp</a>.</p>
 
 </div>
 </div>
 <a class="anchor" id="a79b5cb42cb1829a1de3f377664701c6e"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void ADC::setResolution </td>
@@ -576,15 +706,97 @@ Public Member Functions</h2></td></tr>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Change the resolution of the measurement. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">bits</td><td>is the number of bits of resolution. For single-ended measurements: 8, 10, 12 or 16 bits. For differential measurements: 9, 11, 13 or 16 bits. If you want something in between (11 bits single-ended for example) select the inmediate higher and shift the result one to the right. </td></tr>
+    <tr><td class="paramname">bits</td><td>is the number of bits of resolution. For single-ended measurements: 8, 10, 12 or 16 bits. For differential measurements: 9, 11, 13 or 16 bits. If you want something in between (11 bits single-ended for example) select the inmediate higher and shift the result one to the right. If you select, for example, 9 bits and then do a single-ended reading, the resolution will be adjusted to 8 bitsrt In this case the comparison values will still be correct for analogRead and analogReadDifferential, but not for startSingle* or startContinous*, so whenenver you change the resolution, change also the comparison values. </td></tr>
   </table>
   </dd>
 </dl>
+
+<p>Definition at line <a class="el" href="_a_d_c_8cpp_source.html#l00192">192</a> of file <a class="el" href="_a_d_c_8cpp_source.html">ADC.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="afee4db084de383fab3bd820755386d57"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int ADC::startAnalogTimer </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>pin</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>period</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Starts a periodic measurement using the IntervalTimer library. </p>
+<p>The values will be added to a ring buffer of a fixed size. Read the oldest value with getTimerValue(pin), check if it's the last value with isLastValue(pin). When the buffer is full, new data will overwrite the oldest values. </p>
+<dl class="section return"><dt>Returns</dt><dd>ANALOG_TIMER_ERROR if the timer could not be started. Stop other analog timer and retry. </dd></dl>
+
+<p>Definition at line <a class="el" href="_a_d_c_8cpp_source.html#l00871">871</a> of file <a class="el" href="_a_d_c_8cpp_source.html">ADC.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af837a08b2967789a7cd40cdb9db999b0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int ADC::startAnalogTimerDifferential </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>pinP</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>pinN</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>period</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Starts a periodic measurement using the IntervalTimer library. </p>
+<p>The values will be added to a ring buffer of a fixed size. Read the oldest value with getTimerValue(pinP), check if it's the last value with isLastValue(pinP). When the buffer is full, new data will overwrite the oldest values. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pinP</td><td>must be A10 or A12. </td></tr>
+    <tr><td class="paramname">pinN</td><td>must be A11 (if pinP=A10) or A13 (if pinP=A12). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ANALOG_TIMER_ERROR if the timer could not be started. Stop other analog timer and retry. </dd></dl>
 
 </div>
 </div>
@@ -604,6 +816,8 @@ Public Member Functions</h2></td></tr>
 
 <p>Starts continuous conversion on the pin. </p>
 <p>It returns as soon as the <a class="el" href="class_a_d_c.html">ADC</a> is set, use <a class="el" href="class_a_d_c.html#a03e9af3db07ad97e401045a848aabf17" title="Reads the analog value of a continuous conversion. ">analogReadContinuous()</a> to read the value. </p>
+
+<p>Definition at line <a class="el" href="_a_d_c_8cpp_source.html#l00717">717</a> of file <a class="el" href="_a_d_c_8cpp_source.html">ADC.cpp</a>.</p>
 
 </div>
 </div>
@@ -641,28 +855,135 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
+<p>Definition at line <a class="el" href="_a_d_c_8cpp_source.html#l00754">754</a> of file <a class="el" href="_a_d_c_8cpp_source.html">ADC.cpp</a>.</p>
+
 </div>
 </div>
-<a class="anchor" id="a05857ba731f9b2b0ae35bef5c5cddd9e"></a>
+<a class="anchor" id="a6780adeda5597efe5c09e6dfb5f49ae1"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int ADC::startSingleDifferential </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>pinP</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>pinN</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Start a differential conversion between two pins (pinP - pinN) and enables interrupts. </p>
+<p>It returns inmediately, get value with <a class="el" href="class_a_d_c.html#ae97b6fffe4527e799006c11a9426f468" title="Reads the analog value of a single conversion. ">readSingle()</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pinP</td><td>must be A10 or A12. </td></tr>
+    <tr><td class="paramname">pinN</td><td>must be A11 (if pinP=A10) or A13 (if pinP=A12). Other pins will return ADC_ERROR_DIFF_VALUE. This function is interrupt safe. The <a class="el" href="class_a_d_c.html">ADC</a> interrupt will restore the adc to its previous settings and restart any measurement if it stopped one. If you modifz the adc_isr then this won't happen. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="_a_d_c_8cpp_source.html#l00656">656</a> of file <a class="el" href="_a_d_c_8cpp_source.html">ADC.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7759873f09a8369e41f12280234a383b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int ADC::startSingleRead </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>pin</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Starts an analog measurement on the pin and enables interrupts. </p>
+<p>It returns inmediately, get value with <a class="el" href="class_a_d_c.html#ae97b6fffe4527e799006c11a9426f468" title="Reads the analog value of a single conversion. ">readSingle()</a>. If the pin is incorrect it returns ADC_ERROR_VALUE This function is interrupt safe. The <a class="el" href="class_a_d_c.html">ADC</a> interrupt will restore the adc to its previous settings and restart any measurement if it stopped one. If you modifz the adc_isr then this won't happen. </p>
+
+<p>Definition at line <a class="el" href="_a_d_c_8cpp_source.html#l00599">599</a> of file <a class="el" href="_a_d_c_8cpp_source.html">ADC.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="abff12774fa2c93383e37c8bcf7ae5bfb"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void ADC::stopContinuous </td>
+          <td class="memname">void ADC::stopAnalogTimer </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>pin</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Stops continuous conversion. </p>
+<p>Stops the periodic measurement. </p>
+<p>As soon as it is stopped, you won't be able to access the buffer anymore It also disables the adc interrupt </p>
+
+<p>Definition at line <a class="el" href="_a_d_c_8cpp_source.html#l00922">922</a> of file <a class="el" href="_a_d_c_8cpp_source.html">ADC.cpp</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a782af0c9fd657695f3a573e30c67ba65"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void(* ADC::analogTimerCallbackFP)(void)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Ppoints to the function that takes care of the analogTimers. </p>
+<p>When there are no analogTimers this points to an empty function if you want to modify the adc_isr but still take care of the analogTimers, call this function. </p>
+
+<p>Definition at line <a class="el" href="_a_d_c_8h_source.html#l00281">281</a> of file <a class="el" href="_a_d_c_8h_source.html">ADC.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li><a class="el" href="_a_d_c_8h_source.html">ADC.h</a></li>
-<li><a class="el" href="_a_d_c_8cpp.html">ADC.cpp</a></li>
+<li><a class="el" href="_a_d_c_8cpp_source.html">ADC.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -670,7 +991,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_a_d_c.html">ADC</a></li>
-    <li class="footer">Generated on Tue Oct 22 2013 19:35:06 for ADC by
+    <li class="footer">Generated on Sun Nov 17 2013 22:54:03 for ADC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

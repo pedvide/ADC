@@ -1,7 +1,7 @@
 /* Example for analogContinuousReadInterrupts
 *  It measures continuously the voltage on pin A9,
-*  Write c and press enter on the serial console to check that the conversion is taking place,
-*  Write t to check if the voltage agrees with the comparison in the setup()
+*  Write a and press enter on the serial console to check that the conversion is taking place,
+*  Write v to get the last converted value
 *  Write s to stop the conversion, you can restart it writing r.
 */
 
@@ -35,9 +35,6 @@ void setup() {
   //adc.startContinuousDifferential(A10, A11);
   adc.startContinuous(A9);
 
-  NVIC_ENABLE_IRQ(IRQ_ADC0);
-
-
   delay(500);
 }
 
@@ -61,7 +58,7 @@ void loop() {
         Serial.print("Value: ");
         Serial.println(adc.analogReadContinuous()*3.3/adc.getMaxValue(), DEC);
     } else if(c=='r') { // conversion complete?
-        Serial.print("Restarting conversions ");
+        Serial.println("Restarting conversions ");
         adc.startContinuous(readPin);
         delay(100);
     }
@@ -82,19 +79,19 @@ void adc0_isr(void) {
 }
 
 // RESULTS OF THE TEST
-// Measure continuously the voltage on a voltage divider. Result true if less than 1.0 V
+// Measure continuously the voltage on a voltage divider.
 // Measurement pin A9 (23). Clock speed 96 Mhz. Default options for analog_init. No code on loop(){}. Low level code on isr.
 
-// ADC resolution     Measurement frequency (1 Hz uncertainty)    Num. averages
-//     16  bits           193.546 kHz                               1
-//     12  bits           230.767 kHz                               1
-//     10  bits           272.650 kHz**                             1
-//      8  bits           704.876 kHz*,|                            1
-// * 604.545 kHz if uncommented code in loop(), same frequency for the other resolutions
-// ** 255.725 kHz if using high-level code in the isr.
-// | 257.966 kHz if using high-level code in the isr.
+// ADC resolution     Measurement frequency   Measr. time    Num. averages
+//     16  bits           387.092 kHz         2.58 us               1
+//     12  bits           461.534 kHz         2.17 us               1
+//     10  bits           545.300 kHz**       1.83 us               1
+//      8  bits           1409.752 kHz*,|     0.71 us               1
+// ** 511.45 kHz (1.95 us) if using high-level code in the isr.
+// * 1209.09 kHz (0.83 us) if uncommented code in loop(), same frequency for the other resolutions
+// | 515.932 kHz (1.94 us) if using high-level code in the isr.
 
-//     16  bits           6.049 kHz                                 32
-//     12  bits           7.211 kHz                                 32
-//     10  bits           8.523 kHz                                 32
-//      8  bits           22.058 kHz                                32
+//     16  bits           12.098 kHz          82.7 us               32
+//     12  bits           14.422 kHz          69.3 us               32
+//     10  bits           17.046 kHz          58.7 us               32
+//      8  bits           44.116 kHz          22.7 us               32

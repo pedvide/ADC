@@ -22,8 +22,8 @@ void setup() {
   adc.setResolution(16); // set bits of resolution
 
   // always call the compare functions after changing the resolution!
-  //adc.enableCompare(1.0/3.3*adc.getMaxValue(), 0); // measurement will be ready if value < 1.0V
-  adc.enableCompareRange(1.0*adc.getMaxValue()/3.3, 2.0*adc.getMaxValue()/3.3, 0, 1); // ready if value lies out of [1.0,2.0] V
+  adc.enableCompare(1.0/3.3*adc.getMaxValue(), 0); // measurement will be ready if value < 1.0V
+  //adc.enableCompareRange(1.0*adc.getMaxValue()/3.3, 2.0*adc.getMaxValue()/3.3, 0, 1); // ready if value lies out of [1.0,2.0] V
 
   delay(500);
 }
@@ -37,7 +37,7 @@ void loop() {
   if(value!=ADC_ERROR_VALUE) {
 
       // the test results below were obtained commenting out all Serial.print*() and the delay() lines
-      GPIOC_PTOR = 1<<5;
+      //GPIOC_PTOR = 1<<5;
 
       Serial.print("Value: ");
       Serial.println(value*3.3/adc.getMaxValue(), DEC);
@@ -53,7 +53,7 @@ void loop() {
 // Measure in a loop the voltage on a voltage divider. Result true if less than 1.0 V
 // Measurement pin A9 (23). Clock speed 96 Mhz. Default options for analog_init. Only toggling led code on loop(){}, no Serial.print() nor delay.
 
-// ADC resolution     Measurement frequency (1 Hz uncertainty)    Num. averages
+// ADC resolution     Measurement frequency                  Num. averages
 //     16  bits            99.960 kHz                               1
 //     12  bits           107.002 kHz                               1
 //     10  bits           115.226 kHz                               1

@@ -14,6 +14,17 @@
 // include pow()
 #include <math.h>
 
+// include new and delete
+#include <Arduino.h>
+
+// include the circular buffer
+#include <RingBuffer.h>
+// and IntervalTimer
+#include <IntervalTimer.h>
+
+// number of interval timers we can have
+#define MAX_ANALOG_TIMERS 3
+
 // the alternate clock is connected to OSCERCLK (16 MHz).
 // datasheet says ADC clock should be 2 to 12 MHz for 16 bit mode
 // datasheet says ADC clock should be 1 to 18 MHz for 8-12 bit mode
@@ -41,8 +52,11 @@
 
 
 // Error codes for analogRead and analogReadDifferential
-#define ADC_ERROR_VALUE -1
 #define ADC_ERROR_DIFF_VALUE -70000
+#define ADC_ERROR_VALUE ADC_ERROR_DIFF_VALUE
+
+// Error codes for startAnalogTimer
+#define ANALOG_TIMER_ERROR -1
 
 /** Class ADC: Implements all functions of the Teensy 3.0 analog to digital converter
 *
@@ -64,7 +78,8 @@ class ADC
 
         //! Set the voltage reference you prefer, default is vcc
         /*!
-        * \param type can be DEFAULT, EXTERNAL or INTERNAL
+        * \param type can be DEFAULT, EXTERNAL or INTERNAL.
+        * It needs to recalibrate.
         */
         void setReference(uint8_t type);
 
@@ -76,14 +91,17 @@ class ADC
         *  For differential measurements: 9, 11, 13 or 16 bits.
         *  If you want something in between (11 bits single-ended for example) select the inmediate higher
         *  and shift the result one to the right.
+        *  If you select, for example, 9 bits and then do a single-ended reading, the resolution will be adjusted to 8 bitsrt
+        *  In this case the comparison values will still be correct for analogRead and analogReadDifferential, but not
+        *  for startSingle* or startContinous*, so whenenver you change the resolution, change also the comparison values.
         */
-        void setResolution(unsigned int bits);
+        static void setResolution(unsigned int bits);
 
         //! Returns the resolution of the ADC.
-        int getResolution();
+        static int getResolution();
 
-        //! Returns the maximum value for a measurement, that is: 2^resolution
-        double getMaxValue();
+        //! Returns the maximum value for a measurement.
+        uint32_t getMaxValue();
 
 
         //! Set the number of averages
@@ -97,10 +115,10 @@ class ADC
         /** An IRQ_ADC0 Interrupt will be raised when the conversion is completed
         *  (including hardware averages and if the comparison (if any) is true).
         */
-        void enableInterrupts();
+        static void enableInterrupts();
 
         //! Disable interrupts
-        void disableInterrupts();
+        static void disableInterrupts();
 
 
         //! Enable DMA request
@@ -137,8 +155,9 @@ class ADC
         //! Returns the analog value of the pin.
         /** It waits until the value is read and then returns the result.
         * If a comparison has been set up and fails, it will return ADC_ERROR_VALUE.
+        * This function is interrupt safe, so it will restore the adc to the state it was before being called
         */
-        int analogRead(uint8_t pin);
+        static int analogRead(uint8_t pin);
 
         //! Reads the differential analog value of two pins (pinP - pinN).
         /** It waits until the value is read and then returns the result.
@@ -146,8 +165,33 @@ class ADC
         * \param pinP must be A10 or A12.
         * \param pinN must be A11 (if pinP=A10) or A13 (if pinP=A12).
         * Other pins will return ADC_ERROR_DIFF_VALUE.
+        * This function is interrupt safe, so it will restore the adc to the state it was before being called
         */
-        int analogReadDifferential(uint8_t pinP, uint8_t pinN);
+        static int analogReadDifferential(uint8_t pinP, uint8_t pinN);
+
+        //! Starts an analog measurement on the pin and enables interrupts.
+        /** It returns inmediately, get value with readSingle().
+        *   If the pin is incorrect it returns ADC_ERROR_VALUE
+        *   This function is interrupt safe. The ADC interrupt will restore the adc to its previous settings and
+        *   restart any measurement if it stopped one. If you modifz the adc_isr then this won't happen.
+        */
+        static int startSingleRead(uint8_t pin);
+
+        //! Start a differential conversion between two pins (pinP - pinN) and enables interrupts.
+        /** It returns inmediately, get value with readSingle().
+        *   \param pinP must be A10 or A12.
+        *   \param pinN must be A11 (if pinP=A10) or A13 (if pinP=A12).
+        *   Other pins will return ADC_ERROR_DIFF_VALUE.
+        *   This function is interrupt safe. The ADC interrupt will restore the adc to its previous settings and
+        *   restart any measurement if it stopped one. If you modifz the adc_isr then this won't happen.
+        */
+        static int startSingleDifferential(uint8_t pinP, uint8_t pinN);
+
+        //! Reads the analog value of a single conversion.
+        /** Set the conversion with with startSingleRead(pin) or startSingleDifferential(pinP, pinN).
+        *   \return the converted value.
+        */
+        static int readSingle();
 
 
         //! Starts continuous conversion on the pin.
@@ -163,21 +207,52 @@ class ADC
         */
         void startContinuousDifferential(uint8_t pinP, uint8_t pinN);
 
-        //! Reads the analog value of a continuous conversion
-        /** Set the continuous conversion with with analogStartContinuous(pin) or startContinuousDifferential(pinP, pinN)
+        //! Reads the analog value of a continuous conversion.
+        /** Set the continuous conversion with with analogStartContinuous(pin) or startContinuousDifferential(pinP, pinN).
         *   \return the last converted value.
         */
-        int analogReadContinuous();
+        static int analogReadContinuous();
 
         //! Stops continuous conversion
         void stopContinuous();
+
+
+        //! Starts a periodic measurement using the IntervalTimer library.
+        /** The values will be added to a ring buffer of a fixed size.
+        *   Read the oldest value with getTimerValue(pin), check if it's the last value with isLastValue(pin).
+        *   When the buffer is full, new data will overwrite the oldest values.
+        *   \returns ANALOG_TIMER_ERROR if the timer could not be started. Stop other analog timer and retry.
+        */
+        int startAnalogTimer(uint8_t pin, unsigned int period);
+
+        //! Starts a periodic measurement using the IntervalTimer library.
+        /** The values will be added to a ring buffer of a fixed size.
+        *   Read the oldest value with getTimerValue(pinP), check if it's the last value with isLastValue(pinP).
+        *   When the buffer is full, new data will overwrite the oldest values.
+        *   \param pinP must be A10 or A12.
+        *   \param pinN must be A11 (if pinP=A10) or A13 (if pinP=A12).
+        *   \returns ANALOG_TIMER_ERROR if the timer could not be started. Stop other analog timer and retry.
+        */
+        int startAnalogTimerDifferential(uint8_t pinP, uint8_t pinN, unsigned int period);
+
+        //! Stops the periodic measurement
+        /** As soon as it is stopped, you won't be able to access the buffer anymore
+        *   It also disables the adc interrupt
+        */
+        void stopAnalogTimer(uint8_t pin);
+
+        //! Returns the oldest value of the ring buffer where the periodic measurements go
+        int getTimerValue(uint8_t pin);
+
+        //! Is the oldest value also the last one?
+        int isTimerLastValue(uint8_t pin);
 
 
         //! Is the ADC converting at the moment?
         /**
         *  \return 1 if yes, 0 if not
         */
-        int isConverting();
+        static int isConverting();
 
         //! Is an ADC conversion ready?
         /**
@@ -185,37 +260,110 @@ class ADC
         *  When a value is read this function returns 0 until a new value exists
         *  So it only makes sense to call it before analogRead(), analogReadContinuous() or analogReadDifferential()
         */
-        int isComplete();
+        static int isComplete();
+
+        //! Is the ADC in differential mode?
+        /**
+        *  \return 1 if yes, 0 if not.
+        */
+        static int isDifferential();
+
+        //! Is the ADC in continuous mode?
+        /**
+        *  \return 1 if yes, 0 if not.
+        */
+        static int isContinuous();
+
+        //! Points to the function that takes care of the analogTimers
+        /** When there are no analogTimers this points to an empty function
+        *   if you want to modify the adc_isr but still take care of the analogTimers, call this function.
+        */
+        static void (*analogTimer_ADC_Callback)(void);
+
 
     protected:
     private:
-        uint8_t calibrating;
 
-        uint8_t analog_config_bits;
+        static const uint8_t ledPin;
 
-        double analog_max_val;
+        static uint8_t calibrating;
 
-        uint8_t analog_num_average;
+        static uint8_t analog_config_bits;
 
-        uint8_t analog_reference_internal;
+        static uint32_t analog_max_val;
 
-        uint8_t var_enableInterrupts;
+        static uint8_t analog_num_average;
+
+        static uint8_t analog_reference_internal;
+
+        static uint8_t var_enableInterrupts;
 
         /** Sets up all initial configurations and starts calibration
         *
         */
-        void analog_init(void);
+        static void analog_init(uint32_t config=0);
 
         /** Waits until calibration is finished and writes the corresponding registers
         *
         */
-        void wait_for_cal(void);
+        static void wait_for_cal(void);
 
-        // translate pin number to SC1A nomenclature
-        uint8_t channel2sc1a[16]= {
-            5, 14, 8, 9, 13, 12, 6, 7, 15, 4,
-            0, 19, 3, 21, 26, 22};
+        /** ADC interrupt callback for the timers
+        *
+        */
+        static void ADC_callback();
+
+        /** Empty function
+        *
+        */
+        static void voidFunction();
+
+        // translate pin number to SC1A nomenclature and viceversa
+        static const uint8_t channel2sc1a[16];
+        static const uint8_t sc1a2channel[27];
+
+        static int pinNumber[MAX_ANALOG_TIMERS]; // the timer's pin
+        static IntervalTimer *timer[MAX_ANALOG_TIMERS]; // timer
+        static RingBuffer *buffer[MAX_ANALOG_TIMERS]; // circular buffer to store analog values
+
+        // function callback for the analog timers
+        typedef void (*ISR)(void);
+        static ISR analogTimerCallback[MAX_ANALOG_TIMERS];
+        static void analogTimerCallback0();
+        static void analogTimerCallback1();
+        static void analogTimerCallback2();
+
+        // struct to store the config of the adc
+        typedef struct {
+            uint32_t savedSC1A, savedSC2, savedSC3, savedCFG1, savedCFG2, savedRes;
+            uint8_t diffRes; // is the new resolution different from the old one?
+        } ADC_CONFIG;
+
+        static ADC_CONFIG adc_config;
+        static uint8_t adcWasInUse; // was the adc in use before an analog timer call?
+
+
 
 };
 
+
 #endif // ADC_H
+
+
+/* PDB SKETCH FROM SERVO.CPP
+
+if (!(SIM_SCGC6 & SIM_SCGC6_PDB)) {
+    SIM_SCGC6 |= SIM_SCGC6_PDB; // TODO: use bitband for atomic bitset // enable pdb clock
+    PDB0_MOD = 0xFFFF; // max period of counter, max 65535.
+    PDB0_CNT = 0; // current value of the counter, is supposed to be read-only....
+    PDB0_IDLY = 0; // the pdb interrupt happens when IDLY is equal to CNT
+    PDB0_SC = PDB_CONFIG; // software trigger, pdb and interrupts enabled, continuous mode, clock = bus/4
+    // TODO: maybe this should be a higher priority than most
+    // other interrupts (init all to some default?)
+    PDB0_SC = PDB_CONFIG | PDB_SC_SWTRIG; // start the counter!
+    // i think the pdb interrupt goes off at 183.11 Hz
+}
+NVIC_ENABLE_IRQ(IRQ_PDB);
+
+
+*/

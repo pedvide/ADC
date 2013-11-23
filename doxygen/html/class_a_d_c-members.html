@@ -45,6 +45,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -92,7 +93,7 @@ $(document).ready(function(){initNavTree('class_a_d_c.html','');});
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Macros</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -110,33 +111,44 @@ $(document).ready(function(){initNavTree('class_a_d_c.html','');});
 <p>This is the complete list of members for <a class="el" href="class_a_d_c.html">ADC</a>, including all inherited members.</p>
 <table class="directory">
   <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#a60b6e21403b1f30984f63832c0562960">ADC</a>()</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="class_a_d_c.html#a67ad2a6883cfffb1e4876e678ba7bb8a">analogRead</a>(uint8_t pin)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#a03e9af3db07ad97e401045a848aabf17">analogReadContinuous</a>()</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="class_a_d_c.html#ad3a40837cf36ad7c7c1efe635523c4c4">analogReadDifferential</a>(uint8_t pinP, uint8_t pinN)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#ad48e3b4b69170965fc4fe70ef042c099">disableCompare</a>()</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="class_a_d_c.html#a58af22e8f95c1d2b1560153f906d1038">disableDMA</a>()</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#ad8acae7988973bdede138deea567623a">disableInterrupts</a>()</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="class_a_d_c.html#a5bc29134a1079cc1c232a436c3778f88">enableCompare</a>(int16_t compValue, int greaterThan)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#aee940d66774b13a343e85c358ee6cd45">enableCompareRange</a>(int16_t lowerLimit, int16_t upperLimit, int insideRange, int inclusive)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="class_a_d_c.html#a10b9e674ed487b81160687e38fafbb59">enableDMA</a>()</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#a66a26ded71b7b938e3fc8826c4579092">enableInterrupts</a>()</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="class_a_d_c.html#a0a02587e3678afab6c0398f3c7c56b93">getMaxValue</a>()</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#acf222ac0d18e3d6b47d95f9b8a46c226">getResolution</a>()</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="class_a_d_c.html#a2b2a0d93a661310922f72606b9ddaa03">isComplete</a>()</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#a9ac9c98cd656c5f4d34616d49c91385f">isConverting</a>()</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_a_d_c.html#a67ad2a6883cfffb1e4876e678ba7bb8a">analogRead</a>(uint8_t pin)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#a03e9af3db07ad97e401045a848aabf17">analogReadContinuous</a>()</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_a_d_c.html#ad3a40837cf36ad7c7c1efe635523c4c4">analogReadDifferential</a>(uint8_t pinP, uint8_t pinN)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#a782af0c9fd657695f3a573e30c67ba65">analogTimerCallbackFP</a></td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_a_d_c.html#ad48e3b4b69170965fc4fe70ef042c099">disableCompare</a>()</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#a58af22e8f95c1d2b1560153f906d1038">disableDMA</a>()</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_a_d_c.html#ad8acae7988973bdede138deea567623a">disableInterrupts</a>()</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#a5bc29134a1079cc1c232a436c3778f88">enableCompare</a>(int16_t compValue, int greaterThan)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_a_d_c.html#aee940d66774b13a343e85c358ee6cd45">enableCompareRange</a>(int16_t lowerLimit, int16_t upperLimit, int insideRange, int inclusive)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#a10b9e674ed487b81160687e38fafbb59">enableDMA</a>()</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_a_d_c.html#a66a26ded71b7b938e3fc8826c4579092">enableInterrupts</a>()</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#a254cfc7c511bc29447d2a692433efe24">getMaxValue</a>()</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_a_d_c.html#acf222ac0d18e3d6b47d95f9b8a46c226">getResolution</a>()</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#ac46fe3df35b3f92398f1d0d6bd2a72ac">getTimerValue</a>(uint8_t pin)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_a_d_c.html#a2b2a0d93a661310922f72606b9ddaa03">isComplete</a>()</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#a745c898a53d1caf5f05e5116faa597e2">isContinuous</a>()</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_a_d_c.html#a9ac9c98cd656c5f4d34616d49c91385f">isConverting</a>()</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#af11cf56440a925d143842e020b9b7f79">isDifferential</a>()</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_a_d_c.html#af708e6ce19d316f38343d14141c01a16">isTimerLastValue</a>(uint8_t pin)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#ae97b6fffe4527e799006c11a9426f468">readSingle</a>()</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
   <tr><td class="entry"><a class="el" href="class_a_d_c.html#a6a3fed0d7bfea66dd4b4cd8f2f539c29">setAveraging</a>(unsigned int num)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#a3871e90219238c6319c8b6bf801b5fd7">setReference</a>(uint8_t type)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="class_a_d_c.html#a79b5cb42cb1829a1de3f377664701c6e">setResolution</a>(unsigned int bits)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_a_d_c.html#a79b5cb42cb1829a1de3f377664701c6e">setResolution</a>(unsigned int bits)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#afee4db084de383fab3bd820755386d57">startAnalogTimer</a>(uint8_t pin, unsigned int period)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_a_d_c.html#af837a08b2967789a7cd40cdb9db999b0">startAnalogTimerDifferential</a>(uint8_t pinP, uint8_t pinN, unsigned int period)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#a332029f903b3d92cb52d2d8b1efe5ed6">startContinuous</a>(uint8_t pin)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
   <tr><td class="entry"><a class="el" href="class_a_d_c.html#a013c9c109b7ccd038a5939866fe777ee">startContinuousDifferential</a>(uint8_t pinP, uint8_t pinN)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#a05857ba731f9b2b0ae35bef5c5cddd9e">stopContinuous</a>()</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="class_a_d_c.html#aefd878291d0c14aa524df99af5a63148">~ADC</a>()</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#a6780adeda5597efe5c09e6dfb5f49ae1">startSingleDifferential</a>(uint8_t pinP, uint8_t pinN)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_a_d_c.html#a7759873f09a8369e41f12280234a383b">startSingleRead</a>(uint8_t pin)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#abff12774fa2c93383e37c8bcf7ae5bfb">stopAnalogTimer</a>(uint8_t pin)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_a_d_c.html#a05857ba731f9b2b0ae35bef5c5cddd9e">stopContinuous</a>()</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#aefd878291d0c14aa524df99af5a63148">~ADC</a>()</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
 </table></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Oct 22 2013 19:35:06 for ADC by
+    <li class="footer">Generated on Sun Nov 17 2013 22:54:03 for ADC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>
