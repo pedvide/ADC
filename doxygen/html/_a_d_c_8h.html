@@ -91,7 +91,7 @@ $(document).ready(function(){initNavTree('_a_d_c_8h.html','');});
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Macros</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Macros</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -112,7 +112,8 @@ $(document).ready(function(){initNavTree('_a_d_c_8h.html','');});
 <code>#include &quot;core_pins.h&quot;</code><br/>
 <code>#include &quot;mk20dx128.h&quot;</code><br/>
 <code>#include &lt;math.h&gt;</code><br/>
-<code>#include &lt;RingBuffer.h&gt;</code><br/>
+<code>#include &lt;Arduino.h&gt;</code><br/>
+<code>#include &lt;<a class="el" href="_ring_buffer_8h_source.html">RingBuffer.h</a>&gt;</code><br/>
 <code>#include &lt;IntervalTimer.h&gt;</code><br/>
 </div>
 <p><a href="_a_d_c_8h_source.html">Go to the source code of this file.</a></p>
@@ -124,6 +125,8 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
+<tr class="memitem:a7eb883900caaf62368bacfde26035535"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c_8h.html#a7eb883900caaf62368bacfde26035535">MAX_ANALOG_TIMERS</a>&#160;&#160;&#160;3</td></tr>
+<tr class="separator:a7eb883900caaf62368bacfde26035535"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3da44afeba217135a680a7477b5e3ce3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c_8h.html#a3da44afeba217135a680a7477b5e3ce3">DEFAULT</a>&#160;&#160;&#160;0</td></tr>
 <tr class="separator:a3da44afeba217135a680a7477b5e3ce3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a02c5e2eafaed44878fd8e6c54c8dde4d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c_8h.html#a02c5e2eafaed44878fd8e6c54c8dde4d">INTERNAL</a>&#160;&#160;&#160;2</td></tr>
@@ -134,10 +137,12 @@ Macros</h2></td></tr>
 <tr class="separator:a56000ad2fa885e1acdbb06da63ded9bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af3fe37c1cda80aa7202b5a3bb7557dc9"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c_8h.html#af3fe37c1cda80aa7202b5a3bb7557dc9">EXTERNAL</a>&#160;&#160;&#160;0</td></tr>
 <tr class="separator:af3fe37c1cda80aa7202b5a3bb7557dc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a810b46bdaa73057d834142229111adc5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c_8h.html#a810b46bdaa73057d834142229111adc5">ADC_ERROR_VALUE</a>&#160;&#160;&#160;-1</td></tr>
-<tr class="separator:a810b46bdaa73057d834142229111adc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af181c4b5c617516517400c427494e7e7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c_8h.html#af181c4b5c617516517400c427494e7e7">ADC_ERROR_DIFF_VALUE</a>&#160;&#160;&#160;-70000</td></tr>
 <tr class="separator:af181c4b5c617516517400c427494e7e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a810b46bdaa73057d834142229111adc5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c_8h.html#a810b46bdaa73057d834142229111adc5">ADC_ERROR_VALUE</a>&#160;&#160;&#160;<a class="el" href="_a_d_c_8h.html#af181c4b5c617516517400c427494e7e7">ADC_ERROR_DIFF_VALUE</a></td></tr>
+<tr class="separator:a810b46bdaa73057d834142229111adc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12a745ce8b6499612828e575e39c46b0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c_8h.html#a12a745ce8b6499612828e575e39c46b0">ANALOG_TIMER_ERROR</a>&#160;&#160;&#160;-1</td></tr>
+<tr class="separator:a12a745ce8b6499612828e575e39c46b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a class="anchor" id="af181c4b5c617516517400c427494e7e7"></a>
@@ -157,7 +162,19 @@ Macros</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define ADC_ERROR_VALUE&#160;&#160;&#160;-1</td>
+          <td class="memname">#define ADC_ERROR_VALUE&#160;&#160;&#160;<a class="el" href="_a_d_c_8h.html#af181c4b5c617516517400c427494e7e7">ADC_ERROR_DIFF_VALUE</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a12a745ce8b6499612828e575e39c46b0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ANALOG_TIMER_ERROR&#160;&#160;&#160;-1</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -224,13 +241,25 @@ Macros</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a7eb883900caaf62368bacfde26035535"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MAX_ANALOG_TIMERS&#160;&#160;&#160;3</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="_a_d_c_8h.html">ADC.h</a></li>
-    <li class="footer">Generated on Sat Oct 26 2013 23:16:29 for ADC by
+    <li class="footer">Generated on Sun Nov 24 2013 22:25:56 for ADC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

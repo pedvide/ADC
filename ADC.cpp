@@ -7,10 +7,10 @@
 
  /* TODO
   * Stuff related to the conversion speed and power. Useful if you want more speed or to save power.
-  * calibration for differential and continuous mode. analog_init with arguments
   *
-  * bugs: analog timer at 16 bits resolution goes from 0 to +1.65 and then jumps to -1.65 to 0
-  * comaprison values don't work in 16 bit differential mode (they are twice what you write)
+  * bugs:
+  * - analog timer at 16 bits resolution goes from 0 to +1.65 and then jumps to -1.65 to 0
+  * - comaprison values don't work in 16 bit differential mode (they are twice what you write)
  */
 
 
@@ -35,7 +35,7 @@ uint8_t ADC::analog_reference_internal;
 
 const uint8_t ADC::ledPin = 13;
 
-ADC::ADC_CONFIG ADC::adc_config; // store the adc config
+ADC::ADC_Config ADC::adc_config; // store the adc config
 uint8_t ADC::adcWasInUse; // was the adc in use before an analog timer call?
 
 const uint8_t ADC::channel2sc1a[]= {
@@ -45,18 +45,19 @@ const uint8_t ADC::sc1a2channel[]= { // new version, gives directly the pin numb
     34, 0, 0, 36, 23, 14, 20, 21, 16, 17, 0, 0, 19, 18, // 0-13
     15, 22, 0, 0, 0, 35, 0, 37, 39, 0, 0, 0, 38}; // 14-26
 
-int ADC::pinNumber[]; // the timers pin
-IntervalTimer *ADC::timer[]; // timer
-RingBuffer *ADC::buffer[]; // circular buffer to store analog values
+// struct with the analog timers
+ADC::AnalogTimer *ADC::analogTimer[];
 
 // pointer to isr adc
 void (*ADC::analogTimer_ADC_Callback)(void);
 
+// the functions for the analog timers
 ADC::ISR ADC::analogTimerCallback[] = {
     ADC::analogTimerCallback0,
     ADC::analogTimerCallback1,
     ADC::analogTimerCallback0
 };
+
 
 /* Constructor
 *
@@ -69,11 +70,13 @@ ADC::ADC() {
     analog_reference_internal = 0;
     var_enableInterrupts = 0;
 
-    // itinialize timer pins to -1 (unused)
+    // itinialize analog timers
     int i = 0;
     for(i=0; i<MAX_ANALOG_TIMERS; i++) {
-        pinNumber[i] = -1;
+        analogTimer[i] = new AnalogTimer;
+        //analogTimer[i]->pinNumber = -1;
     }
+    //*analogTimer = new AnalogTimer[MAX_ANALOG_TIMERS]; // doesn't work for some reason
 
     // call our init
     ADC::analog_init();
@@ -88,6 +91,10 @@ ADC::ADC() {
 */
 ADC::~ADC() {
     //dtor
+    int i = 0;
+    for(i=0; i<MAX_ANALOG_TIMERS; i++) {
+        delete analogTimer[i];
+    }
 
 }
 
@@ -101,14 +108,32 @@ void ADC::analog_init(uint32_t config)
 	VREF_TRM = 0x60;
 	VREF_SC = 0xE1;		// enable 1.2 volt ref
 
-	setResolution(analog_config_bits); // set resolution
-
 	if (analog_reference_internal) {
 		ADC0_SC2 |= ADC_SC2_REFSEL(1); // 1.2V ref
 	} else {
 		ADC0_SC2 |= ADC_SC2_REFSEL(0); // vcc/ext ref
 	}
 
+    // conversion resolution and frequency
+    if ( (analog_config_bits == 8) || (analog_config_bits == 9) )  {
+        ADC0_CFG1 = ADC0_CFG1_24MHZ + ADC_CFG1_MODE(0); // 0 clock divide + Input clock: 24 MHz (run at 24 MHz) + Conversion mode: 8 bit + Sample time: Short
+        ADC0_CFG2 = ADC_CFG2_MUXSEL + ADC_CFG2_ADLSTS(3); // b channels + Sample time 2 cycles (I think that if ADC_CFG1_ADLSMP isn't set, then ADC_CFG2_ADLSTS doesn't matter)
+        analog_max_val = 256; // diff mode 9 bits has 1 bit for sign, so max value is the same as single 8 bits
+    } else if ( (analog_config_bits == 10 )|| (analog_config_bits == 11) ) { // total clock cycles to complete conversion: 3 ADCK + 5 BUS + 4 averages*( 20 + 2 ADCK ) = 7.8 us
+        ADC0_CFG1 = ADC0_CFG1_12MHZ + ADC_CFG1_MODE(2) + ADC_CFG1_ADLSMP; // Clock divide: 1/2 + Input clock: 24 MHz (run at 12 MHz) + Conversion mode: 10 bit + Sample time: Long
+        ADC0_CFG2 = ADC_CFG2_MUXSEL + ADC_CFG2_ADLSTS(3); // b channels + Sample time 2 extra clock cycles
+        analog_max_val = 1024;
+    } else if ( (analog_config_bits == 12 )|| (analog_config_bits == 13) ) {
+        ADC0_CFG1 = ADC0_CFG1_12MHZ + ADC_CFG1_MODE(1) + ADC_CFG1_ADLSMP; // Clock divide: 1/2 + Input clock: 24 MHz (run at 12 MHz) + Conversion mode: 12 bit + Sample time: Long
+        ADC0_CFG2 = ADC_CFG2_MUXSEL + ADC_CFG2_ADLSTS(2); // b channels + Sample time: 6 extra clock cycles
+        analog_max_val = 4096;
+    } else {
+        ADC0_CFG1 = ADC0_CFG1_12MHZ + ADC_CFG1_MODE(3) + ADC_CFG1_ADLSMP;  //Clock divide: 1/2 + Input clock: 24 MHz (run at 12 MHz) + Conversion mode: 16 bit + Sample time: Long
+        ADC0_CFG2 = ADC_CFG2_MUXSEL + ADC_CFG2_ADLSTS(2); // b channels + Sample time: 6 extra clock cycles
+        analog_max_val = 65536;
+    }
+
+    // number of averages and calibration
 	num = analog_num_average;
 	if (num <= 1) {
 		ADC0_SC3 = ADC_SC3_CAL;  // begin calibration + no averages
@@ -121,6 +146,7 @@ void ADC::analog_init(uint32_t config)
 	} else {
 		ADC0_SC3 = ADC_SC3_CAL + ADC_SC3_AVGE + ADC_SC3_AVGS(3); // start calib. + single-shot mode + 32 averages
 	}
+
 	// calibration works best when averages are 32 and speed is less than 4 MHz
 	calibrating = 1;
 }
@@ -208,37 +234,19 @@ void ADC::setResolution(unsigned int bits)
         || (config==12 && analog_config_bits==13) || (config==13 && analog_config_bits==12) ) {
         analog_config_bits = config;
     } else if (config != analog_config_bits) { // change res
+        analog_config_bits = config;
+
 		// no recalibration is needed when changing the resolution, p. 619
-		//if (calibrating) ADC0_SC3 = 0; // cancel cal
-		//ADC::analog_init(); // re-cal
-
-		analog_config_bits = config;
-
-        if ( (analog_config_bits == 8) || (analog_config_bits == 9) )  {
-            ADC0_CFG1 = ADC0_CFG1_24MHZ + ADC_CFG1_MODE(0); // 0 clock divide + Input clock: 24 MHz (run at 24 MHz) + Conversion mode: 8 bit + Sample time: Short
-            ADC0_CFG2 = ADC_CFG2_MUXSEL + ADC_CFG2_ADLSTS(3); // b channels + Sample time 2 cycles (I think that if ADC_CFG1_ADLSMP isn't set, then ADC_CFG2_ADLSTS doesn't matter)
-            analog_max_val = 256; // diff mode 9 bits has 1 bit for sign, so max value is the same as single 8 bits
-        } else if ( (analog_config_bits == 10 )|| (analog_config_bits == 11) ) { // total clock cycles to complete conversion: 3 ADCK + 5 BUS + 4 averages*( 20 + 2 ADCK ) = 7.8 us
-            ADC0_CFG1 = ADC0_CFG1_12MHZ + ADC_CFG1_MODE(2) + ADC_CFG1_ADLSMP; // Clock divide: 1/2 + Input clock: 24 MHz (run at 12 MHz) + Conversion mode: 10 bit + Sample time: Long
-            ADC0_CFG2 = ADC_CFG2_MUXSEL + ADC_CFG2_ADLSTS(3); // b channels + Sample time 2 extra clock cycles
-            analog_max_val = 1024;
-        } else if ( (analog_config_bits == 12 )|| (analog_config_bits == 13) ) {
-            ADC0_CFG1 = ADC0_CFG1_12MHZ + ADC_CFG1_MODE(1) + ADC_CFG1_ADLSMP; // Clock divide: 1/2 + Input clock: 24 MHz (run at 12 MHz) + Conversion mode: 12 bit + Sample time: Long
-            ADC0_CFG2 = ADC_CFG2_MUXSEL + ADC_CFG2_ADLSTS(2); // b channels + Sample time: 6 extra clock cycles
-            analog_max_val = 4096;
-        } else {
-            ADC0_CFG1 = ADC0_CFG1_12MHZ + ADC_CFG1_MODE(3) + ADC_CFG1_ADLSMP;  //Clock divide: 1/2 + Input clock: 24 MHz (run at 12 MHz) + Conversion mode: 16 bit + Sample time: Long
-            ADC0_CFG2 = ADC_CFG2_MUXSEL + ADC_CFG2_ADLSTS(2); // b channels + Sample time: 6 extra clock cycles
-            analog_max_val = 65536;
-        }
-
+		// but it's needed if we change the frequency...
+		if (calibrating) ADC0_SC3 = 0; // cancel cal
+		ADC::analog_init(); // re-cal
 	}
 }
 
 /* Returns the resolution of the ADC
 *
 */
-int ADC::getResolution() {
+uint8_t ADC::getResolution() {
     return analog_config_bits;
 }
 
@@ -253,7 +261,7 @@ uint32_t ADC::getMaxValue() {
 /* Set the number of averages: 0, 4, 8, 16 or 32.
 *
 */
-void ADC::setAveraging(unsigned int num)
+void ADC::setAveraging(uint8_t num)
 {
 
 	if (calibrating) wait_for_cal();
@@ -362,7 +370,7 @@ void ADC::disableCompare() {
 */
 int ADC::analogRead(uint8_t pin)
 {
-	int result;
+	uint16_t result;
 
 	if (pin >= 14 && pin <= 39) {
 		if (pin <= 23) {
@@ -376,7 +384,7 @@ int ADC::analogRead(uint8_t pin)
 
 	if (calibrating) wait_for_cal();
 
-	int res = getResolution();
+	uint8_t res = getResolution();
 	uint8_t diffRes = 0; // is the new resolution different from the old one?
 
     // vars to save the current state of the ADC in case it's in use
@@ -390,7 +398,6 @@ int ADC::analogRead(uint8_t pin)
         savedRes = res;
         savedSC1A = ADC0_SC1A;
         savedCFG1 = ADC0_CFG1;
-        savedCFG2 = ADC0_CFG2;
         savedSC2 = ADC0_SC2;
         savedSC3 = ADC0_SC3;
 
@@ -435,7 +442,6 @@ int ADC::analogRead(uint8_t pin)
                     ADC0_CV2 *= 2;
                 }
                 ADC0_CFG1 = savedCFG1;
-                ADC0_CFG2 = savedCFG2;
                 ADC0_SC2 = savedSC2 & 0x7F; // restore first 8 bits
                 ADC0_SC3 = savedSC3 & 0xF; // restore first 4 bits
                 ADC0_SC1A = savedSC1A & 0x7F; // restore first 8 bits
@@ -456,7 +462,6 @@ int ADC::analogRead(uint8_t pin)
                     ADC0_CV2 *= 2;
                 }
                 ADC0_CFG1 = savedCFG1;
-                ADC0_CFG2 = savedCFG2;
                 ADC0_SC2 = savedSC2 & 0x7F; // restore first 8 bits
                 ADC0_SC3 = savedSC3 & 0xF; // restore first 4 bits
                 ADC0_SC1A = savedSC1A & 0x7F; // restore first 8 bits
@@ -482,13 +487,13 @@ int ADC::analogRead(uint8_t pin)
 */
 int ADC::analogReadDifferential(uint8_t pinP, uint8_t pinN)
 {
-	int result;
+	int16_t result;
 
 	// check for calibration before setting channels,
 	// because conversion will start as soon as we write to ADC0_SC1A
 	if (calibrating) wait_for_cal();
 
-	int res = getResolution();
+	uint8_t res = getResolution();
 	uint8_t diffRes = 0; // is the new resolution different from the old one?
 
     // vars to saved the current state of the ADC in case it's in use
@@ -614,7 +619,7 @@ int ADC::startSingleRead(uint8_t pin) {
 
 	if (calibrating) wait_for_cal();
 
-	int res = getResolution();
+	uint8_t res = getResolution();
 
     // if the resolution is incorrect (i.e. 9, 11 or 13) silently correct it
     adc_config.diffRes = 0;
@@ -662,7 +667,7 @@ int ADC::startSingleDifferential(uint8_t pinP, uint8_t pinN)
 	// because conversion will start as soon as we write to ADC0_SC1A
 	if (calibrating) wait_for_cal();
 
-	int res = getResolution();
+	uint8_t res = getResolution();
 
 	// if the resolution is incorrect (i.e. 8, 10 or 12) silently correct it
     adc_config.diffRes = 0;
@@ -721,7 +726,7 @@ void ADC::startContinuous(uint8_t pin)
 {
 
     // if the resolution is incorrect (i.e. 9, 11 or 13) silently correct it
-	int res = getResolution();
+	uint8_t res = getResolution();
 	if( (res==9) || (res==11) || (res==13) ) {
         setResolution(res-1);
 	} else if(res==16) {
@@ -758,7 +763,7 @@ void ADC::startContinuousDifferential(uint8_t pinP, uint8_t pinN)
 {
 
     // if the resolution is incorrect (i.e. 8, 10 or 12) silently correct
-	int res = getResolution();
+	uint8_t res = getResolution();
 	if( (res==8) || (res==10) || (res==12) ) {
         setResolution(res+1);
     } else if(res==16) {
@@ -800,7 +805,7 @@ int ADC::analogReadContinuous()
 {
     // The result is a 16 bit extended sign 2's complement number (the sign bit goes from bit 15 to analog_config_bits-1)
 	// if the number is negative we fill the rest of the 1's upto 32 bits (we extend the sign)
-	int result = ADC0_RA;
+	int16_t result = ADC0_RA;
     if (result & (1<<15)) { // number is negative
         result |= 0xFFFF0000; // result is a 32 bit integer
     }
@@ -817,6 +822,7 @@ void ADC::stopContinuous()
 	return;
 }
 
+
 /* void function that does nothing
 */
 void ADC::voidFunction(){return;}
@@ -832,14 +838,14 @@ void ADC::ADC_callback() {
 
     // find the index of the pin
     int i = 0;
-    while( (i<MAX_ANALOG_TIMERS) && (pinNumber[i]!=pin) ) {i++;}
+    while( (i<MAX_ANALOG_TIMERS) && (analogTimer[i]->pinNumber!=pin) ) {i++;}
     if( i==MAX_ANALOG_TIMERS) {
         digitalWriteFast(ledPin, LOW);
         return; // the last measurement doesn't belong to an analog timer buffer.
     }
 
     // place value in its buffer
-    buffer[i]->write((uint16_t)readSingle());
+    analogTimer[i]->buffer->write(readSingle());
 
     // restore ADC config if it was in use before being interrupted by the analog timer
     if (adcWasInUse) {
@@ -863,7 +869,14 @@ void ADC::ADC_callback() {
 void ADC::analogTimerCallback0() {
     digitalWriteFast(ledPin, HIGH);
 
-    startSingleRead(pinNumber[0]);
+    uint8_t pin = analogTimer[0]->pinNumber;
+    if(pin == A10) {
+        startSingleDifferential(A10, A11);
+    } else if(pin == A12) {
+        startSingleDifferential(A12, A13);
+    } else {
+        startSingleRead(pin);
+    }
 
     digitalWriteFast(ledPin, LOW);
 }
@@ -873,7 +886,14 @@ void ADC::analogTimerCallback0() {
 void ADC::analogTimerCallback1() {
     digitalWriteFast(ledPin, HIGH);
 
-    startSingleRead(pinNumber[1]);
+    uint8_t pin = analogTimer[1]->pinNumber;
+    if(pin == A10) {
+        startSingleDifferential(A10, A11);
+    } else if(pin == A12) {
+        startSingleDifferential(A12, A13);
+    } else {
+        startSingleRead(pin);
+    }
 
     digitalWriteFast(ledPin, LOW);
 }
@@ -883,7 +903,14 @@ void ADC::analogTimerCallback1() {
 void ADC::analogTimerCallback2() {
     digitalWriteFast(ledPin, HIGH);
 
-    startSingleRead(pinNumber[2]);
+    uint8_t pin = analogTimer[2]->pinNumber;
+    if(pin == A10) {
+        startSingleDifferential(A10, A11);
+    } else if(pin == A12) {
+        startSingleDifferential(A12, A13);
+    } else {
+        startSingleRead(pin);
+    }
 
     digitalWriteFast(ledPin, LOW);
 }
@@ -893,7 +920,7 @@ void ADC::analogTimerCallback2() {
 *   Read the oldest value with getTimerValue(pin), check if it's the last value with isLastValue(pin).
 *   When the buffer is full, new data will overwrite the oldest values.
 */
-int ADC::startAnalogTimer(uint8_t pin, unsigned int period) {
+int ADC::startAnalogTimer(uint8_t pin, uint32_t period) {
 
     // check pin
     if (pin < 14 || pin > 39) {
@@ -901,19 +928,17 @@ int ADC::startAnalogTimer(uint8_t pin, unsigned int period) {
     }
 
     // if the resolution is incorrect (i.e. 9, 11 or 13) silently correct it here
-	int res = getResolution();
+	uint8_t res = getResolution();
 	if( (res==9) || (res==11) || (res==13) ) {
         setResolution(res-1);
-        //ADC0_CV1 /= 2; // correct also compare function just in case it was enabled
-        //ADC0_CV2 /= 2;
 	}
 
     // find next timerPin not in use
     int i = 0;
     for(i=0; i<MAX_ANALOG_TIMERS; i++) {
-        if(pinNumber[i]==-1) {
+        if(analogTimer[i]->pinNumber==-1) {
             break;
-        } else if(pinNumber[i]==pin) { // the timer already exists, do nothing
+        } else if(analogTimer[i]->pinNumber==pin) { // the timer already exists, do nothing
             return true;
         }
     }
@@ -921,9 +946,14 @@ int ADC::startAnalogTimer(uint8_t pin, unsigned int period) {
         return ANALOG_TIMER_ERROR;
     }
 
+    analogTimer[i]->pinNumber = pin; // reserve a timer for this pin
+
     // create both objects
-    timer[i] = new IntervalTimer;
-    buffer[i] = new RingBuffer;
+    analogTimer[i]->timer = new IntervalTimer;
+    analogTimer[i]->buffer = new RingBuffer;
+
+    // store period
+    analogTimer[i]->period = period;
 
 	// point the adc_isr to the function that takes care of the timers
 	analogTimer_ADC_Callback = &ADC_callback;
@@ -931,8 +961,61 @@ int ADC::startAnalogTimer(uint8_t pin, unsigned int period) {
 	enableInterrupts();
 
     // start timerPin # i
-    pinNumber[i] = pin; // reserve a timer for this pin
-    int result = timer[i]->begin(analogTimerCallback[i], period);
+    int result = analogTimer[i]->timer->begin(analogTimerCallback[i], period);
+    if(!result) { // begin returns true/false
+            return ANALOG_TIMER_ERROR;
+    }
+
+    return result;
+}
+
+/*  Starts a periodic measurement using the IntervalTimer library.
+*   The values will be added to a ring buffer of a fixed size.
+*   Read the oldest value with getTimerValue(pinP), check if it's the last value with isLastValue(pinP).
+*   When the buffer is full, new data will overwrite the oldest values.
+*   \param pinP must be A10 or A12.
+*   \param pinN must be A11 (if pinP=A10) or A13 (if pinP=A12).
+*   \returns ANALOG_TIMER_ERROR if the timer could not be started. Stop other analog timer and retry.
+*/
+int ADC::startAnalogTimerDifferential(uint8_t pinP, uint8_t pinN, uint32_t period) {
+
+    // check pin
+    if ( (pinP != A10) && (pinP != A12) ) {
+        return ANALOG_TIMER_ERROR;   // invalid pin
+    }
+
+    // if the resolution is incorrect (i.e. 8, 10 or 12) silently correct it here
+	uint8_t res = getResolution();
+	if( (res==8) || (res==10) || (res==12) ) {
+        setResolution(res+1);
+	}
+
+    // find next timerPin not in use
+    int i = 0;
+    for(i=0; i<MAX_ANALOG_TIMERS; i++) {
+        if(analogTimer[i]->pinNumber==-1) {
+            break;
+        } else if(analogTimer[i]->pinNumber==pinP) { // the timer already exists, do nothing
+            return true;
+        }
+    }
+    if( i == (MAX_ANALOG_TIMERS) ) {  // All timers are being used, stop at least one of them!
+        return ANALOG_TIMER_ERROR;
+    }
+
+    analogTimer[i]->pinNumber = pin; // reserve a timer for this pin
+
+    // create both objects
+    analogTimer[i]->timer = new IntervalTimer;
+    analogTimer[i]->buffer = new RingBuffer;
+
+	// point the adc_isr to the function that takes care of the timers
+	analogTimer_ADC_Callback = &ADC_callback;
+    // enable interrupts
+	enableInterrupts();
+
+    // start timerPin # i
+    int result = analogTimer[i]->timer->begin(analogTimerCallback[i], period);
     if(!result) { // begin returns true/false
             return ANALOG_TIMER_ERROR;
     }
@@ -945,21 +1028,21 @@ int ADC::startAnalogTimer(uint8_t pin, unsigned int period) {
 void ADC::stopAnalogTimer(uint8_t pin) {
     // find corresponding timerPin
     int i = 0;
-    while( (i<MAX_ANALOG_TIMERS) && (pinNumber[i]!=pin) ) {i++;}
+    while( (i<MAX_ANALOG_TIMERS) && (analogTimer[i]->pinNumber!=pin) ) {i++;}
     if( i == MAX_ANALOG_TIMERS ) { // Timer doesn't exist
         return;
     }
 
     // stop timerPin # i
-    timer[i]->end();
-    pinNumber[i] = -1; // timerPin i is free now
+    analogTimer[i]->timer->end();
+    analogTimer[i]->pinNumber = -1; // timerPin i is free now
 
-    delete timer[i];
-    delete buffer[i];
+    delete analogTimer[i]->timer;
+    delete analogTimer[i]->buffer;
 
     // check if there are more analog timers in use
     i = 0;
-    while( (i<MAX_ANALOG_TIMERS) && (pinNumber[i]!=-1) ) {i++;}
+    while( (i<MAX_ANALOG_TIMERS) && (analogTimer[i]->pinNumber!=-1) ) {i++;}
     if( i == MAX_ANALOG_TIMERS ) { // no more analog timers
         disableInterrupts();
         // point the adc_isr to the function that does nothing
@@ -974,25 +1057,25 @@ void ADC::stopAnalogTimer(uint8_t pin) {
 int ADC::getTimerValue(uint8_t pin) {
     // find corresponding timerPin
     int i = 0;
-    while( (i<MAX_ANALOG_TIMERS) && (pinNumber[i]!=pin) ) {i++;}
+    while( (i<MAX_ANALOG_TIMERS) && (analogTimer[i]->pinNumber!=pin) ) {i++;}
     if( i == MAX_ANALOG_TIMERS ) { // Timer not found with that pin number!
         return ANALOG_TIMER_ERROR;
     }
 
-    return buffer[i]->read(); // read the oldest value in the buffer
+    return analogTimer[i]->buffer->read(); // read the oldest value in the buffer
 }
 
 // Is the oldest value also the last one?
-int ADC::isTimerLastValue(uint8_t pin) {
+bool ADC::isTimerLastValue(uint8_t pin) {
     // find corresponding timerPin
     int i = 0;
-    while( (i<MAX_ANALOG_TIMERS) && (pinNumber[i]!=pin) ) {i++;}
+    while( (i<MAX_ANALOG_TIMERS) && (analogTimer[i]->pinNumber!=pin) ) {i++;}
     if( i == MAX_ANALOG_TIMERS ) { // Timer not found with that pin number!
         return ANALOG_TIMER_ERROR;
     }
 
     //return timerPin[i].buffer->isEmpty();
-    return buffer[i]->isEmpty();
+    return analogTimer[i]->buffer->isEmpty();
 }
 
 
@@ -1000,7 +1083,7 @@ int ADC::isTimerLastValue(uint8_t pin) {
 /* Is the ADC converting at the moment?
 *  Returns 1 if yes, 0 if not
 */
-int ADC::isConverting() {
+bool ADC::isConverting() {
 
     return (ADC0_SC2 & ADC_SC2_ADACT) >> 7;
 }
@@ -1011,16 +1094,16 @@ int ADC::isConverting() {
 *  When a value is read this function returns 0 until a new value exists
 *  So it only makes sense to call it before analogRead(), analogReadContinuous() or analogReadDifferential()
 */
-int ADC::isComplete() {
+bool ADC::isComplete() {
 
     return (ADC0_SC1A & ADC_SC1_COCO) >> 7;
 }
 
 
-int ADC::isDifferential() {
+bool ADC::isDifferential() {
     return (ADC0_SC1A & ADC_SC1_DIFF) >> 5;
 }
 
-int ADC::isContinuous() {
+bool ADC::isContinuous() {
     return (ADC0_SC3 & ADC_SC3_ADCO) >> 3;
 }

@@ -45,7 +45,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -113,7 +112,7 @@ $(document).ready(function(){initNavTree('functions.html','');});
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Macros</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -123,7 +122,7 @@ $(document).ready(function(){initNavTree('functions.html','');});
 </div>
 
 <div class="contents">
-<div class="textblock">Here is a list of all documented class members with links to the class documentation for each member:</div>
+<div class="textblock">Here is a list of all class members with links to the classes they belong to:</div>
 
 <h3><a class="anchor" id="index_a"></a>- a -</h3><ul>
 <li>ADC()
@@ -138,8 +137,8 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <li>analogReadDifferential()
 : <a class="el" href="class_a_d_c.html#ad3a40837cf36ad7c7c1efe635523c4c4">ADC</a>
 </li>
-<li>analogTimerCallbackFP
-: <a class="el" href="class_a_d_c.html#a782af0c9fd657695f3a573e30c67ba65">ADC</a>
+<li>analogTimer_ADC_Callback
+: <a class="el" href="class_a_d_c.html#acd2190a0fffb121216e5f5bb2d84fc8e">ADC</a>
 </li>
 </ul>
 
@@ -178,7 +177,7 @@ $(document).ready(function(){initNavTree('functions.html','');});
 : <a class="el" href="class_a_d_c.html#a254cfc7c511bc29447d2a692433efe24">ADC</a>
 </li>
 <li>getResolution()
-: <a class="el" href="class_a_d_c.html#acf222ac0d18e3d6b47d95f9b8a46c226">ADC</a>
+: <a class="el" href="class_a_d_c.html#a3d365d0e397a9d2a5f23a117a4a7ef26">ADC</a>
 </li>
 <li>getTimerValue()
 : <a class="el" href="class_a_d_c.html#ac46fe3df35b3f92398f1d0d6bd2a72ac">ADC</a>
@@ -188,16 +187,16 @@ $(document).ready(function(){initNavTree('functions.html','');});
 
 <h3><a class="anchor" id="index_i"></a>- i -</h3><ul>
 <li>isComplete()
-: <a class="el" href="class_a_d_c.html#a2b2a0d93a661310922f72606b9ddaa03">ADC</a>
+: <a class="el" href="class_a_d_c.html#a8d52416818b784f7a0600e83442909b7">ADC</a>
 </li>
 <li>isContinuous()
-: <a class="el" href="class_a_d_c.html#a745c898a53d1caf5f05e5116faa597e2">ADC</a>
+: <a class="el" href="class_a_d_c.html#ae3a0e2b7062366b6cc0f691c9d0acd46">ADC</a>
 </li>
 <li>isConverting()
-: <a class="el" href="class_a_d_c.html#a9ac9c98cd656c5f4d34616d49c91385f">ADC</a>
+: <a class="el" href="class_a_d_c.html#ae9f0fe4ddfa32cd8eb5a6fb085c06668">ADC</a>
 </li>
 <li>isDifferential()
-: <a class="el" href="class_a_d_c.html#af11cf56440a925d143842e020b9b7f79">ADC</a>
+: <a class="el" href="class_a_d_c.html#a21b77150e3b960a4232a755143c64be2">ADC</a>
 </li>
 <li>isEmpty()
 : <a class="el" href="class_ring_buffer.html#a041d2e0a3ec68f91ea9847e220ed2501">RingBuffer</a>
@@ -206,7 +205,7 @@ $(document).ready(function(){initNavTree('functions.html','');});
 : <a class="el" href="class_ring_buffer.html#a47f4fd274ccf142f55092ed851640201">RingBuffer</a>
 </li>
 <li>isTimerLastValue()
-: <a class="el" href="class_a_d_c.html#af708e6ce19d316f38343d14141c01a16">ADC</a>
+: <a class="el" href="class_a_d_c.html#ae834c6a54ed17ed9028d3203b1761da8">ADC</a>
 </li>
 </ul>
 
@@ -226,7 +225,7 @@ $(document).ready(function(){initNavTree('functions.html','');});
 
 <h3><a class="anchor" id="index_s"></a>- s -</h3><ul>
 <li>setAveraging()
-: <a class="el" href="class_a_d_c.html#a6a3fed0d7bfea66dd4b4cd8f2f539c29">ADC</a>
+: <a class="el" href="class_a_d_c.html#aa80d9ebc6a60605e1b9a25f2db8734e9">ADC</a>
 </li>
 <li>setReference()
 : <a class="el" href="class_a_d_c.html#a3871e90219238c6319c8b6bf801b5fd7">ADC</a>
@@ -235,10 +234,10 @@ $(document).ready(function(){initNavTree('functions.html','');});
 : <a class="el" href="class_a_d_c.html#a79b5cb42cb1829a1de3f377664701c6e">ADC</a>
 </li>
 <li>startAnalogTimer()
-: <a class="el" href="class_a_d_c.html#afee4db084de383fab3bd820755386d57">ADC</a>
+: <a class="el" href="class_a_d_c.html#af093122742f6ac86684cb983d4293721">ADC</a>
 </li>
 <li>startAnalogTimerDifferential()
-: <a class="el" href="class_a_d_c.html#af837a08b2967789a7cd40cdb9db999b0">ADC</a>
+: <a class="el" href="class_a_d_c.html#adc1fe1cb2942e7aa12ea4737a529207c">ADC</a>
 </li>
 <li>startContinuous()
 : <a class="el" href="class_a_d_c.html#a332029f903b3d92cb52d2d8b1efe5ed6">ADC</a>
@@ -281,7 +280,7 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sun Nov 17 2013 22:54:03 for ADC by
+    <li class="footer">Generated on Sun Nov 24 2013 22:25:56 for ADC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

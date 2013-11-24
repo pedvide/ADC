@@ -4,7 +4,7 @@
 const int ledPin = 13;
 
 const int readPinCont = A9;
-const int readPinTimer = A8;
+const int readPinTimer = A10;
 const int readPinTimer2 = A7;
 
 ADC adc; // adc object
@@ -20,8 +20,8 @@ void setup() {
 
     delay(1000);
 
-    adc.setAveraging(4); // set number of averages
-    adc.setResolution(10); // set bits of resolution
+    adc.setAveraging(1); // set number of averages
+    adc.setResolution(13); // set bits of resolution
 
     // always call the compare functions after changing the resolution!
     //adc.enableCompare(1.0/3.3*adc.getMaxValue(), 0); // measurement will be ready if value < 1.0V
@@ -36,9 +36,8 @@ void setup() {
     Serial.println("Starting Timer 1");
     // start a analogRead every 10 ms, the values will be placed in a circular buffer
     // for 1 average and 10 bits of resolution the timer interrupt, ADC measurement and inclusion into the buffer takes around 9.0 us
-    //adc.setAveraging(4); // set number of averages
-    adc.setResolution(12); // set bits of resolution
-    startTimerValue = adc.startAnalogTimer(readPinTimer, 1000); // us
+    //startTimerValue = adc.startAnalogTimer(readPinTimer, 1000000); // us
+    startTimerValue = adc.startAnalogTimerDifferential(A10, A11, 1000000);
     Serial.println("Timer 1 started");
 
     //delay(500);
@@ -49,9 +48,6 @@ char c=0;
 
 void loop() {
 
-    Serial.print("Resolution: ");
-    Serial.println(adc.getResolution());
-
     if(startTimerValue==ANALOG_TIMER_ERROR) {
             Serial.println("Setup 1 failed");
     }
@@ -61,12 +57,12 @@ void loop() {
 
     if(!adc.isTimerLastValue(readPinTimer)) { // read the values in the buffer, the values are placed every 10 ms, but we read them every 50 ms
         Serial.print("Read pin 1: ");
-        Serial.println(adc.getTimerValue(readPinTimer)*3.3/adc.getMaxValue(), BIN);
+        Serial.println(adc.getTimerValue(readPinTimer2)*3.3/adc.getMaxValue(), DEC);
         //Serial.println("New value!");
     }
     if(!adc.isTimerLastValue(readPinTimer2)) { // read the values in the buffer, the values are placed every 10 ms, but we read them every 50 ms
         Serial.print("Read pin 2: ");
-        Serial.println(adc.getTimerValue(readPinTimer2)*3.3/adc.getMaxValue(), BIN);
+        Serial.println(adc.getTimerValue(readPinTimer2)*3.3/adc.getMaxValue(), DEC);
         //Serial.println("New value!");
     }
 
@@ -89,6 +85,7 @@ void loop() {
     } else if(c=='r') { // restart timer
         Serial.println("Start timer 2");
         startTimerValue2 = adc.startAnalogTimer(readPinTimer2, 1500);
+        //startTimerValue2 = adc.startAnalogTimerDifferential(A10, A11, 1500);
     }
   }
 

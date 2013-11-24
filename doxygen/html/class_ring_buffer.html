@@ -45,7 +45,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -93,7 +92,7 @@ $(document).ready(function(){initNavTree('class_ring_buffer.html','');});
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Macros</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -115,35 +114,45 @@ $(document).ready(function(){initNavTree('class_ring_buffer.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a93b9973de32a836bdf70befaf9d78eed"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a93b9973de32a836bdf70befaf9d78eed"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ring_buffer.html#a93b9973de32a836bdf70befaf9d78eed">RingBuffer</a> ()</td></tr>
-<tr class="memdesc:a93b9973de32a836bdf70befaf9d78eed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor, buffer has a size DEFAULT_BUFFER_SIZE. <br/></td></tr>
+<tr class="memitem:a93b9973de32a836bdf70befaf9d78eed"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ring_buffer.html#a93b9973de32a836bdf70befaf9d78eed">RingBuffer</a> ()</td></tr>
+<tr class="memdesc:a93b9973de32a836bdf70befaf9d78eed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor, buffer has a size DEFAULT_BUFFER_SIZE.  <a href="#a93b9973de32a836bdf70befaf9d78eed">More...</a><br/></td></tr>
 <tr class="separator:a93b9973de32a836bdf70befaf9d78eed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2715b2e99ea24521ef7a586c2f33e1c9"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ring_buffer.html#a2715b2e99ea24521ef7a586c2f33e1c9">~RingBuffer</a> ()</td></tr>
 <tr class="memdesc:a2715b2e99ea24521ef7a586c2f33e1c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Buffer has a size buffer_size.  <a href="#a2715b2e99ea24521ef7a586c2f33e1c9">More...</a><br/></td></tr>
 <tr class="separator:a2715b2e99ea24521ef7a586c2f33e1c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a47f4fd274ccf142f55092ed851640201"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a47f4fd274ccf142f55092ed851640201"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ring_buffer.html#a47f4fd274ccf142f55092ed851640201">isFull</a> ()</td></tr>
-<tr class="memdesc:a47f4fd274ccf142f55092ed851640201"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns 1 (true) if the buffer is full. <br/></td></tr>
+<tr class="memitem:a47f4fd274ccf142f55092ed851640201"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ring_buffer.html#a47f4fd274ccf142f55092ed851640201">isFull</a> ()</td></tr>
+<tr class="memdesc:a47f4fd274ccf142f55092ed851640201"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns 1 (true) if the buffer is full.  <a href="#a47f4fd274ccf142f55092ed851640201">More...</a><br/></td></tr>
 <tr class="separator:a47f4fd274ccf142f55092ed851640201"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a041d2e0a3ec68f91ea9847e220ed2501"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a041d2e0a3ec68f91ea9847e220ed2501"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ring_buffer.html#a041d2e0a3ec68f91ea9847e220ed2501">isEmpty</a> ()</td></tr>
-<tr class="memdesc:a041d2e0a3ec68f91ea9847e220ed2501"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns 1 (true) if the buffer is empty. <br/></td></tr>
+<tr class="memitem:a041d2e0a3ec68f91ea9847e220ed2501"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ring_buffer.html#a041d2e0a3ec68f91ea9847e220ed2501">isEmpty</a> ()</td></tr>
+<tr class="memdesc:a041d2e0a3ec68f91ea9847e220ed2501"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns 1 (true) if the buffer is empty.  <a href="#a041d2e0a3ec68f91ea9847e220ed2501">More...</a><br/></td></tr>
 <tr class="separator:a041d2e0a3ec68f91ea9847e220ed2501"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa14c47f5bbd73b5f8d2b83a86f01ccf2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa14c47f5bbd73b5f8d2b83a86f01ccf2"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ring_buffer.html#aa14c47f5bbd73b5f8d2b83a86f01ccf2">write</a> (int value)</td></tr>
-<tr class="memdesc:aa14c47f5bbd73b5f8d2b83a86f01ccf2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write a value into the buffer. <br/></td></tr>
+<tr class="memitem:aa14c47f5bbd73b5f8d2b83a86f01ccf2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ring_buffer.html#aa14c47f5bbd73b5f8d2b83a86f01ccf2">write</a> (int value)</td></tr>
+<tr class="memdesc:aa14c47f5bbd73b5f8d2b83a86f01ccf2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write a value into the buffer.  <a href="#aa14c47f5bbd73b5f8d2b83a86f01ccf2">More...</a><br/></td></tr>
 <tr class="separator:aa14c47f5bbd73b5f8d2b83a86f01ccf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8585065af57a71269bc46b30175c8dc8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8585065af57a71269bc46b30175c8dc8"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ring_buffer.html#a8585065af57a71269bc46b30175c8dc8">read</a> ()</td></tr>
-<tr class="memdesc:a8585065af57a71269bc46b30175c8dc8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read a value from the buffer. <br/></td></tr>
+<tr class="memitem:a8585065af57a71269bc46b30175c8dc8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ring_buffer.html#a8585065af57a71269bc46b30175c8dc8">read</a> ()</td></tr>
+<tr class="memdesc:a8585065af57a71269bc46b30175c8dc8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read a value from the buffer.  <a href="#a8585065af57a71269bc46b30175c8dc8">More...</a><br/></td></tr>
 <tr class="separator:a8585065af57a71269bc46b30175c8dc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class <a class="el" href="class_ring_buffer.html">RingBuffer</a> implements a circular buffer of fixed size (must be power of 2) Code adapted from <a href="http://en.wikipedia.org/wiki/Circular_buffer#Mirroring">http://en.wikipedia.org/wiki/Circular_buffer#Mirroring</a> </p>
-
-<p>Definition at line <a class="el" href="_ring_buffer_8h_source.html#l00017">17</a> of file <a class="el" href="_ring_buffer_8h_source.html">RingBuffer.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a93b9973de32a836bdf70befaf9d78eed"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RingBuffer::RingBuffer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Default constructor, buffer has a size DEFAULT_BUFFER_SIZE. </p>
+
+</div>
+</div>
 <a class="anchor" id="a2715b2e99ea24521ef7a586c2f33e1c9"></a>
 <div class="memitem">
 <div class="memproto">
@@ -173,13 +182,81 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_ring_buffer_8cpp_source.html#l00026">26</a> of file <a class="el" href="_ring_buffer_8cpp_source.html">RingBuffer.cpp</a>.</p>
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a041d2e0a3ec68f91ea9847e220ed2501"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int RingBuffer::isEmpty </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns 1 (true) if the buffer is empty. </p>
+
+</div>
+</div>
+<a class="anchor" id="a47f4fd274ccf142f55092ed851640201"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int RingBuffer::isFull </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns 1 (true) if the buffer is full. </p>
+
+</div>
+</div>
+<a class="anchor" id="a8585065af57a71269bc46b30175c8dc8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int RingBuffer::read </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Read a value from the buffer. </p>
+
+</div>
+</div>
+<a class="anchor" id="aa14c47f5bbd73b5f8d2b83a86f01ccf2"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RingBuffer::write </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Write a value into the buffer. </p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li><a class="el" href="_ring_buffer_8h_source.html">RingBuffer.h</a></li>
-<li><a class="el" href="_ring_buffer_8cpp_source.html">RingBuffer.cpp</a></li>
+<li><a class="el" href="_ring_buffer_8cpp.html">RingBuffer.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -187,7 +264,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_ring_buffer.html">RingBuffer</a></li>
-    <li class="footer">Generated on Sun Nov 17 2013 22:54:03 for ADC by
+    <li class="footer">Generated on Sun Nov 24 2013 22:25:56 for ADC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>
