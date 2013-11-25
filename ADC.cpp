@@ -394,7 +394,7 @@ int ADC::analogRead(uint8_t pin)
     if(wasADCInUse) { // this means we're interrupting a conversion
         // save the current conversion config, we don't want any other interrupts messing up the configs
         __disable_irq();
-        GPIOC_PSOR = 1<<5;
+        //GPIOC_PSOR = 1<<5;
         savedRes = res;
         savedSC1A = ADC0_SC1A;
         savedCFG1 = ADC0_CFG1;
@@ -433,7 +433,7 @@ int ADC::analogRead(uint8_t pin)
 
 			// if we interrupted a conversion, set it again
             if (wasADCInUse) {
-                GPIOC_PCOR = 1<<5;
+                //GPIOC_PCOR = 1<<5;
 
                 // restore ADC config, and restart conversion
                 if(diffRes) setResolution(savedRes); // don't change res if isn't necessary
@@ -453,7 +453,7 @@ int ADC::analogRead(uint8_t pin)
 
 		    // if we interrupted a conversion, set it again
             if (wasADCInUse) {
-                GPIOC_PCOR = 1<<5;
+                //GPIOC_PCOR = 1<<5;
 
                 // restore ADC config, and restart conversion
                 if(diffRes) setResolution(savedRes); // don't change res if isn't necessary
@@ -503,7 +503,7 @@ int ADC::analogReadDifferential(uint8_t pinP, uint8_t pinN)
     if(adcWasInUse) { // this means we're interrupting a conversion
         // save the current conversion config, we don't want any other interrupts messing up the configs
         __disable_irq();
-        GPIOC_PSOR = 1<<5;
+        //GPIOC_PSOR = 1<<5;
         savedRes = res;
         savedSC1A = ADC0_SC1A;// & 0x7F; // get first 7 bits
         savedCFG1 = ADC0_CFG1;
@@ -548,7 +548,7 @@ int ADC::analogReadDifferential(uint8_t pinP, uint8_t pinN)
 
 			// if we interrupted a conversion, set it again
             if (adcWasInUse) {
-                GPIOC_PTOR = 1<<5;
+                //GPIOC_PTOR = 1<<5;
 
                 // restore ADC config, and restart conversion
                 if(diffRes) setResolution(savedRes); // don't change res if isn't necessary
@@ -573,7 +573,7 @@ int ADC::analogReadDifferential(uint8_t pinP, uint8_t pinN)
 
 		    // if we interrupted a conversion, set it again
             if (adcWasInUse) {
-                GPIOC_PTOR = 1<<5;
+                //GPIOC_PTOR = 1<<5;
 
                 // restore ADC config, and restart conversion
                 if(diffRes) setResolution(savedRes); // don't change res if isn't necessary
@@ -684,7 +684,7 @@ int ADC::startSingleDifferential(uint8_t pinP, uint8_t pinN)
     if(adcWasInUse) { // this means we're interrupting a conversion
         // save the current conversion config, the adc isr will restore the adc
         __disable_irq();
-        GPIOC_PSOR = 1<<5;
+        //GPIOC_PSOR = 1<<5;
         adc_config.savedRes = res;
         adc_config.savedSC1A = ADC0_SC1A;
         adc_config.savedCFG1 = ADC0_CFG1;
@@ -831,7 +831,7 @@ void ADC::voidFunction(){return;}
 * it takes around 3 us
 */
 void ADC::ADC_callback() {
-    digitalWriteFast(ledPin, HIGH);
+    //digitalWriteFast(ledPin, HIGH);
 
     // get the pin number
     int pin = sc1a2channel[ADC0_SC1A & 0x1F];
@@ -840,7 +840,7 @@ void ADC::ADC_callback() {
     int i = 0;
     while( (i<MAX_ANALOG_TIMERS) && (analogTimer[i]->pinNumber!=pin) ) {i++;}
     if( i==MAX_ANALOG_TIMERS) {
-        digitalWriteFast(ledPin, LOW);
+        //digitalWriteFast(ledPin, LOW);
         return; // the last measurement doesn't belong to an analog timer buffer.
     }
 
@@ -859,7 +859,7 @@ void ADC::ADC_callback() {
         ADC0_SC1A = adc_config.savedSC1A & 0x7F;
     }
 
-    digitalWriteFast(ledPin, LOW);
+    //digitalWriteFast(ledPin, LOW);
 }
 
 
@@ -867,7 +867,7 @@ void ADC::ADC_callback() {
 *  it takes around 2.5 us
 */
 void ADC::analogTimerCallback0() {
-    digitalWriteFast(ledPin, HIGH);
+    //digitalWriteFast(ledPin, HIGH);
 
     uint8_t pin = analogTimer[0]->pinNumber;
     if(pin == A10) {
@@ -878,13 +878,13 @@ void ADC::analogTimerCallback0() {
         startSingleRead(pin);
     }
 
-    digitalWriteFast(ledPin, LOW);
+    //digitalWriteFast(ledPin, LOW);
 }
 /* callback function for the analog timers
 *  it takes around 2.5 us
 */
 void ADC::analogTimerCallback1() {
-    digitalWriteFast(ledPin, HIGH);
+    //digitalWriteFast(ledPin, HIGH);
 
     uint8_t pin = analogTimer[1]->pinNumber;
     if(pin == A10) {
@@ -895,13 +895,13 @@ void ADC::analogTimerCallback1() {
         startSingleRead(pin);
     }
 
-    digitalWriteFast(ledPin, LOW);
+    //digitalWriteFast(ledPin, LOW);
 }
 /* callback function for the analog timers
 *  it takes around 2.5 us
 */
 void ADC::analogTimerCallback2() {
-    digitalWriteFast(ledPin, HIGH);
+    //digitalWriteFast(ledPin, HIGH);
 
     uint8_t pin = analogTimer[2]->pinNumber;
     if(pin == A10) {
@@ -912,7 +912,7 @@ void ADC::analogTimerCallback2() {
         startSingleRead(pin);
     }
 
-    digitalWriteFast(ledPin, LOW);
+    //digitalWriteFast(ledPin, LOW);
 }
 
 /* Starts a periodic measurement.
