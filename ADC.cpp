@@ -126,7 +126,7 @@ void ADC::analog_init(uint32_t config)
 
 
 void ADC::calibrate() {
-    ADC0_SC3 |= ADC_SC3_CAL
+    ADC0_SC3 |= ADC_SC3_CAL;
 
 	// calibration works best when averages are 32 and speed is less than 4 MHz
 	calibrating = 1;
