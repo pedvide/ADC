@@ -47,7 +47,7 @@ const uint8_t ADC::sc1a2channel[]= { // new version, gives directly the pin numb
 
 // struct with the analog timers
 ADC::AnalogTimer *ADC::analogTimer[];
-int8_t ADC::ANALOG_TIMER::pinNumber;
+//int8_t ADC::ANALOG_TIMER::pinNumber;
 
 // pointer to isr adc
 void (*ADC::analogTimer_ADC_Callback)(void);
@@ -871,10 +871,12 @@ void ADC::analogTimerCallback0() {
     //digitalWriteFast(ledPin, HIGH);
 
     uint8_t pin = analogTimer[0]->pinNumber;
-    if(pin == A10) {
-        startSingleDifferential(A10, A11);
-    } else if(pin == A12) {
-        startSingleDifferential(A12, A13);
+    if(analogTimer[0]->isDiff) {
+        if(pin == A10) {
+            startSingleDifferential(A10, A11);
+        } else if(pin == A12) {
+            startSingleDifferential(A12, A13);
+        }
     } else {
         startSingleRead(pin);
     }
@@ -888,10 +890,12 @@ void ADC::analogTimerCallback1() {
     //digitalWriteFast(ledPin, HIGH);
 
     uint8_t pin = analogTimer[1]->pinNumber;
-    if(pin == A10) {
-        startSingleDifferential(A10, A11);
-    } else if(pin == A12) {
-        startSingleDifferential(A12, A13);
+    if(analogTimer[1]->isDiff) {
+        if(pin == A10) {
+            startSingleDifferential(A10, A11);
+        } else if(pin == A12) {
+            startSingleDifferential(A12, A13);
+        }
     } else {
         startSingleRead(pin);
     }
@@ -905,10 +909,12 @@ void ADC::analogTimerCallback2() {
     //digitalWriteFast(ledPin, HIGH);
 
     uint8_t pin = analogTimer[2]->pinNumber;
-    if(pin == A10) {
-        startSingleDifferential(A10, A11);
-    } else if(pin == A12) {
-        startSingleDifferential(A12, A13);
+    if(analogTimer[2]->isDiff) {
+        if(pin == A10) {
+            startSingleDifferential(A10, A11);
+        } else if(pin == A12) {
+            startSingleDifferential(A12, A13);
+        }
     } else {
         startSingleRead(pin);
     }
@@ -1009,6 +1015,9 @@ int ADC::startAnalogTimerDifferential(uint8_t pinP, uint8_t pinN, uint32_t perio
     // create both objects
     analogTimer[i]->timer = new IntervalTimer;
     analogTimer[i]->buffer = new RingBuffer;
+
+    analogTimer[i]->period = period;
+    analogTimer[i]->isDiff = true;
 
 	// point the adc_isr to the function that takes care of the timers
 	analogTimer_ADC_Callback = &ADC_callback;
