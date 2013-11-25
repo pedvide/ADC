@@ -47,6 +47,7 @@ const uint8_t ADC::sc1a2channel[]= { // new version, gives directly the pin numb
 
 // struct with the analog timers
 ADC::AnalogTimer *ADC::analogTimer[];
+int8_t ADC::ANALOG_TIMER::pinNumber;
 
 // pointer to isr adc
 void (*ADC::analogTimer_ADC_Callback)(void);
@@ -1003,7 +1004,7 @@ int ADC::startAnalogTimerDifferential(uint8_t pinP, uint8_t pinN, uint32_t perio
         return ANALOG_TIMER_ERROR;
     }
 
-    analogTimer[i]->pinNumber = pin; // reserve a timer for this pin
+    analogTimer[i]->pinNumber = pinP; // reserve a timer for this pin
 
     // create both objects
     analogTimer[i]->timer = new IntervalTimer;

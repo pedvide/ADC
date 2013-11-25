@@ -334,13 +334,27 @@ class ADC
 
         // struct with the analog timer pin, data and timer
         typedef struct ANALOG_TIMER{
-            int8_t pinNumber; // the timer's pin
+            static int8_t pinNumber; // the timer's pin
             IntervalTimer *timer; // timer
             RingBuffer *buffer; // circular buffer to store analog values
 
             uint32_t period; // timer's period
 
             ANALOG_TIMER() { pinNumber=-1; } // ctor
+
+            static void analogTimerCallback() {
+                //digitalWriteFast(ledPin, HIGH);
+
+                if(pinNumber == A10) {
+                    startSingleDifferential(A10, A11);
+                } else if(pinNumber == A12) {
+                    startSingleDifferential(A12, A13);
+                } else {
+                    startSingleRead(pinNumber);
+                }
+
+                //digitalWriteFast(ledPin, LOW);
+            }
 
             ADC_Config adc_config; // the timer will interrupt the adc, store its settings to restore them later
 
