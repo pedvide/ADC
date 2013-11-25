@@ -7,6 +7,7 @@
 
  /* TODO
   * Stuff related to the conversion speed and power. Useful if you want more speed or to save power.
+  * Function to measure more that 1 pin consecutively
   *
   * bugs:
   * - analog timer at 16 bits resolution goes from 0 to +1.65 and then jumps to -1.65 to 0
@@ -47,7 +48,6 @@ const uint8_t ADC::sc1a2channel[]= { // new version, gives directly the pin numb
 
 // struct with the analog timers
 ADC::AnalogTimer *ADC::analogTimer[];
-//int8_t ADC::ANALOG_TIMER::pinNumber;
 
 // pointer to isr adc
 void (*ADC::analogTimer_ADC_Callback)(void);
@@ -64,8 +64,8 @@ ADC::ISR ADC::analogTimerCallback[] = {
 *
 */
 ADC::ADC() {
-    // default settings: 10 bits resolution, 4 averages, vcc reference, no interrupts and single-ended
-    analog_config_bits = 10;
+    // default settings: 10 bits resolution (in analog_init), 4 averages, vcc reference, no interrupts and single-ended
+    analog_config_bits = 0;
     analog_max_val = 1024;
     analog_num_average = 4;
     analog_reference_internal = 0;
@@ -104,7 +104,6 @@ ADC::~ADC() {
 */
 void ADC::analog_init(uint32_t config)
 {
-	uint32_t num;
 
 	VREF_TRM = 0x60;
 	VREF_SC = 0xE1;		// enable 1.2 volt ref
@@ -115,38 +114,19 @@ void ADC::analog_init(uint32_t config)
 		ADC0_SC2 |= ADC_SC2_REFSEL(0); // vcc/ext ref
 	}
 
-    // conversion resolution and frequency
-    if ( (analog_config_bits == 8) || (analog_config_bits == 9) )  {
-        ADC0_CFG1 = ADC0_CFG1_24MHZ + ADC_CFG1_MODE(0); // 0 clock divide + Input clock: 24 MHz (run at 24 MHz) + Conversion mode: 8 bit + Sample time: Short
-        ADC0_CFG2 = ADC_CFG2_MUXSEL + ADC_CFG2_ADLSTS(3); // b channels + Sample time 2 cycles (I think that if ADC_CFG1_ADLSMP isn't set, then ADC_CFG2_ADLSTS doesn't matter)
-        analog_max_val = 256; // diff mode 9 bits has 1 bit for sign, so max value is the same as single 8 bits
-    } else if ( (analog_config_bits == 10 )|| (analog_config_bits == 11) ) { // total clock cycles to complete conversion: 3 ADCK + 5 BUS + 4 averages*( 20 + 2 ADCK ) = 7.8 us
-        ADC0_CFG1 = ADC0_CFG1_12MHZ + ADC_CFG1_MODE(2) + ADC_CFG1_ADLSMP; // Clock divide: 1/2 + Input clock: 24 MHz (run at 12 MHz) + Conversion mode: 10 bit + Sample time: Long
-        ADC0_CFG2 = ADC_CFG2_MUXSEL + ADC_CFG2_ADLSTS(3); // b channels + Sample time 2 extra clock cycles
-        analog_max_val = 1024;
-    } else if ( (analog_config_bits == 12 )|| (analog_config_bits == 13) ) {
-        ADC0_CFG1 = ADC0_CFG1_12MHZ + ADC_CFG1_MODE(1) + ADC_CFG1_ADLSMP; // Clock divide: 1/2 + Input clock: 24 MHz (run at 12 MHz) + Conversion mode: 12 bit + Sample time: Long
-        ADC0_CFG2 = ADC_CFG2_MUXSEL + ADC_CFG2_ADLSTS(2); // b channels + Sample time: 6 extra clock cycles
-        analog_max_val = 4096;
-    } else {
-        ADC0_CFG1 = ADC0_CFG1_12MHZ + ADC_CFG1_MODE(3) + ADC_CFG1_ADLSMP;  //Clock divide: 1/2 + Input clock: 24 MHz (run at 12 MHz) + Conversion mode: 16 bit + Sample time: Long
-        ADC0_CFG2 = ADC_CFG2_MUXSEL + ADC_CFG2_ADLSTS(2); // b channels + Sample time: 6 extra clock cycles
-        analog_max_val = 65536;
-    }
+    // set resolution
+    setResolution(10);
 
-    // number of averages and calibration
-	num = analog_num_average;
-	if (num <= 1) {
-		ADC0_SC3 = ADC_SC3_CAL;  // begin calibration + no averages
-	} else if (num <= 4) {
-		ADC0_SC3 = ADC_SC3_CAL + ADC_SC3_AVGE + ADC_SC3_AVGS(0); // start calib. + single-shot mode + 4 averages
-	} else if (num <= 8) {
-		ADC0_SC3 = ADC_SC3_CAL + ADC_SC3_AVGE + ADC_SC3_AVGS(1); // start calib. + single-shot mode + 8 averages
-	} else if (num <= 16) {
-		ADC0_SC3 = ADC_SC3_CAL + ADC_SC3_AVGE + ADC_SC3_AVGS(2); // start calib. + single-shot mode + 16 averages
-	} else {
-		ADC0_SC3 = ADC_SC3_CAL + ADC_SC3_AVGE + ADC_SC3_AVGS(3); // start calib. + single-shot mode + 32 averages
-	}
+    // number of averages
+	setAveraging(analog_num_average);
+
+    // begin calibration
+	calibrate();
+}
+
+
+void ADC::calibrate() {
+    ADC0_SC3 |= ADC_SC3_CAL
 
 	// calibration works best when averages are 32 and speed is less than 4 MHz
 	calibrating = 1;
@@ -198,14 +178,14 @@ void ADC::setReference(uint8_t type)
 		if (!analog_reference_internal) {
 			analog_reference_internal = 1;
 			if (calibrating) ADC0_SC3 = 0; // cancel cal
-			ADC::analog_init();
+			calibrate();
 		}
 	} else {
 		// vcc or external reference requested
 		if (analog_reference_internal) {
 			analog_reference_internal = 0;
 			if (calibrating) ADC0_SC3 = 0; // cancel cal
-			ADC::analog_init();
+			calibrate();
 		}
 	}
 }
@@ -217,9 +197,9 @@ void ADC::setReference(uint8_t type)
 *  If you want something in between (11 bits single-ended for example) select the inmediate higher
 *  and shift the result one to the right.
 */
-void ADC::setResolution(unsigned int bits)
+void ADC::setResolution(uint8_t bits)
 {
-    unsigned int config;
+    uint8_t config;
 
     if (bits <8) {
 		config = 8;
@@ -237,11 +217,30 @@ void ADC::setResolution(unsigned int bits)
     } else if (config != analog_config_bits) { // change res
         analog_config_bits = config;
 
+        // conversion resolution and frequency
+        if ( (analog_config_bits == 8) || (analog_config_bits == 9) )  {
+            ADC0_CFG1 = ADC0_CFG1_24MHZ + ADC_CFG1_MODE(0); // 0 clock divide + Input clock: 24 MHz (run at 24 MHz) + Conversion mode: 8 bit + Sample time: Short
+            ADC0_CFG2 = ADC_CFG2_MUXSEL + ADC_CFG2_ADLSTS(3); // b channels + Sample time 2 cycles (I think that if ADC_CFG1_ADLSMP isn't set, then ADC_CFG2_ADLSTS doesn't matter)
+            analog_max_val = 256; // diff mode 9 bits has 1 bit for sign, so max value is the same as single 8 bits
+        } else if ( (analog_config_bits == 10 )|| (analog_config_bits == 11) ) { // total clock cycles to complete conversion: 3 ADCK + 5 BUS + 4 averages*( 20 + 2 ADCK ) = 7.8 us
+            ADC0_CFG1 = ADC0_CFG1_12MHZ + ADC_CFG1_MODE(2) + ADC_CFG1_ADLSMP; // Clock divide: 1/2 + Input clock: 24 MHz (run at 12 MHz) + Conversion mode: 10 bit + Sample time: Long
+            ADC0_CFG2 = ADC_CFG2_MUXSEL + ADC_CFG2_ADLSTS(3); // b channels + Sample time 2 extra clock cycles
+            analog_max_val = 1024;
+        } else if ( (analog_config_bits == 12 )|| (analog_config_bits == 13) ) {
+            ADC0_CFG1 = ADC0_CFG1_12MHZ + ADC_CFG1_MODE(1) + ADC_CFG1_ADLSMP; // Clock divide: 1/2 + Input clock: 24 MHz (run at 12 MHz) + Conversion mode: 12 bit + Sample time: Long
+            ADC0_CFG2 = ADC_CFG2_MUXSEL + ADC_CFG2_ADLSTS(2); // b channels + Sample time: 6 extra clock cycles
+            analog_max_val = 4096;
+        } else {
+            ADC0_CFG1 = ADC0_CFG1_12MHZ + ADC_CFG1_MODE(3) + ADC_CFG1_ADLSMP;  //Clock divide: 1/2 + Input clock: 24 MHz (run at 12 MHz) + Conversion mode: 16 bit + Sample time: Long
+            ADC0_CFG2 = ADC_CFG2_MUXSEL + ADC_CFG2_ADLSTS(2); // b channels + Sample time: 6 extra clock cycles
+            analog_max_val = 65536;
+        }
+
 		// no recalibration is needed when changing the resolution, p. 619
 		// but it's needed if we change the frequency...
 		if (calibrating) ADC0_SC3 = 0; // cancel cal
-		ADC::analog_init(); // re-cal
-	}
+		calibrate(); // re-cal
+	} // end if change res
 }
 
 /* Returns the resolution of the ADC
@@ -268,19 +267,19 @@ void ADC::setAveraging(uint8_t num)
 	if (calibrating) wait_for_cal();
 	if (num <= 1) {
 		num = 0;
-		ADC0_SC3 = 0;
+		ADC0_SC3 &= !ADC_SC3_AVGE;
 	} else if (num <= 4) {
 		num = 4;
-		ADC0_SC3 = ADC_SC3_AVGE + ADC_SC3_AVGS(0);
+		ADC0_SC3 |= ADC_SC3_AVGE + ADC_SC3_AVGS(0);
 	} else if (num <= 8) {
 		num = 8;
-		ADC0_SC3 = ADC_SC3_AVGE + ADC_SC3_AVGS(1);
+		ADC0_SC3 |= ADC_SC3_AVGE + ADC_SC3_AVGS(1);
 	} else if (num <= 16) {
 		num = 16;
-		ADC0_SC3 = ADC_SC3_AVGE + ADC_SC3_AVGS(2);
+		ADC0_SC3 |= ADC_SC3_AVGE + ADC_SC3_AVGS(2);
 	} else {
 		num = 32;
-		ADC0_SC3 = ADC_SC3_AVGE + ADC_SC3_AVGS(3);
+		ADC0_SC3 |= ADC_SC3_AVGE + ADC_SC3_AVGS(3);
 	}
 	analog_num_average = num;
 }
@@ -832,7 +831,9 @@ void ADC::voidFunction(){return;}
 * it takes around 3 us
 */
 void ADC::ADC_callback() {
-    //digitalWriteFast(ledPin, HIGH);
+    #if debug
+        digitalWriteFast(ledPin, HIGH);
+    #endif
 
     // get the pin number
     int pin = sc1a2channel[ADC0_SC1A & 0x1F];
@@ -841,7 +842,9 @@ void ADC::ADC_callback() {
     int i = 0;
     while( (i<MAX_ANALOG_TIMERS) && (analogTimer[i]->pinNumber!=pin) ) {i++;}
     if( i==MAX_ANALOG_TIMERS) {
-        //digitalWriteFast(ledPin, LOW);
+        #if debug
+            digitalWriteFast(ledPin, LOW);
+        #endif
         return; // the last measurement doesn't belong to an analog timer buffer.
     }
 
@@ -860,7 +863,9 @@ void ADC::ADC_callback() {
         ADC0_SC1A = adc_config.savedSC1A & 0x7F;
     }
 
-    //digitalWriteFast(ledPin, LOW);
+    #if debug
+        digitalWriteFast(ledPin, LOW);
+    #endif
 }
 
 
@@ -868,7 +873,9 @@ void ADC::ADC_callback() {
 *  it takes around 2.5 us
 */
 void ADC::analogTimerCallback0() {
-    //digitalWriteFast(ledPin, HIGH);
+    #if debug
+        digitalWriteFast(ledPin, HIGH);
+    #endif
 
     uint8_t pin = analogTimer[0]->pinNumber;
     if(analogTimer[0]->isDiff) {
@@ -881,13 +888,17 @@ void ADC::analogTimerCallback0() {
         startSingleRead(pin);
     }
 
-    //digitalWriteFast(ledPin, LOW);
+    #if debug
+        digitalWriteFast(ledPin, LOW);
+    #endif
 }
 /* callback function for the analog timers
 *  it takes around 2.5 us
 */
 void ADC::analogTimerCallback1() {
-    //digitalWriteFast(ledPin, HIGH);
+    #if debug
+        digitalWriteFast(ledPin, HIGH);
+    #endif
 
     uint8_t pin = analogTimer[1]->pinNumber;
     if(analogTimer[1]->isDiff) {
@@ -900,13 +911,17 @@ void ADC::analogTimerCallback1() {
         startSingleRead(pin);
     }
 
-    //digitalWriteFast(ledPin, LOW);
+    #if debug
+        digitalWriteFast(ledPin, LOW);
+    #endif
 }
 /* callback function for the analog timers
 *  it takes around 2.5 us
 */
 void ADC::analogTimerCallback2() {
-    //digitalWriteFast(ledPin, HIGH);
+    #if debug
+        digitalWriteFast(ledPin, HIGH);
+    #endif
 
     uint8_t pin = analogTimer[2]->pinNumber;
     if(analogTimer[2]->isDiff) {
@@ -919,7 +934,9 @@ void ADC::analogTimerCallback2() {
         startSingleRead(pin);
     }
 
-    //digitalWriteFast(ledPin, LOW);
+    #if debug
+        digitalWriteFast(ledPin, LOW);
+    #endif
 }
 
 /* Starts a periodic measurement.

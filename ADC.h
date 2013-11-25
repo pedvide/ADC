@@ -61,6 +61,9 @@
 // Error codes for startAnalogTimer
 #define ANALOG_TIMER_ERROR -1
 
+// debug mode: blink the led light
+#define debug 1
+
 /** Class ADC: Implements all functions of the Teensy 3.0 analog to digital converter
 *
 */
@@ -98,7 +101,7 @@ class ADC
         *  In this case the comparison values will still be correct for analogRead and analogReadDifferential, but not
         *  for startSingle* or startContinous*, so whenever you change the resolution, change also the comparison values.
         */
-        static void setResolution(unsigned int bits);
+        static void setResolution(uint8_t bits);
 
         //! Returns the resolution of the ADC.
         static uint8_t getResolution();
@@ -302,6 +305,11 @@ class ADC
         *
         */
         static void analog_init(uint32_t config=0);
+
+        /** Starts the calibration sequence
+        *
+        */
+        static void calibrate();
 
         /** Waits until calibration is finished and writes the corresponding registers
         *
