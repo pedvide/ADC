@@ -62,7 +62,7 @@
 #define ANALOG_TIMER_ERROR -1
 
 // debug mode: blink the led light
-#define debug 0
+#define ADC_debug 0
 
 /** Class ADC: Implements all functions of the Teensy 3.0 analog to digital converter
 *

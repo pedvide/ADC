@@ -831,7 +831,7 @@ void ADC::voidFunction(){return;}
 * it takes around 3 us
 */
 void ADC::ADC_callback() {
-    #if debug
+    #if ADC_debug
         digitalWriteFast(ledPin, HIGH);
     #endif
 
@@ -842,7 +842,7 @@ void ADC::ADC_callback() {
     int i = 0;
     while( (i<MAX_ANALOG_TIMERS) && (analogTimer[i]->pinNumber!=pin) ) {i++;}
     if( i==MAX_ANALOG_TIMERS) {
-        #if debug
+        #if ADC_debug
             digitalWriteFast(ledPin, LOW);
         #endif
         return; // the last measurement doesn't belong to an analog timer buffer.
@@ -863,7 +863,7 @@ void ADC::ADC_callback() {
         ADC0_SC1A = adc_config.savedSC1A & 0x7F;
     }
 
-    #if debug
+    #if ADC_debug
         digitalWriteFast(ledPin, LOW);
     #endif
 }
@@ -873,7 +873,7 @@ void ADC::ADC_callback() {
 *  it takes around 2.5 us
 */
 void ADC::analogTimerCallback0() {
-    #if debug
+    #if ADC_debug
         digitalWriteFast(ledPin, HIGH);
     #endif
 
@@ -888,7 +888,7 @@ void ADC::analogTimerCallback0() {
         startSingleRead(pin);
     }
 
-    #if debug
+    #if ADC_debug
         digitalWriteFast(ledPin, LOW);
     #endif
 }
@@ -896,7 +896,7 @@ void ADC::analogTimerCallback0() {
 *  it takes around 2.5 us
 */
 void ADC::analogTimerCallback1() {
-    #if debug
+    #if ADC_debug
         digitalWriteFast(ledPin, HIGH);
     #endif
 
@@ -911,7 +911,7 @@ void ADC::analogTimerCallback1() {
         startSingleRead(pin);
     }
 
-    #if debug
+    #if ADC_debug
         digitalWriteFast(ledPin, LOW);
     #endif
 }
@@ -919,7 +919,7 @@ void ADC::analogTimerCallback1() {
 *  it takes around 2.5 us
 */
 void ADC::analogTimerCallback2() {
-    #if debug
+    #if ADC_debug
         digitalWriteFast(ledPin, HIGH);
     #endif
 
@@ -934,7 +934,7 @@ void ADC::analogTimerCallback2() {
         startSingleRead(pin);
     }
 
-    #if debug
+    #if ADC_debug
         digitalWriteFast(ledPin, LOW);
     #endif
 }
