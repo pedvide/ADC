@@ -663,6 +663,7 @@ void ADC::voidFunction(){return;}
 /* Callback from the ADC0 interrupt, it adds the new value to the ring buffer
 * it takes around 3 us
 */
+<<<<<<< HEAD
 void ADC::ADC0_callback() {
     #if ADC_debug
         digitalWriteFast(ledPin, HIGH);
@@ -701,6 +702,9 @@ void ADC::ADC0_callback() {
     #endif
 }
 void ADC::ADC1_callback() {
+=======
+void ADC::ADC_callback() {
+>>>>>>> b7e0d98bdc048bda7fddb63fc06cad8d782f4ac3
     #if ADC_debug
         digitalWriteFast(ledPin, HIGH);
     #endif
