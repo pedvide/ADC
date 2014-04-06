@@ -4,17 +4,6 @@
  *
  */
 
-
- /* TODO
-  * Stuff related to the conversion speed and power. Useful if you want more speed or to save power.
-  * Function to measure more that 1 pin consecutively
-  *
-  * bugs:
-  * - analog timer at 16 bits resolution goes from 0 to +1.65 and then jumps to -1.65 to 0
-  * - comaprison values don't work in 16 bit differential mode (they are twice what you write)
- */
-
-
 #include "ADC.h"
 
 
@@ -22,54 +11,41 @@
 // if there is at least one analog timer, if not, it does nothing.
 // implemented as weak so that an user can redefine it
 void __attribute__((weak)) adc0_isr(void) {
-    ADC::analogTimer_ADC_Callback();
+    ADC::analogTimer_ADC0_Callback();
 }
-
-
-// static vars need to be restated here
-uint8_t ADC::calibrating;
-uint8_t ADC::var_enableInterrupts;
-uint8_t ADC::analog_config_bits;
-uint32_t ADC::analog_max_val;
-uint8_t ADC::analog_num_average;
-uint8_t ADC::analog_reference_internal;
-
-const uint8_t ADC::ledPin = 13;
-
-ADC::ADC_Config ADC::adc_config; // store the adc config
-uint8_t ADC::adcWasInUse; // was the adc in use before an analog timer call?
-
-const uint8_t ADC::channel2sc1a[]= {
-    5, 14, 8, 9, 13, 12, 6, 7, 15, 4,
-    0, 19, 3, 21, 26, 22};
-const uint8_t ADC::sc1a2channel[]= { // new version, gives directly the pin number
-    34, 0, 0, 36, 23, 14, 20, 21, 16, 17, 0, 0, 19, 18, // 0-13
-    15, 22, 0, 0, 0, 35, 0, 37, 39, 0, 0, 0, 38}; // 14-26
+#if defined(__MK20DX256__)
+void __attribute__((weak)) adc1_isr(void) {
+    ADC::analogTimer_ADC1_Callback();
+}
+#endif
 
 // struct with the analog timers
 ADC::AnalogTimer *ADC::analogTimer[];
 
 // pointer to isr adc
-void (*ADC::analogTimer_ADC_Callback)(void);
+void (*ADC::analogTimer_ADC0_Callback)(void);
+#if defined(__MK20DX256__)
+void (*ADC::analogTimer_ADC1_Callback)(void);
+#endif
 
 // the functions for the analog timers
 ADC::ISR ADC::analogTimerCallback[] = {
     ADC::analogTimerCallback0,
     ADC::analogTimerCallback1,
-    ADC::analogTimerCallback0
+    ADC::analogTimerCallback2
 };
 
 
-/* Constructor
-*
-*/
-ADC::ADC() {
-    // default settings: 10 bits resolution (in analog_init), 4 averages, vcc reference, no interrupts and single-ended
-    analog_config_bits = 0;
-    analog_max_val = 1024;
-    analog_num_average = 4;
-    analog_reference_internal = 0;
-    var_enableInterrupts = 0;
+// static adc module objects
+ADC_Module *ADC::adc0 = new ADC_Module(0);
+#if defined(__MK20DX256__)
+ADC_Module *ADC::adc1 = new ADC_Module(1);
+#endif
+
+
+ADC::ADC()
+{
+    //ctor
 
     // itinialize analog timers
     int i = 0;
@@ -79,791 +55,685 @@ ADC::ADC() {
     }
     //*analogTimer = new AnalogTimer[MAX_ANALOG_TIMERS]; // doesn't work for some reason
 
-    // call our init
-    ADC::analog_init();
-
     // point ADC callback to function that does nothing
     // when the analogTimers are in use, this will point to the correct ADC_callback
-    analogTimer_ADC_Callback = &voidFunction;
+    analogTimer_ADC0_Callback = &voidFunction;
+    #if defined(__MK20DX256__)
+    analogTimer_ADC1_Callback = &voidFunction;
+    #endif
+
 }
 
-/* Destructor
-*
-*/
-ADC::~ADC() {
+ADC::~ADC()
+{
     //dtor
     int i = 0;
     for(i=0; i<MAX_ANALOG_TIMERS; i++) {
         delete analogTimer[i];
     }
-
-}
-
-/* Sets up all initial configurations and starts calibration
-*
-*/
-void ADC::analog_init(uint32_t config)
-{
-
-	VREF_TRM = 0x60;
-	VREF_SC = 0xE1;		// enable 1.2 volt ref
-
-	if (analog_reference_internal) {
-		ADC0_SC2 |= ADC_SC2_REFSEL(1); // 1.2V ref
-	} else {
-		ADC0_SC2 |= ADC_SC2_REFSEL(0); // vcc/ext ref
-	}
-
-    // set resolution
-    setResolution(10);
-
-    // number of averages
-	setAveraging(analog_num_average);
-
-    // begin calibration
-	calibrate();
-}
-
-
-void ADC::calibrate() {
-    ADC0_SC3 |= ADC_SC3_CAL;
-
-	// calibration works best when averages are 32 and speed is less than 4 MHz
-	calibrating = 1;
-}
-
-
-/* Waits until calibration is finished and writes the corresponding registers
-*
-*/
-void ADC::wait_for_cal(void)
-{
-	uint16_t sum;
-
-	//serial_print("wait_for_cal\n");
-	while (ADC0_SC3 & ADC_SC3_CAL) { // Bit ADC_SC3_CAL in register ADC0_SC3 cleared when calib. finishes.
-		// wait
-		//serial_print(".");
-	}
-
-	__disable_irq();
-	if (calibrating) {
-		//serial_print("\n");
-		sum = ADC0_CLPS + ADC0_CLP4 + ADC0_CLP3 + ADC0_CLP2 + ADC0_CLP1 + ADC0_CLP0;
-		sum = (sum / 2) | 0x8000;
-		ADC0_PG = sum;
-		//serial_print("ADC0_PG = ");
-		//serial_phex16(sum);
-		//serial_print("\n");
-		sum = ADC0_CLMS + ADC0_CLM4 + ADC0_CLM3 + ADC0_CLM2 + ADC0_CLM1 + ADC0_CLM0;
-		sum = (sum / 2) | 0x8000;
-		ADC0_MG = sum;
-		//serial_print("ADC0_MG = ");
-		//serial_phex16(sum);
-		//serial_print("\n");
-		calibrating = 0;
-	}
-	__enable_irq();
 }
 
 
 
 /* Set the voltage reference you prefer, default is vcc
-*   It needs to recalibrate
+*
 */
-void ADC::setReference(uint8_t type)
-{
-	if (type) {
-		// internal reference requested
-		if (!analog_reference_internal) {
-			analog_reference_internal = 1;
-			if (calibrating) ADC0_SC3 = 0; // cancel cal
-			calibrate();
-		}
-	} else {
-		// vcc or external reference requested
-		if (analog_reference_internal) {
-			analog_reference_internal = 0;
-			if (calibrating) ADC0_SC3 = 0; // cancel cal
-			calibrate();
-		}
-	}
+void ADC::setReference(uint8_t type, int8_t adc_num) {
+    if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
+        #if defined(__MK20DX256__)
+        adc1->setReference(type);
+        #endif
+        return;
+    }
+    adc0->setReference(type); // adc_num isn't changed or has selected ADC0
+    return;
 }
 
 
-/* Change the resolution of the measurement
+//! Change the resolution of the measurement.
+/*!
+*  \param bits is the number of bits of resolution.
 *  For single-ended measurements: 8, 10, 12 or 16 bits.
 *  For differential measurements: 9, 11, 13 or 16 bits.
 *  If you want something in between (11 bits single-ended for example) select the inmediate higher
 *  and shift the result one to the right.
+*  If you select, for example, 9 bits and then do a single-ended reading, the resolution will be adjusted to 8 bits
+*  In this case the comparison values will still be correct for analogRead and analogReadDifferential, but not
+*  for startSingle* or startContinous*, so whenever you change the resolution, change also the comparison values.
 */
-void ADC::setResolution(uint8_t bits)
-{
-    uint8_t config;
-
-    if (bits <8) {
-		config = 8;
-	} else if (bits > 16) {
-		config = 16;
-	} else {
-		config = bits;
-	}
-
-    // if the new res is the "same" as the old, update analog_config_bits, but do nothing else
-	if( (config==8 && analog_config_bits==9) || (config==9 && analog_config_bits==8)
-        || (config==10 && analog_config_bits==11) || (config==11 && analog_config_bits==10)
-        || (config==12 && analog_config_bits==13) || (config==13 && analog_config_bits==12) ) {
-        analog_config_bits = config;
-    } else if (config != analog_config_bits) { // change res
-        analog_config_bits = config;
-
-        // conversion resolution and frequency
-        if ( (analog_config_bits == 8) || (analog_config_bits == 9) )  {
-            ADC0_CFG1 = ADC0_CFG1_24MHZ + ADC_CFG1_MODE(0); // 0 clock divide + Input clock: 24 MHz (run at 24 MHz) + Conversion mode: 8 bit + Sample time: Short
-            ADC0_CFG2 = ADC_CFG2_MUXSEL + ADC_CFG2_ADLSTS(3); // b channels + Sample time 2 cycles (I think that if ADC_CFG1_ADLSMP isn't set, then ADC_CFG2_ADLSTS doesn't matter)
-            analog_max_val = 256; // diff mode 9 bits has 1 bit for sign, so max value is the same as single 8 bits
-        } else if ( (analog_config_bits == 10 )|| (analog_config_bits == 11) ) { // total clock cycles to complete conversion: 3 ADCK + 5 BUS + 4 averages*( 20 + 2 ADCK ) = 7.8 us
-            ADC0_CFG1 = ADC0_CFG1_12MHZ + ADC_CFG1_MODE(2) + ADC_CFG1_ADLSMP; // Clock divide: 1/2 + Input clock: 24 MHz (run at 12 MHz) + Conversion mode: 10 bit + Sample time: Long
-            ADC0_CFG2 = ADC_CFG2_MUXSEL + ADC_CFG2_ADLSTS(3); // b channels + Sample time 2 extra clock cycles
-            analog_max_val = 1024;
-        } else if ( (analog_config_bits == 12 )|| (analog_config_bits == 13) ) {
-            ADC0_CFG1 = ADC0_CFG1_12MHZ + ADC_CFG1_MODE(1) + ADC_CFG1_ADLSMP; // Clock divide: 1/2 + Input clock: 24 MHz (run at 12 MHz) + Conversion mode: 12 bit + Sample time: Long
-            ADC0_CFG2 = ADC_CFG2_MUXSEL + ADC_CFG2_ADLSTS(2); // b channels + Sample time: 6 extra clock cycles
-            analog_max_val = 4096;
-        } else {
-            ADC0_CFG1 = ADC0_CFG1_12MHZ + ADC_CFG1_MODE(3) + ADC_CFG1_ADLSMP;  //Clock divide: 1/2 + Input clock: 24 MHz (run at 12 MHz) + Conversion mode: 16 bit + Sample time: Long
-            ADC0_CFG2 = ADC_CFG2_MUXSEL + ADC_CFG2_ADLSTS(2); // b channels + Sample time: 6 extra clock cycles
-            analog_max_val = 65536;
-        }
-
-		// no recalibration is needed when changing the resolution, p. 619
-		// but it's needed if we change the frequency...
-		if (calibrating) ADC0_SC3 = 0; // cancel cal
-		calibrate(); // re-cal
-	} // end if change res
+void ADC::setResolution(uint8_t bits, int8_t adc_num) {
+    if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
+        #if defined(__MK20DX256__)
+        adc1->setResolution(bits);
+        #endif
+        return;
+    }
+    adc0->setResolution(bits); // adc_num isn't changed or has selected ADC0
+    return;
 }
 
-/* Returns the resolution of the ADC
-*
-*/
-uint8_t ADC::getResolution() {
-    return analog_config_bits;
+//! Returns the resolution of the ADC_Module.
+uint8_t ADC::getResolution(int8_t adc_num) {
+    if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
+        #if defined(__MK20DX256__)
+        return adc1->getResolution();
+        #endif
+        return 0;
+    }
+    return adc0->getResolution(); // adc_num isn't changed or has selected ADC0
+
 }
 
-/* Returns the maximum value for a measurement, that is 2^resolution
-*
-*/
-uint32_t ADC::getMaxValue() {
-    return analog_max_val;
+//! Returns the maximum value for a measurement.
+uint32_t ADC::getMaxValue(int8_t adc_num) {
+    if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
+        #if defined(__MK20DX256__)
+        return adc1->getMaxValue();
+        #endif
+        return 0;
+    }
+    return adc0->getMaxValue();
 }
 
 
-/* Set the number of averages: 0, 4, 8, 16 or 32.
-*
+//! Set the number of averages
+/*!
+* \param num can be 0, 4, 8, 16 or 32.
 */
-void ADC::setAveraging(uint8_t num)
-{
-
-	if (calibrating) wait_for_cal();
-	if (num <= 1) {
-		num = 0;
-		ADC0_SC3 &= !ADC_SC3_AVGE;
-	} else if (num <= 4) {
-		num = 4;
-		ADC0_SC3 |= ADC_SC3_AVGE + ADC_SC3_AVGS(0);
-	} else if (num <= 8) {
-		num = 8;
-		ADC0_SC3 |= ADC_SC3_AVGE + ADC_SC3_AVGS(1);
-	} else if (num <= 16) {
-		num = 16;
-		ADC0_SC3 |= ADC_SC3_AVGE + ADC_SC3_AVGS(2);
-	} else {
-		num = 32;
-		ADC0_SC3 |= ADC_SC3_AVGE + ADC_SC3_AVGS(3);
-	}
-	analog_num_average = num;
+void ADC::setAveraging(uint8_t num, int8_t adc_num) {
+    if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
+        #if defined(__MK20DX256__)
+        adc1->setAveraging(num);
+        #endif
+        return;
+    }
+    adc0->setAveraging(num); // adc_num isn't changed or has selected ADC0
+    return;
 }
 
 
-/* Enable interrupts: An ADC Interrupt will be raised when the conversion is completed
+//! Enable interrupts
+/** An IRQ_ADC0 Interrupt will be raised when the conversion is completed
 *  (including hardware averages and if the comparison (if any) is true).
 */
-void ADC::enableInterrupts() {
-    var_enableInterrupts = 1;
-    NVIC_ENABLE_IRQ(IRQ_ADC0);
+void ADC::enableInterrupts(int8_t adc_num) {
+    if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
+        #if defined(__MK20DX256__)
+        adc1->enableInterrupts();
+        #endif
+        return;
+    }
+    adc0->enableInterrupts();
+    return;
 }
 
-/* Disable interrupts
-*
-*/
-void ADC::disableInterrupts() {
-    var_enableInterrupts = 0;
-    NVIC_DISABLE_IRQ(IRQ_ADC0);
+//! Disable interrupts
+void ADC::disableInterrupts(int8_t adc_num) {
+    if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
+        #if defined(__MK20DX256__)
+        adc1->disableInterrupts();
+        #endif
+        return;
+    }
+    adc0->disableInterrupts();
+    return;
 }
 
 
-/* Enable DMA request: An ADC DMA request will be raised when the conversion is completed
+//! Enable DMA request
+/** An ADC DMA request will be raised when the conversion is completed
 *  (including hardware averages and if the comparison (if any) is true).
 */
-void ADC::enableDMA() {
-    ADC0_SC2 |= ADC_SC2_DMAEN;
+void ADC::enableDMA(int8_t adc_num) {
+    if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
+        #if defined(__MK20DX256__)
+        adc1->enableDMA();
+        #endif
+        return;
+    }
+    adc0->enableDMA();
+    return;
 }
 
-/* Disable ADC DMA request
-*
-*/
-void ADC::disableDMA() {
-    ADC0_SC2 &= !ADC_SC2_DMAEN;
+//! Disable ADC DMA request
+void ADC::disableDMA(int8_t adc_num) {
+    if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
+        #if defined(__MK20DX256__)
+        adc1->disableDMA();
+        #endif
+        return;
+    }
+    adc0->disableDMA();
+    return;
 }
 
 
-/* Enable the compare function: A conversion will be completed only when the ADC value
+//! Enable the compare function to a single value
+/** A conversion will be completed only when the ADC value
 *  is >= compValue (greaterThan=1) or < compValue (greaterThan=0)
 *  Call it after changing the resolution
-*  Use with interrupts or poll conversion completion with isADC_Complete()
+*  Use with interrupts or poll conversion completion with isComplete()
 */
-void ADC::enableCompare(int16_t compValue, int greaterThan) {
-    ADC0_SC2 |= ADC_SC2_ACFE | greaterThan*ADC_SC2_ACFGT;
-    ADC0_CV1 = compValue;
+void ADC::enableCompare(int16_t compValue, int greaterThan, int8_t adc_num) {
+    if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
+        #if defined(__MK20DX256__)
+        adc1->enableCompare(compValue, greaterThan);
+        #endif
+        return;
+    }
+    adc0->enableCompare(compValue, greaterThan);
+    return;
 }
 
-/* Enable the compare function: A conversion will be completed only when the ADC value
-*  is inside (insideRange=1) or outside (=0) the range given by (lowerLimit, upperLimit),
-*  including (inclusive=1) the limits or not (inclusive=0).
+//! Enable the compare function to a range
+/** A conversion will be completed only when the ADC value is inside (insideRange=1) or outside (=0)
+*  the range given by (lowerLimit, upperLimit),including (inclusive=1) the limits or not (inclusive=0).
 *  See Table 31-78, p. 617 of the freescale manual.
 *  Call it after changing the resolution
 *  Use with interrupts or poll conversion completion with isComplete()
 */
-void ADC::enableCompareRange(int16_t lowerLimit, int16_t upperLimit, int insideRange, int inclusive) {
-
-    if(insideRange && inclusive) { // True if value is inside the range, including the limits. CV1 <= CV2 and ACFGT=1
-        ADC0_CV1 = lowerLimit;
-        ADC0_CV2 = upperLimit;
-        ADC0_SC2 |= ADC_SC2_ACFE | ADC_SC2_ACFGT | ADC_SC2_ACREN;
-    } else if(insideRange && !inclusive) {// True if value is inside the range, excluding the limits. CV1 > CV2 and ACFGT=0
-        ADC0_CV2 = lowerLimit;
-        ADC0_CV1 = upperLimit;
-        ADC0_SC2 |= ADC_SC2_ACFE | ADC_SC2_ACREN;
-    } else if(!insideRange && inclusive) { // True if value is outside of range or is equal to either limit. CV1 > CV2 and ACFGT=1
-        ADC0_CV2 = lowerLimit;
-        ADC0_CV1 = upperLimit;
-        ADC0_SC2 |= ADC_SC2_ACFE | ADC_SC2_ACFGT | ADC_SC2_ACREN;
-    } else if(!insideRange && !inclusive) { // True if value is outside of range and not equal to either limit. CV1 > CV2 and ACFGT=0
-        ADC0_CV1 = lowerLimit;
-        ADC0_CV2 = upperLimit;
-        ADC0_SC2 |= ADC_SC2_ACFE | ADC_SC2_ACREN;
-    }
-}
-
-/* Disable the compare function
-*
-*/
-void ADC::disableCompare() {
-    ADC0_SC2 &= !ADC_SC2_ACFE;
-}
-
-
-/* Reads the analog value of the pin.
-* It waits until the value is read and then returns the result.
-* If a comparison has been set up and fails, it will return -1.
-* Set the resolution, number of averages and voltage reference using the appropriate functions.
-*/
-int ADC::analogRead(uint8_t pin)
-{
-	uint16_t result;
-
-	if (pin >= 14 && pin <= 39) {
-		if (pin <= 23) {
-			pin -= 14;  // 14-23 are A0-A9
-		} else if (pin >= 34) {
-			pin -= 24;  // 34-37 are A10-A13, 38 is temp sensor, 39 is vref
-		}
-    } else {
-        return ADC_ERROR_VALUE;   // all others are invalid
-    }
-
-	if (calibrating) wait_for_cal();
-
-	uint8_t res = getResolution();
-	uint8_t diffRes = 0; // is the new resolution different from the old one?
-
-    // vars to save the current state of the ADC in case it's in use
-    uint32_t savedSC1A, savedSC2, savedSC3, savedCFG1, savedCFG2, savedRes;
-    uint8_t wasADCInUse = isConverting(); // is the ADC running now?
-
-    if(wasADCInUse) { // this means we're interrupting a conversion
-        // save the current conversion config, we don't want any other interrupts messing up the configs
-        __disable_irq();
-        //GPIOC_PSOR = 1<<5;
-        savedRes = res;
-        savedSC1A = ADC0_SC1A;
-        savedCFG1 = ADC0_CFG1;
-        savedSC2 = ADC0_SC2;
-        savedSC3 = ADC0_SC3;
-
-        // change the comparison values if interrupting a 16 bits and diff mode
-        if(res==16 && isDifferential()) {
-            ADC0_CV1 /= 2;
-            ADC0_CV2 /= 2;
-        }
-
-        // disable continuous mode in case analogRead is interrupting a continuous mode
-        ADC0_SC3 &= !ADC_SC3_ADCO;
-
-        __enable_irq(); ////keep irq disabled until we start our conversion
-
-    }
-
-
-    // if the resolution is incorrect (i.e. 9, 11 or 13) silently correct it
-	if( (res==9) || (res==11) || (res==13) ) {
-        setResolution(res-1);
-        diffRes = 1; // resolution changed
-	}
-
-    __disable_irq();
-    ADC0_SC1A = channel2sc1a[pin] + var_enableInterrupts*ADC_SC1_AIEN; // start conversion on pin and with interrupts enabled if requested
-	__enable_irq();
-
-
-	while (1) {
-		__disable_irq();
-		if ((ADC0_SC1A & ADC_SC1_COCO)) { // conversion completed
-			result = ADC0_RA;
-
-			// if we interrupted a conversion, set it again
-            if (wasADCInUse) {
-                //GPIOC_PCOR = 1<<5;
-
-                // restore ADC config, and restart conversion
-                if(diffRes) setResolution(savedRes); // don't change res if isn't necessary
-                if(res==16 && ((savedSC1A & ADC_SC1_DIFF) >> 5) )  { // change back the comparison values if interrupting a 16 bits and diff mode
-                    ADC0_CV1 *= 2;
-                    ADC0_CV2 *= 2;
-                }
-                ADC0_CFG1 = savedCFG1;
-                ADC0_SC2 = savedSC2 & 0x7F; // restore first 8 bits
-                ADC0_SC3 = savedSC3 & 0xF; // restore first 4 bits
-                ADC0_SC1A = savedSC1A & 0x7F; // restore first 8 bits
-            }
-			__enable_irq();
-			return result;
-		} else if( ((ADC0_SC2 & ADC_SC2_ADACT) == 0) && ((ADC0_SC1A & ADC_SC1_COCO) == 0) ) { // comparison was false
-		    // we needed to check that ADACT wasn't 0 because COCO just turned 1.
-
-		    // if we interrupted a conversion, set it again
-            if (wasADCInUse) {
-                //GPIOC_PCOR = 1<<5;
-
-                // restore ADC config, and restart conversion
-                if(diffRes) setResolution(savedRes); // don't change res if isn't necessary
-                if(res==16 && ((savedSC1A & ADC_SC1_DIFF) >> 5) )  { // change back the comparison values if interrupting a 16 bits and diff mode
-                    ADC0_CV1 *= 2;
-                    ADC0_CV2 *= 2;
-                }
-                ADC0_CFG1 = savedCFG1;
-                ADC0_SC2 = savedSC2 & 0x7F; // restore first 8 bits
-                ADC0_SC3 = savedSC3 & 0xF; // restore first 4 bits
-                ADC0_SC1A = savedSC1A & 0x7F; // restore first 8 bits
-            }
-
-		    // comparison was false, we return an error value to indicate this
-		    __enable_irq();
-            return ADC_ERROR_VALUE;
-		} // end if comparison false
-
-		__enable_irq();
-		yield();
-	} // end while
-
-} // analogRead
-
-
-
-/* Reads the differential analog value of two pins (pinP - pinN)
-* It waits until the value is read and then returns the result
-* If a comparison has been set up and fails, it will return -70000
-* Set the resolution, number of averages and voltage reference using the appropriate functions
-*/
-int ADC::analogReadDifferential(uint8_t pinP, uint8_t pinN)
-{
-	int16_t result;
-
-	// check for calibration before setting channels,
-	// because conversion will start as soon as we write to ADC0_SC1A
-	if (calibrating) wait_for_cal();
-
-	uint8_t res = getResolution();
-	uint8_t diffRes = 0; // is the new resolution different from the old one?
-
-    // vars to saved the current state of the ADC in case it's in use
-    uint32_t savedSC1A, savedSC2, savedSC3, savedCFG1, savedCFG2, savedRes;
-    uint8_t adcWasInUse = isConverting(); // is the ADC running now?
-
-    if(adcWasInUse) { // this means we're interrupting a conversion
-        // save the current conversion config, we don't want any other interrupts messing up the configs
-        __disable_irq();
-        //GPIOC_PSOR = 1<<5;
-        savedRes = res;
-        savedSC1A = ADC0_SC1A;// & 0x7F; // get first 7 bits
-        savedCFG1 = ADC0_CFG1;
-        savedCFG2 = ADC0_CFG2;
-        savedSC2 = ADC0_SC2;// & 0x7F; // get first 7 bits
-        savedSC3 = ADC0_SC3;// & 0xF; // get first 4 bits
-
-        // disable continuous mode in case analogReadDifferential is interrupting a continuous mode
-        ADC0_SC3 &= !ADC_SC3_ADCO;
-        __enable_irq(); ////keep irq disabled until we start our conversion
-
-    }
-
-    // if the resolution is incorrect (i.e. 8, 10 or 12) silently correct it
-	if( (res==8) || (res==10) || (res==12) ) {
-        setResolution(res+1);
-    diffRes = 1; // resolution changed
-    } else if(res==16) {
-        ADC0_CV1 /= 2; // correct also compare function in case it was enabled
-        ADC0_CV2 /= 2;
-    }
-
-
-    // once ADC0_SC1A is set, conversion will start, enable interrupts if requested
-	if ( (pinP == A10) && (pinN == A11) ) { // DAD0 selected, pins 34 and 35
-        __disable_irq();
-	    ADC0_SC1A = ADC_SC1_DIFF + 0x0 + var_enableInterrupts*ADC_SC1_AIEN;
-        __enable_irq();
-	} else if ( (pinP == A12) && (pinN == A13) ) { // DAD3 selected, pins 36 and 37
-	    __disable_irq();
-	    ADC0_SC1A = ADC_SC1_DIFF + 0x3 + var_enableInterrupts*ADC_SC1_AIEN;
-	    __enable_irq();
-	} else {
-	    __enable_irq(); // just in case we disabled them in the if above.
-        return ADC_ERROR_DIFF_VALUE; // all others aren't capable of differential measurements, perhaps return analogRead(pinP)-analogRead(pinN)?
-    }
-
-    while (1) {
-		__disable_irq();
-		if ((ADC0_SC1A & ADC_SC1_COCO)) { // conversion completed
-			result = ADC0_RA;
-
-			// if we interrupted a conversion, set it again
-            if (adcWasInUse) {
-                //GPIOC_PTOR = 1<<5;
-
-                // restore ADC config, and restart conversion
-                if(diffRes) setResolution(savedRes); // don't change res if isn't necessary
-                if(res==16) {
-                    ADC0_CV1 *= 2; // change back the comparison values
-                    ADC0_CV2 *= 2;
-                }
-                ADC0_CFG1 = savedCFG1;
-                ADC0_CFG2 = savedCFG2;
-                ADC0_SC2 = savedSC2 & 0x7F;
-                ADC0_SC3 = savedSC3 & 0xF;
-                ADC0_SC1A = savedSC1A & 0x7F;
-            }
-
-			__enable_irq();
-			if (result & (1<<15)) { // number is negative
-                result |= 0xFFFF0000; // result is a 32 bit integer
-            }
-			return result;
-		} else if( ((ADC0_SC2 & ADC_SC2_ADACT) == 0) && ((ADC0_SC1A & ADC_SC1_COCO) == 0) ) {
-		    // we needed to check that ADACT wasn't 0 because COCO just turned 1.
-
-		    // if we interrupted a conversion, set it again
-            if (adcWasInUse) {
-                //GPIOC_PTOR = 1<<5;
-
-                // restore ADC config, and restart conversion
-                if(diffRes) setResolution(savedRes); // don't change res if isn't necessary
-                if(res==16) {
-                    ADC0_CV1 *= 2; // change back the comparison values
-                    ADC0_CV2 *= 2;
-                }
-                ADC0_CFG1 = savedCFG1;
-                ADC0_CFG2 = savedCFG2;
-                ADC0_SC2 = savedSC2 & 0x7F;
-                ADC0_SC3 = savedSC3 & 0xF;
-                ADC0_SC1A = savedSC1A & 0x7F;
-            }
-
-		    // comparison was false, we return an error value to indicate this
-            __enable_irq();
-            return ADC_ERROR_DIFF_VALUE;
-		} // end if comparison false
-
-		__enable_irq();
-		yield();
-	} // while
-
-} // analogReadDifferential
-
-
-
-/* Starts an analog measurement on the pin.
-*  It returns inmediately, read value with readSingle().
-*  If the pin is incorrect it returns ADC_ERROR_VALUE.
-*/
-int ADC::startSingleRead(uint8_t pin) {
-
-	if (pin >= 14 && pin <= 39) {
-		if (pin <= 23) {
-			pin -= 14;  // 14-23 are A0-A9
-		} else if (pin >= 34) {
-			pin -= 24;  // 34-37 are A10-A13, 38 is temp sensor, 39 is vref
-		}
-    } else {
-        return ADC_ERROR_VALUE;   // all others are invalid
-    }
-
-	if (calibrating) wait_for_cal();
-
-	uint8_t res = getResolution();
-
-    // if the resolution is incorrect (i.e. 9, 11 or 13) silently correct it
-    adc_config.diffRes = 0;
-	if( (res==9) || (res==11) || (res==13) ) {
-        setResolution(res-1);
-        adc_config.diffRes = 1; // resolution changed
-	} else if(res==16){ // make sure the max value corresponds to a single-ended 16 bits mode
-	     analog_max_val = 65536;
-    }
-
-    // vars to saved the current state of the ADC in case it's in use
-    adcWasInUse = isConverting(); // is the ADC running now?
-
-    if(adcWasInUse) { // this means we're interrupting a conversion
-        // save the current conversion config, the adc isr will restore the adc
-        __disable_irq();
-        //GPIOC_PSOR = 1<<5;
-        adc_config.savedRes = res;
-        adc_config.savedSC1A = ADC0_SC1A;
-        adc_config.savedCFG1 = ADC0_CFG1;
-        adc_config.savedCFG2 = ADC0_CFG2;
-        adc_config.savedSC2 = ADC0_SC2;
-        adc_config.savedSC3 = ADC0_SC3;
-        //__enable_irq(); //keep irq disabled until we start our conversion
-
-    }
-
-    // select pin for single-ended mode and start conversion, enable interrupts to know when it's done
-    __disable_irq();
-    ADC0_SC1A = channel2sc1a[pin] + var_enableInterrupts*ADC_SC1_AIEN;
-	__enable_irq();
-
-}
-
-
-/* Start a differential conversion between two pins (pinP - pinN).
-* It returns inmediately, get value with readSingle().
-* Incorrect pins will return ADC_ERROR_DIFF_VALUE.
-* Set the resolution, number of averages and voltage reference using the appropriate functions
-*/
-int ADC::startSingleDifferential(uint8_t pinP, uint8_t pinN)
-{
-
-	// check for calibration before setting channels,
-	// because conversion will start as soon as we write to ADC0_SC1A
-	if (calibrating) wait_for_cal();
-
-	uint8_t res = getResolution();
-
-	// if the resolution is incorrect (i.e. 8, 10 or 12) silently correct it
-    adc_config.diffRes = 0;
-    if( (res==8) || (res==10) || (res==12) ) {
-        setResolution(res+1);
-        adc_config.diffRes = 1; // resolution changed
-    } else if(res==16) {
-        analog_max_val = 32768; // 16 bit diff mode is actually 15 bits + 1 sign bit
-    }
-
-    // vars to saved the current state of the ADC in case it's in use
-    adcWasInUse = isConverting(); // is the ADC running now?
-
-    if(adcWasInUse) { // this means we're interrupting a conversion
-        // save the current conversion config, the adc isr will restore the adc
-        __disable_irq();
-        //GPIOC_PSOR = 1<<5;
-        adc_config.savedRes = res;
-        adc_config.savedSC1A = ADC0_SC1A;
-        adc_config.savedCFG1 = ADC0_CFG1;
-        adc_config.savedCFG2 = ADC0_CFG2;
-        adc_config.savedSC2 = ADC0_SC2;
-        adc_config.savedSC3 = ADC0_SC3;
-        //__enable_irq(); //keep irq disabled until we start our conversion
-
-    }
-
-    // once ADC0_SC1A is set, conversion will start, enable interrupts if requested
-	if ( (pinP == A10) && (pinN == A11) ) { // DAD0 selected, pins 34 and 35
-        __disable_irq();
-	    ADC0_SC1A = ADC_SC1_DIFF + 0x0 + var_enableInterrupts*ADC_SC1_AIEN;
-        __enable_irq();
-	} else if ( (pinP == A12) && (pinN == A13) ) { // DAD3 selected, pins 36 and 37
-	    __disable_irq();
-	    ADC0_SC1A = ADC_SC1_DIFF + 0x3 + var_enableInterrupts*ADC_SC1_AIEN;
-	    __enable_irq();
-	} else {
-	    __enable_irq();
-        return ADC_ERROR_DIFF_VALUE; // all others aren't capable of differential measurements, perhaps return analogRead(pinP)-analogRead(pinN)?
-    }
-
-}
-
-/* Reads the analog value of the single conversion set with startAnalogRead(pin)
-*/
-int ADC::readSingle() { return analogReadContinuous(); }
-
-
-
-
-/* Starts continuous conversion on the pin
- * It returns as soon as the ADC is set, use analogReadContinuous() to read the values
- * Set the resolution, number of averages and voltage reference using the appropriate functions BEFORE calling this function
-*/
-void ADC::startContinuous(uint8_t pin)
-{
-
-    // if the resolution is incorrect (i.e. 9, 11 or 13) silently correct it
-	uint8_t res = getResolution();
-	if( (res==9) || (res==11) || (res==13) ) {
-        setResolution(res-1);
-	} else if(res==16) {
-        analog_max_val = 65536; // make sure a differential function didn't change this
-    }
-
-    // check for calibration before setting channels,
-	if (calibrating) wait_for_cal();
-
-	if (pin >= 14) {
-		if (pin <= 23) {
-			pin -= 14;  // 14-23 are A0-A9
-		} else if (pin >= 34 && pin <= 39) {
-			pin -= 24;  // 34-37 are A10-A13, 38 is temp sensor, 39 is vref
-		} else {
-			return;   // all others are invalid
-		}
-	}
-
-    __disable_irq();
-    // set continuous conversion flag
-	ADC0_SC3 |= ADC_SC3_ADCO;
-    // select pin for single-ended mode and start conversion, enable interrupts if requested
-    ADC0_SC1A = channel2sc1a[pin] + var_enableInterrupts*ADC_SC1_AIEN;
-    __enable_irq();
-}
-
-
-/* Starts continuous and differential conversion between the pins (pinP-pinN)
- * It returns as soon as the ADC is set, use analogReadContinuous() to read the value
- * Set the resolution, number of averages and voltage reference using the appropriate functions BEFORE calling this function
-*/
-void ADC::startContinuousDifferential(uint8_t pinP, uint8_t pinN)
-{
-
-    // if the resolution is incorrect (i.e. 8, 10 or 12) silently correct
-	uint8_t res = getResolution();
-	if( (res==8) || (res==10) || (res==12) ) {
-        setResolution(res+1);
-    } else if(res==16) {
-        analog_max_val = 32768; // 16 bit diff mode is actually 15 bits + 1 sign bit
-        //ADC0_CV1 /= 2; // change back the comparison values
-        //ADC0_CV2 /= 2;
-    }
-
-
-    // check for calibration before setting channels,
-	// because conversion will start as soon as we write to ADC0_SC1A
-	if (calibrating) wait_for_cal();
-
-    // set continuous conversion flag
-	__disable_irq();
-	ADC0_SC3 |= ADC_SC3_ADCO;
-	__enable_irq();
-
-    // select pins for differential mode and start conversion, enable interrupts if requested
-	if ( (pinP == A10) && (pinN == A11) ) { // DAD0 selected, pins 34 and 35
-        __disable_irq();
-	    ADC0_SC1A = ADC_SC1_DIFF + 0x0 + var_enableInterrupts*ADC_SC1_AIEN;
-        __enable_irq();
-	} else if ( (pinP == A12) && (pinN == A13) ) { // DAD3 selected, pins 36 and 37
-        __disable_irq();
-	    ADC0_SC1A = ADC_SC1_DIFF + 0x3 + var_enableInterrupts*ADC_SC1_AIEN;
-	    __enable_irq();
-	} else {
+void ADC::enableCompareRange(int16_t lowerLimit, int16_t upperLimit, int insideRange, int inclusive, int8_t adc_num) {
+    if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
+        #if defined(__MK20DX256__)
+        adc1->enableCompareRange(lowerLimit, upperLimit, insideRange, inclusive);
+        #endif
         return;
     }
+    adc0->enableCompareRange(lowerLimit, upperLimit, insideRange, inclusive);
+    return;
+}
+
+//! Disable the compare function
+void ADC::disableCompare(int8_t adc_num) {
+    if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
+        #if defined(__MK20DX256__)
+        adc1->disableCompare();
+        #endif
+        return;
+    }
+    adc0->disableCompare();
+    return;
+}
+
+
+//! Enable and set PGA
+/** Enables the PGA and sets the gain
+*   Use only for signals lower than 1.2 V
+*   \param gain From 0 to 6, set PGA to 2^gain
+*
+*/
+void ADC::enablePGA(uint8_t gain, int8_t adc_num) {
+    #if defined(__MK20DX256__)
+    if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
+        adc1->enablePGA(gain);
+        return;
+    }
+    adc0->enablePGA(gain);
+    #endif
+    return;
+}
+
+//! Returns the PGA level
+/** PGA level = 2^gain, from 0 to 64
+*/
+uint8_t ADC::getPGA(int8_t adc_num) {
+    #if defined(__MK20DX256__)
+    if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
+        return adc1->getPGA();
+    }
+    return adc0->getPGA();
+    #endif
+    return 0;
+}
+
+//! Disable PGA
+void ADC::disablePGA(int8_t adc_num) {
+    #if defined(__MK20DX256__)
+    if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
+        adc1->disablePGA();
+        return;
+    }
+    adc0->disablePGA();
+    #endif
+    return;
+}
+
+//! Is the ADC converting at the moment?
+bool ADC::isConverting(int8_t adc_num) {
+    if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
+        #if defined(__MK20DX256__)
+        return adc1->isConverting();
+        #endif
+        return false;
+    }
+    return adc0->isConverting();
+}
+
+//! Is an ADC conversion ready?
+/**
+*  \return 1 if yes, 0 if not.
+*  When a value is read this function returns 0 until a new value exists
+*  So it only makes sense to call it before analogReadContinuous() or readSingle()
+*/
+bool ADC::isComplete(int8_t adc_num) {
+    if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
+        #if defined(__MK20DX256__)
+        return adc1->isComplete();
+        #endif
+        return false;
+    }
+    return adc0->isComplete();;
+}
+
+//! Is the ADC in differential mode?
+bool ADC::isDifferential(int8_t adc_num) {
+    if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
+        #if defined(__MK20DX256__)
+        return adc1->isDifferential();
+        #endif
+        return false;
+    }
+    return adc0->isDifferential();
+}
+
+//! Is the ADC in continuous mode?
+bool ADC::isContinuous(int8_t adc_num) {
+    if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
+        #if defined(__MK20DX256__)
+        return adc1->isContinuous();
+        #endif
+        return false;
+    }
+    return adc0->isContinuous();
+}
+
+
+/* Returns the analog value of the pin.
+* It waits until the value is read and then returns the result.
+* If a comparison has been set up and fails, it will return ADC_ERROR_VALUE.
+* This function is interrupt safe, so it will restore the adc to the state it was before being called
+* If more than one ADC exists, it will select the module with less workload, you can force a selection using
+* adc_num. If you select ADC1 in Teensy 3.0 it will return ADC_ERROR_VALUE.
+*/
+int ADC::analogRead(uint8_t pin, int8_t adc_num) {
+    // First check that the pin is correct
+    if ( (pin < 0) || (pin > 43) ) {
+        return ADC_ERROR_VALUE;   // all others are invalid
+    }
+
+    /* Teensy 3.0
+    */
+    #if defined(__MK20DX128__)
+    if( adc_num==1 ) { // If asked to use ADC1, return error
+        return ADC_ERROR_VALUE;
+    }
+    if ( (pin < 23) || (pin>=34) ) { // check that the pin is correct (pin<0 or pin>43 have been ruled out already)
+        return adc0->analogRead(pin); // use ADC0
+    }
+
+    /* Teensy 3.1
+    */
+    #elif defined(__MK20DX256__)
+
+    // Check to which ADC the pin corresponds
+    if( (pin==16) || (pin==17) || (pin>=34 && pin<=37) )  { // Both ADCs: pins 16, 17, 34, 35, 36, and 37.
+        if( adc_num==-1 ) { // use no ADC in particular
+            if( (adc0->num_measurements) >= (adc1->num_measurements)) { // use the ADC with less workload
+                return adc1->analogRead(pin);
+            } else {
+                return adc0->analogRead(pin);
+            }
+        }
+        else if( adc_num==0 ) { // use ADC0
+            return adc0->analogRead(pin);
+        }
+        else if( adc_num==1 ){ // user wants ADC 1
+            return adc1->analogRead(pin);
+        }
+    } else if(pin>=26) { // Those pins correspond to ADC1 only
+        return adc1->analogRead(pin);
+    } else if(pin<23){ // Pin corresponds to ADC0
+        return adc0->analogRead(pin);
+    }
+    #endif
+
+    return ADC_ERROR_VALUE;
+}
+
+/* Reads the differential analog value of two pins (pinP - pinN).
+* It waits until the value is read and then returns the result.
+* If a comparison has been set up and fails, it will return ADC_ERROR_VALUE.
+* \param pinP must be A10 or A12.
+* \param pinN must be A11 (if pinP=A10) or A13 (if pinP=A12).
+* Other pins will return ADC_ERROR_VALUE.
+* This function is interrupt safe, so it will restore the adc to the state it was before being called
+* If more than one ADC exists, it will select the module with less workload, you can force a selection using
+* adc_num. If you select ADC1 in Teensy 3.0 it will return ADC_ERROR_VALUE.
+*/
+int ADC::analogReadDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num) {
+    if( adc_num==-1 ) { // adc_num isn't changed
+        #if defined(__MK20DX128__)
+        return adc0->analogReadDifferential(pinP, pinN); // use ADC0
+        #elif defined(__MK20DX256__)
+        if( (adc0->num_measurements) >= (adc1->num_measurements)) { // use the ADC with less workload
+            return adc1->analogReadDifferential(pinP, pinN);
+        } else {
+            return adc0->analogReadDifferential(pinP, pinN);
+        }
+        #endif
+    }
+    else if( adc_num==0 ) { // use ADC0
+        return adc0->analogReadDifferential(pinP, pinN);
+    }
+    else if( adc_num==1 ){ // user wants ADC 1, do nothing if it's a Teensy 3.0
+        #if defined(__MK20DX256__)
+        return adc1->analogReadDifferential(pinP, pinN);
+        #else
+        return ADC_ERROR_VALUE;
+        #endif
+    }
+    return ADC_ERROR_VALUE;
+}
+
+
+//! Starts an analog measurement on the pin and enables interrupts.
+/** It returns inmediately, get value with readSingle().
+*   If the pin is incorrect it returns ADC_ERROR_VALUE
+*   This function is interrupt safe. The ADC interrupt will restore the adc to its previous settings and
+*   restart the adc if it stopped a measurement. If you modify the adc_isr then this won't happen.
+*/
+int ADC::startSingleRead(uint8_t pin, int8_t adc_num) {
+    // First check that the pin is correct
+    if ( (pin < 0) || (pin > 43) ) {
+        return ADC_ERROR_VALUE;   // all others are invalid
+    }
+
+    /* Teensy 3.0
+    */
+    #if defined(__MK20DX128__)
+    if( adc_num==1 ) { // If asked to use ADC1, return error
+        return ADC_ERROR_VALUE;
+    }
+    if ( (pin < 23) || (pin>=34) ) { // check that the pin is correct (pin<0 or pin>43 have been ruled out already)
+        return adc0->startSingleRead(pin); // use ADC0
+    }
+
+    /* Teensy 3.1
+    */
+    #elif defined(__MK20DX256__)
+
+    // Check to which ADC the pin corresponds
+    if( (pin==16) || (pin==17) || (pin>=34 && pin<=37) )  { // Both ADCs: pins 16, 17, 34, 35, 36, and 37.
+        if( adc_num==-1 ) { // use no ADC in particular
+            if( (adc0->num_measurements) >= (adc1->num_measurements)) { // use the ADC with less workload
+                return adc1->startSingleRead(pin);
+            } else {
+                return adc0->startSingleRead(pin);
+            }
+        }
+        else if( adc_num==0 ) { // use ADC0
+            return adc0->startSingleRead(pin);
+        }
+        else if( adc_num==1 ){ // user wants ADC 1
+            return adc1->startSingleRead(pin);
+        }
+    } else if(pin>=26) { // Those pins correspond to ADC1 only
+        return adc1->startSingleRead(pin);
+    } else if(pin<23){ // Pin corresponds to ADC0
+        return adc0->startSingleRead(pin);
+    }
+    #endif
+
+    return ADC_ERROR_VALUE;
+}
+
+//! Start a differential conversion between two pins (pinP - pinN) and enables interrupts.
+/** It returns inmediately, get value with readSingle().
+*   \param pinP must be A10 or A12.
+*   \param pinN must be A11 (if pinP=A10) or A13 (if pinP=A12).
+*   Other pins will return ADC_ERROR_DIFF_VALUE.
+*   This function is interrupt safe. The ADC interrupt will restore the adc to its previous settings and
+*   restart the adc if it stopped a measurement. If you modify the adc_isr then this won't happen.
+*/
+int ADC::startSingleDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num) {
+    if( adc_num==-1 ) { // adc_num isn't changed
+        #if defined(__MK20DX128__)
+        return adc0->startSingleDifferential(pinP, pinN); // use ADC0
+        #elif defined(__MK20DX256__)
+        if( (adc0->num_measurements) >= (adc1->num_measurements)) { // use the ADC with less workload
+            return adc1->startSingleDifferential(pinP, pinN);
+        } else {
+            return adc0->startSingleDifferential(pinP, pinN);
+        }
+        #endif
+    }
+    else if( adc_num==0 ) { // use ADC0
+        return adc0->startSingleDifferential(pinP, pinN);
+    }
+    else if( adc_num==1 ){ // user wants ADC 1, do nothing if it's a Teensy 3.0
+        #if defined(__MK20DX256__)
+        return adc1->startSingleDifferential(pinP, pinN);
+        #else
+        return ADC_ERROR_VALUE;
+        #endif
+    }
+    return ADC_ERROR_VALUE;
+}
+
+//! Reads the analog value of a single conversion.
+/** Set the conversion with with startSingleRead(pin) or startSingleDifferential(pinP, pinN).
+*   \return the converted value.
+*/
+int ADC::readSingle(int8_t adc_num) {
+    if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
+        #if defined(__MK20DX256__)
+        return adc1->readSingle();
+        #endif
+        return false;
+    }
+    return adc0->readSingle();
+}
+
+
+//! Starts continuous conversion on the pin.
+/** It returns as soon as the ADC is set, use analogReadContinuous() to read the value.
+*/
+void ADC::startContinuous(uint8_t pin, int8_t adc_num) {
+    // First check that the pin is correct
+    if ( (pin < 0) || (pin > 43) ) {
+        return;   // all others are invalid
+    }
+
+    /* Teensy 3.0
+    */
+    #if defined(__MK20DX128__)
+    if( adc_num==1 ) { // If asked to use ADC1, return error
+        return;
+    }
+    if ( (pin < 23) || (pin>=34) ) { // check that the pin is correct (pin<0 or pin>43 have been ruled out already)
+        adc0->startContinuous(pin); // use ADC0
+        return;
+    }
+
+    /* Teensy 3.1
+    */
+    #elif defined(__MK20DX256__)
+
+    // Check to which ADC the pin corresponds
+    if( (pin==16) || (pin==17) || (pin>=34 && pin<=37) )  { // Both ADCs: pins 16, 17, 34, 35, 36, and 37.
+        if( adc_num==-1 ) { // use no ADC in particular
+            if( (adc0->num_measurements) >= (adc1->num_measurements)) { // use the ADC with less workload
+                adc1->startContinuous(pin);
+                return;
+            } else {
+                adc0->startContinuous(pin);
+                return;
+            }
+        }
+        else if( adc_num==0 ) { // use ADC0
+            adc0->startContinuous(pin);
+            return;
+        }
+        else if( adc_num==1 ){ // user wants ADC 1
+            adc1->startContinuous(pin);
+            return;
+        }
+    } else if(pin>=26) { // Those pins correspond to ADC1 only
+        adc1->startContinuous(pin);
+        return;
+    } else if(pin<23){ // Pin corresponds to ADC0
+        adc0->startContinuous(pin);
+        return;
+    }
+    #endif
 
     return;
 }
 
-/* Reads the analog value of the continuous conversion set with analogStartContinuous(pin)
- * It returns the last converted value.
+//! Starts continuous conversion between the pins (pinP-pinN).
+/** It returns as soon as the ADC is set, use analogReadContinuous() to read the value.
+* \param pinP must be A10 or A12.
+* \param pinN must be A11 (if pinP=A10) or A13 (if pinP=A12).
+* Other pins will return ADC_ERROR_DIFF_VALUE.
 */
-int ADC::analogReadContinuous()
-{
-    // The result is a 16 bit extended sign 2's complement number (the sign bit goes from bit 15 to analog_config_bits-1)
-	// if the number is negative we fill the rest of the 1's upto 32 bits (we extend the sign)
-	int16_t result = ADC0_RA;
-    if (result & (1<<15)) { // number is negative
-        result |= 0xFFFF0000; // result is a 32 bit integer
+void ADC::startContinuousDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num) {
+    if( adc_num==-1 ) { // adc_num isn't changed
+        #if defined(__MK20DX128__)
+        adc0->startContinuousDifferential(pinP, pinN); // use ADC0
+        return;
+        #elif defined(__MK20DX256__)
+        if( (adc0->num_measurements) >= (adc1->num_measurements)) { // use the ADC with less workload
+            adc1->startContinuousDifferential(pinP, pinN);
+            return;
+        } else {
+            adc0->startContinuousDifferential(pinP, pinN);
+            return;
+        }
+        #endif
     }
-
-	return result;
+    else if( adc_num==0 ) { // use ADC0
+        adc0->startContinuousDifferential(pinP, pinN);
+        return;
+    }
+    else if( adc_num==1 ){ // user wants ADC 1, do nothing if it's a Teensy 3.0
+        #if defined(__MK20DX256__)
+        adc1->startContinuousDifferential(pinP, pinN);
+        return;
+        #else
+        return;
+        #endif
+    }
+    return;
 }
 
-/* Stops continuous conversion
+//! Reads the analog value of a continuous conversion.
+/** Set the continuous conversion with with analogStartContinuous(pin) or startContinuousDifferential(pinP, pinN).
+*   \return the last converted value.
 */
-void ADC::stopContinuous()
-{
-	ADC0_SC1A |= 0x1F; // set channel select to all 1's (31) to stop it.
-
-	return;
+int ADC::analogReadContinuous(int8_t adc_num) {
+    if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
+        #if defined(__MK20DX256__)
+        return adc1->analogReadContinuous();
+        #endif
+        return false;
+    }
+    return adc0->analogReadContinuous();
 }
+
+//! Stops continuous conversion
+void ADC::stopContinuous(int8_t adc_num) {
+    if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
+        #if defined(__MK20DX256__)
+        adc1->stopContinuous();
+        return;
+        #endif
+        return;
+    }
+    adc0->stopContinuous();
+    return;
+}
+
+
 
 
 /* void function that does nothing
 */
 void ADC::voidFunction(){return;}
 
-/* Callback from the ADC interrupt, it adds the new value to the ring buffer
+/* Callback from the ADC0 interrupt, it adds the new value to the ring buffer
 * it takes around 3 us
 */
-void ADC::ADC_callback() {
-    #if debug
+void ADC::ADC0_callback() {
+    #if ADC_debug
         digitalWriteFast(ledPin, HIGH);
     #endif
 
     // get the pin number
-    int pin = sc1a2channel[ADC0_SC1A & 0x1F];
+    int pin = adc0->sc1a2channel[ADC0_SC1A & 0x1F];
 
     // find the index of the pin
     int i = 0;
     while( (i<MAX_ANALOG_TIMERS) && (analogTimer[i]->pinNumber!=pin) ) {i++;}
     if( i==MAX_ANALOG_TIMERS) {
-        #if debug
+        #if ADC_debug
             digitalWriteFast(ledPin, LOW);
         #endif
         return; // the last measurement doesn't belong to an analog timer buffer.
     }
 
     // place value in its buffer
-    analogTimer[i]->buffer->write(readSingle());
+    analogTimer[i]->buffer->write(adc0->readSingle());
 
     // restore ADC config if it was in use before being interrupted by the analog timer
-    if (adcWasInUse) {
+    if (adc0->adcWasInUse) {
         // restore ADC config, and restart conversion
         //if(adc_config.diffRes)
-        setResolution(adc_config.savedRes); // don't change res if isn't necessary
-        ADC0_CFG1 = adc_config.savedCFG1;
-        ADC0_CFG2 = adc_config.savedCFG2;
-        ADC0_SC2 = adc_config.savedSC2 & 0x7F;
-        ADC0_SC3 = adc_config.savedSC3 & 0xF;
-        ADC0_SC1A = adc_config.savedSC1A & 0x7F;
+        adc0->setResolution(adc0->adc_config.savedRes); // don't change res if isn't necessary
+        ADC0_CFG1 = adc0->adc_config.savedCFG1;
+        ADC0_CFG2 = adc0->adc_config.savedCFG2;
+        ADC0_SC2 = adc0->adc_config.savedSC2 & 0x7F;
+        ADC0_SC3 = adc0->adc_config.savedSC3 & 0xF;
+        ADC0_SC1A = adc0->adc_config.savedSC1A & 0x7F;
     }
 
-    #if debug
+    #if ADC_debug
+        digitalWriteFast(ledPin, LOW);
+    #endif
+}
+void ADC::ADC1_callback() {
+    #if ADC_debug
+        digitalWriteFast(ledPin, HIGH);
+    #endif
+
+    // get the pin number
+    int pin = adc1->sc1a2channel[ADC0_SC1A & 0x1F];
+
+    // find the index of the pin
+    int i = 0;
+    while( (i<MAX_ANALOG_TIMERS) && (analogTimer[i]->pinNumber!=pin) ) {i++;}
+    if( i==MAX_ANALOG_TIMERS) {
+        #if ADC_debug
+            digitalWriteFast(ledPin, LOW);
+        #endif
+        return; // the last measurement doesn't belong to an analog timer buffer.
+    }
+
+    // place value in its buffer
+    analogTimer[i]->buffer->write(adc1->readSingle());
+
+    // restore ADC config if it was in use before being interrupted by the analog timer
+    if (adc1->adcWasInUse) {
+        // restore ADC config, and restart conversion
+        //if(adc_config.diffRes)
+        adc1->setResolution(adc1->adc_config.savedRes); // don't change res if isn't necessary
+        ADC1_CFG1 = adc1->adc_config.savedCFG1;
+        ADC1_CFG2 = adc1->adc_config.savedCFG2;
+        ADC1_SC2 = adc1->adc_config.savedSC2 & 0x7F;
+        ADC1_SC3 = adc1->adc_config.savedSC3 & 0xF;
+        ADC1_SC1A = adc1->adc_config.savedSC1A & 0x7F;
+    }
+
+    #if ADC_debug
         digitalWriteFast(ledPin, LOW);
     #endif
 }
@@ -873,22 +743,22 @@ void ADC::ADC_callback() {
 *  it takes around 2.5 us
 */
 void ADC::analogTimerCallback0() {
-    #if debug
+    #if ADC_debug
         digitalWriteFast(ledPin, HIGH);
     #endif
 
     uint8_t pin = analogTimer[0]->pinNumber;
     if(analogTimer[0]->isDiff) {
         if(pin == A10) {
-            startSingleDifferential(A10, A11);
+            ADC::startSingleDifferential(A10, A11);
         } else if(pin == A12) {
-            startSingleDifferential(A12, A13);
+            ADC::startSingleDifferential(A12, A13);
         }
     } else {
-        startSingleRead(pin);
+        ADC::startSingleRead(pin);
     }
 
-    #if debug
+    #if ADC_debug
         digitalWriteFast(ledPin, LOW);
     #endif
 }
@@ -896,7 +766,7 @@ void ADC::analogTimerCallback0() {
 *  it takes around 2.5 us
 */
 void ADC::analogTimerCallback1() {
-    #if debug
+    #if ADC_debug
         digitalWriteFast(ledPin, HIGH);
     #endif
 
@@ -911,7 +781,7 @@ void ADC::analogTimerCallback1() {
         startSingleRead(pin);
     }
 
-    #if debug
+    #if ADC_debug
         digitalWriteFast(ledPin, LOW);
     #endif
 }
@@ -919,7 +789,7 @@ void ADC::analogTimerCallback1() {
 *  it takes around 2.5 us
 */
 void ADC::analogTimerCallback2() {
-    #if debug
+    #if ADC_debug
         digitalWriteFast(ledPin, HIGH);
     #endif
 
@@ -934,10 +804,11 @@ void ADC::analogTimerCallback2() {
         startSingleRead(pin);
     }
 
-    #if debug
+    #if ADC_debug
         digitalWriteFast(ledPin, LOW);
     #endif
 }
+
 
 /* Starts a periodic measurement.
 * The values will be added to a ring buffer of a fixed size.
@@ -947,14 +818,14 @@ void ADC::analogTimerCallback2() {
 int ADC::startAnalogTimer(uint8_t pin, uint32_t period) {
 
     // check pin
-    if (pin < 14 || pin > 39) {
+    if (pin < 0 || pin > 43) {
         return ANALOG_TIMER_ERROR;   // invalid pin
     }
 
     // if the resolution is incorrect (i.e. 9, 11 or 13) silently correct it here
-	uint8_t res = getResolution();
+	uint8_t res = adc0->getResolution();
 	if( (res==9) || (res==11) || (res==13) ) {
-        setResolution(res-1);
+        adc0->setResolution(res-1);
 	}
 
     // find next timerPin not in use
@@ -979,10 +850,22 @@ int ADC::startAnalogTimer(uint8_t pin, uint32_t period) {
     // store period
     analogTimer[i]->period = period;
 
-	// point the adc_isr to the function that takes care of the timers
-	analogTimer_ADC_Callback = &ADC_callback;
+    // Decide which adc will do the job
+    #if defined(__MK20DX128__)
+    // point the adc_isr to the function that takes care of the timers
+    analogTimer_ADC0_Callback = &ADC0_callback; // use ADC0
     // enable interrupts
-	enableInterrupts();
+    adc0->enableInterrupts();
+    #elif defined(__MK20DX256__)
+    if( (adc0->num_measurements) >= (adc1->num_measurements)) { // use the ADC with less workload
+        analogTimer_ADC1_Callback = &ADC1_callback; // use ADC1
+        adc1->enableInterrupts();
+    } else {
+        analogTimer_ADC0_Callback = &ADC0_callback; // use ADC0
+        adc0->enableInterrupts();
+    }
+    #endif
+
 
     // start timerPin # i
     int result = analogTimer[i]->timer->begin(analogTimerCallback[i], period);
@@ -1009,9 +892,9 @@ int ADC::startAnalogTimerDifferential(uint8_t pinP, uint8_t pinN, uint32_t perio
     }
 
     // if the resolution is incorrect (i.e. 8, 10 or 12) silently correct it here
-	uint8_t res = getResolution();
+	uint8_t res = adc0->getResolution();
 	if( (res==8) || (res==10) || (res==12) ) {
-        setResolution(res+1);
+        adc0->setResolution(res+1);
 	}
 
     // find next timerPin not in use
@@ -1036,10 +919,22 @@ int ADC::startAnalogTimerDifferential(uint8_t pinP, uint8_t pinN, uint32_t perio
     analogTimer[i]->period = period;
     analogTimer[i]->isDiff = true;
 
-	// point the adc_isr to the function that takes care of the timers
-	analogTimer_ADC_Callback = &ADC_callback;
+    // Decide which adc will do the job
+    #if defined(__MK20DX128__)
+    // point the adc_isr to the function that takes care of the timers
+    analogTimer_ADC0_Callback = &ADC0_callback; // use ADC0
     // enable interrupts
-	enableInterrupts();
+    adc0->enableInterrupts();
+    #elif defined(__MK20DX256__)
+    if( (adc0->num_measurements) >= (adc1->num_measurements)) { // use the ADC with less workload
+        analogTimer_ADC1_Callback = &ADC1_callback; // use ADC1
+        adc1->enableInterrupts();
+    } else {
+        analogTimer_ADC0_Callback = &ADC0_callback; // use ADC0
+        adc0->enableInterrupts();
+    }
+    #endif
+
 
     // start timerPin # i
     int result = analogTimer[i]->timer->begin(analogTimerCallback[i], period);
@@ -1071,9 +966,14 @@ void ADC::stopAnalogTimer(uint8_t pin) {
     i = 0;
     while( (i<MAX_ANALOG_TIMERS) && (analogTimer[i]->pinNumber!=-1) ) {i++;}
     if( i == MAX_ANALOG_TIMERS ) { // no more analog timers
-        disableInterrupts();
+        adc0->disableInterrupts();
         // point the adc_isr to the function that does nothing
-        analogTimer_ADC_Callback = &voidFunction;
+        analogTimer_ADC0_Callback = &voidFunction;
+        #if defined(__MK20DX256__)
+        adc0->disableInterrupts();
+        // point the adc_isr to the function that does nothing
+        analogTimer_ADC0_Callback = &voidFunction;
+        #endif
     }
 
 
@@ -1107,30 +1007,33 @@ bool ADC::isTimerLastValue(uint8_t pin) {
 
 
 
-/* Is the ADC converting at the moment?
-*  Returns 1 if yes, 0 if not
+/*Returns the analog values of both pins, measured at the same time by the two ADC modules.
+* It waits until the value is read and then returns the result as a struct Sync_result,
+* use Sync_result.result_adc0 and Sync_result.result_adc1.
+* If a comparison has been set up and fails, it will return ADC_ERROR_VALUE in both fields of the struct.
 */
-bool ADC::isConverting() {
+ADC::Sync_result ADC::analogSynchronizedRead(uint8_t pin0, uint8_t pin1) {
 
-    return (ADC0_SC2 & ADC_SC2_ADACT) >> 7;
-}
+    ADC::Sync_result res;
 
+    #if defined(__MK20DX128__)
+    res.result_adc0 = ADC_ERROR_VALUE;
+    res.result_adc1 = ADC_ERROR_VALUE;
+    #elif defined(__MK20DX256__)
+    adc0->startSingleReadFast(pin0);
+    adc1->startSingleReadFast(pin1);
 
-/* Is an ADC conversion ready?
-*  Returns 1 if yes, 0 if not.
-*  When a value is read this function returns 0 until a new value exists
-*  So it only makes sense to call it before analogRead(), analogReadContinuous() or analogReadDifferential()
-*/
-bool ADC::isComplete() {
+    while( (!adc0->isComplete()) && (!adc1->isComplete()) ) {
+        yield();
+        //GPIOC_PTOR = 1<<5;
+    }
 
-    return (ADC0_SC1A & ADC_SC1_COCO) >> 7;
-}
+    res.result_adc0 = adc0->readSingle();
+    res.result_adc1 = adc1->readSingle();
+    #endif
 
+    //GPIOC_PCOR = 1<<5;
 
-bool ADC::isDifferential() {
-    return (ADC0_SC1A & ADC_SC1_DIFF) >> 5;
-}
+    return res;
 
-bool ADC::isContinuous() {
-    return (ADC0_SC3 & ADC_SC3_ADCO) >> 3;
 }

@@ -7,9 +7,7 @@
 // THE SIZE MUST BE A POWER OF 2!!
 #define DEFAULT_BUFFER_SIZE 1024
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+
 
 /** Class RingBuffer implements a circular buffer of fixed size (must be power of 2)
 *   Code adapted from http://en.wikipedia.org/wiki/Circular_buffer#Mirroring
@@ -46,15 +44,12 @@ class RingBuffer
 
         int increase(int p);
 
-        int size = DEFAULT_BUFFER_SIZE;
-        int start = 0;
-        int end = 0;
+        int b_size = DEFAULT_BUFFER_SIZE;
+        int b_start = 0;
+        int b_end = 0;
         //int *elems;
         int elems[DEFAULT_BUFFER_SIZE];
 };
 
-#ifdef __cplusplus
-}
-#endif
 
 #endif // RINGBUFFER_H

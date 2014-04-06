@@ -28,7 +28,7 @@ void setup() {
     //adc.enableCompareRange(1.0*adc.getMaxValue()/3.3, 2.0*adc.getMaxValue()/3.3, 0, 1); // ready if value lies out of [1.0,2.0] V
 
     Serial.println("Starting Cont");
-    adc.startContinuous(readPinCont);
+    //adc.startContinuous(readPinCont);
     Serial.println("Cont started");
 
     //adc.enableInterrupts();
@@ -36,7 +36,7 @@ void setup() {
     Serial.println("Starting Timer 1");
     // start a analogRead every 10 ms, the values will be placed in a circular buffer
     // for 1 average and 10 bits of resolution the timer interrupt, ADC measurement and inclusion into the buffer takes around 9.0 us
-    startTimerValue = adc.startAnalogTimer(readPinTimer, 1000000); // us
+    startTimerValue = adc.startAnalogTimer(readPinTimer, 50); // us
     //startTimerValue = adc.startAnalogTimerDifferential(A10, A11, 1000000);
     Serial.println("Timer 1 started");
 
@@ -66,11 +66,11 @@ void loop() {
         //Serial.println("New value!");
     }
 
-  valueCont = adc.analogReadContinuous();
+  /*valueCont = adc.analogReadContinuous();
 
   Serial.print("Continuous value:");
   Serial.println(valueCont*3.3/adc.getMaxValue(), DEC);
-
+*/
   if (Serial.available()) {
 	c = Serial.read();
 	if(c=='a') { // conversion active?
@@ -84,7 +84,7 @@ void loop() {
         adc.stopAnalogTimer(readPinTimer2);
     } else if(c=='r') { // restart timer
         Serial.println("Start timer 2");
-        startTimerValue2 = adc.startAnalogTimer(readPinTimer2, 1500);
+        startTimerValue2 = adc.startAnalogTimer(readPinTimer2, 50);
         //startTimerValue2 = adc.startAnalogTimerDifferential(A10, A11, 1500);
     }
   }

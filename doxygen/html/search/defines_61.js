@@ -1,6 +1,19 @@
 var searchData=
 [
-  ['adc_5ferror_5fdiff_5fvalue',['ADC_ERROR_DIFF_VALUE',['../_a_d_c_8h.html#af181c4b5c617516517400c427494e7e7',1,'ADC.h']]],
-  ['adc_5ferror_5fvalue',['ADC_ERROR_VALUE',['../_a_d_c_8h.html#a810b46bdaa73057d834142229111adc5',1,'ADC.h']]],
+  ['adc_5f0',['ADC_0',['../_a_d_c_8h.html#a5cbcaa568e20fcd4cc9325927d370860',1,'ADC.h']]],
+  ['adc_5f1',['ADC_1',['../_a_d_c_8h.html#a3d767e16f12a6ee542079f3c9677192c',1,'ADC.h']]],
+  ['adc_5fbandgap',['ADC_BANDGAP',['../_a_d_c___module_8h.html#a22d1f36f85b454a54518cd29713118db',1,'ADC_Module.h']]],
+  ['adc_5fdebug',['ADC_debug',['../_a_d_c___module_8h.html#aaaf2912bdda454e3fcb88156f1ce20d8',1,'ADC_Module.h']]],
+  ['adc_5ferror_5fdiff_5fvalue',['ADC_ERROR_DIFF_VALUE',['../_a_d_c___module_8h.html#af181c4b5c617516517400c427494e7e7',1,'ADC_Module.h']]],
+  ['adc_5ferror_5fvalue',['ADC_ERROR_VALUE',['../_a_d_c___module_8h.html#a810b46bdaa73057d834142229111adc5',1,'ADC_Module.h']]],
+  ['adc_5fref_5fdefault',['ADC_REF_DEFAULT',['../_a_d_c___module_8h.html#a79a0008b0054fba5551f1a2f515cd21f',1,'ADC_Module.h']]],
+  ['adc_5fref_5fexternal',['ADC_REF_EXTERNAL',['../_a_d_c___module_8h.html#aa45db1c2cb73add84d2a33088eba05b2',1,'ADC_Module.h']]],
+  ['adc_5fref_5finternal',['ADC_REF_INTERNAL',['../_a_d_c___module_8h.html#a1721cf11e7e814f29d58ac29611b51cf',1,'ADC_Module.h']]],
+  ['adc_5fref_5finternal1v1',['ADC_REF_INTERNAL1V1',['../_a_d_c___module_8h.html#a91d2836195edf5c1de05a9553ad8699c',1,'ADC_Module.h']]],
+  ['adc_5fref_5finternal1v2',['ADC_REF_INTERNAL1V2',['../_a_d_c___module_8h.html#aa8452539b624c0ca1f9b67e5f96934af',1,'ADC_Module.h']]],
+  ['adc_5ftemp_5fsensor',['ADC_TEMP_SENSOR',['../_a_d_c___module_8h.html#a4cefed245019e53043553487015d4336',1,'ADC_Module.h']]],
+  ['adc_5fvref_5fout',['ADC_VREF_OUT',['../_a_d_c___module_8h.html#aeb28b97a2562d8af49e06f54d217c972',1,'ADC_Module.h']]],
+  ['adc_5fvrefh',['ADC_VREFH',['../_a_d_c___module_8h.html#a82ca060ff604ccffc8ddbc3af6824973',1,'ADC_Module.h']]],
+  ['adc_5fvrefl',['ADC_VREFL',['../_a_d_c___module_8h.html#ac8d25362e749cd9ec5c4ebc4702316b5',1,'ADC_Module.h']]],
   ['analog_5ftimer_5ferror',['ANALOG_TIMER_ERROR',['../_a_d_c_8h.html#a12a745ce8b6499612828e575e39c46b0',1,'ADC.h']]]
 ];
