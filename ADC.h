@@ -239,7 +239,7 @@ class ADC
         *   This function is interrupt safe. The ADC interrupt will restore the adc to its previous settings and
         *   restart the adc if it stopped a measurement. If you modify the adc_isr then this won't happen.
         */
-        int startAnalogTimer(uint8_t pin, uint32_t period);
+        int startAnalogTimer(uint8_t pin, uint32_t period, int8_t adc_num = -1);
 
         //! Starts a periodic measurement using the IntervalTimer library.
         /** The values will be added to a ring buffer of a fixed size.
@@ -251,7 +251,7 @@ class ADC
         *   This function is interrupt safe. The ADC interrupt will restore the adc to its previous settings and
         *   restart the adc if it stopped a measurement. If you modify the adc_isr then this won't happen.
         */
-        int startAnalogTimerDifferential(uint8_t pinP, uint8_t pinN, uint32_t period);
+        int startAnalogTimerDifferential(uint8_t pinP, uint8_t pinN, uint32_t period, int8_t adc_num = -1);
 
         //! Stops the periodic measurement
         /** As soon as it is stopped, you won't be able to access the buffer anymore
@@ -277,6 +277,7 @@ class ADC
         * If more than one ADC exists, it will select the module with less workload
         */
         Sync_result analogSynchronizedRead(uint8_t pin0, uint8_t pin1);
+        Sync_result analogSyncRead(uint8_t pin0, uint8_t pin1) = {return analogSynchronizedRead(uint8_t pin0, uint8_t pin1);}
 
 
         //uint8_t channels_ADC0[20] = {14,15,16,17,18,19,20,21,22,23,34,35,36,37,40, ADC_TEMP_SENSOR, ADC_VREF_OUT, ADC_BANDGAP, ADC_VREFH, ADC_VREFL};

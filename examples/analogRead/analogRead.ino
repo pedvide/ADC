@@ -52,39 +52,8 @@ int c=0;
 void loop() {
 
   value = adc->analogRead(readPin, ADC_0); // read a new value, will return ADC_ERROR_VALUE if the comparison is false.
-/*
-  Serial.print("ADC0_SC1A: ");
-  Serial.println(ADC0_SC1A, HEX);
-  Serial.print("ADC0_CFG1: ");
-  Serial.println(ADC0_CFG1, HEX);
-  Serial.print("ADC0_CFG2: ");
-  Serial.println(ADC0_CFG2, HEX);
-  Serial.print("ADC0_RA: ");
-  Serial.println(ADC0_RA, HEX);
-  Serial.print("ADC0_RB: ");
-  Serial.println(ADC0_RB, HEX);
-  Serial.print("ADC0_SC2: ");
-  Serial.println(ADC0_SC2, HEX);
-  Serial.print("ADC0_SC3: ");
-  Serial.println(ADC0_SC3, HEX);
-*/
+
   value2 = adc->analogRead(readPin2, ADC_1);
-/*
-  Serial.print("ADC1_SC1A: ");
-  Serial.println(ADC1_SC1A, HEX);
-  Serial.print("ADC1_CFG1: ");
-  Serial.println(ADC1_CFG1, HEX);
-  Serial.print("ADC1_CFG2: ");
-  Serial.println(ADC1_CFG2, HEX);
-  Serial.print("ADC1_RA: ");
-  Serial.println(ADC1_RA, HEX);
-  Serial.print("ADC1_RB: ");
-  Serial.println(ADC1_RB, HEX);
-  Serial.print("ADC1_SC2: ");
-  Serial.println(ADC1_SC2, HEX);
-  Serial.print("ADC1_SC3: ");
-  Serial.println(ADC1_SC3, HEX);
-*/
 
   if(value!=ADC_ERROR_VALUE ) {
 

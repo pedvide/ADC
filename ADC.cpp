@@ -815,7 +815,7 @@ void ADC::analogTimerCallback2() {
 *   Read the oldest value with getTimerValue(pin), check if it's the last value with isLastValue(pin).
 *   When the buffer is full, new data will overwrite the oldest values.
 */
-int ADC::startAnalogTimer(uint8_t pin, uint32_t period) {
+int ADC::startAnalogTimer(uint8_t pin, uint32_t period, int8_t adc_num) {
 
     // check pin
     if (pin < 0 || pin > 43) {
@@ -884,7 +884,7 @@ int ADC::startAnalogTimer(uint8_t pin, uint32_t period) {
 *   \param pinN must be A11 (if pinP=A10) or A13 (if pinP=A12).
 *   \returns ANALOG_TIMER_ERROR if the timer could not be started. Stop other analog timer and retry.
 */
-int ADC::startAnalogTimerDifferential(uint8_t pinP, uint8_t pinN, uint32_t period) {
+int ADC::startAnalogTimerDifferential(uint8_t pinP, uint8_t pinN, uint32_t period, int8_t adc_num) {
 
     // check pin
     if ( (pinP != A10) && (pinP != A12) ) {
