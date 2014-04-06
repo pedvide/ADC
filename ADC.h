@@ -23,11 +23,6 @@
 extern "C" {
 #endif
 
-<<<<<<< HEAD
-=======
-// debug mode: blink the led light
-#define ADC_debug 0
->>>>>>> b7e0d98bdc048bda7fddb63fc06cad8d782f4ac3
 
 class ADC
 {
