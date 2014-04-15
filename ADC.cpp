@@ -701,6 +701,7 @@ void ADC::ADC0_callback() {
     #endif
 }
 void ADC::ADC1_callback() {
+    #if defined(__MK20DX256__)
     #if ADC_debug
         digitalWriteFast(ledPin, HIGH);
     #endif
@@ -736,6 +737,7 @@ void ADC::ADC1_callback() {
     #if ADC_debug
         digitalWriteFast(ledPin, LOW);
     #endif
+    #endif // Teensy 3.1?
 }
 
 

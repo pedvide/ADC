@@ -277,7 +277,7 @@ class ADC
         * If more than one ADC exists, it will select the module with less workload
         */
         Sync_result analogSynchronizedRead(uint8_t pin0, uint8_t pin1);
-        Sync_result analogSyncRead(uint8_t pin0, uint8_t pin1) = {return analogSynchronizedRead(uint8_t pin0, uint8_t pin1);}
+        Sync_result analogSyncRead(uint8_t pin0, uint8_t pin1) {return analogSynchronizedRead(pin0, pin1);}
 
 
         //uint8_t channels_ADC0[20] = {14,15,16,17,18,19,20,21,22,23,34,35,36,37,40, ADC_TEMP_SENSOR, ADC_VREF_OUT, ADC_BANDGAP, ADC_VREFH, ADC_VREFL};

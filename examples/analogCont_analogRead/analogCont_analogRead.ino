@@ -10,12 +10,15 @@
 
 #include <ADC.h>
 
-// Teensy 3.0 has the LED on pin 13
+#define ADC_0 0
+#define ADC_1 1
+
+// Teensy 3.x has the LED on pin 13
 const int ledPin = 13;
 const int readPinCont = A9;
 const int readPinSingle = A8;
 
-ADC adc; // adc object
+ADC *adc = new ADC(); // adc object
 
 void setup() {
   // initialize the digital pin as an output.
@@ -27,12 +30,12 @@ void setup() {
 
   Serial.begin(38400);
 
-  adc.setAveraging(4);
-  adc.setResolution(16); // call this before the compare function!!
-  adc.enableCompare(1.0/3.3*adc.getMaxValue(), 0); // true if value < 1.0V
+  adc->setAveraging(4);
+  adc->setResolution(16); // call this before the compare function!!
+  adc->enableCompare(1.0/3.3*adc->getMaxValue(), 0); // true if value < 1.0V
   //adc.enableCompareRange(-1.0*adc.getMaxValue()/3.3, 1.0*adc.getMaxValue()/3.3, 0, 1);
 
-  adc.startContinuous(readPinCont);
+  adc->startContinuous(readPinCont);
   //adc.startContinuousDifferential(A10, A11);
 
   delay(500);
@@ -45,36 +48,36 @@ void loop() {
 
 
   Serial.print("Comparison with value/range is: ");
-  if(adc.isComplete()) {
+  if(adc->isComplete()) {
       Serial.print("True");
   } else {
       Serial.print("False");
   }
 
-  valueCont = adc.analogReadContinuous();
+  valueCont = adc->analogReadContinuous();
 
   Serial.print(" (");
-  Serial.print(valueCont*3.3/adc.getMaxValue(), DEC);
+  Serial.print(valueCont*3.3/adc->getMaxValue(), DEC);
   Serial.println(")");
 
   if (Serial.available()) {
 	c = Serial.read();
 	if(c=='a') { // conversion active?
 	    Serial.print("Converting? ");
-        Serial.println(adc.isConverting());
+        Serial.println(adc->isConverting());
     } else if(c=='s') { // stop conversion
-        adc.stopContinuous();
+        adc->stopContinuous();
         Serial.println("Stopped");
     } else if(c=='t') { // conversion complete?
         Serial.print("True? ");
-        Serial.println(adc.isComplete());
+        Serial.println(adc->isComplete());
     } else if(c=='v') {
         Serial.print("Single value: ");
-        Serial.println(adc.analogRead(readPinSingle)*3.3/adc.getMaxValue(), DEC);
+        Serial.println(adc->analogRead(readPinSingle)*3.3/adc->getMaxValue(), DEC);
         //Serial.println(adc.analogReadDifferential(A10,A11)*2.0*3.3/adc.getMaxValue(), DEC);
     } else if(c=='r') { // restart conversion
         Serial.println("Restarting conversions ");
-        adc.startContinuous(readPinCont);
+        adc->startContinuous(readPinCont);
         delay(100);
     }
   }
