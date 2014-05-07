@@ -17,10 +17,6 @@
 // include new and delete
 #include <Arduino.h>
 
-// include the circular buffer
-#include "RingBuffer.h"
-
-
 // the alternate clock is connected to OSCERCLK (16 MHz).
 // datasheet says ADC clock should be 2 to 12 MHz for 16 bit mode
 // datasheet says ADC clock should be 1 to 18 MHz for 8-12 bit mode
@@ -277,7 +273,6 @@ class ADC_Module
 
         void startPDB(double period);
         double adc_pdb_period;
-
 
         // struct to store the config of the adc
         typedef struct ADC_CONFIG{

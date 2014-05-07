@@ -12,7 +12,7 @@
 // Teensy 3.0 has the LED on pin 13
 const int ledPin = 13;
 
-const int readPin = A0; // ADC0
+const int readPin = 23; // ADC0
 const int readPin2 = A3; // ADC1
 
 ADC *adc = new ADC(); // adc object

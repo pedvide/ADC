@@ -142,7 +142,7 @@ void ADC_Module::analog_init(uint32_t config)
     VREF_TRM = VREF_TRM_CHOPEN | 0x20; // enable module and set the trimmer to medium (max=0x3F=63)
 	VREF_SC = VREF_SC_VREFEN | VREF_SC_REGEN | VREF_SC_ICOMPEN | VREF_SC_MODE_LV(1); // (=0xE1) enable 1.2 volt ref with all compensations
     //VREF_TRM = 0x60;
-	//VREF_SC = 0xE1;		// enable 1.2 volt ref
+	//VREF_SC = 0xE1;
 
 	if (analog_reference_internal) {
 		ADC0_SC2 |= ADC_SC2_REFSEL(1); // 1.2V ref
@@ -330,7 +330,11 @@ void ADC_Module::setAveraging(uint8_t num)
 */
 void ADC_Module::enableInterrupts() {
     var_enableInterrupts = 1;
-    NVIC_ENABLE_IRQ(IRQ_ADC0);
+    if(ADC_num==1) { // enable correct interrupt
+        NVIC_ENABLE_IRQ(IRQ_ADC1);
+    } else {
+        NVIC_ENABLE_IRQ(IRQ_ADC0);
+    }
 }
 
 /* Disable interrupts
@@ -338,7 +342,11 @@ void ADC_Module::enableInterrupts() {
 */
 void ADC_Module::disableInterrupts() {
     var_enableInterrupts = 0;
-    NVIC_DISABLE_IRQ(IRQ_ADC0);
+    if(ADC_num==1) { // disable correct interrupt
+        NVIC_DISABLE_IRQ(IRQ_ADC1);
+    } else {
+        NVIC_DISABLE_IRQ(IRQ_ADC0);
+    }
 }
 
 

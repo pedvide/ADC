@@ -15,6 +15,7 @@
 #include "ADC_Module.h"
 // include the circular buffer
 #include "RingBuffer.h"
+#include "RingBufferDMA.h"
 // and IntervalTimer
 #include <IntervalTimer.h>
 

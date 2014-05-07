@@ -367,7 +367,7 @@ int ADC::analogRead(uint8_t pin, int8_t adc_num) {
     if( adc_num==1 ) { // If asked to use ADC1, return error
         return ADC_ERROR_VALUE;
     }
-    if ( (pin < 23) || (pin>=34) ) { // check that the pin is correct (pin<0 or pin>43 have been ruled out already)
+    if ( (pin <= 23) || (pin>=34) ) { // check that the pin is correct (pin<0 or pin>43 have been ruled out already)
         return adc0->analogRead(pin); // use ADC0
     }
 
@@ -384,7 +384,7 @@ int ADC::analogRead(uint8_t pin, int8_t adc_num) {
                 return adc0->analogRead(pin);
             }
         }
-        else if( adc_num==0 ) { // use ADC0
+        else if( adc_num==0 ) { // user wants ADC0
             return adc0->analogRead(pin);
         }
         else if( adc_num==1 ){ // user wants ADC 1
@@ -392,7 +392,7 @@ int ADC::analogRead(uint8_t pin, int8_t adc_num) {
         }
     } else if(pin>=26) { // Those pins correspond to ADC1 only
         return adc1->analogRead(pin);
-    } else if(pin<23){ // Pin corresponds to ADC0
+    } else if(pin<=23){ // Pin corresponds to ADC0
         return adc0->analogRead(pin);
     }
     #endif
@@ -454,7 +454,7 @@ int ADC::startSingleRead(uint8_t pin, int8_t adc_num) {
     if( adc_num==1 ) { // If asked to use ADC1, return error
         return ADC_ERROR_VALUE;
     }
-    if ( (pin < 23) || (pin>=34) ) { // check that the pin is correct (pin<0 or pin>43 have been ruled out already)
+    if ( (pin <= 23) || (pin>=34) ) { // check that the pin is correct (pin<0 or pin>43 have been ruled out already)
         return adc0->startSingleRead(pin); // use ADC0
     }
 
@@ -479,7 +479,7 @@ int ADC::startSingleRead(uint8_t pin, int8_t adc_num) {
         }
     } else if(pin>=26) { // Those pins correspond to ADC1 only
         return adc1->startSingleRead(pin);
-    } else if(pin<23){ // Pin corresponds to ADC0
+    } else if(pin<=23){ // Pin corresponds to ADC0
         return adc0->startSingleRead(pin);
     }
     #endif
@@ -550,7 +550,7 @@ void ADC::startContinuous(uint8_t pin, int8_t adc_num) {
     if( adc_num==1 ) { // If asked to use ADC1, return error
         return;
     }
-    if ( (pin < 23) || (pin>=34) ) { // check that the pin is correct (pin<0 or pin>43 have been ruled out already)
+    if ( (pin <= 23) || (pin>=34) ) { // check that the pin is correct (pin<0 or pin>43 have been ruled out already)
         adc0->startContinuous(pin); // use ADC0
         return;
     }
@@ -581,7 +581,7 @@ void ADC::startContinuous(uint8_t pin, int8_t adc_num) {
     } else if(pin>=26) { // Those pins correspond to ADC1 only
         adc1->startContinuous(pin);
         return;
-    } else if(pin<23){ // Pin corresponds to ADC0
+    } else if(pin<=23){ // Pin corresponds to ADC0
         adc0->startContinuous(pin);
         return;
     }
