@@ -330,11 +330,15 @@ void ADC_Module::setAveraging(uint8_t num)
 */
 void ADC_Module::enableInterrupts() {
     var_enableInterrupts = 1;
+    #if defined(__MK20DX128__)
+    NVIC_ENABLE_IRQ(IRQ_ADC0);
+    #elif defined(__MK20DX256__)
     if(ADC_num==1) { // enable correct interrupt
         NVIC_ENABLE_IRQ(IRQ_ADC1);
     } else {
         NVIC_ENABLE_IRQ(IRQ_ADC0);
     }
+    #endif // defined
 }
 
 /* Disable interrupts
@@ -342,11 +346,15 @@ void ADC_Module::enableInterrupts() {
 */
 void ADC_Module::disableInterrupts() {
     var_enableInterrupts = 0;
-    if(ADC_num==1) { // disable correct interrupt
+    #if defined(__MK20DX128__)
+    NVIC_DISABLE_IRQ(IRQ_ADC0);
+    #elif defined(__MK20DX256__)
+    if(ADC_num==1) { // enable correct interrupt
         NVIC_DISABLE_IRQ(IRQ_ADC1);
     } else {
         NVIC_DISABLE_IRQ(IRQ_ADC0);
     }
+    #endif // defined
 }
 
 
