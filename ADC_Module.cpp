@@ -427,7 +427,7 @@ void ADC_Module::enablePGA(uint8_t gain) {
     if(gain==0) {
         disablePGA();
     } else {
-        *ADC_PGA = ADC0_PGA_PGAEN | ADC0_PGA_PGAG(gain);
+        *ADC_PGA = ADC_PGA_PGAEN | ADC_PGA_PGAG(gain);
         pga_value=1<<gain;
     }
 }
@@ -441,7 +441,7 @@ uint8_t ADC_Module::getPGA() {
 
 //! Disable PGA
 void ADC_Module::disablePGA() {
-    *ADC_PGA &= ~ADC0_PGA_PGAEN;
+    *ADC_PGA &= ~ADC_PGA_PGAEN;
     pga_value = 1;
 }
 
