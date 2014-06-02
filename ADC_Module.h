@@ -35,16 +35,6 @@
 #error
 #endif
 
-// VREF options that don't appear on mk20dx128.h
-#define VREF_TRM_CHOPEN (uint8_t)0x40 // Chop oscillator enable
-
-#define VREF_SC_VREFEN (uint8_t)0x80 // Internal Voltage Reference enable
-#define VREF_SC_REGEN (uint8_t)0x40 // Regulator enable
-#define VREF_SC_ICOMPEN (uint8_t)0x20 // Second order curvature compensation enable
-#define VREF_SC_VREFST (uint8_t)0x04 // Internal Voltage Reference stable flag
-#define VREF_SC_MODE_LV(n) (uint8_t)(((n) & 3) << 0) // Buffer Mode selection: 0=Bandgap on only, 1=High power buffer mode,
-                                                     // 2=Low-power buffer mode
-
 
 // ADCx_SC2[REFSEL] bit selects the voltage reference sources for ADC.
 //   VREFH/VREFL - connected as the primary reference option
