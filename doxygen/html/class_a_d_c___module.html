@@ -30,7 +30,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">ADC
-   &#160;<span id="projectnumber">3.0</span>
+   &#160;<span id="projectnumber">4.0</span>
    </div>
   </td>
  </tr>
@@ -93,7 +93,7 @@ $(document).ready(function(){initNavTree('class_a_d_c___module.html','');});
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -108,7 +108,7 @@ $(document).ready(function(){initNavTree('class_a_d_c___module.html','');});
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
-<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
+<a href="#friends">Friends</a> &#124;
 <a href="class_a_d_c___module-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">ADC_Module Class Reference</div>  </div>
@@ -121,21 +121,25 @@ $(document).ready(function(){initNavTree('class_a_d_c___module.html','');});
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html">ADC_CONFIG</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g.html">ADC_POWER_SPEED_CONFIG</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:a0092e0915c562b4e318b0aff575315d1"><td class="memItemLeft" align="right" valign="top">typedef struct <br class="typebreak"/>
 <a class="el" href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html">ADC_Module::ADC_CONFIG</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a0092e0915c562b4e318b0aff575315d1">ADC_Config</a></td></tr>
 <tr class="separator:a0092e0915c562b4e318b0aff575315d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a36fa42521ed88815b9085394c1fa7a92"><td class="memItemLeft" align="right" valign="top">typedef volatile uint32_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a></td></tr>
-<tr class="separator:a36fa42521ed88815b9085394c1fa7a92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a893a14998c08fb929fdfd570ff981ccd"><td class="memItemLeft" align="right" valign="top">typedef struct <br class="typebreak"/>
+<a class="el" href="struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g.html">ADC_Module::ADC_POWER_SPEED_CONFIG</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a893a14998c08fb929fdfd570ff981ccd">ADC_Power_Speed_Config</a></td></tr>
+<tr class="separator:a893a14998c08fb929fdfd570ff981ccd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:abd04dee9e56c5b8f0ba8c11d646e635e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#abd04dee9e56c5b8f0ba8c11d646e635e">ADC_Module</a> (uint8_t ADC_number=0)</td></tr>
 <tr class="separator:abd04dee9e56c5b8f0ba8c11d646e635e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae898bfba80833884b8ce1c1b6bed61bf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#ae898bfba80833884b8ce1c1b6bed61bf">~ADC_Module</a> ()</td></tr>
-<tr class="separator:ae898bfba80833884b8ce1c1b6bed61bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe8ed6f2a6c811ec3ef2c4aba768982f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#afe8ed6f2a6c811ec3ef2c4aba768982f">recalibrate</a> ()</td></tr>
+<tr class="memdesc:afe8ed6f2a6c811ec3ef2c4aba768982f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts the calibration sequence, waits until it's done and writes the results.  <a href="#afe8ed6f2a6c811ec3ef2c4aba768982f">More...</a><br/></td></tr>
+<tr class="separator:afe8ed6f2a6c811ec3ef2c4aba768982f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa14ea3e2c5f7d0ba794628e92a2573da"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#aa14ea3e2c5f7d0ba794628e92a2573da">setReference</a> (uint8_t type)</td></tr>
 <tr class="memdesc:aa14ea3e2c5f7d0ba794628e92a2573da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the voltage reference you prefer, default is vcc.  <a href="#aa14ea3e2c5f7d0ba794628e92a2573da">More...</a><br/></td></tr>
 <tr class="separator:aa14ea3e2c5f7d0ba794628e92a2573da"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -148,6 +152,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af3704819ccda64bae9c13a95a74e70a8"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#af3704819ccda64bae9c13a95a74e70a8">getMaxValue</a> ()</td></tr>
 <tr class="memdesc:af3704819ccda64bae9c13a95a74e70a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the maximum value for a measurement.  <a href="#af3704819ccda64bae9c13a95a74e70a8">More...</a><br/></td></tr>
 <tr class="separator:af3704819ccda64bae9c13a95a74e70a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9dcb1b6195ab05fdee708472e4da939f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a9dcb1b6195ab05fdee708472e4da939f">setConversionSpeed</a> (uint8_t speed)</td></tr>
+<tr class="memdesc:a9dcb1b6195ab05fdee708472e4da939f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the conversion speed.  <a href="#a9dcb1b6195ab05fdee708472e4da939f">More...</a><br/></td></tr>
+<tr class="separator:a9dcb1b6195ab05fdee708472e4da939f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94a585ac8079de091133b0ef4588b037"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a94a585ac8079de091133b0ef4588b037">setSamplingSpeed</a> (uint8_t speed)</td></tr>
+<tr class="memdesc:a94a585ac8079de091133b0ef4588b037"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the sampling speed.  <a href="#a94a585ac8079de091133b0ef4588b037">More...</a><br/></td></tr>
+<tr class="separator:a94a585ac8079de091133b0ef4588b037"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a55954618c5c27c1ffce4321e912bac52"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a55954618c5c27c1ffce4321e912bac52">setAveraging</a> (uint8_t num)</td></tr>
 <tr class="memdesc:a55954618c5c27c1ffce4321e912bac52"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the number of averages.  <a href="#a55954618c5c27c1ffce4321e912bac52">More...</a><br/></td></tr>
 <tr class="separator:a55954618c5c27c1ffce4321e912bac52"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -163,12 +173,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac1610dcab46476f287c2dd4d96465c47"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#ac1610dcab46476f287c2dd4d96465c47">disableDMA</a> ()</td></tr>
 <tr class="memdesc:ac1610dcab46476f287c2dd4d96465c47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable <a class="el" href="class_a_d_c.html">ADC</a> DMA request.  <a href="#ac1610dcab46476f287c2dd4d96465c47">More...</a><br/></td></tr>
 <tr class="separator:ac1610dcab46476f287c2dd4d96465c47"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9440dc39f853d66341b5d50cc23f8f04"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a9440dc39f853d66341b5d50cc23f8f04">enableCompare</a> (int16_t compValue, int greaterThan)</td></tr>
-<tr class="memdesc:a9440dc39f853d66341b5d50cc23f8f04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable the compare function to a single value.  <a href="#a9440dc39f853d66341b5d50cc23f8f04">More...</a><br/></td></tr>
-<tr class="separator:a9440dc39f853d66341b5d50cc23f8f04"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8de0a106b343d4f6384dd421dd35a431"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a8de0a106b343d4f6384dd421dd35a431">enableCompareRange</a> (int16_t lowerLimit, int16_t upperLimit, int insideRange, int inclusive)</td></tr>
-<tr class="memdesc:a8de0a106b343d4f6384dd421dd35a431"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable the compare function to a range.  <a href="#a8de0a106b343d4f6384dd421dd35a431">More...</a><br/></td></tr>
-<tr class="separator:a8de0a106b343d4f6384dd421dd35a431"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae7a632267f21b79c31c1dae56b5da188"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#ae7a632267f21b79c31c1dae56b5da188">enableCompare</a> (int16_t compValue, bool greaterThan)</td></tr>
+<tr class="memdesc:ae7a632267f21b79c31c1dae56b5da188"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable the compare function to a single value.  <a href="#ae7a632267f21b79c31c1dae56b5da188">More...</a><br/></td></tr>
+<tr class="separator:ae7a632267f21b79c31c1dae56b5da188"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8e64bab9d4e7f1935a260629e5d71d5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#ab8e64bab9d4e7f1935a260629e5d71d5">enableCompareRange</a> (int16_t lowerLimit, int16_t upperLimit, bool insideRange, bool inclusive)</td></tr>
+<tr class="memdesc:ab8e64bab9d4e7f1935a260629e5d71d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable the compare function to a range.  <a href="#ab8e64bab9d4e7f1935a260629e5d71d5">More...</a><br/></td></tr>
+<tr class="separator:ab8e64bab9d4e7f1935a260629e5d71d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac635f675a9690a4db016c73c31818262"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#ac635f675a9690a4db016c73c31818262">disableCompare</a> ()</td></tr>
 <tr class="memdesc:ac635f675a9690a4db016c73c31818262"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable the compare function.  <a href="#ac635f675a9690a4db016c73c31818262">More...</a><br/></td></tr>
 <tr class="separator:ac635f675a9690a4db016c73c31818262"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -183,6 +193,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a734ac9cf07a54e91707c78d753d3d3dd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a734ac9cf07a54e91707c78d753d3d3dd">disablePGA</a> ()</td></tr>
 <tr class="memdesc:a734ac9cf07a54e91707c78d753d3d3dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable PGA.  <a href="#a734ac9cf07a54e91707c78d753d3d3dd">More...</a><br/></td></tr>
 <tr class="separator:a734ac9cf07a54e91707c78d753d3d3dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e2730c5910f386f3e3b76b9eacc0268"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a1e2730c5910f386f3e3b76b9eacc0268">isConverting</a> ()</td></tr>
+<tr class="memdesc:a1e2730c5910f386f3e3b76b9eacc0268"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is the <a class="el" href="class_a_d_c.html">ADC</a> converting at the moment?  <a href="#a1e2730c5910f386f3e3b76b9eacc0268">More...</a><br/></td></tr>
+<tr class="separator:a1e2730c5910f386f3e3b76b9eacc0268"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c3d39b4fe79bfff701409ea07259a47"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a4c3d39b4fe79bfff701409ea07259a47">isComplete</a> ()</td></tr>
+<tr class="memdesc:a4c3d39b4fe79bfff701409ea07259a47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is an <a class="el" href="class_a_d_c.html">ADC</a> conversion ready?  <a href="#a4c3d39b4fe79bfff701409ea07259a47">More...</a><br/></td></tr>
+<tr class="separator:a4c3d39b4fe79bfff701409ea07259a47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac74cc58870ff82be8ea91a40cd4a7a63"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#ac74cc58870ff82be8ea91a40cd4a7a63">isDifferential</a> ()</td></tr>
+<tr class="memdesc:ac74cc58870ff82be8ea91a40cd4a7a63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is the <a class="el" href="class_a_d_c.html">ADC</a> in differential mode?  <a href="#ac74cc58870ff82be8ea91a40cd4a7a63">More...</a><br/></td></tr>
+<tr class="separator:ac74cc58870ff82be8ea91a40cd4a7a63"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1aa7278d64d55bed0be5779378858a5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#ae1aa7278d64d55bed0be5779378858a5">isContinuous</a> ()</td></tr>
+<tr class="memdesc:ae1aa7278d64d55bed0be5779378858a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is the <a class="el" href="class_a_d_c.html">ADC</a> in continuous mode?  <a href="#ae1aa7278d64d55bed0be5779378858a5">More...</a><br/></td></tr>
+<tr class="separator:ae1aa7278d64d55bed0be5779378858a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad492adad4a9fa728625be82602bf1672"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#ad492adad4a9fa728625be82602bf1672">analogRead</a> (uint8_t pin)</td></tr>
 <tr class="memdesc:ad492adad4a9fa728625be82602bf1672"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the analog value of the pin.  <a href="#ad492adad4a9fa728625be82602bf1672">More...</a><br/></td></tr>
 <tr class="separator:ad492adad4a9fa728625be82602bf1672"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -197,6 +219,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4a8feb071fe092bd904a98714f63976b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a4a8feb071fe092bd904a98714f63976b">startSingleDifferential</a> (uint8_t pinP, uint8_t pinN)</td></tr>
 <tr class="memdesc:a4a8feb071fe092bd904a98714f63976b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start a differential conversion between two pins (pinP - pinN) and enables interrupts.  <a href="#a4a8feb071fe092bd904a98714f63976b">More...</a><br/></td></tr>
 <tr class="separator:a4a8feb071fe092bd904a98714f63976b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0d60a43c585ea80055aa55bf9786e74"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#aa0d60a43c585ea80055aa55bf9786e74">startSingleDifferentialFast</a> (uint8_t pinP, uint8_t pinN)</td></tr>
+<tr class="separator:aa0d60a43c585ea80055aa55bf9786e74"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a60d0edc82fd1dbb2e20d090a53718ce2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a60d0edc82fd1dbb2e20d090a53718ce2">readSingle</a> ()</td></tr>
 <tr class="memdesc:a60d0edc82fd1dbb2e20d090a53718ce2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads the analog value of a single conversion.  <a href="#a60d0edc82fd1dbb2e20d090a53718ce2">More...</a><br/></td></tr>
 <tr class="separator:a60d0edc82fd1dbb2e20d090a53718ce2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -212,105 +236,29 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9af29f865bdd376d954112d36b0992f0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a9af29f865bdd376d954112d36b0992f0">stopContinuous</a> ()</td></tr>
 <tr class="memdesc:a9af29f865bdd376d954112d36b0992f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stops continuous conversion.  <a href="#a9af29f865bdd376d954112d36b0992f0">More...</a><br/></td></tr>
 <tr class="separator:a9af29f865bdd376d954112d36b0992f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1e2730c5910f386f3e3b76b9eacc0268"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a1e2730c5910f386f3e3b76b9eacc0268">isConverting</a> ()</td></tr>
-<tr class="memdesc:a1e2730c5910f386f3e3b76b9eacc0268"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is the <a class="el" href="class_a_d_c.html">ADC</a> converting at the moment?  <a href="#a1e2730c5910f386f3e3b76b9eacc0268">More...</a><br/></td></tr>
-<tr class="separator:a1e2730c5910f386f3e3b76b9eacc0268"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4c3d39b4fe79bfff701409ea07259a47"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a4c3d39b4fe79bfff701409ea07259a47">isComplete</a> ()</td></tr>
-<tr class="memdesc:a4c3d39b4fe79bfff701409ea07259a47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is an <a class="el" href="class_a_d_c.html">ADC</a> conversion ready?  <a href="#a4c3d39b4fe79bfff701409ea07259a47">More...</a><br/></td></tr>
-<tr class="separator:a4c3d39b4fe79bfff701409ea07259a47"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac74cc58870ff82be8ea91a40cd4a7a63"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#ac74cc58870ff82be8ea91a40cd4a7a63">isDifferential</a> ()</td></tr>
-<tr class="memdesc:ac74cc58870ff82be8ea91a40cd4a7a63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is the <a class="el" href="class_a_d_c.html">ADC</a> in differential mode?  <a href="#ac74cc58870ff82be8ea91a40cd4a7a63">More...</a><br/></td></tr>
-<tr class="separator:ac74cc58870ff82be8ea91a40cd4a7a63"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae1aa7278d64d55bed0be5779378858a5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#ae1aa7278d64d55bed0be5779378858a5">isContinuous</a> ()</td></tr>
-<tr class="memdesc:ae1aa7278d64d55bed0be5779378858a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is the <a class="el" href="class_a_d_c.html">ADC</a> in continuous mode?  <a href="#ae1aa7278d64d55bed0be5779378858a5">More...</a><br/></td></tr>
-<tr class="separator:ae1aa7278d64d55bed0be5779378858a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00d8d764c000134e47c02b38f66ebbed"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a00d8d764c000134e47c02b38f66ebbed">startPDB</a> (double period)</td></tr>
-<tr class="separator:a00d8d764c000134e47c02b38f66ebbed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a3fd83a4068c918c6abf9eb06f5662b6e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a3fd83a4068c918c6abf9eb06f5662b6e">adc_pdb_period</a></td></tr>
-<tr class="separator:a3fd83a4068c918c6abf9eb06f5662b6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ac619afe41bd32e546cf5018efc9baf"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a7ac619afe41bd32e546cf5018efc9baf">channel2sc1a</a> [44]</td></tr>
-<tr class="separator:a7ac619afe41bd32e546cf5018efc9baf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad3d904edce6a226937d1ed2b133e7dd3"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#ad3d904edce6a226937d1ed2b133e7dd3">sc1a2channel</a> [30]</td></tr>
-<tr class="separator:ad3d904edce6a226937d1ed2b133e7dd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad4ffd455f5c162d15fb4078aa90b5cbe"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_a_d_c___module.html#a0092e0915c562b4e318b0aff575315d1">ADC_Config</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#ad4ffd455f5c162d15fb4078aa90b5cbe">adc_config</a></td></tr>
 <tr class="separator:ad4ffd455f5c162d15fb4078aa90b5cbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a34f6f7878889aa3644b279f9440dc0bf"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a34f6f7878889aa3644b279f9440dc0bf">adcWasInUse</a></td></tr>
 <tr class="separator:a34f6f7878889aa3644b279f9440dc0bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a27fdc83a7dbe3a8c8c24fc4273414256"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a27fdc83a7dbe3a8c8c24fc4273414256">num_measurements</a> = 0</td></tr>
 <tr class="separator:a27fdc83a7dbe3a8c8c24fc4273414256"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a602c4bb9ba6cee4d3f239be43b2864cb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a602c4bb9ba6cee4d3f239be43b2864cb">ADC_SC1A</a></td></tr>
-<tr class="separator:a602c4bb9ba6cee4d3f239be43b2864cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aff11ed1a817e37e89a350836d09fdd5e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#aff11ed1a817e37e89a350836d09fdd5e">ADC_SC1B</a></td></tr>
-<tr class="separator:aff11ed1a817e37e89a350836d09fdd5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae0d57658078a42d4fe67b7ccf968327e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#ae0d57658078a42d4fe67b7ccf968327e">ADC_CFG1</a></td></tr>
-<tr class="separator:ae0d57658078a42d4fe67b7ccf968327e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9365090edcee70c09a84f163a5a5efb6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a9365090edcee70c09a84f163a5a5efb6">ADC_CFG2</a></td></tr>
-<tr class="separator:a9365090edcee70c09a84f163a5a5efb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad42f9bd24ac7b0b46bc3fd2cd95514dd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#ad42f9bd24ac7b0b46bc3fd2cd95514dd">ADC_RA</a></td></tr>
-<tr class="separator:ad42f9bd24ac7b0b46bc3fd2cd95514dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a98131df796c606e090eb9398066649f9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a98131df796c606e090eb9398066649f9">ADC_RB</a></td></tr>
-<tr class="separator:a98131df796c606e090eb9398066649f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4b53e7bb2d3b0b6cdb493e29af4e9b35"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a4b53e7bb2d3b0b6cdb493e29af4e9b35">ADC_CV1</a></td></tr>
-<tr class="separator:a4b53e7bb2d3b0b6cdb493e29af4e9b35"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5925c2b149b43862515e6bbeceef41c3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a5925c2b149b43862515e6bbeceef41c3">ADC_CV2</a></td></tr>
-<tr class="separator:a5925c2b149b43862515e6bbeceef41c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f87f20f16184544e402984f49eb77d2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a3f87f20f16184544e402984f49eb77d2">ADC_SC2</a></td></tr>
-<tr class="separator:a3f87f20f16184544e402984f49eb77d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc5b6460f1e377c464e562117a3dc90a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#abc5b6460f1e377c464e562117a3dc90a">ADC_SC3</a></td></tr>
-<tr class="separator:abc5b6460f1e377c464e562117a3dc90a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae7b96b4929922739325c61eab60b9ce3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#ae7b96b4929922739325c61eab60b9ce3">ADC_PGA</a></td></tr>
-<tr class="separator:ae7b96b4929922739325c61eab60b9ce3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa4e447503bff8089f3656927faa7d008"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#aa4e447503bff8089f3656927faa7d008">ADC_OFS</a></td></tr>
-<tr class="separator:aa4e447503bff8089f3656927faa7d008"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1fc0663af85da8b0646a7bd937cf3af5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a1fc0663af85da8b0646a7bd937cf3af5">ADC_PG</a></td></tr>
-<tr class="separator:a1fc0663af85da8b0646a7bd937cf3af5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a79fbb2101908e46787d75f4497b2c7c4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a79fbb2101908e46787d75f4497b2c7c4">ADC_MG</a></td></tr>
-<tr class="separator:a79fbb2101908e46787d75f4497b2c7c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af16aa770a675efa54382d406e4df118c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#af16aa770a675efa54382d406e4df118c">ADC_CLPD</a></td></tr>
-<tr class="separator:af16aa770a675efa54382d406e4df118c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf1d823d7e9b286cb380bbadc21a1446"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#abf1d823d7e9b286cb380bbadc21a1446">ADC_CLPS</a></td></tr>
-<tr class="separator:abf1d823d7e9b286cb380bbadc21a1446"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaaf917dc2356a810b196b004ace4c55d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#aaaf917dc2356a810b196b004ace4c55d">ADC_CLP4</a></td></tr>
-<tr class="separator:aaaf917dc2356a810b196b004ace4c55d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aada0808d5a556e70868cc28cafcbcc32"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#aada0808d5a556e70868cc28cafcbcc32">ADC_CLP3</a></td></tr>
-<tr class="separator:aada0808d5a556e70868cc28cafcbcc32"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3e1707a7b2598bda168b09d1483d1ea2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a3e1707a7b2598bda168b09d1483d1ea2">ADC_CLP2</a></td></tr>
-<tr class="separator:a3e1707a7b2598bda168b09d1483d1ea2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7677c11f1c250cc87ffbe16f7ae6aa8b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a7677c11f1c250cc87ffbe16f7ae6aa8b">ADC_CLP1</a></td></tr>
-<tr class="separator:a7677c11f1c250cc87ffbe16f7ae6aa8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab67ae110c643f4bd4b169be08a56600a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#ab67ae110c643f4bd4b169be08a56600a">ADC_CLP0</a></td></tr>
-<tr class="separator:ab67ae110c643f4bd4b169be08a56600a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0b30b64e46d25db9eddecfb2d942e858"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a0b30b64e46d25db9eddecfb2d942e858">ADC_CLMD</a></td></tr>
-<tr class="separator:a0b30b64e46d25db9eddecfb2d942e858"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2538f5966699b9951b9910d8346ae309"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a2538f5966699b9951b9910d8346ae309">ADC_CLMS</a></td></tr>
-<tr class="separator:a2538f5966699b9951b9910d8346ae309"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeb5a37488cd886be6a773a9339e495f8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#aeb5a37488cd886be6a773a9339e495f8">ADC_CLM4</a></td></tr>
-<tr class="separator:aeb5a37488cd886be6a773a9339e495f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4fa94c428157c5bf8325f220e369d9ce"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a4fa94c428157c5bf8325f220e369d9ce">ADC_CLM3</a></td></tr>
-<tr class="separator:a4fa94c428157c5bf8325f220e369d9ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a800c37fd322038ae694b3e6ad35fb719"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a800c37fd322038ae694b3e6ad35fb719">ADC_CLM2</a></td></tr>
-<tr class="separator:a800c37fd322038ae694b3e6ad35fb719"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9bb438d6c6f3414df159bbed074a32c9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a9bb438d6c6f3414df159bbed074a32c9">ADC_CLM1</a></td></tr>
-<tr class="separator:a9bb438d6c6f3414df159bbed074a32c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5de06d42d32e40468290bb7b91d3f336"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a5de06d42d32e40468290bb7b91d3f336">ADC_CLM0</a></td></tr>
-<tr class="separator:a5de06d42d32e40468290bb7b91d3f336"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ac619afe41bd32e546cf5018efc9baf"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a7ac619afe41bd32e546cf5018efc9baf">channel2sc1a</a> [44]</td></tr>
+<tr class="separator:a7ac619afe41bd32e546cf5018efc9baf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85269783274d11b1c7760fd929945380"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a85269783274d11b1c7760fd929945380">sc1a2channel</a> [31]</td></tr>
+<tr class="separator:a85269783274d11b1c7760fd929945380"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6187e43b6b3ea1a42c6bb17f2c10f099"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a6187e43b6b3ea1a42c6bb17f2c10f099">fail_flag</a></td></tr>
+<tr class="separator:a6187e43b6b3ea1a42c6bb17f2c10f099"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
-Static Public Attributes</h2></td></tr>
-<tr class="memitem:a869aaf6169fe85b5a33eb9d7999d28c7"><td class="memItemLeft" align="right" valign="top">static const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a869aaf6169fe85b5a33eb9d7999d28c7">channel2sc1aADC0</a> [44]</td></tr>
-<tr class="separator:a869aaf6169fe85b5a33eb9d7999d28c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac136d935be8b858477d4f99e65855bea"><td class="memItemLeft" align="right" valign="top">static const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#ac136d935be8b858477d4f99e65855bea">channel2sc1aADC1</a> [44]</td></tr>
-<tr class="separator:ac136d935be8b858477d4f99e65855bea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2dfa05a9782afa7bae3bed86733aee0f"><td class="memItemLeft" align="right" valign="top">static const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a2dfa05a9782afa7bae3bed86733aee0f">sc1a2channelADC0</a> [30]</td></tr>
-<tr class="separator:a2dfa05a9782afa7bae3bed86733aee0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5376fea14e4d425df5ecb25027e1ad99"><td class="memItemLeft" align="right" valign="top">static const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a5376fea14e4d425df5ecb25027e1ad99">sc1a2channelADC1</a> [30]</td></tr>
-<tr class="separator:a5376fea14e4d425df5ecb25027e1ad99"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:a15c3621696d3a37e8253160e8f8fdb5c"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a15c3621696d3a37e8253160e8f8fdb5c">ADC</a></td></tr>
+<tr class="separator:a15c3621696d3a37e8253160e8f8fdb5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Class <a class="el" href="class_a_d_c___module.html">ADC_Module</a>: Implements all functions of the Teensy 3.0 analog to digital converter </p>
+<div class="textblock"><p>Class <a class="el" href="class_a_d_c___module.html">ADC_Module</a>: Implements all functions of the Teensy 3.x analog to digital converter </p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a class="anchor" id="a0092e0915c562b4e318b0aff575315d1"></a>
 <div class="memitem">
@@ -324,12 +272,12 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a36fa42521ed88815b9085394c1fa7a92"></a>
+<a class="anchor" id="a893a14998c08fb929fdfd570ff981ccd"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef volatile uint32_t* <a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">ADC_Module::reg</a></td>
+          <td class="memname">typedef struct <a class="el" href="struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g.html">ADC_Module::ADC_POWER_SPEED_CONFIG</a>  <a class="el" href="class_a_d_c___module.html#a893a14998c08fb929fdfd570ff981ccd">ADC_Module::ADC_Power_Speed_Config</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -351,22 +299,6 @@ Static Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Constructor </p>
-
-</div>
-</div>
-<a class="anchor" id="ae898bfba80833884b8ce1c1b6bed61bf"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ADC_Module::~ADC_Module </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Destructor </p>
 
 </div>
 </div>
@@ -393,6 +325,9 @@ Static Public Attributes</h2></td></tr>
 <a class="anchor" id="a8bddd248a9d52110b923fa94438f7f0a"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">int ADC_Module::analogReadContinuous </td>
@@ -401,11 +336,16 @@ Static Public Attributes</h2></td></tr>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Reads the analog value of a continuous conversion. </p>
 <p>Set the continuous conversion with with analogStartContinuous(pin) or startContinuousDifferential(pinP, pinN). </p>
-<dl class="section return"><dt>Returns</dt><dd>the last converted value. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>the last converted value. If single-ended and 16 bits it's necessary to typecast it to an unsigned type (like uint16_t), otherwise values larger than 3.3/2 V are interpreted as negative! </dd></dl>
 
 </div>
 </div>
@@ -438,7 +378,7 @@ Static Public Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">pinP</td><td>must be A10 or A12. </td></tr>
-    <tr><td class="paramname">pinN</td><td>must be A11 (if pinP=A10) or A13 (if pinP=A12). In Teensy 3.1, if PGA is enabled A10-A11 are connected to it. Other pins will return ADC_ERROR_DIFF_VALUE. This function is interrupt safe, so it will restore the adc to the state it was before being called </td></tr>
+    <tr><td class="paramname">pinN</td><td>must be A11 (if pinP=A10) or A13 (if pinP=A12).. Other pins will return ADC_ERROR_DIFF_VALUE. This function is interrupt safe, so it will restore the adc to the state it was before being called </td></tr>
   </table>
   </dd>
 </dl>
@@ -513,7 +453,7 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a9440dc39f853d66341b5d50cc23f8f04"></a>
+<a class="anchor" id="ae7a632267f21b79c31c1dae56b5da188"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -526,7 +466,7 @@ Static Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int&#160;</td>
+          <td class="paramtype">bool&#160;</td>
           <td class="paramname"><em>greaterThan</em>&#160;</td>
         </tr>
         <tr>
@@ -542,7 +482,7 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a8de0a106b343d4f6384dd421dd35a431"></a>
+<a class="anchor" id="ab8e64bab9d4e7f1935a260629e5d71d5"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -561,13 +501,13 @@ Static Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int&#160;</td>
+          <td class="paramtype">bool&#160;</td>
           <td class="paramname"><em>insideRange</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int&#160;</td>
+          <td class="paramtype">bool&#160;</td>
           <td class="paramname"><em>inclusive</em>&#160;</td>
         </tr>
         <tr>
@@ -637,7 +577,7 @@ Static Public Attributes</h2></td></tr>
 <p>Enables the PGA and sets the gain Use only for signals lower than 1.2 V </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">gain</td><td>From 0 to 6, set PGA to 2^gain </td></tr>
+    <tr><td class="paramname">gain</td><td>can be 1 (disabled), 2, 4, 8, 16, 32 or 64 </td></tr>
   </table>
   </dd>
 </dl>
@@ -675,7 +615,7 @@ Static Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns the PGA level. </p>
-<p>PGA level = 2^gain, from 0 to 64 </p>
+<p>PGA from 1 to 64 </p>
 
 </div>
 </div>
@@ -699,6 +639,9 @@ Static Public Attributes</h2></td></tr>
 <a class="anchor" id="a4c3d39b4fe79bfff701409ea07259a47"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool ADC_Module::isComplete </td>
@@ -707,6 +650,11 @@ Static Public Attributes</h2></td></tr>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Is an <a class="el" href="class_a_d_c.html">ADC</a> conversion ready? </p>
@@ -717,6 +665,9 @@ Static Public Attributes</h2></td></tr>
 <a class="anchor" id="ae1aa7278d64d55bed0be5779378858a5"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool ADC_Module::isContinuous </td>
@@ -725,6 +676,11 @@ Static Public Attributes</h2></td></tr>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Is the <a class="el" href="class_a_d_c.html">ADC</a> in continuous mode? </p>
@@ -734,6 +690,9 @@ Static Public Attributes</h2></td></tr>
 <a class="anchor" id="a1e2730c5910f386f3e3b76b9eacc0268"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool ADC_Module::isConverting </td>
@@ -742,6 +701,11 @@ Static Public Attributes</h2></td></tr>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Is the <a class="el" href="class_a_d_c.html">ADC</a> converting at the moment? </p>
@@ -751,6 +715,9 @@ Static Public Attributes</h2></td></tr>
 <a class="anchor" id="ac74cc58870ff82be8ea91a40cd4a7a63"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool ADC_Module::isDifferential </td>
@@ -759,6 +726,11 @@ Static Public Attributes</h2></td></tr>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Is the <a class="el" href="class_a_d_c.html">ADC</a> in differential mode? </p>
@@ -768,6 +740,9 @@ Static Public Attributes</h2></td></tr>
 <a class="anchor" id="a60d0edc82fd1dbb2e20d090a53718ce2"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">int ADC_Module::readSingle </td>
@@ -776,11 +751,34 @@ Static Public Attributes</h2></td></tr>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Reads the analog value of a single conversion. </p>
 <p>Set the conversion with with startSingleRead(pin) or startSingleDifferential(pinP, pinN). </p>
 <dl class="section return"><dt>Returns</dt><dd>the converted value. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="afe8ed6f2a6c811ec3ef2c4aba768982f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ADC_Module::recalibrate </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Starts the calibration sequence, waits until it's done and writes the results. </p>
+<p>Usually it's not necessary to call this function directly, but do it if the "enviroment" changed significantly since the program was started. </p>
 
 </div>
 </div>
@@ -801,10 +799,36 @@ Static Public Attributes</h2></td></tr>
 <p>Set the number of averages. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">num</td><td>can be 0, 4, 8, 16 or 32. </td></tr>
+    <tr><td class="paramname">num</td><td>can be 0, 4, 8, 16 or 32.</td></tr>
   </table>
   </dd>
 </dl>
+<p>It doesn't recalibrate at the end. </p>
+
+</div>
+</div>
+<a class="anchor" id="a9dcb1b6195ab05fdee708472e4da939f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ADC_Module::setConversionSpeed </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>speed</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the conversion speed. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">speed</td><td>can be ADC_VERY_LOW_SPEED, ADC_LOW_SPEED, ADC_MED_SPEED, ADC_HIGH_SPEED_16BITS, ADC_HIGH_SPEED or ADC_VERY_HIGH_SPEED.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>ADC_VERY_LOW_SPEED is guaranteed to be the lowest possible speed within specs for resolutions less than 16 bits (higher than 1 MHz), it's different from ADC_LOW_SPEED only for 24, 4 or 2 MHz. ADC_LOW_SPEED is guaranteed to be the lowest possible speed within specs for all resolutions (higher than 2 MHz). ADC_MED_SPEED is always &gt;= ADC_LOW_SPEED and &lt;= ADC_HIGH_SPEED. ADC_HIGH_SPEED_16BITS is guaranteed to be the highest possible speed within specs for all resolutions (lower or eq than 12 MHz). ADC_HIGH_SPEED is guaranteed to be the highest possible speed within specs for resolutions less than 16 bits (lower or eq than 18 MHz). ADC_VERY_HIGH_SPEED may be out of specs, it's different from ADC_HIGH_SPEED only for 48, 40 or 24 MHz. </p>
 
 </div>
 </div>
@@ -849,10 +873,11 @@ Static Public Attributes</h2></td></tr>
 <p>Set the voltage reference you prefer, default is vcc. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">type</td><td>can be DEFAULT, EXTERNAL or INTERNAL. It needs to recalibrate. </td></tr>
+    <tr><td class="paramname">type</td><td>can be DEFAULT, EXTERNAL or INTERNAL.</td></tr>
   </table>
   </dd>
 </dl>
+<p>It recalibrates at the end. </p>
 
 </div>
 </div>
@@ -873,10 +898,37 @@ Static Public Attributes</h2></td></tr>
 <p>Change the resolution of the measurement. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">bits</td><td>is the number of bits of resolution. For single-ended measurements: 8, 10, 12 or 16 bits. For differential measurements: 9, 11, 13 or 16 bits. If you want something in between (11 bits single-ended for example) select the inmediate higher and shift the result one to the right. If you select, for example, 9 bits and then do a single-ended reading, the resolution will be adjusted to 8 bits In this case the comparison values will still be correct for analogRead and analogReadDifferential, but not for startSingle* or startContinous*, so whenever you change the resolution, change also the comparison values. </td></tr>
+    <tr><td class="paramname">bits</td><td>is the number of bits of resolution. For single-ended measurements: 8, 10, 12 or 16 bits. For differential measurements: 9, 11, 13 or 16 bits. If you want something in between (11 bits single-ended for example) select the inmediate higher and shift the result one to the right.</td></tr>
   </table>
   </dd>
 </dl>
+<p>Whenever you change the resolution, change also the comparison values (if you use them). </p>
+
+</div>
+</div>
+<a class="anchor" id="a94a585ac8079de091133b0ef4588b037"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ADC_Module::setSamplingSpeed </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>speed</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the sampling speed. </p>
+<p>Increase the sampling speed for low impedance sources, decrease it for higher impedance ones. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">speed</td><td>can be ADC_VERY_LOW_SPEED, ADC_LOW_SPEED, ADC_MED_SPEED, ADC_HIGH_SPEED or ADC_VERY_HIGH_SPEED.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>ADC_VERY_LOW_SPEED is the lowest possible sampling speed (+24 ADCK). ADC_LOW_SPEED adds +16 ADCK. ADC_MED_SPEED adds +10 ADCK. ADC_HIGH_SPEED (or ADC_HIGH_SPEED_16BITS) adds +6 ADCK. ADC_VERY_HIGH_SPEED is the highest possible sampling speed (0 ADCK added). </p>
 
 </div>
 </div>
@@ -935,22 +987,6 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a00d8d764c000134e47c02b38f66ebbed"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void ADC_Module::startPDB </td>
-          <td>(</td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>period</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a class="anchor" id="a4a8feb071fe092bd904a98714f63976b"></a>
 <div class="memitem">
 <div class="memproto">
@@ -980,10 +1016,36 @@ Static Public Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">pinP</td><td>must be A10 or A12. </td></tr>
-    <tr><td class="paramname">pinN</td><td>must be A11 (if pinP=A10) or A13 (if pinP=A12). Other pins will return ADC_ERROR_DIFF_VALUE. This function is interrupt safe. The <a class="el" href="class_a_d_c.html">ADC</a> interrupt will restore the adc to its previous settings and restart the adc if it stopped a measurement. If you modify the adc_isr then this won't happen. </td></tr>
+    <tr><td class="paramname">pinN</td><td>must be A11 (if pinP=A10) or A13 (if pinP=A12). Other pins will return ADC_ERROR_DIFF_VALUE. If this function interrupts a measurement, it stores the settings in adc_config </td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a class="anchor" id="aa0d60a43c585ea80055aa55bf9786e74"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int ADC_Module::startSingleDifferentialFast </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>pinP</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>pinN</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -1002,7 +1064,7 @@ Static Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Starts an analog measurement on the pin and enables interrupts. </p>
-<p>It returns inmediately, get value with <a class="el" href="class_a_d_c___module.html#a60d0edc82fd1dbb2e20d090a53718ce2" title="Reads the analog value of a single conversion. ">readSingle()</a>. If the pin is incorrect it returns ADC_ERROR_VALUE This function is interrupt safe. The <a class="el" href="class_a_d_c.html">ADC</a> interrupt will restore the adc to its previous settings and restart the adc if it stopped a measurement. If you modify the adc_isr then this won't happen. </p>
+<p>It returns inmediately, get value with <a class="el" href="class_a_d_c___module.html#a60d0edc82fd1dbb2e20d090a53718ce2" title="Reads the analog value of a single conversion. ">readSingle()</a>. If the pin is incorrect it returns ADC_ERROR_VALUE If this function interrupts a measurement, it stores the settings in adc_config </p>
 
 </div>
 </div>
@@ -1039,361 +1101,34 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<h2 class="groupheader">Friends And Related Function Documentation</h2>
+<a class="anchor" id="a15c3621696d3a37e8253160e8f8fdb5c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="class_a_d_c.html">ADC</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="ae0d57658078a42d4fe67b7ccf968327e"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> ADC_Module::ADC_CFG1</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a9365090edcee70c09a84f163a5a5efb6"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> ADC_Module::ADC_CFG2</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a5de06d42d32e40468290bb7b91d3f336"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> ADC_Module::ADC_CLM0</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a9bb438d6c6f3414df159bbed074a32c9"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> ADC_Module::ADC_CLM1</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a800c37fd322038ae694b3e6ad35fb719"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> ADC_Module::ADC_CLM2</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a4fa94c428157c5bf8325f220e369d9ce"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> ADC_Module::ADC_CLM3</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="aeb5a37488cd886be6a773a9339e495f8"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> ADC_Module::ADC_CLM4</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a0b30b64e46d25db9eddecfb2d942e858"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> ADC_Module::ADC_CLMD</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a2538f5966699b9951b9910d8346ae309"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> ADC_Module::ADC_CLMS</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ab67ae110c643f4bd4b169be08a56600a"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> ADC_Module::ADC_CLP0</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a7677c11f1c250cc87ffbe16f7ae6aa8b"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> ADC_Module::ADC_CLP1</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a3e1707a7b2598bda168b09d1483d1ea2"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> ADC_Module::ADC_CLP2</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="aada0808d5a556e70868cc28cafcbcc32"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> ADC_Module::ADC_CLP3</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="aaaf917dc2356a810b196b004ace4c55d"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> ADC_Module::ADC_CLP4</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="af16aa770a675efa54382d406e4df118c"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> ADC_Module::ADC_CLPD</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="abf1d823d7e9b286cb380bbadc21a1446"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> ADC_Module::ADC_CLPS</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a class="anchor" id="ad4ffd455f5c162d15fb4078aa90b5cbe"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="class_a_d_c___module.html#a0092e0915c562b4e318b0aff575315d1">ADC_Config</a> ADC_Module::adc_config</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a4b53e7bb2d3b0b6cdb493e29af4e9b35"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> ADC_Module::ADC_CV1</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a5925c2b149b43862515e6bbeceef41c3"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> ADC_Module::ADC_CV2</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a79fbb2101908e46787d75f4497b2c7c4"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> ADC_Module::ADC_MG</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="aa4e447503bff8089f3656927faa7d008"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> ADC_Module::ADC_OFS</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a3fd83a4068c918c6abf9eb06f5662b6e"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">double ADC_Module::adc_pdb_period</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a1fc0663af85da8b0646a7bd937cf3af5"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> ADC_Module::ADC_PG</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ae7b96b4929922739325c61eab60b9ce3"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> ADC_Module::ADC_PGA</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ad42f9bd24ac7b0b46bc3fd2cd95514dd"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> ADC_Module::ADC_RA</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a98131df796c606e090eb9398066649f9"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> ADC_Module::ADC_RB</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a602c4bb9ba6cee4d3f239be43b2864cb"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> ADC_Module::ADC_SC1A</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="aff11ed1a817e37e89a350836d09fdd5e"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> ADC_Module::ADC_SC1B</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a3f87f20f16184544e402984f49eb77d2"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> ADC_Module::ADC_SC2</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="abc5b6460f1e377c464e562117a3dc90a"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> ADC_Module::ADC_SC3</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1424,59 +1159,16 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a869aaf6169fe85b5a33eb9d7999d28c7"></a>
+<a class="anchor" id="a6187e43b6b3ea1a42c6bb17f2c10f099"></a>
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const uint8_t ADC_Module::channel2sc1aADC0</td>
+          <td class="memname">uint16_t ADC_Module::fail_flag</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">= { </div>
-<div class="line">    5, 14, 8, 9, 13, 12, 6, 7, 15, 4, 0, 19, 3, 21, </div>
-<div class="line">    5, 14, 8, 9, 13, 12, 6, 7, 15, 4, </div>
-<div class="line">    31, 31, 31, 31, 31, 31, 31, 31, 31, 31, </div>
-<div class="line">    0, 19, 3, 21, </div>
-<div class="line">    26, 22, 23, 27, 29, 30 </div>
-<div class="line">    }</div>
-</div><!-- fragment -->
-</div>
-</div>
-<a class="anchor" id="ac136d935be8b858477d4f99e65855bea"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const uint8_t ADC_Module::channel2sc1aADC1</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">= { </div>
-<div class="line">    31, 31, 8, 9, 31, 31, 31, 31, 31, 31, 3, 31, 0, 19, </div>
-<div class="line">    31, 31, 8, 9, 31, 31, 31, 31, 31, 31, </div>
-<div class="line">    31, 31,  </div>
-<div class="line">    5, 5, 4, 6, 7, 4, 31, 31, </div>
-<div class="line">    3, 31, 0, 19, </div>
-<div class="line">    26, 18, 31, 27, 29, 30 </div>
-<div class="line">    }</div>
-</div><!-- fragment -->
+
 </div>
 </div>
 <a class="anchor" id="a27fdc83a7dbe3a8c8c24fc4273414256"></a>
@@ -1491,66 +1183,16 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ad3d904edce6a226937d1ed2b133e7dd3"></a>
+<a class="anchor" id="a85269783274d11b1c7760fd929945380"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint8_t ADC_Module::sc1a2channel[30]</td>
+          <td class="memname">uint8_t ADC_Module::sc1a2channel[31]</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-</div>
-</div>
-<a class="anchor" id="a2dfa05a9782afa7bae3bed86733aee0f"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const uint8_t ADC_Module::sc1a2channelADC0</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">= { </div>
-<div class="line">    34, 0, 0, 36, 23, 14, 20, 21, 16, 17, 0, 0, 19, 18, </div>
-<div class="line">    15, 22, 0, 0, 0, 35, 0, 37, </div>
-<div class="line">    39, 40, 0, 0, 38, 41, 42, 43 </div>
-<div class="line">    }</div>
-</div><!-- fragment -->
-</div>
-</div>
-<a class="anchor" id="a5376fea14e4d425df5ecb25027e1ad99"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const uint8_t ADC_Module::sc1a2channelADC1</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">= { </div>
-<div class="line">    34, 0, 0, 36, 23, 14, 20, 21, 16, 17, 0, 0, 19, 18, </div>
-<div class="line">    15, 22, 0, 0, 0, 35, 0, 37, </div>
-<div class="line">    39, 40, 0, 0, 38, 41, 42, 43 </div>
-<div class="line">    }</div>
-</div><!-- fragment -->
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
@@ -1563,7 +1205,7 @@ Static Public Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_a_d_c___module.html">ADC_Module</a></li>
-    <li class="footer">Generated on Sun Apr 6 2014 12:55:34 for ADC by
+    <li class="footer">Generated on Sun Jun 15 2014 01:22:30 for ADC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

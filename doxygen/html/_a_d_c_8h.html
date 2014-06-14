@@ -30,7 +30,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">ADC
-   &#160;<span id="projectnumber">3.0</span>
+   &#160;<span id="projectnumber">4.0</span>
    </div>
   </td>
  </tr>
@@ -92,7 +92,7 @@ $(document).ready(function(){initNavTree('_a_d_c_8h.html','');});
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -111,7 +111,7 @@ $(document).ready(function(){initNavTree('_a_d_c_8h.html','');});
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="_a_d_c___module_8h_source.html">ADC_Module.h</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="_ring_buffer_8h_source.html">RingBuffer.h</a>&quot;</code><br/>
-<code>#include &lt;IntervalTimer.h&gt;</code><br/>
+<code>#include &quot;<a class="el" href="_ring_buffer_d_m_a_8h_source.html">RingBufferDMA.h</a>&quot;</code><br/>
 </div>
 <p><a href="_a_d_c_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -120,14 +120,11 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html">ADC</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_a_d_c_1_1_s_y_n_c___r_e_s_u_l_t.html">ADC::SYNC_RESULT</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Struct for synchronous measurements.  <a href="struct_a_d_c_1_1_s_y_n_c___r_e_s_u_l_t.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:a7eb883900caaf62368bacfde26035535"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c_8h.html#a7eb883900caaf62368bacfde26035535">MAX_ANALOG_TIMERS</a>&#160;&#160;&#160;3</td></tr>
-<tr class="separator:a7eb883900caaf62368bacfde26035535"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a12a745ce8b6499612828e575e39c46b0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c_8h.html#a12a745ce8b6499612828e575e39c46b0">ANALOG_TIMER_ERROR</a>&#160;&#160;&#160;-1</td></tr>
-<tr class="separator:a12a745ce8b6499612828e575e39c46b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5cbcaa568e20fcd4cc9325927d370860"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c_8h.html#a5cbcaa568e20fcd4cc9325927d370860">ADC_0</a>&#160;&#160;&#160;0</td></tr>
 <tr class="separator:a5cbcaa568e20fcd4cc9325927d370860"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d767e16f12a6ee542079f3c9677192c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c_8h.html#a3d767e16f12a6ee542079f3c9677192c">ADC_1</a>&#160;&#160;&#160;1</td></tr>
@@ -158,37 +155,13 @@ Macros</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a12a745ce8b6499612828e575e39c46b0"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define ANALOG_TIMER_ERROR&#160;&#160;&#160;-1</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a7eb883900caaf62368bacfde26035535"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MAX_ANALOG_TIMERS&#160;&#160;&#160;3</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="_a_d_c_8h.html">ADC.h</a></li>
-    <li class="footer">Generated on Sun Apr 6 2014 12:55:34 for ADC by
+    <li class="footer">Generated on Sun Jun 15 2014 01:22:29 for ADC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

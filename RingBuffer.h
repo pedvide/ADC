@@ -5,7 +5,7 @@
 #include <Arduino.h>
 
 // THE SIZE MUST BE A POWER OF 2!!
-#define DEFAULT_BUFFER_SIZE 1024
+#define RING_BUFFER_DEFAULT_BUFFER_SIZE 1024
 
 
 
@@ -44,11 +44,11 @@ class RingBuffer
 
         int increase(int p);
 
-        int b_size = DEFAULT_BUFFER_SIZE;
+        int b_size = RING_BUFFER_DEFAULT_BUFFER_SIZE;
         int b_start = 0;
         int b_end = 0;
         //int *elems;
-        int elems[DEFAULT_BUFFER_SIZE];
+        int elems[RING_BUFFER_DEFAULT_BUFFER_SIZE];
 };
 
 

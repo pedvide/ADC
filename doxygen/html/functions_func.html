@@ -30,7 +30,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">ADC
-   &#160;<span id="projectnumber">3.0</span>
+   &#160;<span id="projectnumber">4.0</span>
    </div>
   </td>
  </tr>
@@ -79,10 +79,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li class="current"><a href="functions_func.html"><span>Functions</span></a></li>
       <li><a href="functions_vars.html"><span>Variables</span></a></li>
       <li><a href="functions_type.html"><span>Typedefs</span></a></li>
+      <li><a href="functions_rela.html"><span>Related&#160;Functions</span></a></li>
     </ul>
   </div>
   <div id="navrow4" class="tabs3">
     <ul class="tablist">
+      <li><a href="#index__"><span>_</span></a></li>
       <li><a href="#index_a"><span>a</span></a></li>
       <li><a href="#index_d"><span>d</span></a></li>
       <li><a href="#index_e"><span>e</span></a></li>
@@ -90,6 +92,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="#index_i"><span>i</span></a></li>
       <li><a href="#index_r"><span>r</span></a></li>
       <li><a href="#index_s"><span>s</span></a></li>
+      <li><a href="#index_u"><span>u</span></a></li>
       <li><a href="#index_w"><span>w</span></a></li>
       <li><a href="#index_0x7e"><span>~</span></a></li>
     </ul>
@@ -114,7 +117,7 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -125,6 +128,13 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 
 <div class="contents">
 &#160;
+
+<h3><a class="anchor" id="index__"></a>- _ -</h3><ul>
+<li>__attribute__()
+: <a class="el" href="class_ring_buffer_d_m_a.html#a334e3350b33de297d26dd776e8fad299">RingBufferDMA</a>
+</li>
+</ul>
+
 
 <h3><a class="anchor" id="index_a"></a>- a -</h3><ul>
 <li>ADC()
@@ -148,6 +158,15 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 <li>analogSynchronizedRead()
 : <a class="el" href="class_a_d_c.html#ac8067db45057f691e664f414d1376d1e">ADC</a>
 </li>
+<li>analogSynchronizedReadDifferential()
+: <a class="el" href="class_a_d_c.html#a156bb3fe55e8155dc42fd7e9df1eaa55">ADC</a>
+</li>
+<li>analogSyncRead()
+: <a class="el" href="class_a_d_c.html#a8980e0b1c619d0a39beaf98228053e3d">ADC</a>
+</li>
+<li>analogSyncReadDifferential()
+: <a class="el" href="class_a_d_c.html#a709a33de52fa14673be6170a869be22a">ADC</a>
+</li>
 </ul>
 
 
@@ -165,20 +184,26 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 , <a class="el" href="class_a_d_c___module.html#aa4509062644982526fee3c02e0b528fc">ADC_Module</a>
 </li>
 <li>disablePGA()
-: <a class="el" href="class_a_d_c___module.html#a734ac9cf07a54e91707c78d753d3d3dd">ADC_Module</a>
-, <a class="el" href="class_a_d_c.html#ab9cb3e1c0ee39b45b4b84630606d85e1">ADC</a>
+: <a class="el" href="class_a_d_c.html#ab9cb3e1c0ee39b45b4b84630606d85e1">ADC</a>
+, <a class="el" href="class_a_d_c___module.html#a734ac9cf07a54e91707c78d753d3d3dd">ADC_Module</a>
+</li>
+<li>dma_isr_0()
+: <a class="el" href="class_a_d_c.html#a73cb63fc02d6861aa3d2a393bf9d0485">ADC</a>
+</li>
+<li>dma_isr_1()
+: <a class="el" href="class_a_d_c.html#a576c55fc4ee3e0f32355c9cf46e08e53">ADC</a>
 </li>
 </ul>
 
 
 <h3><a class="anchor" id="index_e"></a>- e -</h3><ul>
 <li>enableCompare()
-: <a class="el" href="class_a_d_c.html#a7a19cbc82fa04990d90578fa76df9541">ADC</a>
-, <a class="el" href="class_a_d_c___module.html#a9440dc39f853d66341b5d50cc23f8f04">ADC_Module</a>
+: <a class="el" href="class_a_d_c.html#a1987df39ccda1ce923eca878b3816383">ADC</a>
+, <a class="el" href="class_a_d_c___module.html#ae7a632267f21b79c31c1dae56b5da188">ADC_Module</a>
 </li>
 <li>enableCompareRange()
-: <a class="el" href="class_a_d_c___module.html#a8de0a106b343d4f6384dd421dd35a431">ADC_Module</a>
-, <a class="el" href="class_a_d_c.html#afda28c04985cb6d7029dbcf16f4f3444">ADC</a>
+: <a class="el" href="class_a_d_c___module.html#ab8e64bab9d4e7f1935a260629e5d71d5">ADC_Module</a>
+, <a class="el" href="class_a_d_c.html#aa5b39a0ee459618f6b95cf4e48f77528">ADC</a>
 </li>
 <li>enableDMA()
 : <a class="el" href="class_a_d_c.html#a1bc9f7f1a0be0e38e9e6f517db8b2da7">ADC</a>
@@ -208,9 +233,6 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 : <a class="el" href="class_a_d_c___module.html#a58cabc09d41f6aa25319fd514b47c48f">ADC_Module</a>
 , <a class="el" href="class_a_d_c.html#a7280bdee747b978de83923fcfa90cba1">ADC</a>
 </li>
-<li>getTimerValue()
-: <a class="el" href="class_a_d_c.html#ac46fe3df35b3f92398f1d0d6bd2a72ac">ADC</a>
-</li>
 </ul>
 
 
@@ -232,13 +254,12 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 , <a class="el" href="class_a_d_c.html#a1bd89979194f6c9b0aa08463373aaa15">ADC</a>
 </li>
 <li>isEmpty()
-: <a class="el" href="class_ring_buffer.html#a041d2e0a3ec68f91ea9847e220ed2501">RingBuffer</a>
+: <a class="el" href="class_ring_buffer_d_m_a.html#a0c10d34a151d2b9960e2ae58084e5baa">RingBufferDMA</a>
+, <a class="el" href="class_ring_buffer.html#a041d2e0a3ec68f91ea9847e220ed2501">RingBuffer</a>
 </li>
 <li>isFull()
 : <a class="el" href="class_ring_buffer.html#a47f4fd274ccf142f55092ed851640201">RingBuffer</a>
-</li>
-<li>isTimerLastValue()
-: <a class="el" href="class_a_d_c.html#ae834c6a54ed17ed9028d3203b1761da8">ADC</a>
+, <a class="el" href="class_ring_buffer_d_m_a.html#a52f974a38148e4baab0acbd2edb5c0e0">RingBufferDMA</a>
 </li>
 </ul>
 
@@ -246,13 +267,26 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 <h3><a class="anchor" id="index_r"></a>- r -</h3><ul>
 <li>read()
 : <a class="el" href="class_ring_buffer.html#a8585065af57a71269bc46b30175c8dc8">RingBuffer</a>
+, <a class="el" href="class_ring_buffer_d_m_a.html#aad5fc1bf31314e717c4f47c3d62e7b31">RingBufferDMA</a>
 </li>
 <li>readSingle()
-: <a class="el" href="class_a_d_c.html#aee7423bfcbb03465bb0bd1e3c6474452">ADC</a>
-, <a class="el" href="class_a_d_c___module.html#a60d0edc82fd1dbb2e20d090a53718ce2">ADC_Module</a>
+: <a class="el" href="class_a_d_c___module.html#a60d0edc82fd1dbb2e20d090a53718ce2">ADC_Module</a>
+, <a class="el" href="class_a_d_c.html#aee7423bfcbb03465bb0bd1e3c6474452">ADC</a>
+</li>
+<li>readSynchronizedContinuous()
+: <a class="el" href="class_a_d_c.html#acd10f3bc117a244e70e53c3489aa97bc">ADC</a>
+</li>
+<li>readSynchronizedSingle()
+: <a class="el" href="class_a_d_c.html#a38d941542bbdbc20c1b9e26a5051094a">ADC</a>
+</li>
+<li>recalibrate()
+: <a class="el" href="class_a_d_c___module.html#afe8ed6f2a6c811ec3ef2c4aba768982f">ADC_Module</a>
 </li>
 <li>RingBuffer()
 : <a class="el" href="class_ring_buffer.html#a93b9973de32a836bdf70befaf9d78eed">RingBuffer</a>
+</li>
+<li>RingBufferDMA()
+: <a class="el" href="class_ring_buffer_d_m_a.html#af3fd37c46b80508278bd9a05cefae859">RingBufferDMA</a>
 </li>
 </ul>
 
@@ -262,48 +296,61 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 : <a class="el" href="class_a_d_c.html#a6fd39809addc247f13004687d201003d">ADC</a>
 , <a class="el" href="class_a_d_c___module.html#a55954618c5c27c1ffce4321e912bac52">ADC_Module</a>
 </li>
+<li>setConversionSpeed()
+: <a class="el" href="class_a_d_c___module.html#a9dcb1b6195ab05fdee708472e4da939f">ADC_Module</a>
+, <a class="el" href="class_a_d_c.html#a004d0b11f4bf0ad8328fdf1a7e2897b0">ADC</a>
+</li>
 <li>setPGA()
 : <a class="el" href="class_a_d_c___module.html#a37d4a3f4fc3499823e51de7f9cf02678">ADC_Module</a>
-, <a class="el" href="class_a_d_c.html#afdf2396fdf154113382e0d4c732b44aa">ADC</a>
 </li>
 <li>setReference()
 : <a class="el" href="class_a_d_c.html#ae66fb96c6b11156d714315ce6380e8b0">ADC</a>
 , <a class="el" href="class_a_d_c___module.html#aa14ea3e2c5f7d0ba794628e92a2573da">ADC_Module</a>
 </li>
 <li>setResolution()
-: <a class="el" href="class_a_d_c___module.html#a6bd8da02e5e9bd3b2b3db30d5faa3585">ADC_Module</a>
-, <a class="el" href="class_a_d_c.html#afb4cead11eaa367165b40c8afc62e23d">ADC</a>
+: <a class="el" href="class_a_d_c.html#afb4cead11eaa367165b40c8afc62e23d">ADC</a>
+, <a class="el" href="class_a_d_c___module.html#a6bd8da02e5e9bd3b2b3db30d5faa3585">ADC_Module</a>
 </li>
-<li>startAnalogTimer()
-: <a class="el" href="class_a_d_c.html#af093122742f6ac86684cb983d4293721">ADC</a>
+<li>setSamplingSpeed()
+: <a class="el" href="class_a_d_c.html#a6e01908bf556b00a73023eaddfe8e67f">ADC</a>
+, <a class="el" href="class_a_d_c___module.html#a94a585ac8079de091133b0ef4588b037">ADC_Module</a>
 </li>
-<li>startAnalogTimerDifferential()
-: <a class="el" href="class_a_d_c.html#adc1fe1cb2942e7aa12ea4737a529207c">ADC</a>
+<li>start()
+: <a class="el" href="class_ring_buffer_d_m_a.html#ac04b74b351c1b37876ad0c954deab5a7">RingBufferDMA</a>
 </li>
 <li>startContinuous()
 : <a class="el" href="class_a_d_c.html#a26880802b2677ae59a3090340cee4fb0">ADC</a>
 , <a class="el" href="class_a_d_c___module.html#a6fbb49ad99a9d28b07b8686021f6126e">ADC_Module</a>
 </li>
 <li>startContinuousDifferential()
-: <a class="el" href="class_a_d_c.html#ac2f4928dbd50593404a63d0510af1296">ADC</a>
-, <a class="el" href="class_a_d_c___module.html#a2fbc6fa04cbdb56e60b2f92a19826b26">ADC_Module</a>
-</li>
-<li>startPDB()
-: <a class="el" href="class_a_d_c___module.html#a00d8d764c000134e47c02b38f66ebbed">ADC_Module</a>
+: <a class="el" href="class_a_d_c___module.html#a2fbc6fa04cbdb56e60b2f92a19826b26">ADC_Module</a>
+, <a class="el" href="class_a_d_c.html#ac2f4928dbd50593404a63d0510af1296">ADC</a>
 </li>
 <li>startSingleDifferential()
 : <a class="el" href="class_a_d_c.html#a71ca08292a2a9dfe0337d0c2ba5cab6d">ADC</a>
 , <a class="el" href="class_a_d_c___module.html#a4a8feb071fe092bd904a98714f63976b">ADC_Module</a>
 </li>
+<li>startSingleDifferentialFast()
+: <a class="el" href="class_a_d_c___module.html#aa0d60a43c585ea80055aa55bf9786e74">ADC_Module</a>
+</li>
 <li>startSingleRead()
-: <a class="el" href="class_a_d_c.html#ad7e03972aff4b6f517c33b44e3935adc">ADC</a>
-, <a class="el" href="class_a_d_c___module.html#a3930aceb90a0c3b33c881c90d0a05236">ADC_Module</a>
+: <a class="el" href="class_a_d_c___module.html#a3930aceb90a0c3b33c881c90d0a05236">ADC_Module</a>
+, <a class="el" href="class_a_d_c.html#ad7e03972aff4b6f517c33b44e3935adc">ADC</a>
 </li>
 <li>startSingleReadFast()
 : <a class="el" href="class_a_d_c___module.html#a785d9d4fd9b54cb8e0c8ab3326c48f94">ADC_Module</a>
 </li>
-<li>stopAnalogTimer()
-: <a class="el" href="class_a_d_c.html#abff12774fa2c93383e37c8bcf7ae5bfb">ADC</a>
+<li>startSynchronizedContinuous()
+: <a class="el" href="class_a_d_c.html#a020e4d7338565d5ef0161b7145c1b1a5">ADC</a>
+</li>
+<li>startSynchronizedContinuousDifferential()
+: <a class="el" href="class_a_d_c.html#a924757183c6a0561978bb7e058f563df">ADC</a>
+</li>
+<li>startSynchronizedSingleDifferential()
+: <a class="el" href="class_a_d_c.html#ac77b97b722784ad911235eda97ad0456">ADC</a>
+</li>
+<li>startSynchronizedSingleRead()
+: <a class="el" href="class_a_d_c.html#ac88add8a6c58bd94d64073d6f9cf0a90">ADC</a>
 </li>
 <li>stopContinuous()
 : <a class="el" href="class_a_d_c___module.html#a9af29f865bdd376d954112d36b0992f0">ADC_Module</a>
@@ -312,22 +359,27 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 </ul>
 
 
+<h3><a class="anchor" id="index_u"></a>- u -</h3><ul>
+<li>useDMA()
+: <a class="el" href="class_a_d_c.html#a9b32e609542d71601adb51b8383145c2">ADC</a>
+</li>
+</ul>
+
+
 <h3><a class="anchor" id="index_w"></a>- w -</h3><ul>
 <li>write()
 : <a class="el" href="class_ring_buffer.html#aa14c47f5bbd73b5f8d2b83a86f01ccf2">RingBuffer</a>
+, <a class="el" href="class_ring_buffer_d_m_a.html#ac64de99b9ef9b4c1b1ae36444ce37699">RingBufferDMA</a>
 </li>
 </ul>
 
 
 <h3><a class="anchor" id="index_0x7e"></a>- ~ -</h3><ul>
-<li>~ADC()
-: <a class="el" href="class_a_d_c.html#aefd878291d0c14aa524df99af5a63148">ADC</a>
-</li>
-<li>~ADC_Module()
-: <a class="el" href="class_a_d_c___module.html#ae898bfba80833884b8ce1c1b6bed61bf">ADC_Module</a>
-</li>
 <li>~RingBuffer()
 : <a class="el" href="class_ring_buffer.html#a2715b2e99ea24521ef7a586c2f33e1c9">RingBuffer</a>
+</li>
+<li>~RingBufferDMA()
+: <a class="el" href="class_ring_buffer_d_m_a.html#ae7b0ff5b6789ac462a657602dbedc7c4">RingBufferDMA</a>
 </li>
 </ul>
 </div><!-- contents -->
@@ -335,7 +387,7 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sun Apr 6 2014 12:55:34 for ADC by
+    <li class="footer">Generated on Sun Jun 15 2014 01:22:30 for ADC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

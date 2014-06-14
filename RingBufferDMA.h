@@ -1,7 +1,6 @@
 #ifndef RINGBUFFERDMA_H
 #define RINGBUFFERDMA_H
 
-// include new and delete
 #include <Arduino.h>
 
 // THE SIZE MUST BE A POWER OF 2!!
@@ -14,17 +13,11 @@
 class RingBufferDMA
 {
     public:
-        //! Default constructor, buffer has a size DEFAULT_BUFFER_SIZE
-        RingBufferDMA();
+        //! Constructor, buffer has a size DEFAULT_BUFFER_SIZE
+        RingBufferDMA(uint8_t dma_channel);
 
-        //! Buffer has a size buffer_size
-        /**
-        * \param buffer_size must be a power of two!
-        */
-        RingBufferDMA(uint32_t buffer_size);
-
-        /** Default destructor */
-        virtual ~RingBufferDMA();
+        //! Destructor
+        ~RingBufferDMA();
 
         //! Returns 1 (true) if the buffer is full
         bool isFull();
@@ -33,28 +26,62 @@ class RingBufferDMA
         bool isEmpty();
 
         //! Write a value into the buffer
+        /** The actual value is copied by DMA, this function only updates the buffer pointers to reflect that fact.
+        *
+        */
         void write();
 
-        //! Read a value from the buffer
-        uint16_t read();
+        //! Read a value from the buffer, make sure it's not emtpy by calling isEmpty() first
+        int read();
+
+        //! Start DMA operation
+        void start();
+
+
+        //! Elements of the buffer, aligned to 16 bits
+        int16_t elems[DMA_BUFFER_SIZE] __attribute__((aligned(0x10))); // align to 16 bits
+
+        //! DMA channel of the instance
+        uint8_t DMA_channel;
+
 
     protected:
     private:
 
-        uint32_t round_pow2(uint32_t n);
+        //! Size of buffer
+        uint16_t b_size;
 
+        //! Start pointer: Read here
+        uint16_t b_start;
+        //! End pointer: Write here
+        uint16_t b_end;
+
+        //! Increases the pointer modulo 2*size-1
         uint16_t increase(uint16_t p);
 
-        uint16_t b_size = DMA_BUFFER_SIZE;
-        uint16_t b_start = 0;
-        uint16_t b_end = 0;
-        //int *elems;
-        //DMAMEM static uint16_t elems[DMA_BUFFER_SIZE];
-        uint16_t elems[DMA_BUFFER_SIZE]; // __attribute__((aligned(0x10))); // align to 16 bits
 
-        // registers point to the correct ADC module
-        //typedef volatile uint32_t* reg;
-        //reg ADC_RA;
+        // Registers to point to the correct DMA channel
+        uint8_t IRQ_DMA_CH;
+
+        volatile uint8_t* DMAMUX0_CHCFG;
+
+        volatile uint16_t* DMA_TCD_CSR; // TCD Control and Status
+
+        volatile const void * volatile * DMA_TCD_SADDR; // TCD Source Address
+        volatile int16_t* DMA_TCD_SOFF;  // TCD Signed Source Address Offset
+        volatile int32_t* DMA_TCD_SLAST; // TCD Last Source Address Adjustment
+
+        volatile void * volatile * DMA_TCD_DADDR; // TCD Destination Address
+        volatile int16_t* DMA_TCD_DOFF; // TCD Signed Destination Address Offset
+        volatile int32_t* DMA_TCD_DLASTSGA; // TCD Last Destination Address Adjustment/Scatter Gather Address
+
+        volatile uint16_t* DMA_TCD_ATTR; // TCD Transfer Attributes
+        volatile uint32_t* DMA_TCD_NBYTES_MLNO; // TCD Minor Byte Count (Minor Loop Disabled)
+
+        volatile uint16_t* DMA_TCD_CITER_ELINKNO; // TCD Current Minor Loop Link, Major Loop Count, Channel Linking Disabled
+        volatile uint16_t* DMA_TCD_BITER_ELINKNO; // TCD Beginning Minor Loop Link, Major Loop Count, Channel Linking Disabled
+
+
 
 };
 

@@ -30,7 +30,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">ADC
-   &#160;<span id="projectnumber">3.0</span>
+   &#160;<span id="projectnumber">4.0</span>
    </div>
   </td>
  </tr>
@@ -92,7 +92,7 @@ $(document).ready(function(){initNavTree('_a_d_c___module_8h_source.html','');})
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -106,375 +106,579 @@ $(document).ready(function(){initNavTree('_a_d_c___module_8h_source.html','');})
 <div class="title">ADC_Module.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="_a_d_c___module_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160; <span class="comment">/* ADC Library created by Pedro Villanueva</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> * It implements all functions of the Teensy 3.0 internal ADC</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> * Some of the code was extracted from the file analog.c included in the distribution of Teensduino by PJRC.COM</span></div>
+<a href="_a_d_c___module_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/* Teensy 3.x ADC library</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> * https://github.com/pedvide/ADC</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> * Copyright (c) 2014 Pedro Villanueva</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#ifndef ADC_MODULE_H</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_MODULE_H</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;stdint.h&gt;</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;core_pins.h&quot;</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;mk20dx128.h&quot;</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">// include pow()</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &lt;math.h&gt;</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">// include new and delete</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;Arduino.h&gt;</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">// include the circular buffer</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_ring_buffer_8h.html">RingBuffer.h</a>&quot;</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">// the alternate clock is connected to OSCERCLK (16 MHz).</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment">// datasheet says ADC clock should be 2 to 12 MHz for 16 bit mode</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment">// datasheet says ADC clock should be 1 to 18 MHz for 8-12 bit mode</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="comment">// calibration works best when averages are 32 and speed is less than 4 MHz</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#if F_BUS == 48000000</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_3MHZ   ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1) // Clock divide select: 3=div8 + Input clock: 1=bus/2</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_6MHZ   ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1) // Clock divide select: 2=div4 + Input clock: 1=bus/2</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_12MHZ  ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1) // Clock divide select: 1=div2 Input clock: 1=bus/2</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_24MHZ  ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(1) // Clock divide select: 0=direct + Input clock: 1=bus/2</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#elif F_BUS == 24000000</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_3MHZ   ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(0) // Clock divide select: 3=div8 + Input clock: 1=bus</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_6MHZ   ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(0) // Clock divide select: 2=div4 + Input clock: 0=bus</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_12MHZ  ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(0) // Clock divide select: 1=div2 + Input clock: 0=bus</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_24MHZ  ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(0) // Clock divide select: 0=direct + Input clock: 0=bus</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#error</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment">// VREF options that don&#39;t appear on mk20dx128.h</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#a0428c6e85511e76aee22a3f672e91b16">   43</a></span>&#160;<span class="preprocessor">#define VREF_TRM_CHOPEN (uint8_t)0x40 // Chop oscillator enable</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#a20ed142ac118d12ce7ae750c5db95e06">   45</a></span>&#160;<span class="preprocessor">#define VREF_SC_VREFEN (uint8_t)0x80 // Internal Voltage Reference enable</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#a28646efff164389096b14f99a643cf9a">   46</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define VREF_SC_REGEN (uint8_t)0x40 // Regulator enable</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#a01f89b4b8b5e915d9840927eeec147d4">   47</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define VREF_SC_ICOMPEN (uint8_t)0x20 // Second order curvature compensation enable</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#aa097f88b5887410f535c56b419d2e8e0">   48</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define VREF_SC_VREFST (uint8_t)0x04 // Internal Voltage Reference stable flag</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#adda35e8438c7f36367f4ddd7ccd553c6">   49</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define VREF_SC_MODE_LV(n) (uint8_t)(((n) &amp; 3) &lt;&lt; 0) // Buffer Mode selection: 0=Bandgap on only, 1=High power buffer mode,</span></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="preprocessor"></span>                                                     <span class="comment">// 2=Low-power buffer mode</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="comment">// ADCx_SC2[REFSEL] bit selects the voltage reference sources for ADC.</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="comment">//   VREFH/VREFL - connected as the primary reference option</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="comment">//   1.2 V VREF_OUT - connected as the VALT reference option</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#a79a0008b0054fba5551f1a2f515cd21f">   56</a></span>&#160;<span class="preprocessor">#define ADC_REF_DEFAULT         0</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#aa45db1c2cb73add84d2a33088eba05b2">   57</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_REF_EXTERNAL        0</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#a1721cf11e7e814f29d58ac29611b51cf">   58</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_REF_INTERNAL        2</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#aa8452539b624c0ca1f9b67e5f96934af">   59</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_REF_INTERNAL1V2     2</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#a91d2836195edf5c1de05a9553ad8699c">   60</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_REF_INTERNAL1V1     2</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment">// Error codes for analogRead and analogReadDifferential</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#af181c4b5c617516517400c427494e7e7">   64</a></span>&#160;<span class="preprocessor">#define ADC_ERROR_DIFF_VALUE -70000</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#a810b46bdaa73057d834142229111adc5">   65</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_ERROR_VALUE ADC_ERROR_DIFF_VALUE</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="comment">// Other things to measure with the ADC that don&#39;t use external pins</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="comment">// In my Teensy I read 1.22 V for the ADC_VREF_OUT, random values for ADC_BANDGAP,</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="comment">// 3.3 V for ADC_VREFH and 0.0 V for ADC_VREFL.</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#a4cefed245019e53043553487015d4336">   70</a></span>&#160;<span class="preprocessor">#define ADC_TEMP_SENSOR 38</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#aeb28b97a2562d8af49e06f54d217c972">   71</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_VREF_OUT 39</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#a22d1f36f85b454a54518cd29713118db">   72</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_BANDGAP 41</span></div>
-<div class="line"><a name="l00073"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#a82ca060ff604ccffc8ddbc3af6824973">   73</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_VREFH 42</span></div>
-<div class="line"><a name="l00074"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#ac8d25362e749cd9ec5c4ebc4702316b5">   74</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_VREFL 43</span></div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="comment">// debug mode: blink the led light</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#aaaf2912bdda454e3fcb88156f1ce20d8">   78</a></span>&#160;<span class="preprocessor">#define ADC_debug 0</span></div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;</div>
-<div class="line"><a name="l00084"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html">   84</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_a_d_c___module.html">ADC_Module</a></div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;{</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <a class="code" href="class_a_d_c___module.html#abd04dee9e56c5b8f0ba8c11d646e635e">ADC_Module</a>(uint8_t ADC_number = 0);</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <a class="code" href="class_a_d_c___module.html#ae898bfba80833884b8ce1c1b6bed61bf">~ADC_Module</a>();</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#aa14ea3e2c5f7d0ba794628e92a2573da">setReference</a>(uint8_t type);</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#a6bd8da02e5e9bd3b2b3db30d5faa3585">setResolution</a>(uint8_t bits);</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        uint8_t <a class="code" href="class_a_d_c___module.html#a58cabc09d41f6aa25319fd514b47c48f">getResolution</a>();</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        uint32_t <a class="code" href="class_a_d_c___module.html#af3704819ccda64bae9c13a95a74e70a8">getMaxValue</a>();</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#a55954618c5c27c1ffce4321e912bac52">setAveraging</a>(uint8_t num);</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#a8be20cecbfb1e8900c9cd8d0bdb47ef7">enableInterrupts</a>();</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;</div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#aa4509062644982526fee3c02e0b528fc">disableInterrupts</a>();</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#af3d14c01b1442c0c34b5dbc9a6e49f35">enableDMA</a>();</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#ac1610dcab46476f287c2dd4d96465c47">disableDMA</a>();</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#a9440dc39f853d66341b5d50cc23f8f04">enableCompare</a>(int16_t compValue, <span class="keywordtype">int</span> greaterThan);</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#a8de0a106b343d4f6384dd421dd35a431">enableCompareRange</a>(int16_t lowerLimit, int16_t upperLimit, <span class="keywordtype">int</span> insideRange, <span class="keywordtype">int</span> inclusive);</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#ac635f675a9690a4db016c73c31818262">disableCompare</a>();</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;</div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#a5bef75f430c061b4bc3d48951e8930c6">enablePGA</a>(uint8_t gain);</div>
-<div class="line"><a name="l00182"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a37d4a3f4fc3499823e51de7f9cf02678">  182</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#a37d4a3f4fc3499823e51de7f9cf02678">setPGA</a>(uint8_t gain) {<a class="code" href="class_a_d_c___module.html#a5bef75f430c061b4bc3d48951e8930c6">enablePGA</a>(gain);}</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;        uint8_t <a class="code" href="class_a_d_c___module.html#a5734a05ce4920be3a2b7fc004a6a14d7">getPGA</a>();</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#a734ac9cf07a54e91707c78d753d3d3dd">disablePGA</a>();</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="class_a_d_c___module.html#ad492adad4a9fa728625be82602bf1672">analogRead</a>(uint8_t pin);</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="class_a_d_c___module.html#a4a57f6a9b0e3884f3862062b33f1a447">analogReadDifferential</a>(uint8_t pinP, uint8_t pinN);</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="class_a_d_c___module.html#a3930aceb90a0c3b33c881c90d0a05236">startSingleRead</a>(uint8_t pin);</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="class_a_d_c___module.html#a785d9d4fd9b54cb8e0c8ab3326c48f94">startSingleReadFast</a>(uint8_t pin);</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="class_a_d_c___module.html#a4a8feb071fe092bd904a98714f63976b">startSingleDifferential</a>(uint8_t pinP, uint8_t pinN);</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="class_a_d_c___module.html#a60d0edc82fd1dbb2e20d090a53718ce2">readSingle</a>();</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#a6fbb49ad99a9d28b07b8686021f6126e">startContinuous</a>(uint8_t pin);</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;</div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#a2fbc6fa04cbdb56e60b2f92a19826b26">startContinuousDifferential</a>(uint8_t pinP, uint8_t pinN);</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="class_a_d_c___module.html#a8bddd248a9d52110b923fa94438f7f0a">analogReadContinuous</a>();</div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> * Permission is hereby granted, free of charge, to any person obtaining</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> * a copy of this software and associated documentation files (the</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment"> * &quot;Software&quot;), to deal in the Software without restriction, including</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment"> * without limitation the rights to use, copy, modify, merge, publish,</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment"> * distribute, sublicense, and/or sell copies of the Software, and to</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment"> * permit persons to whom the Software is furnished to do so, subject to</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"> * the following conditions:</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"> * The above copyright notice and this permission notice shall be</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment"> * included in all copies or substantial portions of the Software.</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment"> * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND,</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment"> * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment"> * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment"> * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment"> * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment"> * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment"> * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment"> * SOFTWARE.</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment">/* ADC_Module.h: Declarations of the fuctions of a Teensy 3.x ADC module</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#ifndef ADC_MODULE_H</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_MODULE_H</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#include &quot;mk20dx128.h&quot;</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#include &lt;Arduino.h&gt;</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment">/* MK20DX256 Datasheet:</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="comment">The 16-bit accuracy specifications listed in Table 24 and Table 25 are achievable on the</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="comment">differential pins ADCx_DP0, ADCx_DM0</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="comment">All other ADC channels meet the 13-bit differential/12-bit single-ended accuracy</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment">specifications.</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="comment"></span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment">The results in this data sheet were derived from a system which has &lt; 8 Ohm analog source resistance. The RAS/CAS</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment">time constant should be kept to &lt; 1ns.</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="comment"></span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="comment">ADC clock should be 2 to 12 MHz for 16 bit mode</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="comment">ADC clock should be 1 to 18 MHz for 8-12 bit mode</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="comment">To use the maximum ADC conversion clock frequency, the ADHSC bit must be set and the ADLPC bit must be clear</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="comment"></span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="comment">The ADHSC bit is used to configure a higher clock input frequency. This will allow</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="comment">faster overall conversion times. To meet internal ADC timing requirements, the ADHSC</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="comment">bit adds additional ADCK cycles. Conversions with ADHSC = 1 take two more ADCK</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="comment">cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="comment"></span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment">*/</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment">// the alternate clock is connected to OSCERCLK (16 MHz).</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="comment">// datasheet says ADC clock should be 2 to 12 MHz for 16 bit mode</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="comment">// datasheet says ADC clock should be 1 to 18 MHz for 8-12 bit mode</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="comment">// calibration works best when averages are 32 and speed is less than 4 MHz</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment">// ADC_CFG1_ADICLK: 0=bus, 1=bus/2, 2=(alternative clk) altclk, 3=(async. clk) adack</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="comment">// See below for an explanation of VERY_LOW_SPEED, LOW_SPEED, etc.</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="preprocessor">#if F_BUS == 60000000</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_3_75MHZ      (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_7_5MHZ       (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1))</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_15MHZ        (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1))</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="preprocessor">  #define ADC_CFG1_VERY_LOW_SPEED ADC_CFG1_LOW_SPEED</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_LOW_SPEED (ADC_CFG1_3_75MHZ)</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_MED_SPEED (ADC_CFG1_7_5MHZ)</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_7_5MHZ)</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_HI_SPEED (ADC_CFG1_15MHZ)</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_VERY_HIGH_SPEED ADC_CFG1_HI_SPEED</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="preprocessor">#elif F_BUS == 56000000</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_3_5MHZ   (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_7MHZ     (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1))</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_14MHZ    (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1))</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="preprocessor">  #define ADC_CFG1_VERY_LOW_SPEED ADC_CFG1_LOW_SPEED</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_LOW_SPEED (ADC_CFG1_3_5MHZ)</span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_MED_SPEED (ADC_CFG1_7MHZ)</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_7MHZ)</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_HI_SPEED (ADC_CFG1_14MHZ)</span></div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_VERY_HIGH_SPEED ADC_CFG1_HI_SPEED</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="preprocessor">#elif F_BUS == 48000000</span></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_3MHZ   (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1)) // Clock divide select: 3=div8 + Input clock: 1=bus/2</span></div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_6MHZ   (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1)) // Clock divide select: 2=div4 + Input clock: 1=bus/2</span></div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_12MHZ  (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1)) // Clock divide select: 1=div2 Input clock: 1=bus/2</span></div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_24MHZ  (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(1)) // this is way too fast, so accurancy is not guaranteed</span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="preprocessor">  #define ADC_CFG1_VERY_LOW_SPEED ADC_CFG1_LOW_SPEED</span></div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_LOW_SPEED (ADC_CFG1_3MHZ)</span></div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_MED_SPEED (ADC_CFG1_6MHZ)</span></div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_12MHZ)</span></div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_HI_SPEED (ADC_CFG1_12MHZ)</span></div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_VERY_HIGH_SPEED (ADC_CFG1_24MHZ)</span></div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="preprocessor">#elif F_BUS == 40000000</span></div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_2_5MHZ   (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))</span></div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_5MHZ     (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1))</span></div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_10MHZ    (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1))</span></div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_20MHZ    (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(1)) // this is too fast, so accurancy is not guaranteed</span></div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="preprocessor">  #define ADC_CFG1_VERY_LOW_SPEED ADC_CFG1_LOW_SPEED</span></div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_LOW_SPEED (ADC_CFG1_2_5MHZ)</span></div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_MED_SPEED (ADC_CFG1_5MHZ)</span></div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_10MHZ)</span></div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_HI_SPEED (ADC_CFG1_10MHZ)</span></div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_VERY_HIGH_SPEED (ADC_CFG1_20MHZ)</span></div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="preprocessor">#elif F_BUS == 36000000</span></div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_2_25MHZ      (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))</span></div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_4_5MHZ       (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1))</span></div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_9MHZ         (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1))</span></div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_18MHZ        (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(1))</span></div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="preprocessor">  #define ADC_CFG1_VERY_LOW_SPEED ADC_CFG1_LOW_SPEED</span></div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_LOW_SPEED (ADC_CFG1_2_25MHZ)</span></div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_MED_SPEED (ADC_CFG1_9MHZ)</span></div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_9MHZ)</span></div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_HI_SPEED (ADC_CFG1_18MHZ)</span></div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_VERY_HIGH_SPEED ADC_CFG1_HI_SPEED</span></div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="preprocessor">#elif F_BUS == 24000000</span></div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_1_5MHZ   (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))</span></div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_3MHZ     (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(0)) // Clock divide select: 3=div8 + Input clock: 0=bus</span></div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_6MHZ     (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(0)) // Clock divide select: 2=div4 + Input clock: 0=bus</span></div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_12MHZ    (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(0)) // Clock divide select: 1=div2 + Input clock: 0=bus</span></div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_24MHZ    (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(0)) // this is way too fast, so accurancy is not guaranteed</span></div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="preprocessor">  #define ADC_CFG1_VERY_LOW_SPEED (ADC_CFG1_1_5MHZ)</span></div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_LOW_SPEED (ADC_CFG1_3MHZ)</span></div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_MED_SPEED (ADC_CFG1_6MHZ)</span></div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_12MHZ)</span></div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_HI_SPEED (ADC_CFG1_12MHZ)</span></div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_VERY_HIGH_SPEED (ADC_CFG1_24MHZ)</span></div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;<span class="preprocessor">#elif F_BUS == 4000000</span></div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_1MHZ   (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(0))</span></div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_2MHZ   (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(0))</span></div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_4MHZ   (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(0))</span></div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;<span class="preprocessor">  #define ADC_CFG1_VERY_LOW_SPEED (ADC_CFG1_1MHZ)</span></div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_LOW_SPEED (ADC_CFG1_2MHZ)</span></div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_MED_SPEED (ADC_CFG1_4MHZ)</span></div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_4MHZ)</span></div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_HI_SPEED (ADC_CFG1_4MHZ)</span></div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_VERY_HIGH_SPEED ADC_CFG1_HI_SPEED</span></div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;<span class="preprocessor">#elif F_BUS == 2000000</span></div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_1MHZ   (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(0))</span></div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_2MHZ   (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(0))</span></div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;<span class="preprocessor">  #define ADC_CFG1_VERY_LOW_SPEED (ADC_CFG1_1MHZ)</span></div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_LOW_SPEED (ADC_CFG1_2MHZ)</span></div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_MED_SPEED (ADC_CFG1_2MHZ)</span></div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_2MHZ)</span></div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_HI_SPEED (ADC_CFG1_2MHZ)</span></div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define ADC_CFG1_VERY_HIGH_SPEED ADC_CFG1_HI_SPEED</span></div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;<span class="preprocessor"></span><span class="preprocessor">    #error &quot;F_BUS must be 60, 56, 48, 40, 36, 24, 4 or 2 MHz&quot;</span></div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;<span class="comment">// mask the important bit in each register</span></div>
+<div class="line"><a name="l00170"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#a2afef33eecca71518bccc0a275a55e4c">  170</a></span>&#160;<span class="preprocessor">#define ADC_CFG1_ADICLK_MASK_1 (1&lt;&lt;1)</span></div>
+<div class="line"><a name="l00171"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#a55a401107321b77a6e50328b3f34c2b5">  171</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_CFG1_ADICLK_MASK_0 (1&lt;&lt;0)</span></div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00173"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#a5ce9da5a5af95caa7fcae5eb1db9e4bf">  173</a></span>&#160;<span class="preprocessor">#define ADC_CFG1_ADIV_MASK_1 (1&lt;&lt;6)</span></div>
+<div class="line"><a name="l00174"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#a5310c0ed3388c027b49e3799bd97f3cd">  174</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_CFG1_ADIV_MASK_0 (1&lt;&lt;5)</span></div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;<span class="comment">// Mask for the channel selection in ADCx_SC1A,</span></div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;<span class="comment">// useful if you want to get the channel number from ADCx_SC1A</span></div>
+<div class="line"><a name="l00178"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#ac1636c047cf3a2250b63203ffe6b2422">  178</a></span>&#160;<span class="preprocessor">#define ADC_SC1A_CHANNELS 0x1F</span></div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;<span class="comment">// Settings for the power/speed of conversions/sampling</span></div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;<span class="comment">/* For conversion speeds:</span></div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;<span class="comment">    ADC_VERY_LOW_SPEED is guaranteed to be the lowest possible speed within specs for resolutions less than 16 bits (higher than 1 MHz),</span></div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;<span class="comment">    it&#39;s different from ADC_LOW_SPEED only for 24, 4 or 2 MHz.</span></div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;<span class="comment">    ADC_LOW_SPEED is guaranteed to be the lowest possible speed within specs for all resolutions (higher than 2 MHz).</span></div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;<span class="comment">    ADC_MED_SPEED is always &gt;= ADC_LOW_SPEED and &lt;= ADC_HIGH_SPEED.</span></div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;<span class="comment">    ADC_HIGH_SPEED_16BITS is guaranteed to be the highest possible speed within specs for all resolutions (lower or eq than 12 MHz).</span></div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;<span class="comment">    ADC_HIGH_SPEED is guaranteed to be the highest possible speed within specs for resolutions less than 16 bits (lower or eq than 18 MHz).</span></div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;<span class="comment">    ADC_VERY_HIGH_SPEED may be out of specs, it&#39;s different from ADC_HIGH_SPEED only for 48, 40 or 24 MHz.</span></div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;<span class="comment">*/</span></div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="comment">/* For sampling speeds:</span></div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;<span class="comment">    ADC_VERY_LOW_SPEED is the lowest possible sampling speed (+24 ADCK).</span></div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;<span class="comment">    ADC_LOW_SPEED adds +16 ADCK.</span></div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;<span class="comment">    ADC_MED_SPEED adds +10 ADCK.</span></div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;<span class="comment">    ADC_HIGH_SPEED (or ADC_HIGH_SPEED_16BITS) adds +6 ADCK.</span></div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;<span class="comment">    ADC_VERY_HIGH_SPEED is the highest possible sampling speed (0 ADCK added).</span></div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;<span class="comment">*/</span></div>
+<div class="line"><a name="l00197"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#afcae43d61a2e44a7ebd2814924e769e3">  197</a></span>&#160;<span class="preprocessor">#define ADC_VERY_LOW_SPEED      0</span></div>
+<div class="line"><a name="l00198"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#ab53b78573e7d3b40ac9e9709240d3ff2">  198</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_LOW_SPEED           1</span></div>
+<div class="line"><a name="l00199"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#a19129091a619eca8d378a7b59e697972">  199</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_MED_SPEED           2</span></div>
+<div class="line"><a name="l00200"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#a23479f037280be7e2e110b9718c04920">  200</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_HIGH_SPEED_16BITS   3</span></div>
+<div class="line"><a name="l00201"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#a3d6e5d1990698c10e5416dd52959100a">  201</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_HIGH_SPEED          4</span></div>
+<div class="line"><a name="l00202"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#acde51a1fd051837c9d97b0a24ea28778">  202</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_VERY_HIGH_SPEED     5</span></div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;<span class="comment">// ADCx_SC2[REFSEL] bit selects the voltage reference sources for ADC.</span></div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;<span class="comment">//   VREFH/VREFL - connected as the primary reference option</span></div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;<span class="comment">//   1.2 V VREF_OUT - connected as the VALT reference option</span></div>
+<div class="line"><a name="l00208"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#a79a0008b0054fba5551f1a2f515cd21f">  208</a></span>&#160;<span class="preprocessor">#define ADC_REF_DEFAULT         0</span></div>
+<div class="line"><a name="l00209"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#aa45db1c2cb73add84d2a33088eba05b2">  209</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_REF_EXTERNAL        0</span></div>
+<div class="line"><a name="l00210"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#a1721cf11e7e814f29d58ac29611b51cf">  210</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_REF_INTERNAL        2</span></div>
+<div class="line"><a name="l00211"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#aa8452539b624c0ca1f9b67e5f96934af">  211</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_REF_INTERNAL1V2     2</span></div>
+<div class="line"><a name="l00212"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#a91d2836195edf5c1de05a9553ad8699c">  212</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_REF_INTERNAL1V1     2</span></div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;<span class="comment">// Error codes for analogRead and analogReadDifferential</span></div>
+<div class="line"><a name="l00216"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#af181c4b5c617516517400c427494e7e7">  216</a></span>&#160;<span class="preprocessor">#define ADC_ERROR_DIFF_VALUE -70000</span></div>
+<div class="line"><a name="l00217"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#a810b46bdaa73057d834142229111adc5">  217</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_ERROR_VALUE ADC_ERROR_DIFF_VALUE</span></div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;<span class="comment">// Error flag masks.</span></div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;<span class="comment">// Possible errors are: other, calibration, wrong pin, analogRead, analogDifferentialRead, continuous, continuousDifferential</span></div>
+<div class="line"><a name="l00221"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#a66e0a0d715bb9236c4fa54e986e19baf">  221</a></span>&#160;<span class="preprocessor">#define ADC_ERROR_ALL               0x3FF</span></div>
+<div class="line"><a name="l00222"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#a958d040f3985722f05c130aef0efdbc0">  222</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_ERROR_CLEAR             0x0</span></div>
+<div class="line"><a name="l00223"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#a46b36a9bd609e88bf9fd309b42b7475a">  223</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_ERROR_OTHER             (1&lt;&lt;0)</span></div>
+<div class="line"><a name="l00224"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#aa1ce76ea02029a6c933e69c66caa2295">  224</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_ERROR_CALIB             (1&lt;&lt;1)</span></div>
+<div class="line"><a name="l00225"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#abe94abe8f828b3420701d1b65ddeff11">  225</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_ERROR_WRONG_PIN         (1&lt;&lt;2)</span></div>
+<div class="line"><a name="l00226"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#afce25e27ef8b04a1ea5d82844be5a1ab">  226</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_ERROR_ANALOG_READ       (1&lt;&lt;3)</span></div>
+<div class="line"><a name="l00227"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#a85ae713eff294b29394c00d9a1af8aa1">  227</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_ERROR_COMPARISON        (1&lt;&lt;4)</span></div>
+<div class="line"><a name="l00228"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#a90e5bad6d5d6bc8475f2daf73c3616f1">  228</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_ERROR_ANALOG_DIFF_READ  (1&lt;&lt;5)</span></div>
+<div class="line"><a name="l00229"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#a55a30ae3e90829e40719c9e1c5e47308">  229</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_ERROR_CONT              (1&lt;&lt;6)</span></div>
+<div class="line"><a name="l00230"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#a8e1259a804e1fd3a89426d835ab5b81f">  230</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_ERROR_CONT_DIFF         (1&lt;&lt;7)</span></div>
+<div class="line"><a name="l00231"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#a2f616602104b15d5b9f4314145d3503f">  231</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_ERROR_WRONG_ADC         (1&lt;&lt;8)</span></div>
+<div class="line"><a name="l00232"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#ad7d1a9910fcd061ca5bce2260468a931">  232</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_ERROR_SYNCH             (1&lt;&lt;9)</span></div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;<span class="comment">// Other things to measure with the ADC that don&#39;t use external pins</span></div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;<span class="comment">// In my Teensy I read 1.22 V for the ADC_VREF_OUT, random values for ADC_BANDGAP,</span></div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;<span class="comment">// 3.3 V for ADC_VREFH and 0.0 V for ADC_VREFL.</span></div>
+<div class="line"><a name="l00238"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#a4cefed245019e53043553487015d4336">  238</a></span>&#160;<span class="preprocessor">#define ADC_TEMP_SENSOR     38</span></div>
+<div class="line"><a name="l00239"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#aeb28b97a2562d8af49e06f54d217c972">  239</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_VREF_OUT        39</span></div>
+<div class="line"><a name="l00240"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#a22d1f36f85b454a54518cd29713118db">  240</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_BANDGAP         41</span></div>
+<div class="line"><a name="l00241"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#a82ca060ff604ccffc8ddbc3af6824973">  241</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_VREFH           42</span></div>
+<div class="line"><a name="l00242"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#ac8d25362e749cd9ec5c4ebc4702316b5">  242</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ADC_VREFL           43</span></div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;<span class="comment">// debug mode: blink the led light</span></div>
+<div class="line"><a name="l00246"></a><span class="lineno"><a class="line" href="_a_d_c___module_8h.html#aaaf2912bdda454e3fcb88156f1ce20d8">  246</a></span>&#160;<span class="preprocessor">#define ADC_debug 0</span></div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;</div>
+<div class="line"><a name="l00252"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html">  252</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_a_d_c___module.html">ADC_Module</a></div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;{</div>
+<div class="line"><a name="l00254"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a15c3621696d3a37e8253160e8f8fdb5c">  254</a></span>&#160;    <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="class_a_d_c.html">ADC</a>;</div>
 <div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#a9af29f865bdd376d954112d36b0992f0">stopContinuous</a>();</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;</div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;</div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="class_a_d_c___module.html#a1e2730c5910f386f3e3b76b9eacc0268">isConverting</a>();</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;        <a class="code" href="class_a_d_c___module.html#abd04dee9e56c5b8f0ba8c11d646e635e">ADC_Module</a>(uint8_t ADC_number = 0);</div>
 <div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="class_a_d_c___module.html#a4c3d39b4fe79bfff701409ea07259a47">isComplete</a>();</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#afe8ed6f2a6c811ec3ef2c4aba768982f">recalibrate</a>();</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;</div>
 <div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="class_a_d_c___module.html#ac74cc58870ff82be8ea91a40cd4a7a63">isDifferential</a>();</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;</div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="class_a_d_c___module.html#ae1aa7278d64d55bed0be5779378858a5">isContinuous</a>();</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#a00d8d764c000134e47c02b38f66ebbed">startPDB</a>(<span class="keywordtype">double</span> period);</div>
-<div class="line"><a name="l00279"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a3fd83a4068c918c6abf9eb06f5662b6e">  279</a></span>&#160;        <span class="keywordtype">double</span> <a class="code" href="class_a_d_c___module.html#a3fd83a4068c918c6abf9eb06f5662b6e">adc_pdb_period</a>;</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#aa14ea3e2c5f7d0ba794628e92a2573da">setReference</a>(uint8_t type);</div>
 <div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;</div>
 <div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;        <span class="comment">// struct to store the config of the adc</span></div>
-<div class="line"><a name="l00283"></a><span class="lineno"><a class="line" href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html">  283</a></span>&#160;        <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html">ADC_CONFIG</a>{</div>
-<div class="line"><a name="l00284"></a><span class="lineno"><a class="line" href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html#a26531cf1a408be6378e2bed2385da4b5">  284</a></span>&#160;            uint32_t <a class="code" href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html#accd8c37cf45a546feb90f21c37140652">savedSC1A</a>, <a class="code" href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html#a3d0e4c301bf15ce0e11a56cd767a1012">savedSC2</a>, <a class="code" href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html#a26531cf1a408be6378e2bed2385da4b5">savedSC3</a>, <a class="code" href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html#a1445124419626efa012c1afad2a2fac6">savedCFG1</a>, <a class="code" href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html#a0189d428f05a6ead6e5d399b0908abd8">savedCFG2</a>, <a class="code" href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html#a766cf922004436e813bc35fc574f1ca2">savedRes</a>;</div>
-<div class="line"><a name="l00285"></a><span class="lineno"><a class="line" href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html#a213e33642f102296d09030f881738860">  285</a></span>&#160;            uint8_t <a class="code" href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html#a213e33642f102296d09030f881738860">diffRes</a>; <span class="comment">// is the new resolution different from the old one?</span></div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;        } <a class="code" href="class_a_d_c___module.html#a0092e0915c562b4e318b0aff575315d1">ADC_Config</a>;</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;        <span class="comment">// translate pin number to SC1A nomenclature and viceversa</span></div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;        <span class="comment">// we need to create this static const arrays so that we can assign the &quot;normal arrays&quot; to the correct one</span></div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;        <span class="comment">// depending on which ADC module we will be.</span></div>
-<div class="line"><a name="l00291"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a869aaf6169fe85b5a33eb9d7999d28c7">  291</a></span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> uint8_t <a class="code" href="class_a_d_c___module.html#a869aaf6169fe85b5a33eb9d7999d28c7">channel2sc1aADC0</a>[44];</div>
-<div class="line"><a name="l00292"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#ac136d935be8b858477d4f99e65855bea">  292</a></span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> uint8_t <a class="code" href="class_a_d_c___module.html#ac136d935be8b858477d4f99e65855bea">channel2sc1aADC1</a>[44];</div>
-<div class="line"><a name="l00293"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a2dfa05a9782afa7bae3bed86733aee0f">  293</a></span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> uint8_t <a class="code" href="class_a_d_c___module.html#a2dfa05a9782afa7bae3bed86733aee0f">sc1a2channelADC0</a>[30];</div>
-<div class="line"><a name="l00294"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a5376fea14e4d425df5ecb25027e1ad99">  294</a></span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> uint8_t <a class="code" href="class_a_d_c___module.html#a5376fea14e4d425df5ecb25027e1ad99">sc1a2channelADC1</a>[30];</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;</div>
-<div class="line"><a name="l00296"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a7ac619afe41bd32e546cf5018efc9baf">  296</a></span>&#160;        uint8_t <a class="code" href="class_a_d_c___module.html#a7ac619afe41bd32e546cf5018efc9baf">channel2sc1a</a>[44];</div>
-<div class="line"><a name="l00297"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#ad3d904edce6a226937d1ed2b133e7dd3">  297</a></span>&#160;        uint8_t <a class="code" href="class_a_d_c___module.html#ad3d904edce6a226937d1ed2b133e7dd3">sc1a2channel</a>[30];</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;</div>
-<div class="line"><a name="l00299"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#ad4ffd455f5c162d15fb4078aa90b5cbe">  299</a></span>&#160;        <a class="code" href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html">ADC_Config</a> <a class="code" href="class_a_d_c___module.html#ad4ffd455f5c162d15fb4078aa90b5cbe">adc_config</a>;</div>
-<div class="line"><a name="l00300"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a34f6f7878889aa3644b279f9440dc0bf">  300</a></span>&#160;        uint8_t <a class="code" href="class_a_d_c___module.html#a34f6f7878889aa3644b279f9440dc0bf">adcWasInUse</a>; <span class="comment">// was the adc in use before an analog timer call?</span></div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;        <span class="comment">// number of measurements that the ADC is performing</span></div>
-<div class="line"><a name="l00303"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a27fdc83a7dbe3a8c8c24fc4273414256">  303</a></span>&#160;        uint8_t <a class="code" href="class_a_d_c___module.html#a27fdc83a7dbe3a8c8c24fc4273414256">num_measurements</a> = 0;</div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;</div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;</div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;       <span class="comment">// registers point to the correct ADC module</span></div>
-<div class="line"><a name="l00307"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">  307</a></span>&#160;        <span class="keyword">typedef</span> <span class="keyword">volatile</span> uint32_t* <a class="code" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a>;</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;        <span class="comment">// registers that control the adc module</span></div>
-<div class="line"><a name="l00310"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a602c4bb9ba6cee4d3f239be43b2864cb">  310</a></span>&#160;        <a class="code" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> <a class="code" href="class_a_d_c___module.html#a602c4bb9ba6cee4d3f239be43b2864cb">ADC_SC1A</a>;</div>
-<div class="line"><a name="l00311"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#aff11ed1a817e37e89a350836d09fdd5e">  311</a></span>&#160;        <a class="code" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> <a class="code" href="class_a_d_c___module.html#aff11ed1a817e37e89a350836d09fdd5e">ADC_SC1B</a>;</div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;</div>
-<div class="line"><a name="l00313"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#ae0d57658078a42d4fe67b7ccf968327e">  313</a></span>&#160;        <a class="code" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> <a class="code" href="class_a_d_c___module.html#ae0d57658078a42d4fe67b7ccf968327e">ADC_CFG1</a>;</div>
-<div class="line"><a name="l00314"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a9365090edcee70c09a84f163a5a5efb6">  314</a></span>&#160;        <a class="code" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> <a class="code" href="class_a_d_c___module.html#a9365090edcee70c09a84f163a5a5efb6">ADC_CFG2</a>;</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#a6bd8da02e5e9bd3b2b3db30d5faa3585">setResolution</a>(uint8_t bits);</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;        uint8_t <a class="code" href="class_a_d_c___module.html#a58cabc09d41f6aa25319fd514b47c48f">getResolution</a>();</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;        uint32_t <a class="code" href="class_a_d_c___module.html#af3704819ccda64bae9c13a95a74e70a8">getMaxValue</a>();</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#a9dcb1b6195ab05fdee708472e4da939f">setConversionSpeed</a>(uint8_t speed);</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;</div>
 <div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;</div>
-<div class="line"><a name="l00316"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#ad42f9bd24ac7b0b46bc3fd2cd95514dd">  316</a></span>&#160;        <a class="code" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> <a class="code" href="class_a_d_c___module.html#ad42f9bd24ac7b0b46bc3fd2cd95514dd">ADC_RA</a>;</div>
-<div class="line"><a name="l00317"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a98131df796c606e090eb9398066649f9">  317</a></span>&#160;        <a class="code" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> <a class="code" href="class_a_d_c___module.html#a98131df796c606e090eb9398066649f9">ADC_RB</a>;</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;</div>
-<div class="line"><a name="l00319"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a4b53e7bb2d3b0b6cdb493e29af4e9b35">  319</a></span>&#160;        <a class="code" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> <a class="code" href="class_a_d_c___module.html#a4b53e7bb2d3b0b6cdb493e29af4e9b35">ADC_CV1</a>;</div>
-<div class="line"><a name="l00320"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a5925c2b149b43862515e6bbeceef41c3">  320</a></span>&#160;        <a class="code" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> <a class="code" href="class_a_d_c___module.html#a5925c2b149b43862515e6bbeceef41c3">ADC_CV2</a>;</div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;</div>
-<div class="line"><a name="l00322"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a3f87f20f16184544e402984f49eb77d2">  322</a></span>&#160;        <a class="code" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> <a class="code" href="class_a_d_c___module.html#a3f87f20f16184544e402984f49eb77d2">ADC_SC2</a>;</div>
-<div class="line"><a name="l00323"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#abc5b6460f1e377c464e562117a3dc90a">  323</a></span>&#160;        <a class="code" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> <a class="code" href="class_a_d_c___module.html#abc5b6460f1e377c464e562117a3dc90a">ADC_SC3</a>;</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;</div>
-<div class="line"><a name="l00325"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#ae7b96b4929922739325c61eab60b9ce3">  325</a></span>&#160;        <a class="code" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> <a class="code" href="class_a_d_c___module.html#ae7b96b4929922739325c61eab60b9ce3">ADC_PGA</a>;</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;</div>
-<div class="line"><a name="l00327"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#aa4e447503bff8089f3656927faa7d008">  327</a></span>&#160;        <a class="code" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> <a class="code" href="class_a_d_c___module.html#aa4e447503bff8089f3656927faa7d008">ADC_OFS</a>;</div>
-<div class="line"><a name="l00328"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a1fc0663af85da8b0646a7bd937cf3af5">  328</a></span>&#160;        <a class="code" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> <a class="code" href="class_a_d_c___module.html#a1fc0663af85da8b0646a7bd937cf3af5">ADC_PG</a>;</div>
-<div class="line"><a name="l00329"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a79fbb2101908e46787d75f4497b2c7c4">  329</a></span>&#160;        <a class="code" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> <a class="code" href="class_a_d_c___module.html#a79fbb2101908e46787d75f4497b2c7c4">ADC_MG</a>;</div>
-<div class="line"><a name="l00330"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#af16aa770a675efa54382d406e4df118c">  330</a></span>&#160;        <a class="code" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> <a class="code" href="class_a_d_c___module.html#af16aa770a675efa54382d406e4df118c">ADC_CLPD</a>;</div>
-<div class="line"><a name="l00331"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#abf1d823d7e9b286cb380bbadc21a1446">  331</a></span>&#160;        <a class="code" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> <a class="code" href="class_a_d_c___module.html#abf1d823d7e9b286cb380bbadc21a1446">ADC_CLPS</a>;</div>
-<div class="line"><a name="l00332"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#aaaf917dc2356a810b196b004ace4c55d">  332</a></span>&#160;        <a class="code" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> <a class="code" href="class_a_d_c___module.html#aaaf917dc2356a810b196b004ace4c55d">ADC_CLP4</a>;</div>
-<div class="line"><a name="l00333"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#aada0808d5a556e70868cc28cafcbcc32">  333</a></span>&#160;        <a class="code" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> <a class="code" href="class_a_d_c___module.html#aada0808d5a556e70868cc28cafcbcc32">ADC_CLP3</a>;</div>
-<div class="line"><a name="l00334"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a3e1707a7b2598bda168b09d1483d1ea2">  334</a></span>&#160;        <a class="code" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> <a class="code" href="class_a_d_c___module.html#a3e1707a7b2598bda168b09d1483d1ea2">ADC_CLP2</a>;</div>
-<div class="line"><a name="l00335"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a7677c11f1c250cc87ffbe16f7ae6aa8b">  335</a></span>&#160;        <a class="code" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> <a class="code" href="class_a_d_c___module.html#a7677c11f1c250cc87ffbe16f7ae6aa8b">ADC_CLP1</a>;</div>
-<div class="line"><a name="l00336"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#ab67ae110c643f4bd4b169be08a56600a">  336</a></span>&#160;        <a class="code" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> <a class="code" href="class_a_d_c___module.html#ab67ae110c643f4bd4b169be08a56600a">ADC_CLP0</a>;</div>
-<div class="line"><a name="l00337"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a0b30b64e46d25db9eddecfb2d942e858">  337</a></span>&#160;        <a class="code" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> <a class="code" href="class_a_d_c___module.html#a0b30b64e46d25db9eddecfb2d942e858">ADC_CLMD</a>;</div>
-<div class="line"><a name="l00338"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a2538f5966699b9951b9910d8346ae309">  338</a></span>&#160;        <a class="code" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> <a class="code" href="class_a_d_c___module.html#a2538f5966699b9951b9910d8346ae309">ADC_CLMS</a>;</div>
-<div class="line"><a name="l00339"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#aeb5a37488cd886be6a773a9339e495f8">  339</a></span>&#160;        <a class="code" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> <a class="code" href="class_a_d_c___module.html#aeb5a37488cd886be6a773a9339e495f8">ADC_CLM4</a>;</div>
-<div class="line"><a name="l00340"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a4fa94c428157c5bf8325f220e369d9ce">  340</a></span>&#160;        <a class="code" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> <a class="code" href="class_a_d_c___module.html#a4fa94c428157c5bf8325f220e369d9ce">ADC_CLM3</a>;</div>
-<div class="line"><a name="l00341"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a800c37fd322038ae694b3e6ad35fb719">  341</a></span>&#160;        <a class="code" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> <a class="code" href="class_a_d_c___module.html#a800c37fd322038ae694b3e6ad35fb719">ADC_CLM2</a>;</div>
-<div class="line"><a name="l00342"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a9bb438d6c6f3414df159bbed074a32c9">  342</a></span>&#160;        <a class="code" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> <a class="code" href="class_a_d_c___module.html#a9bb438d6c6f3414df159bbed074a32c9">ADC_CLM1</a>;</div>
-<div class="line"><a name="l00343"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a5de06d42d32e40468290bb7b91d3f336">  343</a></span>&#160;        <a class="code" href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">reg</a> <a class="code" href="class_a_d_c___module.html#a5de06d42d32e40468290bb7b91d3f336">ADC_CLM0</a>;</div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;</div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#a94a585ac8079de091133b0ef4588b037">setSamplingSpeed</a>(uint8_t speed);</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#a55954618c5c27c1ffce4321e912bac52">setAveraging</a>(uint8_t num);</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#a8be20cecbfb1e8900c9cd8d0bdb47ef7">enableInterrupts</a>();</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#aa4509062644982526fee3c02e0b528fc">disableInterrupts</a>();</div>
 <div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;</div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;        <span class="keyword">const</span> uint8_t ledPin=13;</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;</div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;        uint8_t calibrating;</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;        uint8_t analog_config_bits;</div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;</div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;        uint32_t analog_max_val;</div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;</div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;        uint8_t analog_num_average;</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#af3d14c01b1442c0c34b5dbc9a6e49f35">enableDMA</a>();</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#ac1610dcab46476f287c2dd4d96465c47">disableDMA</a>();</div>
 <div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;</div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;        uint8_t analog_reference_internal;</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;</div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;        uint8_t var_enableInterrupts;</div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;</div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;        uint8_t pga_value;</div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;</div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;        <span class="comment">// which adc is this?</span></div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;        uint8_t ADC_num;</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#ae7a632267f21b79c31c1dae56b5da188">enableCompare</a>(int16_t compValue, <span class="keywordtype">bool</span> greaterThan);</div>
 <div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;</div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;</div>
-<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;        <span class="keywordtype">void</span> analog_init(uint32_t config = 0);</div>
-<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;</div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;</div>
-<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;        <span class="keywordtype">void</span> calibrate();</div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#ab8e64bab9d4e7f1935a260629e5d71d5">enableCompareRange</a>(int16_t lowerLimit, int16_t upperLimit, <span class="keywordtype">bool</span> insideRange, <span class="keywordtype">bool</span> inclusive);</div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;</div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#ac635f675a9690a4db016c73c31818262">disableCompare</a>();</div>
 <div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;</div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;        <span class="keywordtype">void</span> wait_for_cal(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;</div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;</div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;    <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;</div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;</div>
-<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;};</div>
-<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;</div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#a5bef75f430c061b4bc3d48951e8930c6">enablePGA</a>(uint8_t gain);</div>
+<div class="line"><a name="l00386"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a37d4a3f4fc3499823e51de7f9cf02678">  386</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#a37d4a3f4fc3499823e51de7f9cf02678">setPGA</a>(uint8_t gain) {<a class="code" href="class_a_d_c___module.html#a5bef75f430c061b4bc3d48951e8930c6">enablePGA</a>(gain);}</div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;</div>
 <div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;</div>
-<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;<span class="preprocessor">#endif // ADC_MODULE_H</span></div>
-<div class="ttc" id="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g_html_a3d0e4c301bf15ce0e11a56cd767a1012"><div class="ttname"><a href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html#a3d0e4c301bf15ce0e11a56cd767a1012">ADC_Module::ADC_CONFIG::savedSC2</a></div><div class="ttdeci">uint32_t savedSC2</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:284</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a60d0edc82fd1dbb2e20d090a53718ce2"><div class="ttname"><a href="class_a_d_c___module.html#a60d0edc82fd1dbb2e20d090a53718ce2">ADC_Module::readSingle</a></div><div class="ttdeci">int readSingle()</div><div class="ttdoc">Reads the analog value of a single conversion. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:867</div></div>
-<div class="ttc" id="class_a_d_c___module_html_ac635f675a9690a4db016c73c31818262"><div class="ttname"><a href="class_a_d_c___module.html#ac635f675a9690a4db016c73c31818262">ADC_Module::disableCompare</a></div><div class="ttdeci">void disableCompare()</div><div class="ttdoc">Disable the compare function. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:401</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a3fd83a4068c918c6abf9eb06f5662b6e"><div class="ttname"><a href="class_a_d_c___module.html#a3fd83a4068c918c6abf9eb06f5662b6e">ADC_Module::adc_pdb_period</a></div><div class="ttdeci">double adc_pdb_period</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:279</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a602c4bb9ba6cee4d3f239be43b2864cb"><div class="ttname"><a href="class_a_d_c___module.html#a602c4bb9ba6cee4d3f239be43b2864cb">ADC_Module::ADC_SC1A</a></div><div class="ttdeci">reg ADC_SC1A</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:310</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a00d8d764c000134e47c02b38f66ebbed"><div class="ttname"><a href="class_a_d_c___module.html#a00d8d764c000134e47c02b38f66ebbed">ADC_Module::startPDB</a></div><div class="ttdeci">void startPDB(double period)</div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:1018</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a9af29f865bdd376d954112d36b0992f0"><div class="ttname"><a href="class_a_d_c___module.html#a9af29f865bdd376d954112d36b0992f0">ADC_Module::stopContinuous</a></div><div class="ttdeci">void stopContinuous()</div><div class="ttdoc">Stops continuous conversion. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:978</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a27fdc83a7dbe3a8c8c24fc4273414256"><div class="ttname"><a href="class_a_d_c___module.html#a27fdc83a7dbe3a8c8c24fc4273414256">ADC_Module::num_measurements</a></div><div class="ttdeci">uint8_t num_measurements</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:303</div></div>
-<div class="ttc" id="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g_html_a1445124419626efa012c1afad2a2fac6"><div class="ttname"><a href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html#a1445124419626efa012c1afad2a2fac6">ADC_Module::ADC_CONFIG::savedCFG1</a></div><div class="ttdeci">uint32_t savedCFG1</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:284</div></div>
-<div class="ttc" id="class_a_d_c___module_html_abd04dee9e56c5b8f0ba8c11d646e635e"><div class="ttname"><a href="class_a_d_c___module.html#abd04dee9e56c5b8f0ba8c11d646e635e">ADC_Module::ADC_Module</a></div><div class="ttdeci">ADC_Module(uint8_t ADC_number=0)</div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:59</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a4fa94c428157c5bf8325f220e369d9ce"><div class="ttname"><a href="class_a_d_c___module.html#a4fa94c428157c5bf8325f220e369d9ce">ADC_Module::ADC_CLM3</a></div><div class="ttdeci">reg ADC_CLM3</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:340</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a734ac9cf07a54e91707c78d753d3d3dd"><div class="ttname"><a href="class_a_d_c___module.html#a734ac9cf07a54e91707c78d753d3d3dd">ADC_Module::disablePGA</a></div><div class="ttdeci">void disablePGA()</div><div class="ttdoc">Disable PGA. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:427</div></div>
-<div class="ttc" id="class_a_d_c___module_html_ae0d57658078a42d4fe67b7ccf968327e"><div class="ttname"><a href="class_a_d_c___module.html#ae0d57658078a42d4fe67b7ccf968327e">ADC_Module::ADC_CFG1</a></div><div class="ttdeci">reg ADC_CFG1</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:313</div></div>
-<div class="ttc" id="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g_html"><div class="ttname"><a href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html">ADC_Module::ADC_CONFIG</a></div><div class="ttdef"><b>Definition:</b> ADC_Module.h:283</div></div>
-<div class="ttc" id="class_a_d_c___module_html_af3704819ccda64bae9c13a95a74e70a8"><div class="ttname"><a href="class_a_d_c___module.html#af3704819ccda64bae9c13a95a74e70a8">ADC_Module::getMaxValue</a></div><div class="ttdeci">uint32_t getMaxValue()</div><div class="ttdoc">Returns the maximum value for a measurement. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:296</div></div>
-<div class="ttc" id="class_a_d_c___module_html"><div class="ttname"><a href="class_a_d_c___module.html">ADC_Module</a></div><div class="ttdef"><b>Definition:</b> ADC_Module.h:84</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a785d9d4fd9b54cb8e0c8ab3326c48f94"><div class="ttname"><a href="class_a_d_c___module.html#a785d9d4fd9b54cb8e0c8ab3326c48f94">ADC_Module::startSingleReadFast</a></div><div class="ttdeci">int startSingleReadFast(uint8_t pin)</div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:789</div></div>
-<div class="ttc" id="class_a_d_c___module_html_ac74cc58870ff82be8ea91a40cd4a7a63"><div class="ttname"><a href="class_a_d_c___module.html#ac74cc58870ff82be8ea91a40cd4a7a63">ADC_Module::isDifferential</a></div><div class="ttdeci">bool isDifferential()</div><div class="ttdoc">Is the ADC in differential mode? </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:1009</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a4a57f6a9b0e3884f3862062b33f1a447"><div class="ttname"><a href="class_a_d_c___module.html#a4a57f6a9b0e3884f3862062b33f1a447">ADC_Module::analogReadDifferential</a></div><div class="ttdeci">int analogReadDifferential(uint8_t pinP, uint8_t pinN)</div><div class="ttdoc">Reads the differential analog value of two pins (pinP - pinN). </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:572</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a79fbb2101908e46787d75f4497b2c7c4"><div class="ttname"><a href="class_a_d_c___module.html#a79fbb2101908e46787d75f4497b2c7c4">ADC_Module::ADC_MG</a></div><div class="ttdeci">reg ADC_MG</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:329</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a98131df796c606e090eb9398066649f9"><div class="ttname"><a href="class_a_d_c___module.html#a98131df796c606e090eb9398066649f9">ADC_Module::ADC_RB</a></div><div class="ttdeci">reg ADC_RB</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:317</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a5376fea14e4d425df5ecb25027e1ad99"><div class="ttname"><a href="class_a_d_c___module.html#a5376fea14e4d425df5ecb25027e1ad99">ADC_Module::sc1a2channelADC1</a></div><div class="ttdeci">static const uint8_t sc1a2channelADC1[30]</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:294</div></div>
-<div class="ttc" id="class_a_d_c___module_html_abc5b6460f1e377c464e562117a3dc90a"><div class="ttname"><a href="class_a_d_c___module.html#abc5b6460f1e377c464e562117a3dc90a">ADC_Module::ADC_SC3</a></div><div class="ttdeci">reg ADC_SC3</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:323</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a800c37fd322038ae694b3e6ad35fb719"><div class="ttname"><a href="class_a_d_c___module.html#a800c37fd322038ae694b3e6ad35fb719">ADC_Module::ADC_CLM2</a></div><div class="ttdeci">reg ADC_CLM2</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:341</div></div>
-<div class="ttc" id="class_a_d_c___module_html_af3d14c01b1442c0c34b5dbc9a6e49f35"><div class="ttname"><a href="class_a_d_c___module.html#af3d14c01b1442c0c34b5dbc9a6e49f35">ADC_Module::enableDMA</a></div><div class="ttdeci">void enableDMA()</div><div class="ttdoc">Enable DMA request. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:348</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a4a8feb071fe092bd904a98714f63976b"><div class="ttname"><a href="class_a_d_c___module.html#a4a8feb071fe092bd904a98714f63976b">ADC_Module::startSingleDifferential</a></div><div class="ttdeci">int startSingleDifferential(uint8_t pinP, uint8_t pinN)</div><div class="ttdoc">Start a differential conversion between two pins (pinP - pinN) and enables interrupts. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:813</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a1e2730c5910f386f3e3b76b9eacc0268"><div class="ttname"><a href="class_a_d_c___module.html#a1e2730c5910f386f3e3b76b9eacc0268">ADC_Module::isConverting</a></div><div class="ttdeci">bool isConverting()</div><div class="ttdoc">Is the ADC converting at the moment? </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:992</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a36fa42521ed88815b9085394c1fa7a92"><div class="ttname"><a href="class_a_d_c___module.html#a36fa42521ed88815b9085394c1fa7a92">ADC_Module::reg</a></div><div class="ttdeci">volatile uint32_t * reg</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:307</div></div>
-<div class="ttc" id="class_a_d_c___module_html_af16aa770a675efa54382d406e4df118c"><div class="ttname"><a href="class_a_d_c___module.html#af16aa770a675efa54382d406e4df118c">ADC_Module::ADC_CLPD</a></div><div class="ttdeci">reg ADC_CLPD</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:330</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a5de06d42d32e40468290bb7b91d3f336"><div class="ttname"><a href="class_a_d_c___module.html#a5de06d42d32e40468290bb7b91d3f336">ADC_Module::ADC_CLM0</a></div><div class="ttdeci">reg ADC_CLM0</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:343</div></div>
-<div class="ttc" id="class_a_d_c___module_html_ad4ffd455f5c162d15fb4078aa90b5cbe"><div class="ttname"><a href="class_a_d_c___module.html#ad4ffd455f5c162d15fb4078aa90b5cbe">ADC_Module::adc_config</a></div><div class="ttdeci">ADC_Config adc_config</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:299</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a9bb438d6c6f3414df159bbed074a32c9"><div class="ttname"><a href="class_a_d_c___module.html#a9bb438d6c6f3414df159bbed074a32c9">ADC_Module::ADC_CLM1</a></div><div class="ttdeci">reg ADC_CLM1</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:342</div></div>
-<div class="ttc" id="class_a_d_c___module_html_aeb5a37488cd886be6a773a9339e495f8"><div class="ttname"><a href="class_a_d_c___module.html#aeb5a37488cd886be6a773a9339e495f8">ADC_Module::ADC_CLM4</a></div><div class="ttdeci">reg ADC_CLM4</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:339</div></div>
-<div class="ttc" id="class_a_d_c___module_html_aff11ed1a817e37e89a350836d09fdd5e"><div class="ttname"><a href="class_a_d_c___module.html#aff11ed1a817e37e89a350836d09fdd5e">ADC_Module::ADC_SC1B</a></div><div class="ttdeci">reg ADC_SC1B</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:311</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a7ac619afe41bd32e546cf5018efc9baf"><div class="ttname"><a href="class_a_d_c___module.html#a7ac619afe41bd32e546cf5018efc9baf">ADC_Module::channel2sc1a</a></div><div class="ttdeci">uint8_t channel2sc1a[44]</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:296</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a5925c2b149b43862515e6bbeceef41c3"><div class="ttname"><a href="class_a_d_c___module.html#a5925c2b149b43862515e6bbeceef41c3">ADC_Module::ADC_CV2</a></div><div class="ttdeci">reg ADC_CV2</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:320</div></div>
-<div class="ttc" id="_ring_buffer_8h_html"><div class="ttname"><a href="_ring_buffer_8h.html">RingBuffer.h</a></div></div>
-<div class="ttc" id="class_a_d_c___module_html_a0b30b64e46d25db9eddecfb2d942e858"><div class="ttname"><a href="class_a_d_c___module.html#a0b30b64e46d25db9eddecfb2d942e858">ADC_Module::ADC_CLMD</a></div><div class="ttdeci">reg ADC_CLMD</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:337</div></div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;        uint8_t <a class="code" href="class_a_d_c___module.html#a5734a05ce4920be3a2b7fc004a6a14d7">getPGA</a>();</div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;</div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#a734ac9cf07a54e91707c78d753d3d3dd">disablePGA</a>();</div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;</div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;</div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;</div>
+<div class="line"><a name="l00400"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a1e2730c5910f386f3e3b76b9eacc0268">  400</a></span>&#160;        <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="class_a_d_c___module.html#a1e2730c5910f386f3e3b76b9eacc0268">isConverting</a>() {</div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;            <span class="keywordflow">return</span> (*ADC_SC2_adact);</div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;        }</div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;</div>
+<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;</div>
+<div class="line"><a name="l00410"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a4c3d39b4fe79bfff701409ea07259a47">  410</a></span>&#160;        <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="class_a_d_c___module.html#a4c3d39b4fe79bfff701409ea07259a47">isComplete</a>() {</div>
+<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;            <span class="keywordflow">return</span> (*ADC_SC1A_coco);</div>
+<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;        }</div>
+<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;</div>
+<div class="line"><a name="l00415"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#ac74cc58870ff82be8ea91a40cd4a7a63">  415</a></span>&#160;        <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="class_a_d_c___module.html#ac74cc58870ff82be8ea91a40cd4a7a63">isDifferential</a>() {</div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;            <span class="keywordflow">return</span> (*ADC_SC1A &amp; ADC_SC1_DIFF) &gt;&gt; 5;</div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;        }</div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;</div>
+<div class="line"><a name="l00420"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#ae1aa7278d64d55bed0be5779378858a5">  420</a></span>&#160;        <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="class_a_d_c___module.html#ae1aa7278d64d55bed0be5779378858a5">isContinuous</a>() {</div>
+<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;            <span class="keywordflow">return</span> (*ADC_SC3_adco);</div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;        }</div>
+<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;</div>
+<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;</div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;</div>
+<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;</div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="class_a_d_c___module.html#ad492adad4a9fa728625be82602bf1672">analogRead</a>(uint8_t pin);</div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;</div>
+<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;</div>
+<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="class_a_d_c___module.html#a4a57f6a9b0e3884f3862062b33f1a447">analogReadDifferential</a>(uint8_t pinP, uint8_t pinN);</div>
+<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;</div>
+<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;</div>
+<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;</div>
+<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;</div>
+<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="class_a_d_c___module.html#a3930aceb90a0c3b33c881c90d0a05236">startSingleRead</a>(uint8_t pin);</div>
+<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="class_a_d_c___module.html#a785d9d4fd9b54cb8e0c8ab3326c48f94">startSingleReadFast</a>(uint8_t pin);</div>
+<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;</div>
+<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;</div>
+<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="class_a_d_c___module.html#a4a8feb071fe092bd904a98714f63976b">startSingleDifferential</a>(uint8_t pinP, uint8_t pinN);</div>
+<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="class_a_d_c___module.html#aa0d60a43c585ea80055aa55bf9786e74">startSingleDifferentialFast</a>(uint8_t pinP, uint8_t pinN);</div>
+<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;</div>
+<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;</div>
+<div class="line"><a name="l00469"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a60d0edc82fd1dbb2e20d090a53718ce2">  469</a></span>&#160;        <span class="keyword">inline</span> <span class="keywordtype">int</span> <a class="code" href="class_a_d_c___module.html#a60d0edc82fd1dbb2e20d090a53718ce2">readSingle</a>(){ <span class="keywordflow">return</span> <a class="code" href="class_a_d_c___module.html#a8bddd248a9d52110b923fa94438f7f0a">analogReadContinuous</a>(); }</div>
+<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;</div>
+<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;</div>
+<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;</div>
+<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;</div>
+<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#a6fbb49ad99a9d28b07b8686021f6126e">startContinuous</a>(uint8_t pin);</div>
+<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;</div>
+<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;</div>
+<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#a2fbc6fa04cbdb56e60b2f92a19826b26">startContinuousDifferential</a>(uint8_t pinP, uint8_t pinN);</div>
+<div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160;</div>
+<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;</div>
+<div class="line"><a name="l00493"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a8bddd248a9d52110b923fa94438f7f0a">  493</a></span>&#160;        <span class="keyword">inline</span> <span class="keywordtype">int</span> <a class="code" href="class_a_d_c___module.html#a8bddd248a9d52110b923fa94438f7f0a">analogReadContinuous</a>() {</div>
+<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;            <span class="keywordflow">return</span> (int16_t)(int32_t)*ADC_RA;</div>
+<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;        }</div>
+<div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;</div>
+<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_d_c___module.html#a9af29f865bdd376d954112d36b0992f0">stopContinuous</a>();</div>
+<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160;</div>
+<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;</div>
+<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160;</div>
+<div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160;        <span class="comment">// struct to store the config of the adc</span></div>
+<div class="line"><a name="l00504"></a><span class="lineno"><a class="line" href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html">  504</a></span>&#160;        <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html">ADC_CONFIG</a>{</div>
+<div class="line"><a name="l00505"></a><span class="lineno"><a class="line" href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html#a26531cf1a408be6378e2bed2385da4b5">  505</a></span>&#160;            uint32_t <a class="code" href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html#accd8c37cf45a546feb90f21c37140652">savedSC1A</a>, <a class="code" href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html#a3d0e4c301bf15ce0e11a56cd767a1012">savedSC2</a>, <a class="code" href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html#a26531cf1a408be6378e2bed2385da4b5">savedSC3</a>, <a class="code" href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html#a1445124419626efa012c1afad2a2fac6">savedCFG1</a>, <a class="code" href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html#a0189d428f05a6ead6e5d399b0908abd8">savedCFG2</a>;</div>
+<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;        } <a class="code" href="class_a_d_c___module.html#a0092e0915c562b4e318b0aff575315d1">ADC_Config</a>;</div>
+<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;</div>
+<div class="line"><a name="l00508"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#ad4ffd455f5c162d15fb4078aa90b5cbe">  508</a></span>&#160;        <a class="code" href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html">ADC_Config</a> <a class="code" href="class_a_d_c___module.html#ad4ffd455f5c162d15fb4078aa90b5cbe">adc_config</a>; <span class="comment">// store ADC config</span></div>
+<div class="line"><a name="l00509"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a34f6f7878889aa3644b279f9440dc0bf">  509</a></span>&#160;        uint8_t <a class="code" href="class_a_d_c___module.html#a34f6f7878889aa3644b279f9440dc0bf">adcWasInUse</a>; <span class="comment">// was the adc in use before an analog timer call?</span></div>
+<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;</div>
+<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;</div>
+<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;        <span class="comment">// struct stores the relevant bits that affect power and speed of conversion</span></div>
+<div class="line"><a name="l00513"></a><span class="lineno"><a class="line" href="struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g.html">  513</a></span>&#160;        <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g.html">ADC_POWER_SPEED_CONFIG</a>{</div>
+<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;            <span class="comment">//   low power, low sampling speed, enable async. clock, high speed config</span></div>
+<div class="line"><a name="l00515"></a><span class="lineno"><a class="line" href="struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g.html#a64ce6312e1edd560ea12bb0e9b0caa62">  515</a></span>&#160;            <span class="keywordtype">bool</span> <a class="code" href="struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g.html#a602f4cbc26dd63b4bdca7993c39ba48a">adlpc</a>, <a class="code" href="struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g.html#a64ce6312e1edd560ea12bb0e9b0caa62">adlsmp</a>, <a class="code" href="struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g.html#ad7ec2bb831fffe09ee32ab016333520c">adacken</a>, <a class="code" href="struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g.html#a7370c04ccfbc3cd8a737adc411f98aa3">adhsc</a>;</div>
+<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;            <span class="comment">//      divide input clk, select input clk, long sampling time</span></div>
+<div class="line"><a name="l00517"></a><span class="lineno"><a class="line" href="struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g.html#a4c7dcc888c03cfc29e1f8681bc1a33e4">  517</a></span>&#160;            uint8_t <a class="code" href="struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g.html#ae5551e139dfd008a8d312b6f3e2f5205">adiv</a>, <a class="code" href="struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g.html#a1c1f3ce97add93383d291b649ce2fe13">adiclk</a>, <a class="code" href="struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g.html#a4c7dcc888c03cfc29e1f8681bc1a33e4">adlsts</a>;</div>
+<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;        } <a class="code" href="class_a_d_c___module.html#a893a14998c08fb929fdfd570ff981ccd">ADC_Power_Speed_Config</a>;</div>
+<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;</div>
+<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;</div>
+<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;        <span class="comment">// number of measurements that the ADC is performing</span></div>
+<div class="line"><a name="l00522"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a27fdc83a7dbe3a8c8c24fc4273414256">  522</a></span>&#160;        uint8_t <a class="code" href="class_a_d_c___module.html#a27fdc83a7dbe3a8c8c24fc4273414256">num_measurements</a> = 0;</div>
+<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;</div>
+<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;</div>
+<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;        <span class="comment">// translate pin number to SC1A nomenclature and viceversa</span></div>
+<div class="line"><a name="l00526"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a7ac619afe41bd32e546cf5018efc9baf">  526</a></span>&#160;        uint8_t <a class="code" href="class_a_d_c___module.html#a7ac619afe41bd32e546cf5018efc9baf">channel2sc1a</a>[44];</div>
+<div class="line"><a name="l00527"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a85269783274d11b1c7760fd929945380">  527</a></span>&#160;        uint8_t <a class="code" href="class_a_d_c___module.html#a85269783274d11b1c7760fd929945380">sc1a2channel</a>[31];</div>
+<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;</div>
+<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;</div>
+<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;        <span class="comment">// This flag indicates that some kind of error took place</span></div>
+<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;        <span class="comment">// Use the defines at the beggining of this file to find out what caused the fail.</span></div>
+<div class="line"><a name="l00532"></a><span class="lineno"><a class="line" href="class_a_d_c___module.html#a6187e43b6b3ea1a42c6bb17f2c10f099">  532</a></span>&#160;        uint16_t <a class="code" href="class_a_d_c___module.html#a6187e43b6b3ea1a42c6bb17f2c10f099">fail_flag</a>;</div>
+<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;</div>
+<div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160;</div>
+<div class="line"><a name="l00535"></a><span class="lineno">  535</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160;</div>
+<div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160;        <span class="comment">// is set to 1 when the calibration procedure is taking place</span></div>
+<div class="line"><a name="l00538"></a><span class="lineno">  538</span>&#160;        uint8_t calibrating;</div>
+<div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160;</div>
+<div class="line"><a name="l00540"></a><span class="lineno">  540</span>&#160;        <span class="comment">// the first calibration will use 32 averages and lowest speed,</span></div>
+<div class="line"><a name="l00541"></a><span class="lineno">  541</span>&#160;        <span class="comment">// when this calibration is over the averages and speed will be set to default.</span></div>
+<div class="line"><a name="l00542"></a><span class="lineno">  542</span>&#160;        uint8_t init_calib;</div>
+<div class="line"><a name="l00543"></a><span class="lineno">  543</span>&#160;</div>
+<div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160;        <span class="comment">// resolution</span></div>
+<div class="line"><a name="l00545"></a><span class="lineno">  545</span>&#160;        uint8_t analog_res_bits;</div>
+<div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160;</div>
+<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;        <span class="comment">// maximum value possible 2^res-1</span></div>
+<div class="line"><a name="l00548"></a><span class="lineno">  548</span>&#160;        uint32_t analog_max_val;</div>
+<div class="line"><a name="l00549"></a><span class="lineno">  549</span>&#160;</div>
+<div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160;        <span class="comment">// num of averages</span></div>
+<div class="line"><a name="l00551"></a><span class="lineno">  551</span>&#160;        uint8_t analog_num_average;</div>
+<div class="line"><a name="l00552"></a><span class="lineno">  552</span>&#160;</div>
+<div class="line"><a name="l00553"></a><span class="lineno">  553</span>&#160;        <span class="comment">// reference can be internal or external</span></div>
+<div class="line"><a name="l00554"></a><span class="lineno">  554</span>&#160;        uint8_t analog_reference_internal;</div>
+<div class="line"><a name="l00555"></a><span class="lineno">  555</span>&#160;</div>
+<div class="line"><a name="l00556"></a><span class="lineno">  556</span>&#160;        <span class="comment">// are interrupts enabled?</span></div>
+<div class="line"><a name="l00557"></a><span class="lineno">  557</span>&#160;        uint8_t var_enableInterrupts;</div>
+<div class="line"><a name="l00558"></a><span class="lineno">  558</span>&#160;</div>
+<div class="line"><a name="l00559"></a><span class="lineno">  559</span>&#160;        <span class="comment">// value of the pga</span></div>
+<div class="line"><a name="l00560"></a><span class="lineno">  560</span>&#160;        uint8_t pga_value;</div>
+<div class="line"><a name="l00561"></a><span class="lineno">  561</span>&#160;</div>
+<div class="line"><a name="l00562"></a><span class="lineno">  562</span>&#160;        <span class="comment">// conversion speed</span></div>
+<div class="line"><a name="l00563"></a><span class="lineno">  563</span>&#160;        uint8_t conversion_speed;</div>
+<div class="line"><a name="l00564"></a><span class="lineno">  564</span>&#160;</div>
+<div class="line"><a name="l00565"></a><span class="lineno">  565</span>&#160;        <span class="comment">// sampling speed</span></div>
+<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;        uint8_t sampling_speed;</div>
+<div class="line"><a name="l00567"></a><span class="lineno">  567</span>&#160;</div>
+<div class="line"><a name="l00568"></a><span class="lineno">  568</span>&#160;</div>
+<div class="line"><a name="l00569"></a><span class="lineno">  569</span>&#160;</div>
+<div class="line"><a name="l00570"></a><span class="lineno">  570</span>&#160;        <span class="comment">// which adc is this?</span></div>
+<div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160;        uint8_t ADC_num;</div>
+<div class="line"><a name="l00572"></a><span class="lineno">  572</span>&#160;</div>
+<div class="line"><a name="l00573"></a><span class="lineno">  573</span>&#160;</div>
+<div class="line"><a name="l00575"></a><span class="lineno">  575</span>&#160;        <span class="keywordtype">void</span> analog_init();</div>
+<div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160;</div>
+<div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160;</div>
+<div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;        <span class="keywordtype">void</span> calibrate();</div>
+<div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160;</div>
+<div class="line"><a name="l00584"></a><span class="lineno">  584</span>&#160;        <span class="keywordtype">void</span> wait_for_cal(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00585"></a><span class="lineno">  585</span>&#160;</div>
+<div class="line"><a name="l00586"></a><span class="lineno">  586</span>&#160;</div>
+<div class="line"><a name="l00587"></a><span class="lineno">  587</span>&#160;        <span class="comment">// returns the bitband address of the adc_register&#39;s bit.</span></div>
+<div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160;        <span class="comment">// use it for atomic access.</span></div>
+<div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160;        <span class="keyword">inline</span> <span class="keyword">volatile</span> uint32_t* adc_bitband(uint32_t adc_register, uint8_t bit) {</div>
+<div class="line"><a name="l00590"></a><span class="lineno">  590</span>&#160;            <span class="comment">//return (uint32_t*)(((uint32_t)adc_register&amp;0xBFFFFFFF)&lt;&lt;5) + 0x42000000 + 4*bit;</span></div>
+<div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160;            <span class="keywordflow">return</span> (uint32_t*)(((uint32_t)(adc_register) - 0x40000000)*32 + 0x42000000 + 4*bit);</div>
+<div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160;        }</div>
+<div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160;</div>
+<div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160;        <span class="comment">// registers point to the correct ADC module</span></div>
+<div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160;        <span class="keyword">typedef</span> <span class="keyword">volatile</span> uint32_t* reg;</div>
+<div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160;</div>
+<div class="line"><a name="l00597"></a><span class="lineno">  597</span>&#160;        <span class="comment">// registers that control the adc module</span></div>
+<div class="line"><a name="l00598"></a><span class="lineno">  598</span>&#160;        reg ADC_SC1A; reg ADC_SC1A_aien; reg ADC_SC1A_coco;</div>
+<div class="line"><a name="l00599"></a><span class="lineno">  599</span>&#160;        reg ADC_SC1B;</div>
+<div class="line"><a name="l00600"></a><span class="lineno">  600</span>&#160;</div>
+<div class="line"><a name="l00601"></a><span class="lineno">  601</span>&#160;        reg ADC_CFG1; reg ADC_CFG1_adlpc; reg ADC_CFG1_adiv0, ADC_CFG1_adiv1; reg ADC_CFG1_adlsmp;</div>
+<div class="line"><a name="l00602"></a><span class="lineno">  602</span>&#160;                        reg ADC_CFG1_mode0, ADC_CFG1_mode1; reg ADC_CFG1_adiclk0, ADC_CFG1_adiclk1;</div>
+<div class="line"><a name="l00603"></a><span class="lineno">  603</span>&#160;        reg ADC_CFG2; reg ADC_CFG2_muxsel; reg ADC_CFG2_adacken; reg ADC_CFG2_adhsc; reg ADC_CFG2_adlsts1, ADC_CFG2_adlsts0;</div>
+<div class="line"><a name="l00604"></a><span class="lineno">  604</span>&#160;</div>
+<div class="line"><a name="l00605"></a><span class="lineno">  605</span>&#160;        reg ADC_RA;</div>
+<div class="line"><a name="l00606"></a><span class="lineno">  606</span>&#160;        reg ADC_RB;</div>
+<div class="line"><a name="l00607"></a><span class="lineno">  607</span>&#160;</div>
+<div class="line"><a name="l00608"></a><span class="lineno">  608</span>&#160;        reg ADC_CV1;</div>
+<div class="line"><a name="l00609"></a><span class="lineno">  609</span>&#160;        reg ADC_CV2;</div>
+<div class="line"><a name="l00610"></a><span class="lineno">  610</span>&#160;</div>
+<div class="line"><a name="l00611"></a><span class="lineno">  611</span>&#160;        reg ADC_SC2; reg ADC_SC2_adact; reg ADC_SC2_ref; reg ADC_SC2_dma; reg ADC_SC2_cfe; reg ADC_SC2_cfgt; reg ADC_SC2_cren;</div>
+<div class="line"><a name="l00612"></a><span class="lineno">  612</span>&#160;        reg ADC_SC3; reg ADC_SC3_cal, ADC_SC3_calf; reg ADC_SC3_avge; reg ADC_SC3_avgs0, ADC_SC3_avgs1; reg ADC_SC3_adco;</div>
+<div class="line"><a name="l00613"></a><span class="lineno">  613</span>&#160;</div>
+<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&#160;        reg ADC_PGA; reg ADC_PGA_pgaen;</div>
+<div class="line"><a name="l00615"></a><span class="lineno">  615</span>&#160;</div>
+<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160;        reg ADC_OFS;</div>
+<div class="line"><a name="l00617"></a><span class="lineno">  617</span>&#160;        reg ADC_PG;</div>
+<div class="line"><a name="l00618"></a><span class="lineno">  618</span>&#160;        reg ADC_MG;</div>
+<div class="line"><a name="l00619"></a><span class="lineno">  619</span>&#160;        reg ADC_CLPD;</div>
+<div class="line"><a name="l00620"></a><span class="lineno">  620</span>&#160;        reg ADC_CLPS;</div>
+<div class="line"><a name="l00621"></a><span class="lineno">  621</span>&#160;        reg ADC_CLP4;</div>
+<div class="line"><a name="l00622"></a><span class="lineno">  622</span>&#160;        reg ADC_CLP3;</div>
+<div class="line"><a name="l00623"></a><span class="lineno">  623</span>&#160;        reg ADC_CLP2;</div>
+<div class="line"><a name="l00624"></a><span class="lineno">  624</span>&#160;        reg ADC_CLP1;</div>
+<div class="line"><a name="l00625"></a><span class="lineno">  625</span>&#160;        reg ADC_CLP0;</div>
+<div class="line"><a name="l00626"></a><span class="lineno">  626</span>&#160;        reg ADC_CLMD;</div>
+<div class="line"><a name="l00627"></a><span class="lineno">  627</span>&#160;        reg ADC_CLMS;</div>
+<div class="line"><a name="l00628"></a><span class="lineno">  628</span>&#160;        reg ADC_CLM4;</div>
+<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160;        reg ADC_CLM3;</div>
+<div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160;        reg ADC_CLM2;</div>
+<div class="line"><a name="l00631"></a><span class="lineno">  631</span>&#160;        reg ADC_CLM1;</div>
+<div class="line"><a name="l00632"></a><span class="lineno">  632</span>&#160;        reg ADC_CLM0;</div>
+<div class="line"><a name="l00633"></a><span class="lineno">  633</span>&#160;</div>
+<div class="line"><a name="l00634"></a><span class="lineno">  634</span>&#160;</div>
+<div class="line"><a name="l00635"></a><span class="lineno">  635</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00636"></a><span class="lineno">  636</span>&#160;</div>
+<div class="line"><a name="l00637"></a><span class="lineno">  637</span>&#160;</div>
+<div class="line"><a name="l00638"></a><span class="lineno">  638</span>&#160;};</div>
+<div class="line"><a name="l00639"></a><span class="lineno">  639</span>&#160;</div>
+<div class="line"><a name="l00640"></a><span class="lineno">  640</span>&#160;</div>
+<div class="line"><a name="l00641"></a><span class="lineno">  641</span>&#160;<span class="preprocessor">#endif // ADC_MODULE_H</span></div>
+<div class="ttc" id="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g_html_a3d0e4c301bf15ce0e11a56cd767a1012"><div class="ttname"><a href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html#a3d0e4c301bf15ce0e11a56cd767a1012">ADC_Module::ADC_CONFIG::savedSC2</a></div><div class="ttdeci">uint32_t savedSC2</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:505</div></div>
+<div class="ttc" id="class_a_d_c___module_html_ab8e64bab9d4e7f1935a260629e5d71d5"><div class="ttname"><a href="class_a_d_c___module.html#ab8e64bab9d4e7f1935a260629e5d71d5">ADC_Module::enableCompareRange</a></div><div class="ttdeci">void enableCompareRange(int16_t lowerLimit, int16_t upperLimit, bool insideRange, bool inclusive)</div><div class="ttdoc">Enable the compare function to a range. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:614</div></div>
+<div class="ttc" id="class_a_d_c___module_html_a94a585ac8079de091133b0ef4588b037"><div class="ttname"><a href="class_a_d_c___module.html#a94a585ac8079de091133b0ef4588b037">ADC_Module::setSamplingSpeed</a></div><div class="ttdeci">void setSamplingSpeed(uint8_t speed)</div><div class="ttdoc">Sets the sampling speed. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:455</div></div>
+<div class="ttc" id="class_a_d_c___module_html_a60d0edc82fd1dbb2e20d090a53718ce2"><div class="ttname"><a href="class_a_d_c___module.html#a60d0edc82fd1dbb2e20d090a53718ce2">ADC_Module::readSingle</a></div><div class="ttdeci">int readSingle()</div><div class="ttdoc">Reads the analog value of a single conversion. </div><div class="ttdef"><b>Definition:</b> ADC_Module.h:469</div></div>
+<div class="ttc" id="class_a_d_c___module_html_ac635f675a9690a4db016c73c31818262"><div class="ttname"><a href="class_a_d_c___module.html#ac635f675a9690a4db016c73c31818262">ADC_Module::disableCompare</a></div><div class="ttdeci">void disableCompare()</div><div class="ttdoc">Disable the compare function. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:651</div></div>
+<div class="ttc" id="class_a_d_c___module_html_afe8ed6f2a6c811ec3ef2c4aba768982f"><div class="ttname"><a href="class_a_d_c___module.html#afe8ed6f2a6c811ec3ef2c4aba768982f">ADC_Module::recalibrate</a></div><div class="ttdeci">void recalibrate()</div><div class="ttdoc">Starts the calibration sequence, waits until it&amp;#39;s done and writes the results. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:261</div></div>
+<div class="ttc" id="struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g_html_ae5551e139dfd008a8d312b6f3e2f5205"><div class="ttname"><a href="struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g.html#ae5551e139dfd008a8d312b6f3e2f5205">ADC_Module::ADC_POWER_SPEED_CONFIG::adiv</a></div><div class="ttdeci">uint8_t adiv</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:517</div></div>
+<div class="ttc" id="struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g_html_ad7ec2bb831fffe09ee32ab016333520c"><div class="ttname"><a href="struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g.html#ad7ec2bb831fffe09ee32ab016333520c">ADC_Module::ADC_POWER_SPEED_CONFIG::adacken</a></div><div class="ttdeci">bool adacken</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:515</div></div>
+<div class="ttc" id="class_a_d_c___module_html_a9af29f865bdd376d954112d36b0992f0"><div class="ttname"><a href="class_a_d_c___module.html#a9af29f865bdd376d954112d36b0992f0">ADC_Module::stopContinuous</a></div><div class="ttdeci">void stopContinuous()</div><div class="ttdoc">Stops continuous conversion. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:1339</div></div>
+<div class="ttc" id="class_a_d_c___module_html_a27fdc83a7dbe3a8c8c24fc4273414256"><div class="ttname"><a href="class_a_d_c___module.html#a27fdc83a7dbe3a8c8c24fc4273414256">ADC_Module::num_measurements</a></div><div class="ttdeci">uint8_t num_measurements</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:522</div></div>
+<div class="ttc" id="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g_html_a1445124419626efa012c1afad2a2fac6"><div class="ttname"><a href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html#a1445124419626efa012c1afad2a2fac6">ADC_Module::ADC_CONFIG::savedCFG1</a></div><div class="ttdeci">uint32_t savedCFG1</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:505</div></div>
+<div class="ttc" id="class_a_d_c___module_html_abd04dee9e56c5b8f0ba8c11d646e635e"><div class="ttname"><a href="class_a_d_c___module.html#abd04dee9e56c5b8f0ba8c11d646e635e">ADC_Module::ADC_Module</a></div><div class="ttdeci">ADC_Module(uint8_t ADC_number=0)</div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:41</div></div>
+<div class="ttc" id="class_a_d_c___module_html_a6187e43b6b3ea1a42c6bb17f2c10f099"><div class="ttname"><a href="class_a_d_c___module.html#a6187e43b6b3ea1a42c6bb17f2c10f099">ADC_Module::fail_flag</a></div><div class="ttdeci">uint16_t fail_flag</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:532</div></div>
+<div class="ttc" id="class_a_d_c___module_html_a734ac9cf07a54e91707c78d753d3d3dd"><div class="ttname"><a href="class_a_d_c___module.html#a734ac9cf07a54e91707c78d753d3d3dd">ADC_Module::disablePGA</a></div><div class="ttdeci">void disablePGA()</div><div class="ttdoc">Disable PGA. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:698</div></div>
+<div class="ttc" id="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g_html"><div class="ttname"><a href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html">ADC_Module::ADC_CONFIG</a></div><div class="ttdef"><b>Definition:</b> ADC_Module.h:504</div></div>
+<div class="ttc" id="class_a_d_c___module_html_af3704819ccda64bae9c13a95a74e70a8"><div class="ttname"><a href="class_a_d_c___module.html#af3704819ccda64bae9c13a95a74e70a8">ADC_Module::getMaxValue</a></div><div class="ttdeci">uint32_t getMaxValue()</div><div class="ttdoc">Returns the maximum value for a measurement. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:360</div></div>
+<div class="ttc" id="class_a_d_c___module_html"><div class="ttname"><a href="class_a_d_c___module.html">ADC_Module</a></div><div class="ttdef"><b>Definition:</b> ADC_Module.h:252</div></div>
+<div class="ttc" id="class_a_d_c___module_html_a785d9d4fd9b54cb8e0c8ab3326c48f94"><div class="ttname"><a href="class_a_d_c___module.html#a785d9d4fd9b54cb8e0c8ab3326c48f94">ADC_Module::startSingleReadFast</a></div><div class="ttdeci">int startSingleReadFast(uint8_t pin)</div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:1014</div></div>
+<div class="ttc" id="class_a_d_c___module_html_ac74cc58870ff82be8ea91a40cd4a7a63"><div class="ttname"><a href="class_a_d_c___module.html#ac74cc58870ff82be8ea91a40cd4a7a63">ADC_Module::isDifferential</a></div><div class="ttdeci">bool isDifferential()</div><div class="ttdoc">Is the ADC in differential mode? </div><div class="ttdef"><b>Definition:</b> ADC_Module.h:415</div></div>
+<div class="ttc" id="class_a_d_c___module_html_a4a57f6a9b0e3884f3862062b33f1a447"><div class="ttname"><a href="class_a_d_c___module.html#a4a57f6a9b0e3884f3862062b33f1a447">ADC_Module::analogReadDifferential</a></div><div class="ttdeci">int analogReadDifferential(uint8_t pinP, uint8_t pinN)</div><div class="ttdoc">Reads the differential analog value of two pins (pinP - pinN). </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:814</div></div>
+<div class="ttc" id="class_a_d_c_html"><div class="ttname"><a href="class_a_d_c.html">ADC</a></div><div class="ttdef"><b>Definition:</b> ADC.h:62</div></div>
+<div class="ttc" id="class_a_d_c___module_html_aa0d60a43c585ea80055aa55bf9786e74"><div class="ttname"><a href="class_a_d_c___module.html#aa0d60a43c585ea80055aa55bf9786e74">ADC_Module::startSingleDifferentialFast</a></div><div class="ttdeci">int startSingleDifferentialFast(uint8_t pinP, uint8_t pinN)</div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:1136</div></div>
+<div class="ttc" id="class_a_d_c___module_html_af3d14c01b1442c0c34b5dbc9a6e49f35"><div class="ttname"><a href="class_a_d_c___module.html#af3d14c01b1442c0c34b5dbc9a6e49f35">ADC_Module::enableDMA</a></div><div class="ttdeci">void enableDMA()</div><div class="ttdoc">Enable DMA request. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:575</div></div>
+<div class="ttc" id="class_a_d_c___module_html_a4a8feb071fe092bd904a98714f63976b"><div class="ttname"><a href="class_a_d_c___module.html#a4a8feb071fe092bd904a98714f63976b">ADC_Module::startSingleDifferential</a></div><div class="ttdeci">int startSingleDifferential(uint8_t pinP, uint8_t pinN)</div><div class="ttdoc">Start a differential conversion between two pins (pinP - pinN) and enables interrupts. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:1043</div></div>
+<div class="ttc" id="class_a_d_c___module_html_a1e2730c5910f386f3e3b76b9eacc0268"><div class="ttname"><a href="class_a_d_c___module.html#a1e2730c5910f386f3e3b76b9eacc0268">ADC_Module::isConverting</a></div><div class="ttdeci">bool isConverting()</div><div class="ttdoc">Is the ADC converting at the moment? </div><div class="ttdef"><b>Definition:</b> ADC_Module.h:400</div></div>
+<div class="ttc" id="class_a_d_c___module_html_ad4ffd455f5c162d15fb4078aa90b5cbe"><div class="ttname"><a href="class_a_d_c___module.html#ad4ffd455f5c162d15fb4078aa90b5cbe">ADC_Module::adc_config</a></div><div class="ttdeci">ADC_Config adc_config</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:508</div></div>
+<div class="ttc" id="struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g_html_a64ce6312e1edd560ea12bb0e9b0caa62"><div class="ttname"><a href="struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g.html#a64ce6312e1edd560ea12bb0e9b0caa62">ADC_Module::ADC_POWER_SPEED_CONFIG::adlsmp</a></div><div class="ttdeci">bool adlsmp</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:515</div></div>
+<div class="ttc" id="class_a_d_c___module_html_ae7a632267f21b79c31c1dae56b5da188"><div class="ttname"><a href="class_a_d_c___module.html#ae7a632267f21b79c31c1dae56b5da188">ADC_Module::enableCompare</a></div><div class="ttdeci">void enableCompare(int16_t compValue, bool greaterThan)</div><div class="ttdoc">Enable the compare function to a single value. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:598</div></div>
+<div class="ttc" id="struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g_html_a602f4cbc26dd63b4bdca7993c39ba48a"><div class="ttname"><a href="struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g.html#a602f4cbc26dd63b4bdca7993c39ba48a">ADC_Module::ADC_POWER_SPEED_CONFIG::adlpc</a></div><div class="ttdeci">bool adlpc</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:515</div></div>
+<div class="ttc" id="class_a_d_c___module_html_a7ac619afe41bd32e546cf5018efc9baf"><div class="ttname"><a href="class_a_d_c___module.html#a7ac619afe41bd32e546cf5018efc9baf">ADC_Module::channel2sc1a</a></div><div class="ttdeci">uint8_t channel2sc1a[44]</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:526</div></div>
+<div class="ttc" id="class_a_d_c___module_html_a893a14998c08fb929fdfd570ff981ccd"><div class="ttname"><a href="class_a_d_c___module.html#a893a14998c08fb929fdfd570ff981ccd">ADC_Module::ADC_Power_Speed_Config</a></div><div class="ttdeci">struct ADC_Module::ADC_POWER_SPEED_CONFIG ADC_Power_Speed_Config</div></div>
+<div class="ttc" id="class_a_d_c___module_html_a9dcb1b6195ab05fdee708472e4da939f"><div class="ttname"><a href="class_a_d_c___module.html#a9dcb1b6195ab05fdee708472e4da939f">ADC_Module::setConversionSpeed</a></div><div class="ttdeci">void setConversionSpeed(uint8_t speed)</div><div class="ttdoc">Sets the conversion speed. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:377</div></div>
 <div class="ttc" id="class_a_d_c___module_html_a0092e0915c562b4e318b0aff575315d1"><div class="ttname"><a href="class_a_d_c___module.html#a0092e0915c562b4e318b0aff575315d1">ADC_Module::ADC_Config</a></div><div class="ttdeci">struct ADC_Module::ADC_CONFIG ADC_Config</div></div>
-<div class="ttc" id="class_a_d_c___module_html_abf1d823d7e9b286cb380bbadc21a1446"><div class="ttname"><a href="class_a_d_c___module.html#abf1d823d7e9b286cb380bbadc21a1446">ADC_Module::ADC_CLPS</a></div><div class="ttdeci">reg ADC_CLPS</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:331</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a1fc0663af85da8b0646a7bd937cf3af5"><div class="ttname"><a href="class_a_d_c___module.html#a1fc0663af85da8b0646a7bd937cf3af5">ADC_Module::ADC_PG</a></div><div class="ttdeci">reg ADC_PG</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:328</div></div>
-<div class="ttc" id="class_a_d_c___module_html_ad3d904edce6a226937d1ed2b133e7dd3"><div class="ttname"><a href="class_a_d_c___module.html#ad3d904edce6a226937d1ed2b133e7dd3">ADC_Module::sc1a2channel</a></div><div class="ttdeci">uint8_t sc1a2channel[30]</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:297</div></div>
-<div class="ttc" id="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g_html_a26531cf1a408be6378e2bed2385da4b5"><div class="ttname"><a href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html#a26531cf1a408be6378e2bed2385da4b5">ADC_Module::ADC_CONFIG::savedSC3</a></div><div class="ttdeci">uint32_t savedSC3</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:284</div></div>
-<div class="ttc" id="class_a_d_c___module_html_ae7b96b4929922739325c61eab60b9ce3"><div class="ttname"><a href="class_a_d_c___module.html#ae7b96b4929922739325c61eab60b9ce3">ADC_Module::ADC_PGA</a></div><div class="ttdeci">reg ADC_PGA</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:325</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a5734a05ce4920be3a2b7fc004a6a14d7"><div class="ttname"><a href="class_a_d_c___module.html#a5734a05ce4920be3a2b7fc004a6a14d7">ADC_Module::getPGA</a></div><div class="ttdeci">uint8_t getPGA()</div><div class="ttdoc">Returns the PGA level. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:422</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a37d4a3f4fc3499823e51de7f9cf02678"><div class="ttname"><a href="class_a_d_c___module.html#a37d4a3f4fc3499823e51de7f9cf02678">ADC_Module::setPGA</a></div><div class="ttdeci">void setPGA(uint8_t gain)</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:182</div></div>
-<div class="ttc" id="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g_html_a213e33642f102296d09030f881738860"><div class="ttname"><a href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html#a213e33642f102296d09030f881738860">ADC_Module::ADC_CONFIG::diffRes</a></div><div class="ttdeci">uint8_t diffRes</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:285</div></div>
-<div class="ttc" id="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g_html_a766cf922004436e813bc35fc574f1ca2"><div class="ttname"><a href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html#a766cf922004436e813bc35fc574f1ca2">ADC_Module::ADC_CONFIG::savedRes</a></div><div class="ttdeci">uint32_t savedRes</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:284</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a3930aceb90a0c3b33c881c90d0a05236"><div class="ttname"><a href="class_a_d_c___module.html#a3930aceb90a0c3b33c881c90d0a05236">ADC_Module::startSingleRead</a></div><div class="ttdeci">int startSingleRead(uint8_t pin)</div><div class="ttdoc">Starts an analog measurement on the pin and enables interrupts. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:736</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a6bd8da02e5e9bd3b2b3db30d5faa3585"><div class="ttname"><a href="class_a_d_c___module.html#a6bd8da02e5e9bd3b2b3db30d5faa3585">ADC_Module::setResolution</a></div><div class="ttdeci">void setResolution(uint8_t bits)</div><div class="ttdoc">Change the resolution of the measurement. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:240</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a4b53e7bb2d3b0b6cdb493e29af4e9b35"><div class="ttname"><a href="class_a_d_c___module.html#a4b53e7bb2d3b0b6cdb493e29af4e9b35">ADC_Module::ADC_CV1</a></div><div class="ttdeci">reg ADC_CV1</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:319</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a2dfa05a9782afa7bae3bed86733aee0f"><div class="ttname"><a href="class_a_d_c___module.html#a2dfa05a9782afa7bae3bed86733aee0f">ADC_Module::sc1a2channelADC0</a></div><div class="ttdeci">static const uint8_t sc1a2channelADC0[30]</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:293</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a2fbc6fa04cbdb56e60b2f92a19826b26"><div class="ttname"><a href="class_a_d_c___module.html#a2fbc6fa04cbdb56e60b2f92a19826b26">ADC_Module::startContinuousDifferential</a></div><div class="ttdeci">void startContinuousDifferential(uint8_t pinP, uint8_t pinN)</div><div class="ttdoc">Starts continuous conversion between the pins (pinP-pinN). </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:919</div></div>
-<div class="ttc" id="class_a_d_c___module_html_ac1610dcab46476f287c2dd4d96465c47"><div class="ttname"><a href="class_a_d_c___module.html#ac1610dcab46476f287c2dd4d96465c47">ADC_Module::disableDMA</a></div><div class="ttdeci">void disableDMA()</div><div class="ttdoc">Disable ADC DMA request. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:355</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a6fbb49ad99a9d28b07b8686021f6126e"><div class="ttname"><a href="class_a_d_c___module.html#a6fbb49ad99a9d28b07b8686021f6126e">ADC_Module::startContinuous</a></div><div class="ttdeci">void startContinuous(uint8_t pin)</div><div class="ttdoc">Starts continuous conversion on the pin. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:876</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a3f87f20f16184544e402984f49eb77d2"><div class="ttname"><a href="class_a_d_c___module.html#a3f87f20f16184544e402984f49eb77d2">ADC_Module::ADC_SC2</a></div><div class="ttdeci">reg ADC_SC2</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:322</div></div>
-<div class="ttc" id="class_a_d_c___module_html_ad492adad4a9fa728625be82602bf1672"><div class="ttname"><a href="class_a_d_c___module.html#ad492adad4a9fa728625be82602bf1672">ADC_Module::analogRead</a></div><div class="ttdeci">int analogRead(uint8_t pin)</div><div class="ttdoc">Returns the analog value of the pin. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:438</div></div>
-<div class="ttc" id="class_a_d_c___module_html_aada0808d5a556e70868cc28cafcbcc32"><div class="ttname"><a href="class_a_d_c___module.html#aada0808d5a556e70868cc28cafcbcc32">ADC_Module::ADC_CLP3</a></div><div class="ttdeci">reg ADC_CLP3</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:333</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a2538f5966699b9951b9910d8346ae309"><div class="ttname"><a href="class_a_d_c___module.html#a2538f5966699b9951b9910d8346ae309">ADC_Module::ADC_CLMS</a></div><div class="ttdeci">reg ADC_CLMS</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:338</div></div>
-<div class="ttc" id="class_a_d_c___module_html_aa4e447503bff8089f3656927faa7d008"><div class="ttname"><a href="class_a_d_c___module.html#aa4e447503bff8089f3656927faa7d008">ADC_Module::ADC_OFS</a></div><div class="ttdeci">reg ADC_OFS</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:327</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a4c3d39b4fe79bfff701409ea07259a47"><div class="ttname"><a href="class_a_d_c___module.html#a4c3d39b4fe79bfff701409ea07259a47">ADC_Module::isComplete</a></div><div class="ttdeci">bool isComplete()</div><div class="ttdoc">Is an ADC conversion ready? </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:1003</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a9365090edcee70c09a84f163a5a5efb6"><div class="ttname"><a href="class_a_d_c___module.html#a9365090edcee70c09a84f163a5a5efb6">ADC_Module::ADC_CFG2</a></div><div class="ttdeci">reg ADC_CFG2</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:314</div></div>
-<div class="ttc" id="class_a_d_c___module_html_ad42f9bd24ac7b0b46bc3fd2cd95514dd"><div class="ttname"><a href="class_a_d_c___module.html#ad42f9bd24ac7b0b46bc3fd2cd95514dd">ADC_Module::ADC_RA</a></div><div class="ttdeci">reg ADC_RA</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:316</div></div>
-<div class="ttc" id="class_a_d_c___module_html_ab67ae110c643f4bd4b169be08a56600a"><div class="ttname"><a href="class_a_d_c___module.html#ab67ae110c643f4bd4b169be08a56600a">ADC_Module::ADC_CLP0</a></div><div class="ttdeci">reg ADC_CLP0</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:336</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a8de0a106b343d4f6384dd421dd35a431"><div class="ttname"><a href="class_a_d_c___module.html#a8de0a106b343d4f6384dd421dd35a431">ADC_Module::enableCompareRange</a></div><div class="ttdeci">void enableCompareRange(int16_t lowerLimit, int16_t upperLimit, int insideRange, int inclusive)</div><div class="ttdoc">Enable the compare function to a range. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:377</div></div>
-<div class="ttc" id="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g_html_a0189d428f05a6ead6e5d399b0908abd8"><div class="ttname"><a href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html#a0189d428f05a6ead6e5d399b0908abd8">ADC_Module::ADC_CONFIG::savedCFG2</a></div><div class="ttdeci">uint32_t savedCFG2</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:284</div></div>
-<div class="ttc" id="class_a_d_c___module_html_ac136d935be8b858477d4f99e65855bea"><div class="ttname"><a href="class_a_d_c___module.html#ac136d935be8b858477d4f99e65855bea">ADC_Module::channel2sc1aADC1</a></div><div class="ttdeci">static const uint8_t channel2sc1aADC1[44]</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:292</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a34f6f7878889aa3644b279f9440dc0bf"><div class="ttname"><a href="class_a_d_c___module.html#a34f6f7878889aa3644b279f9440dc0bf">ADC_Module::adcWasInUse</a></div><div class="ttdeci">uint8_t adcWasInUse</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:300</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a58cabc09d41f6aa25319fd514b47c48f"><div class="ttname"><a href="class_a_d_c___module.html#a58cabc09d41f6aa25319fd514b47c48f">ADC_Module::getResolution</a></div><div class="ttdeci">uint8_t getResolution()</div><div class="ttdoc">Returns the resolution of the ADC_Module. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:289</div></div>
-<div class="ttc" id="class_a_d_c___module_html_aaaf917dc2356a810b196b004ace4c55d"><div class="ttname"><a href="class_a_d_c___module.html#aaaf917dc2356a810b196b004ace4c55d">ADC_Module::ADC_CLP4</a></div><div class="ttdeci">reg ADC_CLP4</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:332</div></div>
-<div class="ttc" id="class_a_d_c___module_html_aa14ea3e2c5f7d0ba794628e92a2573da"><div class="ttname"><a href="class_a_d_c___module.html#aa14ea3e2c5f7d0ba794628e92a2573da">ADC_Module::setReference</a></div><div class="ttdeci">void setReference(uint8_t type)</div><div class="ttdoc">Set the voltage reference you prefer, default is vcc. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:213</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a55954618c5c27c1ffce4321e912bac52"><div class="ttname"><a href="class_a_d_c___module.html#a55954618c5c27c1ffce4321e912bac52">ADC_Module::setAveraging</a></div><div class="ttdeci">void setAveraging(uint8_t num)</div><div class="ttdoc">Set the number of averages. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:304</div></div>
-<div class="ttc" id="class_a_d_c___module_html_ae898bfba80833884b8ce1c1b6bed61bf"><div class="ttname"><a href="class_a_d_c___module.html#ae898bfba80833884b8ce1c1b6bed61bf">ADC_Module::~ADC_Module</a></div><div class="ttdeci">~ADC_Module()</div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:132</div></div>
-<div class="ttc" id="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g_html_accd8c37cf45a546feb90f21c37140652"><div class="ttname"><a href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html#accd8c37cf45a546feb90f21c37140652">ADC_Module::ADC_CONFIG::savedSC1A</a></div><div class="ttdeci">uint32_t savedSC1A</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:284</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a869aaf6169fe85b5a33eb9d7999d28c7"><div class="ttname"><a href="class_a_d_c___module.html#a869aaf6169fe85b5a33eb9d7999d28c7">ADC_Module::channel2sc1aADC0</a></div><div class="ttdeci">static const uint8_t channel2sc1aADC0[44]</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:291</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a9440dc39f853d66341b5d50cc23f8f04"><div class="ttname"><a href="class_a_d_c___module.html#a9440dc39f853d66341b5d50cc23f8f04">ADC_Module::enableCompare</a></div><div class="ttdeci">void enableCompare(int16_t compValue, int greaterThan)</div><div class="ttdoc">Enable the compare function to a single value. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:365</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a8be20cecbfb1e8900c9cd8d0bdb47ef7"><div class="ttname"><a href="class_a_d_c___module.html#a8be20cecbfb1e8900c9cd8d0bdb47ef7">ADC_Module::enableInterrupts</a></div><div class="ttdeci">void enableInterrupts()</div><div class="ttdoc">Enable interrupts. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:331</div></div>
-<div class="ttc" id="class_a_d_c___module_html_ae1aa7278d64d55bed0be5779378858a5"><div class="ttname"><a href="class_a_d_c___module.html#ae1aa7278d64d55bed0be5779378858a5">ADC_Module::isContinuous</a></div><div class="ttdeci">bool isContinuous()</div><div class="ttdoc">Is the ADC in continuous mode? </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:1013</div></div>
-<div class="ttc" id="class_a_d_c___module_html_aa4509062644982526fee3c02e0b528fc"><div class="ttname"><a href="class_a_d_c___module.html#aa4509062644982526fee3c02e0b528fc">ADC_Module::disableInterrupts</a></div><div class="ttdeci">void disableInterrupts()</div><div class="ttdoc">Disable interrupts. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:339</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a5bef75f430c061b4bc3d48951e8930c6"><div class="ttname"><a href="class_a_d_c___module.html#a5bef75f430c061b4bc3d48951e8930c6">ADC_Module::enablePGA</a></div><div class="ttdeci">void enablePGA(uint8_t gain)</div><div class="ttdoc">Enable and set PGA. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:410</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a3e1707a7b2598bda168b09d1483d1ea2"><div class="ttname"><a href="class_a_d_c___module.html#a3e1707a7b2598bda168b09d1483d1ea2">ADC_Module::ADC_CLP2</a></div><div class="ttdeci">reg ADC_CLP2</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:334</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a8bddd248a9d52110b923fa94438f7f0a"><div class="ttname"><a href="class_a_d_c___module.html#a8bddd248a9d52110b923fa94438f7f0a">ADC_Module::analogReadContinuous</a></div><div class="ttdeci">int analogReadContinuous()</div><div class="ttdoc">Reads the analog value of a continuous conversion. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:964</div></div>
-<div class="ttc" id="class_a_d_c___module_html_a7677c11f1c250cc87ffbe16f7ae6aa8b"><div class="ttname"><a href="class_a_d_c___module.html#a7677c11f1c250cc87ffbe16f7ae6aa8b">ADC_Module::ADC_CLP1</a></div><div class="ttdeci">reg ADC_CLP1</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:335</div></div>
+<div class="ttc" id="struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g_html_a1c1f3ce97add93383d291b649ce2fe13"><div class="ttname"><a href="struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g.html#a1c1f3ce97add93383d291b649ce2fe13">ADC_Module::ADC_POWER_SPEED_CONFIG::adiclk</a></div><div class="ttdeci">uint8_t adiclk</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:517</div></div>
+<div class="ttc" id="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g_html_a26531cf1a408be6378e2bed2385da4b5"><div class="ttname"><a href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html#a26531cf1a408be6378e2bed2385da4b5">ADC_Module::ADC_CONFIG::savedSC3</a></div><div class="ttdeci">uint32_t savedSC3</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:505</div></div>
+<div class="ttc" id="struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g_html_a7370c04ccfbc3cd8a737adc411f98aa3"><div class="ttname"><a href="struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g.html#a7370c04ccfbc3cd8a737adc411f98aa3">ADC_Module::ADC_POWER_SPEED_CONFIG::adhsc</a></div><div class="ttdeci">bool adhsc</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:515</div></div>
+<div class="ttc" id="class_a_d_c___module_html_a5734a05ce4920be3a2b7fc004a6a14d7"><div class="ttname"><a href="class_a_d_c___module.html#a5734a05ce4920be3a2b7fc004a6a14d7">ADC_Module::getPGA</a></div><div class="ttdeci">uint8_t getPGA()</div><div class="ttdoc">Returns the PGA level. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:693</div></div>
+<div class="ttc" id="class_a_d_c___module_html_a37d4a3f4fc3499823e51de7f9cf02678"><div class="ttname"><a href="class_a_d_c___module.html#a37d4a3f4fc3499823e51de7f9cf02678">ADC_Module::setPGA</a></div><div class="ttdeci">void setPGA(uint8_t gain)</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:386</div></div>
+<div class="ttc" id="class_a_d_c___module_html_a3930aceb90a0c3b33c881c90d0a05236"><div class="ttname"><a href="class_a_d_c___module.html#a3930aceb90a0c3b33c881c90d0a05236">ADC_Module::startSingleRead</a></div><div class="ttdeci">int startSingleRead(uint8_t pin)</div><div class="ttdoc">Starts an analog measurement on the pin and enables interrupts. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:964</div></div>
+<div class="ttc" id="class_a_d_c___module_html_a6bd8da02e5e9bd3b2b3db30d5faa3585"><div class="ttname"><a href="class_a_d_c___module.html#a6bd8da02e5e9bd3b2b3db30d5faa3585">ADC_Module::setResolution</a></div><div class="ttdeci">void setResolution(uint8_t bits)</div><div class="ttdoc">Change the resolution of the measurement. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:306</div></div>
+<div class="ttc" id="struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g_html_a4c7dcc888c03cfc29e1f8681bc1a33e4"><div class="ttname"><a href="struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g.html#a4c7dcc888c03cfc29e1f8681bc1a33e4">ADC_Module::ADC_POWER_SPEED_CONFIG::adlsts</a></div><div class="ttdeci">uint8_t adlsts</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:517</div></div>
+<div class="ttc" id="class_a_d_c___module_html_a2fbc6fa04cbdb56e60b2f92a19826b26"><div class="ttname"><a href="class_a_d_c___module.html#a2fbc6fa04cbdb56e60b2f92a19826b26">ADC_Module::startContinuousDifferential</a></div><div class="ttdeci">void startContinuousDifferential(uint8_t pinP, uint8_t pinN)</div><div class="ttdoc">Starts continuous conversion between the pins (pinP-pinN). </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:1257</div></div>
+<div class="ttc" id="class_a_d_c___module_html_ac1610dcab46476f287c2dd4d96465c47"><div class="ttname"><a href="class_a_d_c___module.html#ac1610dcab46476f287c2dd4d96465c47">ADC_Module::disableDMA</a></div><div class="ttdeci">void disableDMA()</div><div class="ttdoc">Disable ADC DMA request. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:586</div></div>
+<div class="ttc" id="class_a_d_c___module_html_a6fbb49ad99a9d28b07b8686021f6126e"><div class="ttname"><a href="class_a_d_c___module.html#a6fbb49ad99a9d28b07b8686021f6126e">ADC_Module::startContinuous</a></div><div class="ttdeci">void startContinuous(uint8_t pin)</div><div class="ttdoc">Starts continuous conversion on the pin. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:1216</div></div>
+<div class="ttc" id="class_a_d_c___module_html_ad492adad4a9fa728625be82602bf1672"><div class="ttname"><a href="class_a_d_c___module.html#ad492adad4a9fa728625be82602bf1672">ADC_Module::analogRead</a></div><div class="ttdeci">int analogRead(uint8_t pin)</div><div class="ttdoc">Returns the analog value of the pin. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:727</div></div>
+<div class="ttc" id="class_a_d_c___module_html_a4c3d39b4fe79bfff701409ea07259a47"><div class="ttname"><a href="class_a_d_c___module.html#a4c3d39b4fe79bfff701409ea07259a47">ADC_Module::isComplete</a></div><div class="ttdeci">bool isComplete()</div><div class="ttdoc">Is an ADC conversion ready? </div><div class="ttdef"><b>Definition:</b> ADC_Module.h:410</div></div>
+<div class="ttc" id="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g_html_a0189d428f05a6ead6e5d399b0908abd8"><div class="ttname"><a href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html#a0189d428f05a6ead6e5d399b0908abd8">ADC_Module::ADC_CONFIG::savedCFG2</a></div><div class="ttdeci">uint32_t savedCFG2</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:505</div></div>
+<div class="ttc" id="class_a_d_c___module_html_a34f6f7878889aa3644b279f9440dc0bf"><div class="ttname"><a href="class_a_d_c___module.html#a34f6f7878889aa3644b279f9440dc0bf">ADC_Module::adcWasInUse</a></div><div class="ttdeci">uint8_t adcWasInUse</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:509</div></div>
+<div class="ttc" id="class_a_d_c___module_html_a58cabc09d41f6aa25319fd514b47c48f"><div class="ttname"><a href="class_a_d_c___module.html#a58cabc09d41f6aa25319fd514b47c48f">ADC_Module::getResolution</a></div><div class="ttdeci">uint8_t getResolution()</div><div class="ttdoc">Returns the resolution of the ADC_Module. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:353</div></div>
+<div class="ttc" id="class_a_d_c___module_html_aa14ea3e2c5f7d0ba794628e92a2573da"><div class="ttname"><a href="class_a_d_c___module.html#aa14ea3e2c5f7d0ba794628e92a2573da">ADC_Module::setReference</a></div><div class="ttdeci">void setReference(uint8_t type)</div><div class="ttdoc">Set the voltage reference you prefer, default is vcc. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:276</div></div>
+<div class="ttc" id="class_a_d_c___module_html_a55954618c5c27c1ffce4321e912bac52"><div class="ttname"><a href="class_a_d_c___module.html#a55954618c5c27c1ffce4321e912bac52">ADC_Module::setAveraging</a></div><div class="ttdeci">void setAveraging(uint8_t num)</div><div class="ttdoc">Set the number of averages. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:497</div></div>
+<div class="ttc" id="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g_html_accd8c37cf45a546feb90f21c37140652"><div class="ttname"><a href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html#accd8c37cf45a546feb90f21c37140652">ADC_Module::ADC_CONFIG::savedSC1A</a></div><div class="ttdeci">uint32_t savedSC1A</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:505</div></div>
+<div class="ttc" id="class_a_d_c___module_html_a8be20cecbfb1e8900c9cd8d0bdb47ef7"><div class="ttname"><a href="class_a_d_c___module.html#a8be20cecbfb1e8900c9cd8d0bdb47ef7">ADC_Module::enableInterrupts</a></div><div class="ttdeci">void enableInterrupts()</div><div class="ttdoc">Enable interrupts. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:536</div></div>
+<div class="ttc" id="class_a_d_c___module_html_ae1aa7278d64d55bed0be5779378858a5"><div class="ttname"><a href="class_a_d_c___module.html#ae1aa7278d64d55bed0be5779378858a5">ADC_Module::isContinuous</a></div><div class="ttdeci">bool isContinuous()</div><div class="ttdoc">Is the ADC in continuous mode? </div><div class="ttdef"><b>Definition:</b> ADC_Module.h:420</div></div>
+<div class="ttc" id="class_a_d_c___module_html_aa4509062644982526fee3c02e0b528fc"><div class="ttname"><a href="class_a_d_c___module.html#aa4509062644982526fee3c02e0b528fc">ADC_Module::disableInterrupts</a></div><div class="ttdeci">void disableInterrupts()</div><div class="ttdoc">Disable interrupts. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:556</div></div>
+<div class="ttc" id="class_a_d_c___module_html_a5bef75f430c061b4bc3d48951e8930c6"><div class="ttname"><a href="class_a_d_c___module.html#a5bef75f430c061b4bc3d48951e8930c6">ADC_Module::enablePGA</a></div><div class="ttdeci">void enablePGA(uint8_t gain)</div><div class="ttdoc">Enable and set PGA. </div><div class="ttdef"><b>Definition:</b> ADC_Module.cpp:662</div></div>
+<div class="ttc" id="class_a_d_c___module_html_a8bddd248a9d52110b923fa94438f7f0a"><div class="ttname"><a href="class_a_d_c___module.html#a8bddd248a9d52110b923fa94438f7f0a">ADC_Module::analogReadContinuous</a></div><div class="ttdeci">int analogReadContinuous()</div><div class="ttdoc">Reads the analog value of a continuous conversion. </div><div class="ttdef"><b>Definition:</b> ADC_Module.h:493</div></div>
+<div class="ttc" id="class_a_d_c___module_html_a85269783274d11b1c7760fd929945380"><div class="ttname"><a href="class_a_d_c___module.html#a85269783274d11b1c7760fd929945380">ADC_Module::sc1a2channel</a></div><div class="ttdeci">uint8_t sc1a2channel[31]</div><div class="ttdef"><b>Definition:</b> ADC_Module.h:527</div></div>
+<div class="ttc" id="struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g_html"><div class="ttname"><a href="struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g.html">ADC_Module::ADC_POWER_SPEED_CONFIG</a></div><div class="ttdef"><b>Definition:</b> ADC_Module.h:513</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="_a_d_c___module_8h.html">ADC_Module.h</a></li>
-    <li class="footer">Generated on Sun Apr 6 2014 12:55:34 for ADC by
+    <li class="footer">Generated on Sun Jun 15 2014 01:22:29 for ADC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

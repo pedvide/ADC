@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['default_5fbuffer_5fsize',['DEFAULT_BUFFER_SIZE',['../_ring_buffer_8h.html#a6e576a3c6530636d68b7a220480bcd32',1,'RingBuffer.h']]]
+  ['dma_5fbuffer_5fsize',['DMA_BUFFER_SIZE',['../_ring_buffer_d_m_a_8h.html#ac58748de79395a1751fc333bbc7ebd6b',1,'RingBufferDMA.h']]]
 ];

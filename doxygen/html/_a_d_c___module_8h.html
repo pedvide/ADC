@@ -30,7 +30,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">ADC
-   &#160;<span id="projectnumber">3.0</span>
+   &#160;<span id="projectnumber">4.0</span>
    </div>
   </td>
  </tr>
@@ -92,7 +92,7 @@ $(document).ready(function(){initNavTree('_a_d_c___module_8h.html','');});
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -109,12 +109,8 @@ $(document).ready(function(){initNavTree('_a_d_c___module_8h.html','');});
 <div class="title">ADC_Module.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;stdint.h&gt;</code><br/>
-<code>#include &quot;core_pins.h&quot;</code><br/>
-<code>#include &quot;mk20dx128.h&quot;</code><br/>
-<code>#include &lt;math.h&gt;</code><br/>
+<div class="textblock"><code>#include &quot;mk20dx128.h&quot;</code><br/>
 <code>#include &lt;Arduino.h&gt;</code><br/>
-<code>#include &quot;<a class="el" href="_ring_buffer_8h_source.html">RingBuffer.h</a>&quot;</code><br/>
 </div>
 <p><a href="_a_d_c___module_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -124,21 +120,33 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html">ADC_Module::ADC_CONFIG</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g.html">ADC_Module::ADC_POWER_SPEED_CONFIG</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:a0428c6e85511e76aee22a3f672e91b16"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#a0428c6e85511e76aee22a3f672e91b16">VREF_TRM_CHOPEN</a>&#160;&#160;&#160;(uint8_t)0x40</td></tr>
-<tr class="separator:a0428c6e85511e76aee22a3f672e91b16"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a20ed142ac118d12ce7ae750c5db95e06"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#a20ed142ac118d12ce7ae750c5db95e06">VREF_SC_VREFEN</a>&#160;&#160;&#160;(uint8_t)0x80</td></tr>
-<tr class="separator:a20ed142ac118d12ce7ae750c5db95e06"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a28646efff164389096b14f99a643cf9a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#a28646efff164389096b14f99a643cf9a">VREF_SC_REGEN</a>&#160;&#160;&#160;(uint8_t)0x40</td></tr>
-<tr class="separator:a28646efff164389096b14f99a643cf9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a01f89b4b8b5e915d9840927eeec147d4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#a01f89b4b8b5e915d9840927eeec147d4">VREF_SC_ICOMPEN</a>&#160;&#160;&#160;(uint8_t)0x20</td></tr>
-<tr class="separator:a01f89b4b8b5e915d9840927eeec147d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa097f88b5887410f535c56b419d2e8e0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#aa097f88b5887410f535c56b419d2e8e0">VREF_SC_VREFST</a>&#160;&#160;&#160;(uint8_t)0x04</td></tr>
-<tr class="separator:aa097f88b5887410f535c56b419d2e8e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adda35e8438c7f36367f4ddd7ccd553c6"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#adda35e8438c7f36367f4ddd7ccd553c6">VREF_SC_MODE_LV</a>(n)&#160;&#160;&#160;(uint8_t)(((n) &amp; 3) &lt;&lt; 0)</td></tr>
-<tr class="separator:adda35e8438c7f36367f4ddd7ccd553c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2afef33eecca71518bccc0a275a55e4c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#a2afef33eecca71518bccc0a275a55e4c">ADC_CFG1_ADICLK_MASK_1</a>&#160;&#160;&#160;(1&lt;&lt;1)</td></tr>
+<tr class="separator:a2afef33eecca71518bccc0a275a55e4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55a401107321b77a6e50328b3f34c2b5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#a55a401107321b77a6e50328b3f34c2b5">ADC_CFG1_ADICLK_MASK_0</a>&#160;&#160;&#160;(1&lt;&lt;0)</td></tr>
+<tr class="separator:a55a401107321b77a6e50328b3f34c2b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ce9da5a5af95caa7fcae5eb1db9e4bf"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#a5ce9da5a5af95caa7fcae5eb1db9e4bf">ADC_CFG1_ADIV_MASK_1</a>&#160;&#160;&#160;(1&lt;&lt;6)</td></tr>
+<tr class="separator:a5ce9da5a5af95caa7fcae5eb1db9e4bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5310c0ed3388c027b49e3799bd97f3cd"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#a5310c0ed3388c027b49e3799bd97f3cd">ADC_CFG1_ADIV_MASK_0</a>&#160;&#160;&#160;(1&lt;&lt;5)</td></tr>
+<tr class="separator:a5310c0ed3388c027b49e3799bd97f3cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1636c047cf3a2250b63203ffe6b2422"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#ac1636c047cf3a2250b63203ffe6b2422">ADC_SC1A_CHANNELS</a>&#160;&#160;&#160;0x1F</td></tr>
+<tr class="separator:ac1636c047cf3a2250b63203ffe6b2422"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afcae43d61a2e44a7ebd2814924e769e3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#afcae43d61a2e44a7ebd2814924e769e3">ADC_VERY_LOW_SPEED</a>&#160;&#160;&#160;0</td></tr>
+<tr class="separator:afcae43d61a2e44a7ebd2814924e769e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab53b78573e7d3b40ac9e9709240d3ff2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#ab53b78573e7d3b40ac9e9709240d3ff2">ADC_LOW_SPEED</a>&#160;&#160;&#160;1</td></tr>
+<tr class="separator:ab53b78573e7d3b40ac9e9709240d3ff2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19129091a619eca8d378a7b59e697972"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#a19129091a619eca8d378a7b59e697972">ADC_MED_SPEED</a>&#160;&#160;&#160;2</td></tr>
+<tr class="separator:a19129091a619eca8d378a7b59e697972"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23479f037280be7e2e110b9718c04920"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#a23479f037280be7e2e110b9718c04920">ADC_HIGH_SPEED_16BITS</a>&#160;&#160;&#160;3</td></tr>
+<tr class="separator:a23479f037280be7e2e110b9718c04920"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d6e5d1990698c10e5416dd52959100a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#a3d6e5d1990698c10e5416dd52959100a">ADC_HIGH_SPEED</a>&#160;&#160;&#160;4</td></tr>
+<tr class="separator:a3d6e5d1990698c10e5416dd52959100a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acde51a1fd051837c9d97b0a24ea28778"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#acde51a1fd051837c9d97b0a24ea28778">ADC_VERY_HIGH_SPEED</a>&#160;&#160;&#160;5</td></tr>
+<tr class="separator:acde51a1fd051837c9d97b0a24ea28778"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79a0008b0054fba5551f1a2f515cd21f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#a79a0008b0054fba5551f1a2f515cd21f">ADC_REF_DEFAULT</a>&#160;&#160;&#160;0</td></tr>
 <tr class="separator:a79a0008b0054fba5551f1a2f515cd21f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa45db1c2cb73add84d2a33088eba05b2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#aa45db1c2cb73add84d2a33088eba05b2">ADC_REF_EXTERNAL</a>&#160;&#160;&#160;0</td></tr>
@@ -153,6 +161,30 @@ Macros</h2></td></tr>
 <tr class="separator:af181c4b5c617516517400c427494e7e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a810b46bdaa73057d834142229111adc5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#a810b46bdaa73057d834142229111adc5">ADC_ERROR_VALUE</a>&#160;&#160;&#160;<a class="el" href="_a_d_c___module_8h.html#af181c4b5c617516517400c427494e7e7">ADC_ERROR_DIFF_VALUE</a></td></tr>
 <tr class="separator:a810b46bdaa73057d834142229111adc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66e0a0d715bb9236c4fa54e986e19baf"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#a66e0a0d715bb9236c4fa54e986e19baf">ADC_ERROR_ALL</a>&#160;&#160;&#160;0x3FF</td></tr>
+<tr class="separator:a66e0a0d715bb9236c4fa54e986e19baf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a958d040f3985722f05c130aef0efdbc0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#a958d040f3985722f05c130aef0efdbc0">ADC_ERROR_CLEAR</a>&#160;&#160;&#160;0x0</td></tr>
+<tr class="separator:a958d040f3985722f05c130aef0efdbc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46b36a9bd609e88bf9fd309b42b7475a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#a46b36a9bd609e88bf9fd309b42b7475a">ADC_ERROR_OTHER</a>&#160;&#160;&#160;(1&lt;&lt;0)</td></tr>
+<tr class="separator:a46b36a9bd609e88bf9fd309b42b7475a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1ce76ea02029a6c933e69c66caa2295"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#aa1ce76ea02029a6c933e69c66caa2295">ADC_ERROR_CALIB</a>&#160;&#160;&#160;(1&lt;&lt;1)</td></tr>
+<tr class="separator:aa1ce76ea02029a6c933e69c66caa2295"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe94abe8f828b3420701d1b65ddeff11"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#abe94abe8f828b3420701d1b65ddeff11">ADC_ERROR_WRONG_PIN</a>&#160;&#160;&#160;(1&lt;&lt;2)</td></tr>
+<tr class="separator:abe94abe8f828b3420701d1b65ddeff11"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afce25e27ef8b04a1ea5d82844be5a1ab"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#afce25e27ef8b04a1ea5d82844be5a1ab">ADC_ERROR_ANALOG_READ</a>&#160;&#160;&#160;(1&lt;&lt;3)</td></tr>
+<tr class="separator:afce25e27ef8b04a1ea5d82844be5a1ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85ae713eff294b29394c00d9a1af8aa1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#a85ae713eff294b29394c00d9a1af8aa1">ADC_ERROR_COMPARISON</a>&#160;&#160;&#160;(1&lt;&lt;4)</td></tr>
+<tr class="separator:a85ae713eff294b29394c00d9a1af8aa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90e5bad6d5d6bc8475f2daf73c3616f1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#a90e5bad6d5d6bc8475f2daf73c3616f1">ADC_ERROR_ANALOG_DIFF_READ</a>&#160;&#160;&#160;(1&lt;&lt;5)</td></tr>
+<tr class="separator:a90e5bad6d5d6bc8475f2daf73c3616f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55a30ae3e90829e40719c9e1c5e47308"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#a55a30ae3e90829e40719c9e1c5e47308">ADC_ERROR_CONT</a>&#160;&#160;&#160;(1&lt;&lt;6)</td></tr>
+<tr class="separator:a55a30ae3e90829e40719c9e1c5e47308"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e1259a804e1fd3a89426d835ab5b81f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#a8e1259a804e1fd3a89426d835ab5b81f">ADC_ERROR_CONT_DIFF</a>&#160;&#160;&#160;(1&lt;&lt;7)</td></tr>
+<tr class="separator:a8e1259a804e1fd3a89426d835ab5b81f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f616602104b15d5b9f4314145d3503f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#a2f616602104b15d5b9f4314145d3503f">ADC_ERROR_WRONG_ADC</a>&#160;&#160;&#160;(1&lt;&lt;8)</td></tr>
+<tr class="separator:a2f616602104b15d5b9f4314145d3503f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7d1a9910fcd061ca5bce2260468a931"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#ad7d1a9910fcd061ca5bce2260468a931">ADC_ERROR_SYNCH</a>&#160;&#160;&#160;(1&lt;&lt;9)</td></tr>
+<tr class="separator:ad7d1a9910fcd061ca5bce2260468a931"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4cefed245019e53043553487015d4336"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#a4cefed245019e53043553487015d4336">ADC_TEMP_SENSOR</a>&#160;&#160;&#160;38</td></tr>
 <tr class="separator:a4cefed245019e53043553487015d4336"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb28b97a2562d8af49e06f54d217c972"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#aeb28b97a2562d8af49e06f54d217c972">ADC_VREF_OUT</a>&#160;&#160;&#160;39</td></tr>
@@ -179,12 +211,156 @@ Macros</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a55a401107321b77a6e50328b3f34c2b5"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ADC_CFG1_ADICLK_MASK_0&#160;&#160;&#160;(1&lt;&lt;0)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a2afef33eecca71518bccc0a275a55e4c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ADC_CFG1_ADICLK_MASK_1&#160;&#160;&#160;(1&lt;&lt;1)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a5310c0ed3388c027b49e3799bd97f3cd"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ADC_CFG1_ADIV_MASK_0&#160;&#160;&#160;(1&lt;&lt;5)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a5ce9da5a5af95caa7fcae5eb1db9e4bf"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ADC_CFG1_ADIV_MASK_1&#160;&#160;&#160;(1&lt;&lt;6)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="aaaf2912bdda454e3fcb88156f1ce20d8"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">#define ADC_debug&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a66e0a0d715bb9236c4fa54e986e19baf"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ADC_ERROR_ALL&#160;&#160;&#160;0x3FF</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a90e5bad6d5d6bc8475f2daf73c3616f1"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ADC_ERROR_ANALOG_DIFF_READ&#160;&#160;&#160;(1&lt;&lt;5)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="afce25e27ef8b04a1ea5d82844be5a1ab"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ADC_ERROR_ANALOG_READ&#160;&#160;&#160;(1&lt;&lt;3)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aa1ce76ea02029a6c933e69c66caa2295"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ADC_ERROR_CALIB&#160;&#160;&#160;(1&lt;&lt;1)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a958d040f3985722f05c130aef0efdbc0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ADC_ERROR_CLEAR&#160;&#160;&#160;0x0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a85ae713eff294b29394c00d9a1af8aa1"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ADC_ERROR_COMPARISON&#160;&#160;&#160;(1&lt;&lt;4)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a55a30ae3e90829e40719c9e1c5e47308"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ADC_ERROR_CONT&#160;&#160;&#160;(1&lt;&lt;6)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a8e1259a804e1fd3a89426d835ab5b81f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ADC_ERROR_CONT_DIFF&#160;&#160;&#160;(1&lt;&lt;7)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -203,12 +379,108 @@ Macros</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a46b36a9bd609e88bf9fd309b42b7475a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ADC_ERROR_OTHER&#160;&#160;&#160;(1&lt;&lt;0)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ad7d1a9910fcd061ca5bce2260468a931"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ADC_ERROR_SYNCH&#160;&#160;&#160;(1&lt;&lt;9)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a810b46bdaa73057d834142229111adc5"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">#define ADC_ERROR_VALUE&#160;&#160;&#160;<a class="el" href="_a_d_c___module_8h.html#af181c4b5c617516517400c427494e7e7">ADC_ERROR_DIFF_VALUE</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a2f616602104b15d5b9f4314145d3503f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ADC_ERROR_WRONG_ADC&#160;&#160;&#160;(1&lt;&lt;8)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="abe94abe8f828b3420701d1b65ddeff11"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ADC_ERROR_WRONG_PIN&#160;&#160;&#160;(1&lt;&lt;2)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a3d6e5d1990698c10e5416dd52959100a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ADC_HIGH_SPEED&#160;&#160;&#160;4</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a23479f037280be7e2e110b9718c04920"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ADC_HIGH_SPEED_16BITS&#160;&#160;&#160;3</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ab53b78573e7d3b40ac9e9709240d3ff2"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ADC_LOW_SPEED&#160;&#160;&#160;1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a19129091a619eca8d378a7b59e697972"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ADC_MED_SPEED&#160;&#160;&#160;2</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -275,12 +547,48 @@ Macros</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ac1636c047cf3a2250b63203ffe6b2422"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ADC_SC1A_CHANNELS&#160;&#160;&#160;0x1F</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a4cefed245019e53043553487015d4336"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">#define ADC_TEMP_SENSOR&#160;&#160;&#160;38</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="acde51a1fd051837c9d97b0a24ea28778"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ADC_VERY_HIGH_SPEED&#160;&#160;&#160;5</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="afcae43d61a2e44a7ebd2814924e769e3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ADC_VERY_LOW_SPEED&#160;&#160;&#160;0</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -323,89 +631,13 @@ Macros</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a01f89b4b8b5e915d9840927eeec147d4"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define VREF_SC_ICOMPEN&#160;&#160;&#160;(uint8_t)0x20</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="adda35e8438c7f36367f4ddd7ccd553c6"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define VREF_SC_MODE_LV</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">n</td><td>)</td>
-          <td>&#160;&#160;&#160;(uint8_t)(((n) &amp; 3) &lt;&lt; 0)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a28646efff164389096b14f99a643cf9a"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define VREF_SC_REGEN&#160;&#160;&#160;(uint8_t)0x40</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a20ed142ac118d12ce7ae750c5db95e06"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define VREF_SC_VREFEN&#160;&#160;&#160;(uint8_t)0x80</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="aa097f88b5887410f535c56b419d2e8e0"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define VREF_SC_VREFST&#160;&#160;&#160;(uint8_t)0x04</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a0428c6e85511e76aee22a3f672e91b16"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define VREF_TRM_CHOPEN&#160;&#160;&#160;(uint8_t)0x40</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="_a_d_c___module_8h.html">ADC_Module.h</a></li>
-    <li class="footer">Generated on Sun Apr 6 2014 12:55:34 for ADC by
+    <li class="footer">Generated on Sun Jun 15 2014 01:22:29 for ADC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

@@ -30,7 +30,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">ADC
-   &#160;<span id="projectnumber">3.0</span>
+   &#160;<span id="projectnumber">4.0</span>
    </div>
   </td>
  </tr>
@@ -79,6 +79,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="globals_defs.html"><span>Macros</span></a></li>
     </ul>
   </div>
+  <div id="navrow4" class="tabs3">
+    <ul class="tablist">
+      <li><a href="#index_a"><span>a</span></a></li>
+      <li><a href="#index_d"><span>d</span></a></li>
+      <li><a href="#index_r"><span>r</span></a></li>
+    </ul>
+  </div>
 </div><!-- top -->
 <div id="side-nav" class="ui-resizable side-nav-resizable">
   <div id="nav-tree">
@@ -99,7 +106,7 @@ $(document).ready(function(){initNavTree('globals.html','');});
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -109,10 +116,9 @@ $(document).ready(function(){initNavTree('globals.html','');});
 </div>
 
 <div class="contents">
-<div class="textblock">Here is a list of all file members with links to the files they belong to:</div><ul>
-<li>__attribute__()
-: <a class="el" href="_a_d_c_8cpp.html#a515b2edb92623afe10d1360601de1fba">ADC.cpp</a>
-</li>
+<div class="textblock">Here is a list of all file members with links to the files they belong to:</div>
+
+<h3><a class="anchor" id="index_a"></a>- a -</h3><ul>
 <li>ADC_0
 : <a class="el" href="_a_d_c_8h.html#a5cbcaa568e20fcd4cc9325927d370860">ADC.h</a>
 </li>
@@ -122,14 +128,74 @@ $(document).ready(function(){initNavTree('globals.html','');});
 <li>ADC_BANDGAP
 : <a class="el" href="_a_d_c___module_8h.html#a22d1f36f85b454a54518cd29713118db">ADC_Module.h</a>
 </li>
+<li>ADC_CFG1_ADICLK_MASK_0
+: <a class="el" href="_a_d_c___module_8h.html#a55a401107321b77a6e50328b3f34c2b5">ADC_Module.h</a>
+</li>
+<li>ADC_CFG1_ADICLK_MASK_1
+: <a class="el" href="_a_d_c___module_8h.html#a2afef33eecca71518bccc0a275a55e4c">ADC_Module.h</a>
+</li>
+<li>ADC_CFG1_ADIV_MASK_0
+: <a class="el" href="_a_d_c___module_8h.html#a5310c0ed3388c027b49e3799bd97f3cd">ADC_Module.h</a>
+</li>
+<li>ADC_CFG1_ADIV_MASK_1
+: <a class="el" href="_a_d_c___module_8h.html#a5ce9da5a5af95caa7fcae5eb1db9e4bf">ADC_Module.h</a>
+</li>
 <li>ADC_debug
 : <a class="el" href="_a_d_c___module_8h.html#aaaf2912bdda454e3fcb88156f1ce20d8">ADC_Module.h</a>
+</li>
+<li>ADC_ERROR_ALL
+: <a class="el" href="_a_d_c___module_8h.html#a66e0a0d715bb9236c4fa54e986e19baf">ADC_Module.h</a>
+</li>
+<li>ADC_ERROR_ANALOG_DIFF_READ
+: <a class="el" href="_a_d_c___module_8h.html#a90e5bad6d5d6bc8475f2daf73c3616f1">ADC_Module.h</a>
+</li>
+<li>ADC_ERROR_ANALOG_READ
+: <a class="el" href="_a_d_c___module_8h.html#afce25e27ef8b04a1ea5d82844be5a1ab">ADC_Module.h</a>
+</li>
+<li>ADC_ERROR_CALIB
+: <a class="el" href="_a_d_c___module_8h.html#aa1ce76ea02029a6c933e69c66caa2295">ADC_Module.h</a>
+</li>
+<li>ADC_ERROR_CLEAR
+: <a class="el" href="_a_d_c___module_8h.html#a958d040f3985722f05c130aef0efdbc0">ADC_Module.h</a>
+</li>
+<li>ADC_ERROR_COMPARISON
+: <a class="el" href="_a_d_c___module_8h.html#a85ae713eff294b29394c00d9a1af8aa1">ADC_Module.h</a>
+</li>
+<li>ADC_ERROR_CONT
+: <a class="el" href="_a_d_c___module_8h.html#a55a30ae3e90829e40719c9e1c5e47308">ADC_Module.h</a>
+</li>
+<li>ADC_ERROR_CONT_DIFF
+: <a class="el" href="_a_d_c___module_8h.html#a8e1259a804e1fd3a89426d835ab5b81f">ADC_Module.h</a>
 </li>
 <li>ADC_ERROR_DIFF_VALUE
 : <a class="el" href="_a_d_c___module_8h.html#af181c4b5c617516517400c427494e7e7">ADC_Module.h</a>
 </li>
+<li>ADC_ERROR_OTHER
+: <a class="el" href="_a_d_c___module_8h.html#a46b36a9bd609e88bf9fd309b42b7475a">ADC_Module.h</a>
+</li>
+<li>ADC_ERROR_SYNCH
+: <a class="el" href="_a_d_c___module_8h.html#ad7d1a9910fcd061ca5bce2260468a931">ADC_Module.h</a>
+</li>
 <li>ADC_ERROR_VALUE
 : <a class="el" href="_a_d_c___module_8h.html#a810b46bdaa73057d834142229111adc5">ADC_Module.h</a>
+</li>
+<li>ADC_ERROR_WRONG_ADC
+: <a class="el" href="_a_d_c___module_8h.html#a2f616602104b15d5b9f4314145d3503f">ADC_Module.h</a>
+</li>
+<li>ADC_ERROR_WRONG_PIN
+: <a class="el" href="_a_d_c___module_8h.html#abe94abe8f828b3420701d1b65ddeff11">ADC_Module.h</a>
+</li>
+<li>ADC_HIGH_SPEED
+: <a class="el" href="_a_d_c___module_8h.html#a3d6e5d1990698c10e5416dd52959100a">ADC_Module.h</a>
+</li>
+<li>ADC_HIGH_SPEED_16BITS
+: <a class="el" href="_a_d_c___module_8h.html#a23479f037280be7e2e110b9718c04920">ADC_Module.h</a>
+</li>
+<li>ADC_LOW_SPEED
+: <a class="el" href="_a_d_c___module_8h.html#ab53b78573e7d3b40ac9e9709240d3ff2">ADC_Module.h</a>
+</li>
+<li>ADC_MED_SPEED
+: <a class="el" href="_a_d_c___module_8h.html#a19129091a619eca8d378a7b59e697972">ADC_Module.h</a>
 </li>
 <li>ADC_REF_DEFAULT
 : <a class="el" href="_a_d_c___module_8h.html#a79a0008b0054fba5551f1a2f515cd21f">ADC_Module.h</a>
@@ -146,8 +212,17 @@ $(document).ready(function(){initNavTree('globals.html','');});
 <li>ADC_REF_INTERNAL1V2
 : <a class="el" href="_a_d_c___module_8h.html#aa8452539b624c0ca1f9b67e5f96934af">ADC_Module.h</a>
 </li>
+<li>ADC_SC1A_CHANNELS
+: <a class="el" href="_a_d_c___module_8h.html#ac1636c047cf3a2250b63203ffe6b2422">ADC_Module.h</a>
+</li>
 <li>ADC_TEMP_SENSOR
 : <a class="el" href="_a_d_c___module_8h.html#a4cefed245019e53043553487015d4336">ADC_Module.h</a>
+</li>
+<li>ADC_VERY_HIGH_SPEED
+: <a class="el" href="_a_d_c___module_8h.html#acde51a1fd051837c9d97b0a24ea28778">ADC_Module.h</a>
+</li>
+<li>ADC_VERY_LOW_SPEED
+: <a class="el" href="_a_d_c___module_8h.html#afcae43d61a2e44a7ebd2814924e769e3">ADC_Module.h</a>
 </li>
 <li>ADC_VREF_OUT
 : <a class="el" href="_a_d_c___module_8h.html#aeb28b97a2562d8af49e06f54d217c972">ADC_Module.h</a>
@@ -158,41 +233,25 @@ $(document).ready(function(){initNavTree('globals.html','');});
 <li>ADC_VREFL
 : <a class="el" href="_a_d_c___module_8h.html#ac8d25362e749cd9ec5c4ebc4702316b5">ADC_Module.h</a>
 </li>
-<li>ANALOG_TIMER_ERROR
-: <a class="el" href="_a_d_c_8h.html#a12a745ce8b6499612828e575e39c46b0">ADC.h</a>
+</ul>
+
+
+<h3><a class="anchor" id="index_d"></a>- d -</h3><ul>
+<li>DMA_BUFFER_SIZE
+: <a class="el" href="_ring_buffer_d_m_a_8h.html#ac58748de79395a1751fc333bbc7ebd6b">RingBufferDMA.h</a>
 </li>
-<li>DEFAULT_BUFFER_SIZE
-: <a class="el" href="_ring_buffer_8h.html#a6e576a3c6530636d68b7a220480bcd32">RingBuffer.h</a>
+<li>dma_isr_0()
+: <a class="el" href="_a_d_c_8cpp.html#a66fa493056595dc39285952e112212e7">ADC.cpp</a>
 </li>
-<li>MAX_ANALOG_TIMERS
-: <a class="el" href="_a_d_c_8h.html#a7eb883900caaf62368bacfde26035535">ADC.h</a>
+<li>dma_isr_1()
+: <a class="el" href="_a_d_c_8cpp.html#a153f4b5f45e012008581c1c34657e2e7">ADC.cpp</a>
 </li>
-<li>PDB_CH0C1_EN
-: <a class="el" href="_a_d_c___module_8cpp.html#a2995cd527ac5ea9e5c61211a14458d23">ADC_Module.cpp</a>
-</li>
-<li>PDB_CH0C1_TOS
-: <a class="el" href="_a_d_c___module_8cpp.html#ac45a7b9667905b8f4c127a97792f0ff4">ADC_Module.cpp</a>
-</li>
-<li>PDB_CONFIG
-: <a class="el" href="_a_d_c___module_8cpp.html#add26eef3393aa349aee1b7fc7faabc42">ADC_Module.cpp</a>
-</li>
-<li>VREF_SC_ICOMPEN
-: <a class="el" href="_a_d_c___module_8h.html#a01f89b4b8b5e915d9840927eeec147d4">ADC_Module.h</a>
-</li>
-<li>VREF_SC_MODE_LV
-: <a class="el" href="_a_d_c___module_8h.html#adda35e8438c7f36367f4ddd7ccd553c6">ADC_Module.h</a>
-</li>
-<li>VREF_SC_REGEN
-: <a class="el" href="_a_d_c___module_8h.html#a28646efff164389096b14f99a643cf9a">ADC_Module.h</a>
-</li>
-<li>VREF_SC_VREFEN
-: <a class="el" href="_a_d_c___module_8h.html#a20ed142ac118d12ce7ae750c5db95e06">ADC_Module.h</a>
-</li>
-<li>VREF_SC_VREFST
-: <a class="el" href="_a_d_c___module_8h.html#aa097f88b5887410f535c56b419d2e8e0">ADC_Module.h</a>
-</li>
-<li>VREF_TRM_CHOPEN
-: <a class="el" href="_a_d_c___module_8h.html#a0428c6e85511e76aee22a3f672e91b16">ADC_Module.h</a>
+</ul>
+
+
+<h3><a class="anchor" id="index_r"></a>- r -</h3><ul>
+<li>RING_BUFFER_DEFAULT_BUFFER_SIZE
+: <a class="el" href="_ring_buffer_8h.html#a231c232364ab25ef40c9a718b277074f">RingBuffer.h</a>
 </li>
 </ul>
 </div><!-- contents -->
@@ -200,7 +259,7 @@ $(document).ready(function(){initNavTree('globals.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sun Apr 6 2014 12:55:34 for ADC by
+    <li class="footer">Generated on Sun Jun 15 2014 01:22:30 for ADC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

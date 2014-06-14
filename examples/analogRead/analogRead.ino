@@ -2,85 +2,113 @@
 *  You can change the number of averages, bits of resolution and also the comparison value or range.
 */
 
+//// check that the comparison values work also for 16 bits
 
 #include <ADC.h>
 
-#define ADC_0 0
-#define ADC_1 1
-
-
-// Teensy 3.0 has the LED on pin 13
-const int ledPin = 13;
-
-const int readPin = 23; // ADC0
+const int readPin = A9; // ADC0
 const int readPin2 = A3; // ADC1
 
 ADC *adc = new ADC(); // adc object
 
 void setup() {
 
+    pinMode(LED_BUILTIN, OUTPUT);
+    pinMode(readPin, INPUT); //pin 23 single ended
+    pinMode(readPin2, INPUT); //pin 23 single ended
 
+    Serial.begin(9600);
 
-  pinMode(ledPin, OUTPUT);
-  pinMode(readPin, INPUT); //pin 23 single ended
-  pinMode(readPin2, INPUT); //pin 23 single ended
+    ///// ADC0 ////
+    //adc->setReference(ADC_REF_INTERNAL, ADC_0); change all 3.3 to 1.2 if you change the reference
 
-  Serial.begin(9600);
+    adc->setAveraging(1); // set number of averages
+    adc->setResolution(12); // set bits of resolution
 
-  //adc->setReference(ADC_REF_INTERNAL, ADC_0); change all 3.3 to 1.2 if you change the reference
+    // it can be ADC_VERY_LOW_SPEED, ADC_LOW_SPEED, ADC_MED_SPEED, ADC_HIGH_SPEED_16BITS, ADC_HIGH_SPEED or ADC_VERY_HIGH_SPEED
+    // see the documentation for more information
+    adc->setConversionSpeed(ADC_HIGH_SPEED); // change the conversion speed, it recalibrates
+    // it can be ADC_VERY_LOW_SPEED, ADC_LOW_SPEED, ADC_MED_SPEED, ADC_HIGH_SPEED or ADC_VERY_HIGH_SPEED
+    adc->setSamplingSpeed(ADC_HIGH_SPEED); // change the sampling speed, it recalibrates
 
-  adc->setAveraging(8); // set number of averages
-  adc->setResolution(12); // set bits of resolution
+    // always call the compare functions after changing the resolution!
+    adc->enableCompare(1.0/3.3*adc->getMaxValue(ADC_0), 0, ADC_0); // measurement will be ready if value < 1.0V
+    //adc->enableCompareRange(1.0*adc->getMaxValue(ADC_0)/3.3, 2.0*adc->getMaxValue(ADC_0)/3.3, 0, 1, ADC_0); // ready if value lies out of [1.0,2.0] V
 
+    ////// ADC1 /////
+    adc->setAveraging(32, ADC_1); // set number of averages
+    adc->setResolution(16, ADC_1); // set bits of resolution
+    adc->setConversionSpeed(ADC_VERY_LOW_SPEED, ADC_1); // change the conversion speed, it recalibrates
+    adc->setSamplingSpeed(ADC_VERY_LOW_SPEED, ADC_1); // change the sampling speed, it recalibrates
 
-  adc->setAveraging(32, ADC_1); // set number of averages
-  adc->setResolution(12, ADC_1); // set bits of resolution
+    // always call the compare functions after changing the resolution!
+    //adc->enableCompare(1.0/3.3*adc->getMaxValue(ADC_1), 0, ADC_1); // measurement will be ready if value < 1.0V
+    adc->enableCompareRange(1.0*adc->getMaxValue(ADC_1)/3.3, 2.0*adc->getMaxValue(ADC_1)/3.3, 0, 1, ADC_1); // ready if value lies out of [1.0,2.0] V
 
-  // always call the compare functions after changing the resolution!
-  //adc->enableCompare(1.0/3.3*adc->getMaxValue(ADC_0), 0, ADC_0); // measurement will be ready if value < 1.0V
-  //adc->enableCompareRange(1.0*adc->getMaxValue(ADC_1)/3.3, 2.0*adc->getMaxValue(ADC_1)/3.3, 0, 1, ADC_1); // ready if value lies out of [1.0,2.0] V
-
-  delay(500);
-  Serial.println("end setup");
+    Serial.println("End setup");
 }
 
-int value = ADC_ERROR_VALUE;
-int value2 = ADC_ERROR_VALUE;
-
-int c=0;
+int value;
+int value2;
 
 void loop() {
 
-  value = adc->analogRead(readPin, ADC_0); // read a new value, will return ADC_ERROR_VALUE if the comparison is false.
+    value = adc->analogRead(readPin, ADC_0); // read a new value, will return ADC_ERROR_VALUE if the comparison is false.
 
-  value2 = adc->analogRead(readPin2, ADC_1);
+    value2 = adc->analogRead(readPin2, ADC_1);
 
-  if(value!=ADC_ERROR_VALUE ) {
+    Serial.print("Pin: ");
+    Serial.print(readPin);
+    Serial.print(", value ADC0: ");
+    Serial.println(value*3.3/adc->getMaxValue(ADC_0), DEC);
 
-      Serial.print("Pin: ");
-      Serial.print(readPin);
-      Serial.print(", value ADC0: ");
-      Serial.println(value*3.3/adc->getMaxValue(ADC_0), DEC);
-  } else {
-      Serial.println("ADC0 Comparison failed");
-  }
-  #if defined(__MK20DX256__)
-  if(value2!=ADC_ERROR_VALUE) {
+    #if defined(__MK20DX256__)
+    Serial.print("Pin: ");
+    Serial.print(readPin2);
+    Serial.print(", value ADC1: ");
+    Serial.println(value2*3.3/adc->getMaxValue(ADC_1), DEC);
+    #endif
 
-      Serial.print("Pin: ");
-      Serial.print(readPin2);
-      Serial.print(", value ADC1: ");
-      Serial.println(value2*3.3/adc->getMaxValue(ADC_1), DEC);
-  } else {
-      Serial.println("ADC1 Comparison failed");
-  }
-  #endif
+    /* fail_flag contains all possible errors,
+        They are defined in  ADC_Module.h as
+
+        ADC_ERROR_OTHER
+        ADC_ERROR_CALIB
+        ADC_ERROR_WRONG_PIN
+        ADC_ERROR_ANALOG_READ
+        ADC_ERROR_COMPARISON
+        ADC_ERROR_ANALOG_DIFF_READ
+        ADC_ERROR_CONT
+        ADC_ERROR_CONT_DIFF
+        ADC_ERROR_WRONG_ADC
+        ADC_ERROR_SYNCH
+
+        You can compare the value of the flag with those masks to know what's the error.
+    */
+    if(adc->adc0->fail_flag) {
+        Serial.print("ADC0 error flags: 0x");
+        Serial.println(adc->adc0->fail_flag, HEX);
+        if(adc->adc0->fail_flag == ADC_ERROR_COMPARISON) {
+            adc->adc0->fail_flag &= ~ADC_ERROR_COMPARISON; // clear that error
+            Serial.println("Comparison error in ADC0");
+        }
+    }
+    #if defined(__MK20DX256__)
+    if(adc->adc1->fail_flag) {
+        Serial.print("ADC1 error flags: 0x");
+        Serial.println(adc->adc1->fail_flag, HEX);
+        if(adc->adc1->fail_flag == ADC_ERROR_COMPARISON) {
+            adc->adc1->fail_flag &= ~ADC_ERROR_COMPARISON; // clear that error
+            Serial.println("Comparison error in ADC1");
+        }
+    }
+    #endif
 
 
-  GPIOC_PTOR = 1<<5;
+    //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
 
 
-  delay(1000);
+    delay(500);
 }
 
 
