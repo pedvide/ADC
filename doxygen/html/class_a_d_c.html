@@ -202,6 +202,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aec3464cdb697f89cf162813b00b2e965"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#aec3464cdb697f89cf162813b00b2e965">analogReadDifferential</a> (uint8_t pinP, uint8_t pinN, int8_t adc_num=-1)</td></tr>
 <tr class="memdesc:aec3464cdb697f89cf162813b00b2e965"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads the differential analog value of two pins (pinP - pinN).  <a href="#aec3464cdb697f89cf162813b00b2e965">More...</a><br/></td></tr>
 <tr class="separator:aec3464cdb697f89cf162813b00b2e965"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7e03972aff4b6f517c33b44e3935adc"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#ad7e03972aff4b6f517c33b44e3935adc">startSingleRead</a> (uint8_t pin, int8_t adc_num=-1)</td></tr>
+<tr class="memdesc:ad7e03972aff4b6f517c33b44e3935adc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts an analog measurement on the pin and enables interrupts.  <a href="#ad7e03972aff4b6f517c33b44e3935adc">More...</a><br/></td></tr>
+<tr class="separator:ad7e03972aff4b6f517c33b44e3935adc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71ca08292a2a9dfe0337d0c2ba5cab6d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a71ca08292a2a9dfe0337d0c2ba5cab6d">startSingleDifferential</a> (uint8_t pinP, uint8_t pinN, int8_t adc_num=-1)</td></tr>
+<tr class="memdesc:a71ca08292a2a9dfe0337d0c2ba5cab6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start a differential conversion between two pins (pinP - pinN) and enables interrupts.  <a href="#a71ca08292a2a9dfe0337d0c2ba5cab6d">More...</a><br/></td></tr>
+<tr class="separator:a71ca08292a2a9dfe0337d0c2ba5cab6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee7423bfcbb03465bb0bd1e3c6474452"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#aee7423bfcbb03465bb0bd1e3c6474452">readSingle</a> (int8_t adc_num=-1)</td></tr>
 <tr class="memdesc:aee7423bfcbb03465bb0bd1e3c6474452"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads the analog value of a single conversion.  <a href="#aee7423bfcbb03465bb0bd1e3c6474452">More...</a><br/></td></tr>
 <tr class="separator:aee7423bfcbb03465bb0bd1e3c6474452"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -245,17 +251,14 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:acd10f3bc117a244e70e53c3489aa97bc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_a_d_c.html#a3d0e0013dca9f7a4d289722d71af24f7">Sync_result</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#acd10f3bc117a244e70e53c3489aa97bc">readSynchronizedContinuous</a> ()</td></tr>
 <tr class="memdesc:acd10f3bc117a244e70e53c3489aa97bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the values of both ADCs.  <a href="#acd10f3bc117a244e70e53c3489aa97bc">More...</a><br/></td></tr>
 <tr class="separator:acd10f3bc117a244e70e53c3489aa97bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2070250dd4d557b27ec0f4f2b360f21"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#ac2070250dd4d557b27ec0f4f2b360f21">stopSynchronizedContinuous</a> ()</td></tr>
+<tr class="memdesc:ac2070250dd4d557b27ec0f4f2b360f21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stops synchronous continuous conversion.  <a href="#ac2070250dd4d557b27ec0f4f2b360f21">More...</a><br/></td></tr>
+<tr class="separator:ac2070250dd4d557b27ec0f4f2b360f21"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b32e609542d71601adb51b8383145c2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a9b32e609542d71601adb51b8383145c2">useDMA</a> (uint8_t ch0=0, uint8_t ch1=1)</td></tr>
 <tr class="separator:a9b32e609542d71601adb51b8383145c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:ad7e03972aff4b6f517c33b44e3935adc"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#ad7e03972aff4b6f517c33b44e3935adc">startSingleRead</a> (uint8_t pin, int8_t adc_num=-1)</td></tr>
-<tr class="memdesc:ad7e03972aff4b6f517c33b44e3935adc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts an analog measurement on the pin and enables interrupts.  <a href="#ad7e03972aff4b6f517c33b44e3935adc">More...</a><br/></td></tr>
-<tr class="separator:ad7e03972aff4b6f517c33b44e3935adc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a71ca08292a2a9dfe0337d0c2ba5cab6d"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a71ca08292a2a9dfe0337d0c2ba5cab6d">startSingleDifferential</a> (uint8_t pinP, uint8_t pinN, int8_t adc_num=-1)</td></tr>
-<tr class="memdesc:a71ca08292a2a9dfe0337d0c2ba5cab6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start a differential conversion between two pins (pinP - pinN) and enables interrupts.  <a href="#a71ca08292a2a9dfe0337d0c2ba5cab6d">More...</a><br/></td></tr>
-<tr class="separator:a71ca08292a2a9dfe0337d0c2ba5cab6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a73cb63fc02d6861aa3d2a393bf9d0485"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a73cb63fc02d6861aa3d2a393bf9d0485">dma_isr_0</a> (void)</td></tr>
 <tr class="separator:a73cb63fc02d6861aa3d2a393bf9d0485"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a576c55fc4ee3e0f32355c9cf46e08e53"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a576c55fc4ee3e0f32355c9cf46e08e53">dma_isr_1</a> (void)</td></tr>
@@ -1274,9 +1277,6 @@ Static Public Attributes</h2></td></tr>
 <a class="anchor" id="a71ca08292a2a9dfe0337d0c2ba5cab6d"></a>
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">int ADC::startSingleDifferential </td>
@@ -1302,11 +1302,6 @@ Static Public Attributes</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Start a differential conversion between two pins (pinP - pinN) and enables interrupts. </p>
@@ -1325,9 +1320,6 @@ Static Public Attributes</h2></td></tr>
 <a class="anchor" id="ad7e03972aff4b6f517c33b44e3935adc"></a>
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">int ADC::startSingleRead </td>
@@ -1347,11 +1339,6 @@ Static Public Attributes</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Starts an analog measurement on the pin and enables interrupts. </p>
@@ -1521,6 +1508,23 @@ Static Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Stops continuous conversion. </p>
+
+</div>
+</div>
+<a class="anchor" id="ac2070250dd4d557b27ec0f4f2b360f21"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ADC::stopSynchronizedContinuous </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Stops synchronous continuous conversion. </p>
 
 </div>
 </div>
@@ -1732,7 +1736,7 @@ Static Public Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_a_d_c.html">ADC</a></li>
-    <li class="footer">Generated on Sun Jun 15 2014 14:04:39 for ADC by
+    <li class="footer">Generated on Sun Jun 15 2014 14:58:10 for ADC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

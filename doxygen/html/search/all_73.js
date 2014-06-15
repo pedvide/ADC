@@ -26,6 +26,7 @@ var searchData=
   ['startsynchronizedsingledifferential',['startSynchronizedSingleDifferential',['../class_a_d_c.html#ac77b97b722784ad911235eda97ad0456',1,'ADC']]],
   ['startsynchronizedsingleread',['startSynchronizedSingleRead',['../class_a_d_c.html#ac88add8a6c58bd94d64073d6f9cf0a90',1,'ADC']]],
   ['stopcontinuous',['stopContinuous',['../class_a_d_c.html#a436e52cf82ca735f636899de670a2f0c',1,'ADC::stopContinuous()'],['../class_a_d_c___module.html#a9af29f865bdd376d954112d36b0992f0',1,'ADC_Module::stopContinuous()']]],
-  ['sync_5fresult',['SYNC_RESULT',['../struct_a_d_c_1_1_s_y_n_c___r_e_s_u_l_t.html',1,'ADC']]],
-  ['sync_5fresult',['Sync_result',['../class_a_d_c.html#a3d0e0013dca9f7a4d289722d71af24f7',1,'ADC']]]
+  ['stopsynchronizedcontinuous',['stopSynchronizedContinuous',['../class_a_d_c.html#ac2070250dd4d557b27ec0f4f2b360f21',1,'ADC']]],
+  ['sync_5fresult',['Sync_result',['../class_a_d_c.html#a3d0e0013dca9f7a4d289722d71af24f7',1,'ADC']]],
+  ['sync_5fresult',['SYNC_RESULT',['../struct_a_d_c_1_1_s_y_n_c___r_e_s_u_l_t.html',1,'ADC']]]
 ];

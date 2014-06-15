@@ -36,10 +36,13 @@ var class_a_d_c =
     [ "setSamplingSpeed", "class_a_d_c.html#a6e01908bf556b00a73023eaddfe8e67f", null ],
     [ "startContinuous", "class_a_d_c.html#a26880802b2677ae59a3090340cee4fb0", null ],
     [ "startContinuousDifferential", "class_a_d_c.html#ac2f4928dbd50593404a63d0510af1296", null ],
+    [ "startSingleDifferential", "class_a_d_c.html#a71ca08292a2a9dfe0337d0c2ba5cab6d", null ],
+    [ "startSingleRead", "class_a_d_c.html#ad7e03972aff4b6f517c33b44e3935adc", null ],
     [ "startSynchronizedContinuous", "class_a_d_c.html#a020e4d7338565d5ef0161b7145c1b1a5", null ],
     [ "startSynchronizedContinuousDifferential", "class_a_d_c.html#a924757183c6a0561978bb7e058f563df", null ],
     [ "startSynchronizedSingleDifferential", "class_a_d_c.html#ac77b97b722784ad911235eda97ad0456", null ],
     [ "startSynchronizedSingleRead", "class_a_d_c.html#ac88add8a6c58bd94d64073d6f9cf0a90", null ],
     [ "stopContinuous", "class_a_d_c.html#a436e52cf82ca735f636899de670a2f0c", null ],
+    [ "stopSynchronizedContinuous", "class_a_d_c.html#ac2070250dd4d557b27ec0f4f2b360f21", null ],
     [ "useDMA", "class_a_d_c.html#a9b32e609542d71601adb51b8383145c2", null ]
 ];

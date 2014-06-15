@@ -254,7 +254,7 @@ class ADC
         *   If the pin is incorrect it returns ADC_ERROR_VALUE
         *   If this function interrupts a measurement, it stores the settings in adc_config
         */
-        static int startSingleRead(uint8_t pin, int8_t adc_num = -1);
+        int startSingleRead(uint8_t pin, int8_t adc_num = -1);
 
         //! Start a differential conversion between two pins (pinP - pinN) and enables interrupts.
         /** It returns inmediately, get value with readSingle().
@@ -264,7 +264,7 @@ class ADC
         *   Other pins will return ADC_ERROR_DIFF_VALUE.
         *   If this function interrupts a measurement, it stores the settings in adc_config
         */
-        static int startSingleDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num = -1);
+        int startSingleDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num = -1);
 
         //! Reads the analog value of a single conversion.
         /** Set the conversion with with startSingleRead(pin) or startSingleDifferential(pinP, pinN).
