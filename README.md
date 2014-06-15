@@ -5,6 +5,9 @@ Teensy 3.0/3.1 ADC implementation library created by Pedro Villanueva.
 
 See examples and documentation.
 
+This thread in the Teensy forum also has information:
+http://forum.pjrc.com/threads/25532-ADC-library-update-now-with-support-for-Teensy-3-1
+
 License
 ===
 
