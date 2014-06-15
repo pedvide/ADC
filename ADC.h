@@ -385,6 +385,9 @@ class ADC
         //! Returns the values of both ADCs.
         Sync_result readSynchronizedContinuous();
 
+        //! Stops synchronous continuous conversion
+        void stopSynchronizedContinuous();
+
 
         /////////// DMA METHODS ///////////////
 

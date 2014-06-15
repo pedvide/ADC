@@ -1102,6 +1102,14 @@ ADC::Sync_result ADC::readSynchronizedContinuous() {
     return res;
 }
 
+//! Stops synchronous continuous conversion
+void ADC::stopSynchronizedContinuous() {
+
+    adc0->stopContinuous();
+    adc1->stopContinuous();
+
+}
+
 
 //Our dma ISR
 void dma_isr_0(void)
