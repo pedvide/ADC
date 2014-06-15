@@ -47,7 +47,7 @@ void loop() {
           printBuffer();
       } else if(c=='l') { // toggle led
           digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
-      } else if(c=='r') { // read CITER
+      } else if(c=='r') { // read
           Serial.print("read(): ");
           Serial.println(dmaBuffer->read());
       } else if(c=='f') { // full?

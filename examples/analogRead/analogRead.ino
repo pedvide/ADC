@@ -27,9 +27,9 @@ void setup() {
 
     // it can be ADC_VERY_LOW_SPEED, ADC_LOW_SPEED, ADC_MED_SPEED, ADC_HIGH_SPEED_16BITS, ADC_HIGH_SPEED or ADC_VERY_HIGH_SPEED
     // see the documentation for more information
-    adc->setConversionSpeed(ADC_HIGH_SPEED); // change the conversion speed, it recalibrates
+    adc->setConversionSpeed(ADC_HIGH_SPEED); // change the conversion speed
     // it can be ADC_VERY_LOW_SPEED, ADC_LOW_SPEED, ADC_MED_SPEED, ADC_HIGH_SPEED or ADC_VERY_HIGH_SPEED
-    adc->setSamplingSpeed(ADC_HIGH_SPEED); // change the sampling speed, it recalibrates
+    adc->setSamplingSpeed(ADC_HIGH_SPEED); // change the sampling speed
 
     // always call the compare functions after changing the resolution!
     adc->enableCompare(1.0/3.3*adc->getMaxValue(ADC_0), 0, ADC_0); // measurement will be ready if value < 1.0V
@@ -38,8 +38,8 @@ void setup() {
     ////// ADC1 /////
     adc->setAveraging(32, ADC_1); // set number of averages
     adc->setResolution(16, ADC_1); // set bits of resolution
-    adc->setConversionSpeed(ADC_VERY_LOW_SPEED, ADC_1); // change the conversion speed, it recalibrates
-    adc->setSamplingSpeed(ADC_VERY_LOW_SPEED, ADC_1); // change the sampling speed, it recalibrates
+    adc->setConversionSpeed(ADC_VERY_LOW_SPEED, ADC_1); // change the conversion speed
+    adc->setSamplingSpeed(ADC_VERY_LOW_SPEED, ADC_1); // change the sampling speed
 
     // always call the compare functions after changing the resolution!
     //adc->enableCompare(1.0/3.3*adc->getMaxValue(ADC_1), 0, ADC_1); // measurement will be ready if value < 1.0V

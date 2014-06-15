@@ -64,9 +64,9 @@ void setup() {
 
     // it can be ADC_VERY_LOW_SPEED, ADC_LOW_SPEED, ADC_MED_SPEED, ADC_HIGH_SPEED_16BITS, ADC_HIGH_SPEED or ADC_VERY_HIGH_SPEED
     // see the documentation for more information
-    adc->setConversionSpeed(ADC_HIGH_SPEED); // change the conversion speed, it recalibrates
+    adc->setConversionSpeed(ADC_HIGH_SPEED); // change the conversion speed
     // it can be ADC_VERY_LOW_SPEED, ADC_LOW_SPEED, ADC_MED_SPEED, ADC_HIGH_SPEED or ADC_VERY_HIGH_SPEED
-    adc->setSamplingSpeed(ADC_HIGH_SPEED); // change the sampling speed, it recalibrates
+    adc->setSamplingSpeed(ADC_HIGH_SPEED); // change the sampling speed
     // with 16 averages, 12 bits resolution and ADC_HIGH_SPEED conversion and sampling it takes about 32.5 us for a conversion
 
     Serial.println("Starting Timers");
