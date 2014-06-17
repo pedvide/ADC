@@ -4,7 +4,7 @@ const int readPin = A9;
 
 ADC *adc = new ADC(); // adc object
 
-RingBufferDMA *dmaBuffer = new RingBufferDMA(2); // use dma channel 2
+RingBufferDMA *dmaBuffer = new RingBufferDMA(2,ADC_0); // use dma channel 2 and ADC0
 
 
 void setup() {
@@ -79,12 +79,31 @@ void dma_ch2_isr(void) {
     //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
 
 }
+void dma_ch10_isr(void) {
+    //int t = micros();
+    //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
+
+    Serial.println("DMA_CH10_ISR"); //Serial.println(t);
+
+    DMA_CINT = 10; // clear interrupt
+
+    // call write to tell the buffer that we wrote a new value
+    dmaBuffer->write();
+
+    //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
+
+}
 
 // called everytime a new value is converted. The DMA isr is called first
 void adc0_isr(void) {
     //int t = micros();
     Serial.println("ADC0_ISR"); //Serial.println(t);
     ADC0_RA; // clear interrupt
+}
+void adc1_isr(void) {
+    //int t = micros();
+    Serial.println("ADC1_ISR"); //Serial.println(t);
+    ADC1_RA; // clear interrupt
 }
 
 

@@ -27,13 +27,24 @@
 
 
 
-RingBufferDMA::RingBufferDMA(uint8_t dma_channel) {
+RingBufferDMA::RingBufferDMA(uint8_t dma_channel, uint8_t ADC_num) {
 
     b_size = DMA_BUFFER_SIZE;
     b_start = 0;
     b_end = 0;
 
+    if(dma_channel<0) {
+        dma_channel = 0;
+    }
+    if(ADC_num<0) {
+        ADC_num = 0;
+    } else if(ADC_num>1) {
+        ADC_num = 1;
+    }
+
     DMA_channel = dma_channel;
+
+    ADC_number = ADC_num;
 
     IRQ_DMA_CH = IRQ_DMA_CH0 + DMA_channel;
 
@@ -59,6 +70,9 @@ RingBufferDMA::RingBufferDMA(uint8_t dma_channel) {
     DMA_TCD_CITER_ELINKNO = &DMA_TCD0_CITER_ELINKNO + dma_offset_16*DMA_channel;
     DMA_TCD_BITER_ELINKNO = &DMA_TCD0_BITER_ELINKNO + dma_offset_16*DMA_channel;
 
+    // point to the correct ADC
+    ADC_RA = &ADC0_RA + (uint32_t)0x20000*ADC_number;
+
     //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
 
 
@@ -78,7 +92,7 @@ void RingBufferDMA::start() {
                   DMA_TCD_ATTR_DMOD(4); // src and dst data is 16 bit (2 bytes), buffer size 2^^4 bytes = 8 values
     *DMA_TCD_NBYTES_MLNO = 2; // Minor Byte Transfer Count 2 bytes = 16 bits (we transfer 2 bytes each minor loop)
 
-    *DMA_TCD_SADDR = &ADC0_RA; // source address
+    *DMA_TCD_SADDR = ADC_RA; // source address
     *DMA_TCD_SOFF = 0; // don't change the address when minor loop finishes
     *DMA_TCD_SLAST = 0; // don't change src address after major loop completes
 
@@ -94,7 +108,11 @@ void RingBufferDMA::start() {
     DMA_CERQ = DMA_CERQ_CERQ(DMA_channel); // clear all past request
     DMA_CINT = DMA_channel; // clear interrupts
 
-    *DMAMUX0_CHCFG = DMAMUX_SOURCE_ADC0 | DMAMUX_ENABLE; // enable mux and set channel DMA_channel to ADC0
+    uint8_t DMAMUX_SOURCE_ADC = DMAMUX_SOURCE_ADC0;
+    if(ADC_number==1){
+        DMAMUX_SOURCE_ADC = DMAMUX_SOURCE_ADC1;
+    }
+    *DMAMUX0_CHCFG = DMAMUX_SOURCE_ADC | DMAMUX_ENABLE; // enable mux and set channel DMA_channel to ADC0
 
     DMA_SERQ = DMA_SERQ_SERQ(DMA_channel); // enable DMA request
     NVIC_ENABLE_IRQ(IRQ_DMA_CH); // enable interrupts

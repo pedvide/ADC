@@ -99,7 +99,7 @@ void ADC::setReference(uint8_t type, int8_t adc_num) {
         #if defined(__MK20DX256__)
         adc1->setReference(type);
         #else
-        fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
         #endif
         return;
     }
@@ -124,7 +124,7 @@ void ADC::setResolution(uint8_t bits, int8_t adc_num) {
         #if defined(__MK20DX256__)
         adc1->setResolution(bits);
         #else
-        fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
         #endif
         return;
     }
@@ -138,7 +138,7 @@ uint8_t ADC::getResolution(int8_t adc_num) {
         #if defined(__MK20DX256__)
         return adc1->getResolution();
         #else
-        fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
         #endif
         return 0;
     }
@@ -152,7 +152,7 @@ uint32_t ADC::getMaxValue(int8_t adc_num) {
         #if defined(__MK20DX256__)
         return adc1->getMaxValue();
         #else
-        fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
         #endif
         return 1;
     }
@@ -171,7 +171,7 @@ void ADC::setConversionSpeed(uint8_t speed, int8_t adc_num) {
         #if defined(__MK20DX256__)
         adc1->setConversionSpeed(speed);
         #else
-        fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
         #endif
         return;
     }
@@ -192,7 +192,7 @@ void ADC::setSamplingSpeed(uint8_t speed, int8_t adc_num) {
         #if defined(__MK20DX256__)
         adc1->setSamplingSpeed(speed);
         #else
-        fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
         #endif
         return;
     }
@@ -211,7 +211,7 @@ void ADC::setAveraging(uint8_t num, int8_t adc_num) {
         #if defined(__MK20DX256__)
         adc1->setAveraging(num);
         #else
-        fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
         #endif
         return;
     }
@@ -229,7 +229,7 @@ void ADC::enableInterrupts(int8_t adc_num) {
         #if defined(__MK20DX256__)
         adc1->enableInterrupts();
         #else
-        fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
         #endif
         return;
     }
@@ -243,7 +243,7 @@ void ADC::disableInterrupts(int8_t adc_num) {
         #if defined(__MK20DX256__)
         adc1->disableInterrupts();
         #else
-        fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
         #endif
         return;
     }
@@ -261,7 +261,7 @@ void ADC::enableDMA(int8_t adc_num) {
         #if defined(__MK20DX256__)
         adc1->enableDMA();
         #else
-        fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
         #endif
         return;
     }
@@ -275,7 +275,7 @@ void ADC::disableDMA(int8_t adc_num) {
         #if defined(__MK20DX256__)
         adc1->disableDMA();
         #else
-        fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
         #endif
         return;
     }
@@ -295,7 +295,7 @@ void ADC::enableCompare(int16_t compValue, bool greaterThan, int8_t adc_num) {
         #if defined(__MK20DX256__)
         adc1->enableCompare(compValue, greaterThan);
         #else
-        fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
         #endif
         return;
     }
@@ -315,7 +315,7 @@ void ADC::enableCompareRange(int16_t lowerLimit, int16_t upperLimit, bool inside
         #if defined(__MK20DX256__)
         adc1->enableCompareRange(lowerLimit, upperLimit, insideRange, inclusive);
         #else
-        fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
         #endif
         return;
     }
@@ -329,7 +329,7 @@ void ADC::disableCompare(int8_t adc_num) {
         #if defined(__MK20DX256__)
         adc1->disableCompare();
         #else
-        fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
         #endif
         return;
     }
@@ -349,7 +349,7 @@ void ADC::enablePGA(uint8_t gain, int8_t adc_num) {
         #if defined(__MK20DX256__)
         adc1->enablePGA(gain);
         #else
-        fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
         return;
         #endif
     }
@@ -752,8 +752,9 @@ ADC::Sync_result ADC::analogSynchronizedRead(uint8_t pin0, uint8_t pin1) {
     #if defined(__MK20DX128__)
     res.result_adc0 = ADC_ERROR_VALUE;
     res.result_adc1 = ADC_ERROR_VALUE;
+    adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
     return res;
-    #endif
+    #else
 
     // check if we are interrupting a measurement, store setting if so.
     // vars to save the current state of the ADC in case it's in use
@@ -831,6 +832,8 @@ ADC::Sync_result ADC::analogSynchronizedRead(uint8_t pin0, uint8_t pin1) {
     //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
 
     return res;
+
+    #endif
 
 }
 
@@ -846,7 +849,9 @@ ADC::Sync_result ADC::analogSynchronizedReadDifferential(uint8_t pin0P, uint8_t 
     #if defined(__MK20DX128__)
     res.result_adc0 = ADC_ERROR_VALUE;
     res.result_adc1 = ADC_ERROR_VALUE;
-    #endif
+    adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+    return res;
+    #else
 
     // check if we are interrupting a measurement, store setting if so.
     // vars to save the current state of the ADC in case it's in use
@@ -924,6 +929,8 @@ ADC::Sync_result ADC::analogSynchronizedReadDifferential(uint8_t pin0P, uint8_t 
 
     return res;
 
+    #endif
+
 }
 
 /////////////// SYNCHRONIZED NON-BLOCKING METHODS //////////////
@@ -938,7 +945,7 @@ int ADC::startSynchronizedSingleRead(uint8_t pin0, uint8_t pin1) {
     #if defined(__MK20DX128__)
     adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
     return false;
-    #endif
+    #else
 
     // check if we are interrupting a measurement, store setting if so.
     adc0->adcWasInUse = adc0->isConverting(); // is the ADC running now?
@@ -974,6 +981,8 @@ int ADC::startSynchronizedSingleRead(uint8_t pin0, uint8_t pin1) {
 
     //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
     return true;
+
+    #endif
 }
 
 // Start a differential conversion between two pins (pin0P - pin0N) and (pin1P - pin1N)
@@ -988,7 +997,7 @@ int ADC::startSynchronizedSingleDifferential(uint8_t pin0P, uint8_t pin0N, uint8
     #if defined(__MK20DX128__)
     adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
     return false;
-    #endif
+    #else
 
     // check if we are interrupting a measurement, store setting if so.
     adc0->adcWasInUse = adc0->isConverting(); // is the ADC running now?
@@ -1024,6 +1033,8 @@ int ADC::startSynchronizedSingleDifferential(uint8_t pin0P, uint8_t pin0N, uint8
 
     return true;
 
+    #endif
+
 }
 
 // Reads the analog value of a single conversion.
@@ -1033,11 +1044,16 @@ int ADC::startSynchronizedSingleDifferential(uint8_t pin0P, uint8_t pin0N, uint8
 ADC::Sync_result ADC::readSynchronizedSingle() {
     ADC::Sync_result res;
 
+    #if defined(__MK20DX128__)
     res.result_adc0 = ADC_ERROR_VALUE;
     res.result_adc1 = ADC_ERROR_VALUE;
+    adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+    #elif defined(__MK20DX256__)
+    res.result_adc0 = adc0->readSingle();
+    res.result_adc1 = adc1->readSingle();
+    #endif // defined
 
     return res;
-
 }
 
 
@@ -1050,6 +1066,7 @@ ADC::Sync_result ADC::readSynchronizedSingle() {
 void ADC::startSynchronizedContinuous(uint8_t pin0, uint8_t pin1) {
 
     #if defined(__MK20DX128__)
+    adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
     return;
     #elif defined(__MK20DX256__)
     adc0->startContinuous(pin0);
@@ -1072,6 +1089,7 @@ void ADC::startSynchronizedContinuous(uint8_t pin0, uint8_t pin1) {
 void ADC::startSynchronizedContinuousDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N) {
 
     #if defined(__MK20DX128__)
+    adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
     return;
     #elif defined(__MK20DX256__)
     adc0->startContinuousDifferential(pin0P, pin0N);
@@ -1094,6 +1112,7 @@ ADC::Sync_result ADC::readSynchronizedContinuous() {
     #if defined(__MK20DX128__)
     res.result_adc0 = ADC_ERROR_VALUE;
     res.result_adc1 = ADC_ERROR_VALUE;
+    adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
     #elif defined(__MK20DX256__)
     res.result_adc0 = adc0->analogReadContinuous();
     res.result_adc1 = adc1->analogReadContinuous();
@@ -1105,8 +1124,13 @@ ADC::Sync_result ADC::readSynchronizedContinuous() {
 //! Stops synchronous continuous conversion
 void ADC::stopSynchronizedContinuous() {
 
+    #if defined(__MK20DX128__)
+    adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+    return;
+    #elif defined(__MK20DX256__)
     adc0->stopContinuous();
     adc1->stopContinuous();
+    #endif // defined
 
 }
 

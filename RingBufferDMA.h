@@ -39,7 +39,7 @@ class RingBufferDMA
 {
     public:
         //! Constructor, buffer has a size DEFAULT_BUFFER_SIZE
-        RingBufferDMA(uint8_t dma_channel);
+        RingBufferDMA(uint8_t dma_channel, uint8_t ADC_num = 0);
 
         //! Destructor
         ~RingBufferDMA();
@@ -68,6 +68,9 @@ class RingBufferDMA
 
         //! DMA channel of the instance
         uint8_t DMA_channel;
+
+        //! ADC module of the instance
+        uint8_t ADC_number;
 
 
     protected:
@@ -105,6 +108,8 @@ class RingBufferDMA
 
         volatile uint16_t* DMA_TCD_CITER_ELINKNO; // TCD Current Minor Loop Link, Major Loop Count, Channel Linking Disabled
         volatile uint16_t* DMA_TCD_BITER_ELINKNO; // TCD Beginning Minor Loop Link, Major Loop Count, Channel Linking Disabled
+
+        volatile uint32_t* ADC_RA; // adc module
 
 
 
