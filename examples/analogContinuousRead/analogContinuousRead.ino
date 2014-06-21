@@ -49,7 +49,7 @@ void setup() {
 
 
     // If you enable interrupts, notice that the isr will read the result, so that isComplete() will return false (most of the time)
-    adc->enableInterrupts(ADC_0); // enable interrupts BEFORE calling a measurement method
+    //adc->enableInterrupts(ADC_0); // enable interrupts BEFORE calling a measurement method
     //adc->enableInterrupts(ADC_1);
 
 

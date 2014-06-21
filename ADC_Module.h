@@ -399,6 +399,7 @@ class ADC_Module
         //! Is the ADC converting at the moment?
         inline bool isConverting() {
             return (*ADC_SC2_adact);
+            //return ((*ADC_SC2) & ADC_SC2_ADACT) >> 7;
         }
 
         //! Is an ADC conversion ready?
@@ -409,16 +410,18 @@ class ADC_Module
         */
         inline bool isComplete() {
             return (*ADC_SC1A_coco);
+            //return ((*ADC_SC1A) & ADC_SC1_COCO) >> 7;
         }
 
         //! Is the ADC in differential mode?
         inline bool isDifferential() {
-            return (*ADC_SC1A & ADC_SC1_DIFF) >> 5;
+            return ((*ADC_SC1A) & ADC_SC1_DIFF) >> 5;
         }
 
         //! Is the ADC in continuous mode?
         inline bool isContinuous() {
             return (*ADC_SC3_adco);
+            //return ((*ADC_SC3) & ADC_SC3_ADCO) >> 3;
         }
 
 

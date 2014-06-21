@@ -6,7 +6,7 @@
 #include <ADC.h>
 
 const int readPin = A9;
-const int readPin2 = A2;
+const int readPin2 = A3;
 
 ADC *adc = new ADC(); // adc object
 
@@ -85,8 +85,6 @@ void loop() {
       Serial.print(result.result_adc0*3.3/adc->getMaxValue(ADC_0), DEC);
       Serial.print(" ");
       Serial.println(result.result_adc1*3.3/adc->getMaxValue(ADC_1), DEC);
-    } else {
-      Serial.println("Comparison failed");
     }
 
     /* fail_flag contains all possible errors,

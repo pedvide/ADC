@@ -738,6 +738,8 @@ void ADC::stopContinuous(int8_t adc_num) {
     return;
 }
 
+
+
 //////////////// SYNCHRONIZED BLOCKING METHODS //////////////////
 
 /*Returns the analog values of both pins, measured at the same time by the two ADC modules.
@@ -755,6 +757,18 @@ ADC::Sync_result ADC::analogSynchronizedRead(uint8_t pin0, uint8_t pin1) {
     adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
     return res;
     #else
+
+    if ( (pin0 < 0) || (pin0 > 43) || (channel2sc1aADC0[pin0]==31) ) {
+        adc0->fail_flag |= ADC_ERROR_WRONG_PIN;
+        res.result_adc0 = ADC_ERROR_VALUE;
+        return res;
+    }
+    if ( (pin1 < 0) || (pin1 > 43) || (channel2sc1aADC1[pin1]==31) ) {
+        adc1->fail_flag |= ADC_ERROR_WRONG_PIN;
+        res.result_adc1 = ADC_ERROR_VALUE;
+        return res;
+    }
+
 
     // check if we are interrupting a measurement, store setting if so.
     // vars to save the current state of the ADC in case it's in use
@@ -791,24 +805,25 @@ ADC::Sync_result ADC::analogSynchronizedRead(uint8_t pin0, uint8_t pin1) {
     adc1->startSingleReadFast(pin1);
 
     // wait for both ADCs to finish
-    while( (adc0->isConverting()) && (adc1->isConverting()) ) {
+    while( (adc0->isConverting()) || (adc1->isConverting()) ) { // wait for both to finish
         yield();
         //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
     }
     __disable_irq(); // make sure nothing interrupts this part
-    if (adc0->isComplete()) { // conversion succeded
+    if ( adc0->isComplete() ) { // conversion succeded
         res.result_adc0 = adc0->readSingle();
     } else { // comparison was false
         adc0->fail_flag |= ADC_ERROR_COMPARISON;
         res.result_adc0 = ADC_ERROR_VALUE;
     }
-    if (adc1->isComplete()) { // conversion succeded
+    if ( adc1->isComplete() ) { // conversion succeded
         res.result_adc1 = adc1->readSingle();
     } else { // comparison was false
         adc1->fail_flag |= ADC_ERROR_COMPARISON;
         res.result_adc1 = ADC_ERROR_VALUE;
     }
     __enable_irq();
+
 
 
     // if we interrupted a conversion, set it again
@@ -887,7 +902,7 @@ ADC::Sync_result ADC::analogSynchronizedReadDifferential(uint8_t pin0P, uint8_t 
     adc1->startSingleDifferentialFast(pin1P, pin1N);
 
     // wait for both ADCs to finish
-    while( (adc0->isConverting()) && (adc1->isConverting()) ) {
+    while( (adc0->isConverting()) || (adc1->isConverting()) ) {
         yield();
         //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
     }
@@ -1077,8 +1092,10 @@ void ADC::startSynchronizedContinuous(uint8_t pin0, uint8_t pin1) {
     uint32_t temp_ADC0_SC1A = ADC0_SC1A; ADC0_SC1A = 0x1F;
     uint32_t temp_ADC1_SC1A = ADC1_SC1A; ADC1_SC1A = 0x1F;
 
+    __disable_irq(); // both measurements should have a maximum delay of an instruction time
     ADC0_SC1A = temp_ADC0_SC1A;
     ADC1_SC1A = temp_ADC1_SC1A;
+    __enable_irq();
     #endif
 }
 
@@ -1100,8 +1117,10 @@ void ADC::startSynchronizedContinuousDifferential(uint8_t pin0P, uint8_t pin0N, 
     uint32_t temp_ADC0_SC1A = ADC0_SC1A; ADC0_SC1A = 0x1F;
     uint32_t temp_ADC1_SC1A = ADC1_SC1A; ADC1_SC1A = 0x1F;
 
+    __disable_irq();
     ADC0_SC1A = temp_ADC0_SC1A;
     ADC1_SC1A = temp_ADC1_SC1A;
+    __enable_irq();
     #endif
 }
 
