@@ -49,7 +49,8 @@
 #include "RingBufferDMA.h"
 
 // dma assigment
-//#include "DMAControl.h"
+#include "DMAChannel.h"
+
 
 
 #ifdef __cplusplus
@@ -392,7 +393,6 @@ class ADC
         /////////// DMA METHODS ///////////////
 
         // DMA stuff
-        //DMAControl dmaControl; // dma channel assignment
         static uint8_t dma_Ch0, dma_Ch1;
 
         static void dma_isr_0(void);

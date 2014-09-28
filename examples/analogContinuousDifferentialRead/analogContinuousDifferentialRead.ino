@@ -119,7 +119,7 @@ void loop() {
     }
     #endif
 
-    digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN))
+    digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
     delay(100);
 
 }

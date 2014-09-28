@@ -350,8 +350,8 @@ void ADC::enablePGA(uint8_t gain, int8_t adc_num) {
         adc1->enablePGA(gain);
         #else
         adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
-        return;
         #endif
+        return;
     }
     adc0->enablePGA(gain);
     return;
@@ -1170,19 +1170,20 @@ void dma_isr_1(void)
 
 void ADC::useDMA(uint8_t ch0, uint8_t ch1) {
 
+    // request channels
+    DMAChannel dma0, dma1;
+
     // Initialize buffers
+    //channel
 
     #if defined(__MK20DX128__)
-    //dma_Ch0 = dmaControl->getChannel(&dma_isr_0);
-    dma_Ch0 = ch0;
+    dma_Ch0 = dma0.channel;
     if(dma_Ch0!=-1) {
         buffer0 = new RingBufferDMA(dma_Ch0);
     }
     #elif defined(__MK20DX256__)
-    //dma_Ch0 = dmaControl->getChannel(&dma_isr_0);
-    //dma_Ch1 = dmaControl->getChannel(&dma_isr_1);
-    dma_Ch0 = ch0;
-    dma_Ch1 = ch1;
+    dma_Ch0 = dma0.channel;
+    dma_Ch1 = dma1.channel;
     if(dma_Ch0!=-1) {
         buffer0 = new RingBufferDMA(dma_Ch0);
         buffer0->start();

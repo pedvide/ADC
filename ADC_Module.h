@@ -31,7 +31,7 @@
 #ifndef ADC_MODULE_H
 #define ADC_MODULE_H
 
-#include "mk20dx128.h"
+//#include "mk20dx128.h"
 
 #include <Arduino.h>
 
