@@ -49,7 +49,7 @@
 #include "RingBufferDMA.h"
 
 // dma assigment
-#include "DMAChannel.h"
+//#include "DMAChannel.h"
 
 
 
@@ -71,10 +71,12 @@ class ADC
         // create both adc objects
 
         //! Object to control the ADC0
-        static ADC_Module *adc0; // adc object
+        //static ADC_Module *adc0; // adc object
+        ADC_Module *adc0; // adc object
         #if defined(__MK20DX256__)
         //! Object to control the ADC1
-        static ADC_Module *adc1; // adc object
+        //static ADC_Module *adc1; // adc object
+        ADC_Module *adc1; // adc object
         #endif
 
 

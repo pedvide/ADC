@@ -29,13 +29,13 @@
 
 #include "ADC.h"
 
-
+/*
 // static adc module objects
 ADC_Module *ADC::adc0 = new ADC_Module(0);
 #if defined(__MK20DX256__)
 ADC_Module *ADC::adc1 = new ADC_Module(1);
 #endif
-
+*/
 uint8_t ADC::dma_Ch0 = -1;
 uint8_t ADC::dma_Ch1 = -1;
 
@@ -83,6 +83,11 @@ ADC::ADC() {
     SIM_SCGC6 |= SIM_SCGC6_ADC0;
     #if defined(__MK20DX256__)
     SIM_SCGC3 |= SIM_SCGC3_ADC1;
+    #endif
+
+    adc0 = new ADC_Module(0);
+    #if defined(__MK20DX256__)
+    adc1 = new ADC_Module(1);
     #endif
 
     //dmaControl = new DMAControl;
@@ -1169,7 +1174,7 @@ void dma_isr_1(void)
 }
 
 void ADC::useDMA(uint8_t ch0, uint8_t ch1) {
-
+/*
     // request channels
     DMAChannel dma0, dma1;
 
@@ -1194,7 +1199,7 @@ void ADC::useDMA(uint8_t ch0, uint8_t ch1) {
     }
     #endif
 
-
+*/
 }
 
 
