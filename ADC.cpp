@@ -346,7 +346,7 @@ void ADC::disableCompare(int8_t adc_num) {
 // Enable and set PGA
 /* Enables the PGA and sets the gain
 *   Use only for signals lower than 1.2 V
-*   \param gain From 0 to 6, set PGA to 2^gain
+*   \param gain can be 1, 2, 4, 8, 16, 32 or 64
 *
 */
 void ADC::enablePGA(uint8_t gain, int8_t adc_num) {

@@ -189,7 +189,7 @@ class ADC
         //! Enable and set PGA
         /** Enables the PGA and sets the gain
         *   Use only for signals lower than 1.2 V
-        *   \param gain can be 1 (disabled), 2, 4, 8, 16, 32 or 64
+        *   \param gain can be 1, 2, 4, 8, 16, 32 or 64
         *
         */
         void enablePGA(uint8_t gain, int8_t adc_num = -1);
