@@ -6,5 +6,5 @@ var searchData=
   ['readsynchronizedsingle',['readSynchronizedSingle',['../class_a_d_c.html#a38d941542bbdbc20c1b9e26a5051094a',1,'ADC']]],
   ['recalibrate',['recalibrate',['../class_a_d_c___module.html#afe8ed6f2a6c811ec3ef2c4aba768982f',1,'ADC_Module']]],
   ['ringbuffer',['RingBuffer',['../class_ring_buffer.html#a93b9973de32a836bdf70befaf9d78eed',1,'RingBuffer']]],
-  ['ringbufferdma',['RingBufferDMA',['../class_ring_buffer_d_m_a.html#af3fd37c46b80508278bd9a05cefae859',1,'RingBufferDMA']]]
+  ['ringbufferdma',['RingBufferDMA',['../class_ring_buffer_d_m_a.html#a9476b985cbf41086732ef912e89ce889',1,'RingBufferDMA']]]
 ];

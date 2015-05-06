@@ -1,6 +1,6 @@
-/* Teensy 3.x ADC library
+/* Teensy 3.x, LC ADC library
  * https://github.com/pedvide/ADC
- * Copyright (c) 2014 Pedro Villanueva
+ * Copyright (c) 2015 Pedro Villanueva
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 
-/* ADC.h: Control for one (Teensy 3.0) or two ADC modules (Teensy 3.1).
+/* ADC.h: Control for one (Teensy 3.0, LC) or two ADC modules (Teensy 3.1).
  *
  */
 
@@ -40,17 +40,34 @@
 #define ADC_0 0
 #define ADC_1 1
 
+// Teensy 3.1 has 2 ADCs, Teensy 3.0 and LC only 1.
+#if defined(__MK20DX256__) // Teensy 3.1
+        #define ADC_NUM_ADCS 2
+#elif defined(__MK20DX128__) // Teensy 3.0
+        #define ADC_NUM_ADCS 1
+#elif defined(__MKL26Z64__) // Teensy LC
+        #define ADC_NUM_ADCS 1
+#endif
+
+#if defined(__MK20DX256__) || defined(__MK20DX128__) // Teensy 3.x
+        #define ADC_USE_DMA 1
+#else
+        #define ADC_USE_DMA 0
+#endif
+
 
 // include ADC module class
 #include "ADC_Module.h"
 
 // include the circular buffer
 #include "RingBuffer.h"
-#include "RingBufferDMA.h"
+
+#if ADC_USE_DMA==1
+        #include "RingBufferDMA.h"
+#endif
 
 // dma assigment
 //#include "DMAChannel.h"
-
 
 
 #ifdef __cplusplus
@@ -394,6 +411,8 @@ class ADC
 
         /////////// DMA METHODS ///////////////
 
+        #if ADC_USE_DMA==1
+
         // DMA stuff
         static uint8_t dma_Ch0, dma_Ch1;
 
@@ -411,6 +430,8 @@ class ADC
 
         void useDMA(uint8_t ch0=0, uint8_t ch1=1);
 
+        #endif
+
 
         // PDB stuff
         //void startPDB(double period);
@@ -419,20 +440,16 @@ class ADC
         //! Translate pin number to SC1A nomenclature and viceversa
         static const uint8_t channel2sc1aADC0[44];
         static const uint8_t sc1a2channelADC0[31];
+        #if defined(__MK20DX256__)
         static const uint8_t channel2sc1aADC1[44];
         static const uint8_t sc1a2channelADC1[31];
+        #endif
 
 
     protected:
     private:
 
-
-        #if defined(__MK20DX128__)
-        const uint8_t num_ADCs = 1;
-        #elif defined(__MK20DX256__)
-        const uint8_t num_ADCs = 2;
-        #endif
-
+        const uint8_t num_ADCs = ADC_NUM_ADCS;
 
 };
 

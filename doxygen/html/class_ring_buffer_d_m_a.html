@@ -116,9 +116,9 @@ $(document).ready(function(){initNavTree('class_ring_buffer_d_m_a.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:af3fd37c46b80508278bd9a05cefae859"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ring_buffer_d_m_a.html#af3fd37c46b80508278bd9a05cefae859">RingBufferDMA</a> (uint8_t dma_channel)</td></tr>
-<tr class="memdesc:af3fd37c46b80508278bd9a05cefae859"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor, buffer has a size DEFAULT_BUFFER_SIZE.  <a href="#af3fd37c46b80508278bd9a05cefae859">More...</a><br/></td></tr>
-<tr class="separator:af3fd37c46b80508278bd9a05cefae859"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9476b985cbf41086732ef912e89ce889"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ring_buffer_d_m_a.html#a9476b985cbf41086732ef912e89ce889">RingBufferDMA</a> (uint8_t dma_channel, uint8_t ADC_num=0)</td></tr>
+<tr class="memdesc:a9476b985cbf41086732ef912e89ce889"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor, buffer has a size DEFAULT_BUFFER_SIZE.  <a href="#a9476b985cbf41086732ef912e89ce889">More...</a><br/></td></tr>
+<tr class="separator:a9476b985cbf41086732ef912e89ce889"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae7b0ff5b6789ac462a657602dbedc7c4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ring_buffer_d_m_a.html#ae7b0ff5b6789ac462a657602dbedc7c4">~RingBufferDMA</a> ()</td></tr>
 <tr class="memdesc:ae7b0ff5b6789ac462a657602dbedc7c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="#ae7b0ff5b6789ac462a657602dbedc7c4">More...</a><br/></td></tr>
 <tr class="separator:ae7b0ff5b6789ac462a657602dbedc7c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -146,11 +146,14 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a58cb9dfc9b223725ac546c723beac5aa"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ring_buffer_d_m_a.html#a58cb9dfc9b223725ac546c723beac5aa">DMA_channel</a></td></tr>
 <tr class="memdesc:a58cb9dfc9b223725ac546c723beac5aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">DMA channel of the instance.  <a href="#a58cb9dfc9b223725ac546c723beac5aa">More...</a><br/></td></tr>
 <tr class="separator:a58cb9dfc9b223725ac546c723beac5aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a293d8fa003796812801612f64c1d7aa6"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ring_buffer_d_m_a.html#a293d8fa003796812801612f64c1d7aa6">ADC_number</a></td></tr>
+<tr class="memdesc:a293d8fa003796812801612f64c1d7aa6"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_a_d_c.html">ADC</a> module of the instance.  <a href="#a293d8fa003796812801612f64c1d7aa6">More...</a><br/></td></tr>
+<tr class="separator:a293d8fa003796812801612f64c1d7aa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class <a class="el" href="class_ring_buffer_d_m_a.html">RingBufferDMA</a> implements a circular buffer of fixed size (must be power of 2) Code adapted from <a href="http://en.wikipedia.org/wiki/Circular_buffer#Mirroring">http://en.wikipedia.org/wiki/Circular_buffer#Mirroring</a> </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="af3fd37c46b80508278bd9a05cefae859"></a>
+<a class="anchor" id="a9476b985cbf41086732ef912e89ce889"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -158,8 +161,18 @@ Public Attributes</h2></td></tr>
           <td class="memname">RingBufferDMA::RingBufferDMA </td>
           <td>(</td>
           <td class="paramtype">uint8_t&#160;</td>
-          <td class="paramname"><em>dma_channel</em></td><td>)</td>
+          <td class="paramname"><em>dma_channel</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>ADC_num</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -291,6 +304,20 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a293d8fa003796812801612f64c1d7aa6"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t RingBufferDMA::ADC_number</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><a class="el" href="class_a_d_c.html">ADC</a> module of the instance. </p>
+
+</div>
+</div>
 <a class="anchor" id="a58cb9dfc9b223725ac546c723beac5aa"></a>
 <div class="memitem">
 <div class="memproto">
@@ -305,9 +332,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following files:<ul>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li><a class="el" href="_ring_buffer_d_m_a_8h_source.html">RingBufferDMA.h</a></li>
-<li><a class="el" href="_ring_buffer_d_m_a_8cpp.html">RingBufferDMA.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -315,7 +341,7 @@ Public Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_ring_buffer_d_m_a.html">RingBufferDMA</a></li>
-    <li class="footer">Generated on Sun Jun 15 2014 14:58:10 for ADC by
+    <li class="footer">Generated on Thu May 7 2015 00:06:35 for ADC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

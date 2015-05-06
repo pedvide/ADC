@@ -1,6 +1,6 @@
- /* Teensy 3.x ADC library
+/* Teensy 3.x, LC ADC library
  * https://github.com/pedvide/ADC
- * Copyright (c) 2014 Pedro Villanueva
+ * Copyright (c) 2015 Pedro Villanueva
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 
-/* ADC.cpp: Implements the control of one or more ADC modules of Teensy 3.x
+/* ADC.cpp: Implements the control of one or more ADC modules of Teensy 3.x, LC
  *
  */
 
@@ -36,8 +36,11 @@ ADC_Module *ADC::adc0 = new ADC_Module(0);
 ADC_Module *ADC::adc1 = new ADC_Module(1);
 #endif
 */
+
+#if ADC_USE_DMA==1
 uint8_t ADC::dma_Ch0 = -1;
 uint8_t ADC::dma_Ch1 = -1;
+#endif
 
 
 // translate pin number to SC1A nomenclature and viceversa
@@ -46,6 +49,7 @@ uint8_t ADC::dma_Ch1 = -1;
 /* channel2sc1aADCx converts a pin number to their value for the SC1A register, for the ADC0 and ADC1
 *  sc1a2channelADCx does the opposite.
 */
+#if !defined(__MKL26Z64__)
 const uint8_t ADC::channel2sc1aADC0[]= { // new version, gives directly the sc1a number. 0x1F=31 deactivates the ADC.
     5, 14, 8, 9, 13, 12, 6, 7, 15, 4, 0, 19, 3, 21, // 0-13, we treat them as A0-A13
     5, 14, 8, 9, 13, 12, 6, 7, 15, 4, // 14-23 (A0-A9)
@@ -59,7 +63,24 @@ const uint8_t ADC::sc1a2channelADC0[]= { // new version, gives directly the pin 
     39, 40, 0, 0, 38, 41, 42, 43, // VREF_OUT, A14, temp. sensor, bandgap, VREFH, VREFL.
     0 // 31 means disabled, but just in case
 };
+#else
+// Teensy LC
+const uint8_t ADC::channel2sc1aADC0[]= { // new version, gives directly the sc1a number. 0x1F=31 deactivates the ADC.
+    5, 14, 8, 9, 13, 12, 6, 7, 15, 17, 0, 4, 23, 31, // 0-13, we treat them as A0-A12 + A13= doesn't exist
+    5, 14, 8, 9, 13, 12, 6, 7, 15, 17, // 14-23 (A0-A9)
+    31, 31, 31, 31, 31, 31, 31, 31, 31, 31, // 24-33
+    0, 4, 23, 31, // 34-37 (A10-A12) + nothing
+    26, 31, 31, 27, 29, 30 // 38-43: temp. sensor, , , bandgap, VREFH, VREFL.
+};
+const uint8_t ADC::sc1a2channelADC0[]= { // new version, gives directly the pin number
+    34, 0, 0, 0, 35, 14, 20, 21, 16, 17, 0, 0, 19, 18, // 0-13
+    15, 22, 0, 23, 0, 0, 0, 0, // 14-21
+    0, 0, 0, 0, 38, 41, 42, 43, // VREF_OUT, A14, temp. sensor, bandgap, VREFH, VREFL.
+    0 // 31 means disabled, but just in case
+};
+#endif // defined
 
+#if defined(__MK20DX256__)
 const uint8_t ADC::channel2sc1aADC1[]= { // new version, gives directly the sc1a number. 0x1F=31 deactivates the ADC.
     31, 31, 8, 9, 31, 31, 31, 31, 31, 31, 3, 31, 0, 19, // 0-13, we treat them as A0-A13
     31, 31, 8, 9, 31, 31, 31, 31, 31, 31, // 14-23 (A0-A9)
@@ -74,6 +95,7 @@ const uint8_t ADC::sc1a2channelADC1[]= { // new version, gives directly the pin 
     0, 0, 0, 0, 38, 41, 0, 42, // 22-29. VREF_OUT, A14, temp. sensor, bandgap, VREFH, VREFL.
     43
 };
+#endif
 
 
 ADC::ADC() {
@@ -101,7 +123,7 @@ ADC::ADC() {
 */
 void ADC::setReference(uint8_t type, int8_t adc_num) {
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
-        #if defined(__MK20DX256__)
+        #if ADC_NUM_ADCS>=2 // Teensy 3.1
         adc1->setReference(type);
         #else
         adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
@@ -126,7 +148,7 @@ void ADC::setReference(uint8_t type, int8_t adc_num) {
 */
 void ADC::setResolution(uint8_t bits, int8_t adc_num) {
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
-        #if defined(__MK20DX256__)
+        #if ADC_NUM_ADCS>=2 // Teensy 3.1
         adc1->setResolution(bits);
         #else
         adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
@@ -140,7 +162,7 @@ void ADC::setResolution(uint8_t bits, int8_t adc_num) {
 //! Returns the resolution of the ADC_Module.
 uint8_t ADC::getResolution(int8_t adc_num) {
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
-        #if defined(__MK20DX256__)
+        #if ADC_NUM_ADCS>=2 // Teensy 3.1
         return adc1->getResolution();
         #else
         adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
@@ -154,7 +176,7 @@ uint8_t ADC::getResolution(int8_t adc_num) {
 //! Returns the maximum value for a measurement.
 uint32_t ADC::getMaxValue(int8_t adc_num) {
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
-        #if defined(__MK20DX256__)
+        #if ADC_NUM_ADCS>=2 // Teensy 3.1
         return adc1->getMaxValue();
         #else
         adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
@@ -173,7 +195,7 @@ uint32_t ADC::getMaxValue(int8_t adc_num) {
 */
 void ADC::setConversionSpeed(uint8_t speed, int8_t adc_num) {
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
-        #if defined(__MK20DX256__)
+        #if ADC_NUM_ADCS>=2 // Teensy 3.1
         adc1->setConversionSpeed(speed);
         #else
         adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
@@ -194,7 +216,7 @@ void ADC::setConversionSpeed(uint8_t speed, int8_t adc_num) {
 */
 void ADC::setSamplingSpeed(uint8_t speed, int8_t adc_num) {
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
-        #if defined(__MK20DX256__)
+        #if ADC_NUM_ADCS>=2 // Teensy 3.1
         adc1->setSamplingSpeed(speed);
         #else
         adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
@@ -213,7 +235,7 @@ void ADC::setSamplingSpeed(uint8_t speed, int8_t adc_num) {
 */
 void ADC::setAveraging(uint8_t num, int8_t adc_num) {
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
-        #if defined(__MK20DX256__)
+        #if ADC_NUM_ADCS>=2 // Teensy 3.1
         adc1->setAveraging(num);
         #else
         adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
@@ -231,7 +253,7 @@ void ADC::setAveraging(uint8_t num, int8_t adc_num) {
 */
 void ADC::enableInterrupts(int8_t adc_num) {
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
-        #if defined(__MK20DX256__)
+        #if ADC_NUM_ADCS>=2 // Teensy 3.1
         adc1->enableInterrupts();
         #else
         adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
@@ -245,7 +267,7 @@ void ADC::enableInterrupts(int8_t adc_num) {
 //! Disable interrupts
 void ADC::disableInterrupts(int8_t adc_num) {
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
-        #if defined(__MK20DX256__)
+        #if ADC_NUM_ADCS>=2 // Teensy 3.1
         adc1->disableInterrupts();
         #else
         adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
@@ -263,7 +285,7 @@ void ADC::disableInterrupts(int8_t adc_num) {
 */
 void ADC::enableDMA(int8_t adc_num) {
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
-        #if defined(__MK20DX256__)
+        #if ADC_NUM_ADCS>=2 // Teensy 3.1
         adc1->enableDMA();
         #else
         adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
@@ -277,7 +299,7 @@ void ADC::enableDMA(int8_t adc_num) {
 //! Disable ADC DMA request
 void ADC::disableDMA(int8_t adc_num) {
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
-        #if defined(__MK20DX256__)
+        #if ADC_NUM_ADCS>=2 // Teensy 3.1
         adc1->disableDMA();
         #else
         adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
@@ -297,7 +319,7 @@ void ADC::disableDMA(int8_t adc_num) {
 */
 void ADC::enableCompare(int16_t compValue, bool greaterThan, int8_t adc_num) {
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
-        #if defined(__MK20DX256__)
+        #if ADC_NUM_ADCS>=2 // Teensy 3.1
         adc1->enableCompare(compValue, greaterThan);
         #else
         adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
@@ -317,7 +339,7 @@ void ADC::enableCompare(int16_t compValue, bool greaterThan, int8_t adc_num) {
 */
 void ADC::enableCompareRange(int16_t lowerLimit, int16_t upperLimit, bool insideRange, bool inclusive, int8_t adc_num) {
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
-        #if defined(__MK20DX256__)
+        #if ADC_NUM_ADCS>=2 // Teensy 3.1
         adc1->enableCompareRange(lowerLimit, upperLimit, insideRange, inclusive);
         #else
         adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
@@ -331,7 +353,7 @@ void ADC::enableCompareRange(int16_t lowerLimit, int16_t upperLimit, bool inside
 //! Disable the compare function
 void ADC::disableCompare(int8_t adc_num) {
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
-        #if defined(__MK20DX256__)
+        #if ADC_NUM_ADCS>=2 // Teensy 3.1
         adc1->disableCompare();
         #else
         adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
@@ -351,7 +373,7 @@ void ADC::disableCompare(int8_t adc_num) {
 */
 void ADC::enablePGA(uint8_t gain, int8_t adc_num) {
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
-        #if defined(__MK20DX256__)
+        #if ADC_NUM_ADCS>=2 // Teensy 3.1
         adc1->enablePGA(gain);
         #else
         adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
@@ -367,7 +389,7 @@ void ADC::enablePGA(uint8_t gain, int8_t adc_num) {
 */
 uint8_t ADC::getPGA(int8_t adc_num) {
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
-        #if defined(__MK20DX256__)
+        #if ADC_NUM_ADCS>=2 // Teensy 3.1
         return adc1->getPGA();
         #else
         adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
@@ -380,7 +402,7 @@ uint8_t ADC::getPGA(int8_t adc_num) {
 //! Disable PGA
 void ADC::disablePGA(int8_t adc_num) {
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
-        #if defined(__MK20DX256__)
+        #if ADC_NUM_ADCS>=2 // Teensy 3.1
         adc1->disablePGA();
         #else
         adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
@@ -394,7 +416,7 @@ void ADC::disablePGA(int8_t adc_num) {
 //! Is the ADC converting at the moment?
 bool ADC::isConverting(int8_t adc_num) {
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
-        #if defined(__MK20DX256__)
+        #if ADC_NUM_ADCS>=2 // Teensy 3.1
         return adc1->isConverting();
         #else
         adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
@@ -412,7 +434,7 @@ bool ADC::isConverting(int8_t adc_num) {
 */
 bool ADC::isComplete(int8_t adc_num) {
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
-        #if defined(__MK20DX256__)
+        #if ADC_NUM_ADCS>=2 // Teensy 3.1
         return adc1->isComplete();
         #else
         adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
@@ -425,7 +447,7 @@ bool ADC::isComplete(int8_t adc_num) {
 //! Is the ADC in differential mode?
 bool ADC::isDifferential(int8_t adc_num) {
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
-        #if defined(__MK20DX256__)
+        #if ADC_NUM_ADCS>=2 // Teensy 3.1
         return adc1->isDifferential();
         #else
         adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
@@ -438,7 +460,7 @@ bool ADC::isDifferential(int8_t adc_num) {
 //! Is the ADC in continuous mode?
 bool ADC::isContinuous(int8_t adc_num) {
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
-        #if defined(__MK20DX256__)
+        #if ADC_NUM_ADCS>=2 // Teensy 3.1
         return adc1->isContinuous();
         #else
         adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
@@ -509,21 +531,21 @@ int ADC::analogRead(uint8_t pin, int8_t adc_num) {
 */
 int ADC::analogReadDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num) {
     if( adc_num==-1 ) { // adc_num isn't changed
-        #if defined(__MK20DX128__)
-        return adc0->analogReadDifferential(pinP, pinN); // use ADC0
-        #elif defined(__MK20DX256__)
+        #if ADC_NUM_ADCS>=2 // Teensy 3.1
         if( (adc0->num_measurements) >= (adc1->num_measurements)) { // use the ADC with less workload
             return adc1->analogReadDifferential(pinP, pinN);
         } else {
             return adc0->analogReadDifferential(pinP, pinN);
         }
+        #else
+        return adc0->analogReadDifferential(pinP, pinN); // use ADC0
         #endif
     }
     else if( adc_num==0 ) { // use ADC0
         return adc0->analogReadDifferential(pinP, pinN);
     }
     else if( adc_num==1 ){ // user wants ADC 1, do nothing if it's a Teensy 3.0
-        #if defined(__MK20DX256__)
+        #if ADC_NUM_ADCS>=2 // Teensy 3.1
         return adc1->analogReadDifferential(pinP, pinN);
         #else
         adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
@@ -542,20 +564,8 @@ int ADC::analogReadDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num) {
 *   restart the adc if it stopped a measurement. If you modify the adc_isr then this won't happen.
 */
 int ADC::startSingleRead(uint8_t pin, int8_t adc_num) {
-    /* Teensy 3.0
-    */
-    #if defined(__MK20DX128__)
-    if( adc_num==1 ) { // If asked to use ADC1, return error
-        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
-        return ADC_ERROR_VALUE;
-    }
-    if ( (pin <= 23) || (pin>=34) ) { // check that the pin is correct (pin<0 or pin>43 have been ruled out already)
-        return adc0->startSingleRead(pin); // use ADC0
-    }
 
-    /* Teensy 3.1
-    */
-    #elif defined(__MK20DX256__)
+    #if ADC_NUM_ADCS>=2 // Teensy 3.1
 
     // Check to which ADC the pin corresponds
     if( (pin==16) || (pin==17) || (pin>=34 && pin<=37) )  { // Both ADCs: pins 16, 17, 34, 35, 36, and 37.
@@ -577,7 +587,19 @@ int ADC::startSingleRead(uint8_t pin, int8_t adc_num) {
     } else if(pin<=23){ // Pin corresponds to ADC0
         return adc0->startSingleRead(pin);
     }
+
+    #else
+
+    if( adc_num==1 ) { // If asked to use ADC1, return error
+        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        return ADC_ERROR_VALUE;
+    }
+    if ( (pin <= 23) || (pin>=34) ) { // check that the pin is correct (pin<0 or pin>43 have been ruled out already)
+        return adc0->startSingleRead(pin); // use ADC0
+    }
+
     #endif
+
     adc0->fail_flag |= ADC_ERROR_OTHER;
     return ADC_ERROR_VALUE;
 }
@@ -592,21 +614,21 @@ int ADC::startSingleRead(uint8_t pin, int8_t adc_num) {
 */
 int ADC::startSingleDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num) {
     if( adc_num==-1 ) { // adc_num isn't changed
-        #if defined(__MK20DX128__)
-        return adc0->startSingleDifferential(pinP, pinN); // use ADC0
-        #elif defined(__MK20DX256__)
+        #if ADC_NUM_ADCS>=2 // Teensy 3.1
         if( (adc0->num_measurements) >= (adc1->num_measurements)) { // use the ADC with less workload
             return adc1->startSingleDifferential(pinP, pinN);
         } else {
             return adc0->startSingleDifferential(pinP, pinN);
         }
+        #else
+        return adc0->startSingleDifferential(pinP, pinN); // use ADC0
         #endif
     }
     else if( adc_num==0 ) { // use ADC0
         return adc0->startSingleDifferential(pinP, pinN);
     }
     else if( adc_num==1 ){ // user wants ADC 1, do nothing if it's a Teensy 3.0
-        #if defined(__MK20DX256__)
+        #if ADC_NUM_ADCS>=2 // Teensy 3.1
         return adc1->startSingleDifferential(pinP, pinN);
         #else
         adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
@@ -623,7 +645,7 @@ int ADC::startSingleDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num) {
 */
 int ADC::readSingle(int8_t adc_num) {
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
-        #if defined(__MK20DX256__)
+        #if ADC_NUM_ADCS>=2 // Teensy 3.1
         return adc1->readSingle();
         #else
         adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
@@ -638,21 +660,8 @@ int ADC::readSingle(int8_t adc_num) {
 /* It returns as soon as the ADC is set, use analogReadContinuous() to read the value.
 */
 void ADC::startContinuous(uint8_t pin, int8_t adc_num) {
-    /* Teensy 3.0
-    */
-    #if defined(__MK20DX128__)
-    if( adc_num==1 ) { // If asked to use ADC1, return error
-        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
-        return;
-    }
-    if ( (pin <= 23) || (pin>=34) ) { // check that the pin is correct (pin<0 or pin>43 have been ruled out already)
-        adc0->startContinuous(pin); // use ADC0
-        return;
-    }
 
-    /* Teensy 3.1
-    */
-    #elif defined(__MK20DX256__)
+    #if ADC_NUM_ADCS>=2 // Teensy 3.1
 
     // Check to which ADC the pin corresponds
     if( (pin==16) || (pin==17) || (pin>=34 && pin<=37) )  { // Both ADCs: pins 16, 17, 34, 35, 36, and 37.
@@ -680,7 +689,20 @@ void ADC::startContinuous(uint8_t pin, int8_t adc_num) {
         adc0->startContinuous(pin);
         return;
     }
+
+    #else
+
+    if( adc_num==1 ) { // If asked to use ADC1, return error
+        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        return;
+    }
+    if ( (pin <= 23) || (pin>=34) ) { // check that the pin is correct (pin<0 or pin>43 have been ruled out already)
+        adc0->startContinuous(pin); // use ADC0
+        return;
+    }
+
     #endif
+
     adc0->fail_flag |= ADC_ERROR_OTHER;
     return;
 }
@@ -693,10 +715,7 @@ void ADC::startContinuous(uint8_t pin, int8_t adc_num) {
 */
 void ADC::startContinuousDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num) {
     if( adc_num==-1 ) { // adc_num isn't changed
-        #if defined(__MK20DX128__)
-        adc0->startContinuousDifferential(pinP, pinN); // use ADC0
-        return;
-        #elif defined(__MK20DX256__)
+        #if ADC_NUM_ADCS>=2 // Teensy 3.1
         if( (adc0->num_measurements) >= (adc1->num_measurements)) { // use the ADC with less workload
             adc1->startContinuousDifferential(pinP, pinN);
             return;
@@ -704,6 +723,9 @@ void ADC::startContinuousDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num
             adc0->startContinuousDifferential(pinP, pinN);
             return;
         }
+        #else
+        adc0->startContinuousDifferential(pinP, pinN); // use ADC0
+        return;
         #endif
     }
     else if( adc_num==0 ) { // use ADC0
@@ -711,7 +733,7 @@ void ADC::startContinuousDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num
         return;
     }
     else if( adc_num==1 ){ // user wants ADC 1, do nothing if it's a Teensy 3.0
-        #if defined(__MK20DX256__)
+        #if ADC_NUM_ADCS>=2 // Teensy 3.1
         adc1->startContinuousDifferential(pinP, pinN);
         return;
         #else
@@ -732,7 +754,7 @@ void ADC::startContinuousDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num
 //! Stops continuous conversion
 void ADC::stopContinuous(int8_t adc_num) {
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
-        #if defined(__MK20DX256__)
+        #if ADC_NUM_ADCS>=2 // Teensy 3.1
         adc1->stopContinuous();
         #else
         adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
@@ -756,12 +778,7 @@ ADC::Sync_result ADC::analogSynchronizedRead(uint8_t pin0, uint8_t pin1) {
 
     Sync_result res;
 
-    #if defined(__MK20DX128__)
-    res.result_adc0 = ADC_ERROR_VALUE;
-    res.result_adc1 = ADC_ERROR_VALUE;
-    adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
-    return res;
-    #else
+    #if ADC_NUM_ADCS>=2 // Teensy 3.1
 
     if ( (pin0 < 0) || (pin0 > 43) || (channel2sc1aADC0[pin0]==31) ) {
         adc0->fail_flag |= ADC_ERROR_WRONG_PIN;
@@ -853,6 +870,12 @@ ADC::Sync_result ADC::analogSynchronizedRead(uint8_t pin0, uint8_t pin1) {
 
     return res;
 
+    #else // Teensy 3.0 and LC
+
+    res.result_adc0 = ADC_ERROR_VALUE;
+    res.result_adc1 = ADC_ERROR_VALUE;
+    adc0->fail_flag |= ADC_ERROR_SYNCH;
+    return res;
     #endif
 
 }
@@ -866,12 +889,7 @@ ADC::Sync_result ADC::analogSynchronizedReadDifferential(uint8_t pin0P, uint8_t 
 
     ADC::Sync_result res;
 
-    #if defined(__MK20DX128__)
-    res.result_adc0 = ADC_ERROR_VALUE;
-    res.result_adc1 = ADC_ERROR_VALUE;
-    adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
-    return res;
-    #else
+    #if ADC_NUM_ADCS>=2 // Teensy 3.1
 
     // check if we are interrupting a measurement, store setting if so.
     // vars to save the current state of the ADC in case it's in use
@@ -949,6 +967,13 @@ ADC::Sync_result ADC::analogSynchronizedReadDifferential(uint8_t pin0P, uint8_t 
 
     return res;
 
+    #else // Teensy 3.0, LC
+
+    res.result_adc0 = ADC_ERROR_VALUE;
+    res.result_adc1 = ADC_ERROR_VALUE;
+    adc0->fail_flag |= ADC_ERROR_SYNCH;
+    return res;
+
     #endif
 
 }
@@ -962,10 +987,7 @@ ADC::Sync_result ADC::analogSynchronizedReadDifferential(uint8_t pin0P, uint8_t 
 */
 int ADC::startSynchronizedSingleRead(uint8_t pin0, uint8_t pin1) {
 
-    #if defined(__MK20DX128__)
-    adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
-    return false;
-    #else
+    #if ADC_NUM_ADCS>=2 // Teensy 3.1
 
     // check if we are interrupting a measurement, store setting if so.
     adc0->adcWasInUse = adc0->isConverting(); // is the ADC running now?
@@ -1002,6 +1024,11 @@ int ADC::startSynchronizedSingleRead(uint8_t pin0, uint8_t pin1) {
     //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
     return true;
 
+    #else  // Teensy 3.0, LC
+
+    adc0->fail_flag |= ADC_ERROR_SYNCH;
+    return false;
+
     #endif
 }
 
@@ -1014,10 +1041,7 @@ int ADC::startSynchronizedSingleRead(uint8_t pin0, uint8_t pin1) {
 */
 int ADC::startSynchronizedSingleDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N) {
 
-    #if defined(__MK20DX128__)
-    adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
-    return false;
-    #else
+    #if ADC_NUM_ADCS>=2 // Teensy 3.1
 
     // check if we are interrupting a measurement, store setting if so.
     adc0->adcWasInUse = adc0->isConverting(); // is the ADC running now?
@@ -1053,6 +1077,11 @@ int ADC::startSynchronizedSingleDifferential(uint8_t pin0P, uint8_t pin0N, uint8
 
     return true;
 
+    #else
+
+    adc0->fail_flag |= ADC_ERROR_SYNCH;
+    return false;
+
     #endif
 
 }
@@ -1064,14 +1093,15 @@ int ADC::startSynchronizedSingleDifferential(uint8_t pin0P, uint8_t pin0N, uint8
 ADC::Sync_result ADC::readSynchronizedSingle() {
     ADC::Sync_result res;
 
-    #if defined(__MK20DX128__)
-    res.result_adc0 = ADC_ERROR_VALUE;
-    res.result_adc1 = ADC_ERROR_VALUE;
-    adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
-    #elif defined(__MK20DX256__)
+
+    #if ADC_NUM_ADCS>=2 // Teensy 3.1
     res.result_adc0 = adc0->readSingle();
     res.result_adc1 = adc1->readSingle();
-    #endif // defined
+    #else
+    res.result_adc0 = ADC_ERROR_VALUE;
+    res.result_adc1 = ADC_ERROR_VALUE;
+    adc0->fail_flag |= ADC_ERROR_SYNCH;
+    #endif
 
     return res;
 }
@@ -1085,10 +1115,8 @@ ADC::Sync_result ADC::readSynchronizedSingle() {
 */
 void ADC::startSynchronizedContinuous(uint8_t pin0, uint8_t pin1) {
 
-    #if defined(__MK20DX128__)
-    adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
-    return;
-    #elif defined(__MK20DX256__)
+    #if ADC_NUM_ADCS>=2 // Teensy 3.1
+
     adc0->startContinuous(pin0);
     adc1->startContinuous(pin1);
 
@@ -1101,6 +1129,11 @@ void ADC::startSynchronizedContinuous(uint8_t pin0, uint8_t pin1) {
     ADC0_SC1A = temp_ADC0_SC1A;
     ADC1_SC1A = temp_ADC1_SC1A;
     __enable_irq();
+
+    #else
+    adc0->fail_flag |= ADC_ERROR_SYNCH;
+    return;
+
     #endif
 }
 
@@ -1110,10 +1143,7 @@ void ADC::startSynchronizedContinuous(uint8_t pin0, uint8_t pin1) {
 */
 void ADC::startSynchronizedContinuousDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N) {
 
-    #if defined(__MK20DX128__)
-    adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
-    return;
-    #elif defined(__MK20DX256__)
+    #if ADC_NUM_ADCS>=2 // Teensy 3.1
     adc0->startContinuousDifferential(pin0P, pin0N);
     adc1->startContinuousDifferential(pin1P, pin1N);
 
@@ -1126,6 +1156,11 @@ void ADC::startSynchronizedContinuousDifferential(uint8_t pin0P, uint8_t pin0N, 
     ADC0_SC1A = temp_ADC0_SC1A;
     ADC1_SC1A = temp_ADC1_SC1A;
     __enable_irq();
+
+    #else
+    adc0->fail_flag |= ADC_ERROR_SYNCH;
+    return;
+
     #endif
 }
 
@@ -1133,14 +1168,14 @@ void ADC::startSynchronizedContinuousDifferential(uint8_t pin0P, uint8_t pin0N, 
 ADC::Sync_result ADC::readSynchronizedContinuous() {
     ADC::Sync_result res;
 
-    #if defined(__MK20DX128__)
-    res.result_adc0 = ADC_ERROR_VALUE;
-    res.result_adc1 = ADC_ERROR_VALUE;
-    adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
-    #elif defined(__MK20DX256__)
+    #if ADC_NUM_ADCS>=2 // Teensy 3.1
     res.result_adc0 = adc0->analogReadContinuous();
     res.result_adc1 = adc1->analogReadContinuous();
-    #endif // defined
+    #else
+    res.result_adc0 = ADC_ERROR_VALUE;
+    res.result_adc1 = ADC_ERROR_VALUE;
+    adc0->fail_flag |= ADC_ERROR_SYNCH;
+    #endif
 
     return res;
 }
@@ -1148,29 +1183,34 @@ ADC::Sync_result ADC::readSynchronizedContinuous() {
 //! Stops synchronous continuous conversion
 void ADC::stopSynchronizedContinuous() {
 
-    #if defined(__MK20DX128__)
-    adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
-    return;
-    #elif defined(__MK20DX256__)
+    #if ADC_NUM_ADCS>=2 // Teensy 3.1
     adc0->stopContinuous();
     adc1->stopContinuous();
+    #else
+    adc0->fail_flag |= ADC_ERROR_SYNCH;
+    return;
     #endif // defined
 
 }
 
+#if ADC_USE_DMA==1
 
 //Our dma ISR
 void dma_isr_0(void)
 {
+        #if ADC_NUM_ADCS>=2 // Teensy 3.1
     DMA_CINT = ADC::dma_Ch0;
 	Serial.print("isr, dma_chanel: "); Serial.println(ADC::dma_Ch0);
 	digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
+	#endif
 }
 void dma_isr_1(void)
 {
+        #if ADC_NUM_ADCS>=2 // Teensy 3.1
     DMA_CINT = ADC::dma_Ch1;
 	Serial.print("isr, dma_chanel: "); Serial.println(ADC::dma_Ch1);
 	digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
+	#endif
 }
 
 void ADC::useDMA(uint8_t ch0, uint8_t ch1) {
@@ -1201,6 +1241,8 @@ void ADC::useDMA(uint8_t ch0, uint8_t ch1) {
 
 */
 }
+
+#endif
 
 
 

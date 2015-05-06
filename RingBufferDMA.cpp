@@ -1,6 +1,6 @@
- /* Teensy 3.x ADC library
+/* Teensy 3.x, LC ADC library
  * https://github.com/pedvide/ADC
- * Copyright (c) 2014 Pedro Villanueva
+ * Copyright (c) 2015 Pedro Villanueva
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -24,6 +24,8 @@
  */
 
 #include "RingBufferDMA.h"
+
+#if ADC_USE_DMA==1
 
 
 
@@ -161,3 +163,5 @@ uint16_t RingBufferDMA::increase(uint16_t p) {
     return (p + 1)&(2*b_size-1);
 }
 
+
+#endif // ADC_USE_DMA

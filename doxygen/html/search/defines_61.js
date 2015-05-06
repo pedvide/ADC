@@ -33,6 +33,7 @@ var searchData=
   ['adc_5fref_5finternal1v2',['ADC_REF_INTERNAL1V2',['../_a_d_c___module_8h.html#aa8452539b624c0ca1f9b67e5f96934af',1,'ADC_Module.h']]],
   ['adc_5fsc1a_5fchannels',['ADC_SC1A_CHANNELS',['../_a_d_c___module_8h.html#ac1636c047cf3a2250b63203ffe6b2422',1,'ADC_Module.h']]],
   ['adc_5ftemp_5fsensor',['ADC_TEMP_SENSOR',['../_a_d_c___module_8h.html#a4cefed245019e53043553487015d4336',1,'ADC_Module.h']]],
+  ['adc_5fuse_5fdma',['ADC_USE_DMA',['../_a_d_c_8h.html#acaaa746538d4c886e3f975085e6c1b54',1,'ADC.h']]],
   ['adc_5fvery_5fhigh_5fspeed',['ADC_VERY_HIGH_SPEED',['../_a_d_c___module_8h.html#acde51a1fd051837c9d97b0a24ea28778',1,'ADC_Module.h']]],
   ['adc_5fvery_5flow_5fspeed',['ADC_VERY_LOW_SPEED',['../_a_d_c___module_8h.html#afcae43d61a2e44a7ebd2814924e769e3',1,'ADC_Module.h']]],
   ['adc_5fvref_5fout',['ADC_VREF_OUT',['../_a_d_c___module_8h.html#aeb28b97a2562d8af49e06f54d217c972',1,'ADC_Module.h']]],

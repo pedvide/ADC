@@ -1,8 +1,9 @@
 var searchData=
 [
   ['adacken',['adacken',['../struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g.html#ad7ec2bb831fffe09ee32ab016333520c',1,'ADC_Module::ADC_POWER_SPEED_CONFIG']]],
-  ['adc0',['adc0',['../class_a_d_c.html#a5ae17e83b7da013c9ea1502f3d3d8ec8',1,'ADC']]],
+  ['adc0',['adc0',['../class_a_d_c.html#ab8deee5fdd0fec290faa1f01c1d4b7d7',1,'ADC']]],
   ['adc_5fconfig',['adc_config',['../class_a_d_c___module.html#ad4ffd455f5c162d15fb4078aa90b5cbe',1,'ADC_Module']]],
+  ['adc_5fnumber',['ADC_number',['../class_ring_buffer_d_m_a.html#a293d8fa003796812801612f64c1d7aa6',1,'RingBufferDMA']]],
   ['adcwasinuse',['adcWasInUse',['../class_a_d_c___module.html#a34f6f7878889aa3644b279f9440dc0bf',1,'ADC_Module']]],
   ['adhsc',['adhsc',['../struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g.html#a7370c04ccfbc3cd8a737adc411f98aa3',1,'ADC_Module::ADC_POWER_SPEED_CONFIG']]],
   ['adiclk',['adiclk',['../struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g.html#a1c1f3ce97add93383d291b649ce2fe13',1,'ADC_Module::ADC_POWER_SPEED_CONFIG']]],

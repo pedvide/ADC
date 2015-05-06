@@ -44,5 +44,5 @@ var class_a_d_c =
     [ "startSynchronizedSingleRead", "class_a_d_c.html#ac88add8a6c58bd94d64073d6f9cf0a90", null ],
     [ "stopContinuous", "class_a_d_c.html#a436e52cf82ca735f636899de670a2f0c", null ],
     [ "stopSynchronizedContinuous", "class_a_d_c.html#ac2070250dd4d557b27ec0f4f2b360f21", null ],
-    [ "useDMA", "class_a_d_c.html#a9b32e609542d71601adb51b8383145c2", null ]
+    [ "adc0", "class_a_d_c.html#ab8deee5fdd0fec290faa1f01c1d4b7d7", null ]
 ];

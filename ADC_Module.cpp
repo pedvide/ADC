@@ -1,6 +1,6 @@
-/* Teensy 3.x ADC library
+/* Teensy 3.x, LC ADC library
  * https://github.com/pedvide/ADC
- * Copyright (c) 2014 Pedro Villanueva
+ * Copyright (c) 2015 Pedro Villanueva
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 
-/* ADC_Module.cpp: Implements the fuctions of a Teensy 3.x ADC module
+/* ADC_Module.cpp: Implements the fuctions of a Teensy 3.x, LC ADC module
  *
  */
 
@@ -31,6 +31,12 @@
 
 #include "ADC_Module.h"
 #include "ADC.h"
+
+// little hack to avoid changing a lot of code in the differential functions in ADC_Module.cpp
+// A13 isn't defined for Teensy LC, define it here as a 0
+#if defined(__MKL26Z64__)
+const static uint8_t A13 = 0;
+#endif
 
 
 /* Constructor
@@ -174,13 +180,13 @@ void ADC_Module::analog_init() {
 
     // Internal reference initialization
     VREF_TRM = VREF_TRM_CHOPEN | 0x20; // enable module and set the trimmer to medium (max=0x3F=63)
-	VREF_SC = VREF_SC_VREFEN | VREF_SC_REGEN | VREF_SC_ICOMPEN | VREF_SC_MODE_LV(1); // (=0xE1) enable 1.2 volt ref with all compensations
+    VREF_SC = VREF_SC_VREFEN | VREF_SC_REGEN | VREF_SC_ICOMPEN | VREF_SC_MODE_LV(1); // (=0xE1) enable 1.2 volt ref with all compensations
 
-	// select b channels
-	*ADC_CFG2_muxsel = 1;
+    // select b channels
+    *ADC_CFG2_muxsel = 1;
 
     // set reference to vcc/external
-	setReference(ADC_REF_EXTERNAL);
+    setReference(ADC_REF_EXTERNAL);
 
     // set resolution to 10
     setResolution(10);
@@ -190,7 +196,7 @@ void ADC_Module::analog_init() {
     setConversionSpeed(ADC_LOW_SPEED);
     setSamplingSpeed(ADC_LOW_SPEED);
     // begin init calibration
-	calibrate();
+    calibrate();
 }
 
 // starts calibration
@@ -539,15 +545,16 @@ void ADC_Module::enableInterrupts() {
 
     var_enableInterrupts = 1;
     *ADC_SC1A_aien = 1;
-    #if defined(__MK20DX128__)
-    NVIC_ENABLE_IRQ(IRQ_ADC0);
-    #elif defined(__MK20DX256__)
+    #if ADC_NUM_ADCS>=2 // Teensy 3.1
     if(ADC_num==1) { // enable correct interrupt
         NVIC_ENABLE_IRQ(IRQ_ADC1);
     } else {
         NVIC_ENABLE_IRQ(IRQ_ADC0);
     }
-    #endif // defined
+    #else
+    NVIC_ENABLE_IRQ(IRQ_ADC0);
+    #endif // ADC_NUM_ADCS
+
 }
 
 /* Disable interrupts
@@ -557,15 +564,15 @@ void ADC_Module::disableInterrupts() {
 
     var_enableInterrupts = 0;
     *ADC_SC1A_aien = 0;
-    #if defined(__MK20DX128__)
-    NVIC_DISABLE_IRQ(IRQ_ADC0);
-    #elif defined(__MK20DX256__)
+    #if ADC_NUM_ADCS>=2 // Teensy 3.1
     if(ADC_num==1) { // enable correct interrupt
         NVIC_DISABLE_IRQ(IRQ_ADC1);
     } else {
         NVIC_DISABLE_IRQ(IRQ_ADC0);
     }
-    #endif // defined
+    #else
+    NVIC_DISABLE_IRQ(IRQ_ADC0);
+    #endif
 }
 
 

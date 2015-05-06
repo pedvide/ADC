@@ -1,6 +1,6 @@
-/* Teensy 3.x ADC library
+/* Teensy 3.x, LC ADC library
  * https://github.com/pedvide/ADC
- * Copyright (c) 2014 Pedro Villanueva
+ * Copyright (c) 2015 Pedro Villanueva
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 
-/* ADC_Module.h: Declarations of the fuctions of a Teensy 3.x ADC module
+/* ADC_Module.h: Declarations of the fuctions of a Teensy 3.x, LC ADC module
  *
  */
 
@@ -567,7 +567,6 @@ class ADC_Module
 
         // sampling speed
         uint8_t sampling_speed;
-
 
 
         // which adc is this?

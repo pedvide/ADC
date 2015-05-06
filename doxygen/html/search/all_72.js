@@ -12,7 +12,7 @@ var searchData=
   ['ringbuffer',['RingBuffer',['../class_ring_buffer.html',1,'RingBuffer'],['../class_ring_buffer.html#a93b9973de32a836bdf70befaf9d78eed',1,'RingBuffer::RingBuffer()']]],
   ['ringbuffer_2ecpp',['RingBuffer.cpp',['../_ring_buffer_8cpp.html',1,'']]],
   ['ringbuffer_2eh',['RingBuffer.h',['../_ring_buffer_8h.html',1,'']]],
-  ['ringbufferdma',['RingBufferDMA',['../class_ring_buffer_d_m_a.html',1,'RingBufferDMA'],['../class_ring_buffer_d_m_a.html#af3fd37c46b80508278bd9a05cefae859',1,'RingBufferDMA::RingBufferDMA()']]],
+  ['ringbufferdma',['RingBufferDMA',['../class_ring_buffer_d_m_a.html',1,'RingBufferDMA'],['../class_ring_buffer_d_m_a.html#a9476b985cbf41086732ef912e89ce889',1,'RingBufferDMA::RingBufferDMA()']]],
   ['ringbufferdma_2ecpp',['RingBufferDMA.cpp',['../_ring_buffer_d_m_a_8cpp.html',1,'']]],
   ['ringbufferdma_2eh',['RingBufferDMA.h',['../_ring_buffer_d_m_a_8h.html',1,'']]]
 ];
