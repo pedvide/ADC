@@ -1,7 +1,6 @@
 var class_a_d_c =
 [
-    [ "SYNC_RESULT", "struct_a_d_c_1_1_s_y_n_c___r_e_s_u_l_t.html", "struct_a_d_c_1_1_s_y_n_c___r_e_s_u_l_t" ],
-    [ "Sync_result", "class_a_d_c.html#a3d0e0013dca9f7a4d289722d71af24f7", null ],
+    [ "Sync_result", "struct_a_d_c_1_1_sync__result.html", "struct_a_d_c_1_1_sync__result" ],
     [ "ADC", "class_a_d_c.html#a60b6e21403b1f30984f63832c0562960", null ],
     [ "analogRead", "class_a_d_c.html#aaf6079870b115d8b029d3613d44091dd", null ],
     [ "analogReadContinuous", "class_a_d_c.html#a749efc928425a1eea18341ccfafd1819", null ],

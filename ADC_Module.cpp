@@ -32,19 +32,13 @@
 #include "ADC_Module.h"
 #include "ADC.h"
 
-// little hack to avoid changing a lot of code in the differential functions in ADC_Module.cpp
-// A13 isn't defined for Teensy LC, define it here as a 0
-#if defined(__MKL26Z64__)
-const static uint8_t A13 = 0;
-#endif
-
 
 /* Constructor
 *   Point the registers to the correct ADC module
-*   Copy the correct channel2sc1a and sc1a2channel
+*   Copy the correct channel2sc1a
 *   Call init
 */
-ADC_Module::ADC_Module(uint8_t ADC_number) {
+ADC_Module::ADC_Module(uint8_t ADC_number, const uint8_t *a_channel2sc1a) {
 
     // ADC0 or ADC1?
     ADC_num = ADC_number;
@@ -54,25 +48,25 @@ ADC_Module::ADC_Module(uint8_t ADC_number) {
     uint32_t adc_offset = (uint32_t)0x20000;
 
     ADC_SC1A = &ADC0_SC1A + adc_offset*ADC_num;
-        ADC_SC1A_coco = adc_bitband((uint32_t)ADC_SC1A, 7); // conversion complete
-        ADC_SC1A_aien = adc_bitband((uint32_t)ADC_SC1A, 6); // interrupts enabled
+//        ADC_SC1A_coco = adc_bitband((uint32_t)ADC_SC1A, 7); // conversion complete
+//        ADC_SC1A_aien = adc_bitband((uint32_t)ADC_SC1A, 6); // interrupts enabled
     ADC_SC1B = &ADC0_SC1B + adc_offset*ADC_num;
 
     ADC_CFG1 = &ADC0_CFG1 + adc_offset*ADC_num;
-        ADC_CFG1_adlpc = adc_bitband((uint32_t)ADC_CFG1, 7); // low power conf.
-        ADC_CFG1_adiv1 = adc_bitband((uint32_t)ADC_CFG1, 6); // divide input clock
-        ADC_CFG1_adiv0 = adc_bitband((uint32_t)ADC_CFG1, 5); //
-        ADC_CFG1_adlsmp = adc_bitband((uint32_t)ADC_CFG1, 4); // low sampling speed
-        ADC_CFG1_mode1 = adc_bitband((uint32_t)ADC_CFG1, 3); // resolution mode
-        ADC_CFG1_mode0 = adc_bitband((uint32_t)ADC_CFG1, 2); //
-        ADC_CFG1_adiclk1 = adc_bitband((uint32_t)ADC_CFG1, 1); // input clock
-        ADC_CFG1_adiclk0 = adc_bitband((uint32_t)ADC_CFG1, 0); //
+//        ADC_CFG1_adlpc = adc_bitband((uint32_t)ADC_CFG1, 7); // low power conf.
+//        ADC_CFG1_adiv1 = adc_bitband((uint32_t)ADC_CFG1, 6); // divide input clock
+//        ADC_CFG1_adiv0 = adc_bitband((uint32_t)ADC_CFG1, 5); //
+//        ADC_CFG1_adlsmp = adc_bitband((uint32_t)ADC_CFG1, 4); // low sampling speed
+//        ADC_CFG1_mode1 = adc_bitband((uint32_t)ADC_CFG1, 3); // resolution mode
+//        ADC_CFG1_mode0 = adc_bitband((uint32_t)ADC_CFG1, 2); //
+//        ADC_CFG1_adiclk1 = adc_bitband((uint32_t)ADC_CFG1, 1); // input clock
+//        ADC_CFG1_adiclk0 = adc_bitband((uint32_t)ADC_CFG1, 0); //
     ADC_CFG2 = &ADC0_CFG2 + adc_offset*ADC_num;
-        ADC_CFG2_muxsel = adc_bitband((uint32_t)ADC_CFG2, 4); // mux to select a or b channels
-        ADC_CFG2_adacken = adc_bitband((uint32_t)ADC_CFG2, 3); // enable the async. clock
-        ADC_CFG2_adhsc = adc_bitband((uint32_t)ADC_CFG2, 2); // high-speed config: add 2 ADCK
-        ADC_CFG2_adlsts1 = adc_bitband((uint32_t)ADC_CFG2, 1); // loger sampling time
-        ADC_CFG2_adlsts0 = adc_bitband((uint32_t)ADC_CFG2, 0);
+//        ADC_CFG2_muxsel = adc_bitband((uint32_t)ADC_CFG2, 4); // mux to select a or b channels
+//        ADC_CFG2_adacken = adc_bitband((uint32_t)ADC_CFG2, 3); // enable the async. clock
+//        ADC_CFG2_adhsc = adc_bitband((uint32_t)ADC_CFG2, 2); // high-speed config: add 2 ADCK
+//        ADC_CFG2_adlsts1 = adc_bitband((uint32_t)ADC_CFG2, 1); // loger sampling time
+//        ADC_CFG2_adlsts0 = adc_bitband((uint32_t)ADC_CFG2, 0);
 
     ADC_RA = &ADC0_RA + adc_offset*ADC_num;
     ADC_RB = &ADC0_RB + adc_offset*ADC_num;
@@ -81,23 +75,24 @@ ADC_Module::ADC_Module(uint8_t ADC_number) {
     ADC_CV2 = &ADC0_CV2 + adc_offset*ADC_num;
 
     ADC_SC2 = &ADC0_SC2 + adc_offset*ADC_num;
-        ADC_SC2_adact = adc_bitband((uint32_t)ADC_SC2, 7); // conversion active
-        ADC_SC2_cfe = adc_bitband((uint32_t)ADC_SC2, 5); // compare function enable, greater than and range enable
-        ADC_SC2_cfgt = adc_bitband((uint32_t)ADC_SC2, 4);
-        ADC_SC2_cren = adc_bitband((uint32_t)ADC_SC2, 3);
-        ADC_SC2_dma = adc_bitband((uint32_t)ADC_SC2, 2); // dma enable
-        ADC_SC2_ref = adc_bitband((uint32_t)ADC_SC2, 0); // refsel only uses bit 0, not really bit 1.
+//        ADC_SC2_adact = adc_bitband((uint32_t)ADC_SC2, 7); // conversion active
+//        ADC_SC2_cfe = adc_bitband((uint32_t)ADC_SC2, 5); // compare function enable, greater than and range enable
+//        ADC_SC2_cfgt = adc_bitband((uint32_t)ADC_SC2, 4);
+//        ADC_SC2_cren = adc_bitband((uint32_t)ADC_SC2, 3);
+//        ADC_SC2_dma = adc_bitband((uint32_t)ADC_SC2, 2); // dma enable
+//        ADC_SC2_ref = adc_bitband((uint32_t)ADC_SC2, 0); // refsel only uses bit 0, not really bit 1.
 
 
     ADC_SC3 = &ADC0_SC3 + adc_offset*ADC_num;
-        ADC_SC3_cal = adc_bitband((uint32_t)ADC_SC3, 7); // start/stop calibration
-        ADC_SC3_calf = adc_bitband((uint32_t)ADC_SC3, 6); // calibration failed flag
-        ADC_SC3_adco = adc_bitband((uint32_t)ADC_SC3, 3); // continuous conversion
-        ADC_SC3_avge = adc_bitband((uint32_t)ADC_SC3, 2); // enable averages bit
-        ADC_SC3_avgs0 = adc_bitband((uint32_t)ADC_SC3, 0); // num of averages bits
-        ADC_SC3_avgs1 = adc_bitband((uint32_t)ADC_SC3, 1);
+//        ADC_SC3_cal = adc_bitband((uint32_t)ADC_SC3, 7); // start/stop calibration
+//        ADC_SC3_calf = adc_bitband((uint32_t)ADC_SC3, 6); // calibration failed flag
+//        ADC_SC3_adco = adc_bitband((uint32_t)ADC_SC3, 3); // continuous conversion
+//        ADC_SC3_avge = adc_bitband((uint32_t)ADC_SC3, 2); // enable averages bit
+//        ADC_SC3_avgs1 = adc_bitband((uint32_t)ADC_SC3, 1); // num of averages bits
+//        ADC_SC3_avgs0 = adc_bitband((uint32_t)ADC_SC3, 0);
 
-    ADC_PGA = &ADC0_PGA + adc_offset*ADC_num; ADC_PGA_pgaen = adc_bitband((uint32_t)ADC_PGA, 23); // enable pga
+    ADC_PGA = &ADC0_PGA + adc_offset*ADC_num;
+//        ADC_PGA_pgaen = adc_bitband((uint32_t)ADC_PGA, 23); // enable pga
 
     ADC_OFS = &ADC0_OFS + adc_offset*ADC_num;
     ADC_PG = &ADC0_PG + adc_offset*ADC_num;
@@ -117,21 +112,11 @@ ADC_Module::ADC_Module(uint8_t ADC_number) {
     ADC_CLM1 = &ADC0_CLM1 + adc_offset*ADC_num;
     ADC_CLM0 = &ADC0_CLM0 + adc_offset*ADC_num;
 
-    // copy the correct version of channel2sc1a and sc1a2channel depending on the ADC module this instance is:
-    #if defined(__MK20DX128__)
-    // Tennsy 3.0, only ADC0
-    memcpy(&channel2sc1a, &ADC::channel2sc1aADC0, sizeof(channel2sc1a));
-    memcpy(&sc1a2channel, &ADC::sc1a2channelADC0, sizeof(sc1a2channel));
-    #elif defined(__MK20DX256__)
-    // Teensy 3.1: can be ADC0 or ADC1
-    if(ADC_num==0) { // ADC0
-        memcpy(&channel2sc1a, &ADC::channel2sc1aADC0, sizeof(channel2sc1a));
-        memcpy(&sc1a2channel, &ADC::sc1a2channelADC0, sizeof(sc1a2channel));
-    } else { // ADC1
-        memcpy(&channel2sc1a, &ADC::channel2sc1aADC1, sizeof(channel2sc1a));
-        memcpy(&sc1a2channel, &ADC::sc1a2channelADC1, sizeof(sc1a2channel));
-    }
-    #endif
+    // copy the correct version of channel2sc1a
+    //channel2sc1a = new uint8_t[array_size];
+    //memcpy(&channel2sc1a, &a_channel2sc1a[0], sizeof(channel2sc1a));
+
+    channel2sc1a = a_channel2sc1a;
 
     // call our init
     analog_init();
@@ -172,29 +157,33 @@ void ADC_Module::analog_init() {
     conversion_speed = 0;
     sampling_speed =  0;
 
-    // the first calibration will use 32 averages and lowest speed,
-    // when this calibration is over the averages and speed will be set to default by wait_for_cal and init_calib will be cleared.
-    init_calib = 1;
+    calibrating = 0;
 
     fail_flag = ADC_ERROR_CLEAR; // clear all errors
 
-    // Internal reference initialization
+    // Internal reference initialization, Teensy 3.x only!
+    #if !defined(ADC_TEENSY_LC)
     VREF_TRM = VREF_TRM_CHOPEN | 0x20; // enable module and set the trimmer to medium (max=0x3F=63)
     VREF_SC = VREF_SC_VREFEN | VREF_SC_REGEN | VREF_SC_ICOMPEN | VREF_SC_MODE_LV(1); // (=0xE1) enable 1.2 volt ref with all compensations
+    #endif
 
     // select b channels
-    *ADC_CFG2_muxsel = 1;
+    //*ADC_CFG2_muxsel = 1;
+    setBit(ADC_CFG2, ADC_CFG2_MUXSEL_BIT);
 
     // set reference to vcc/external
-    setReference(ADC_REF_EXTERNAL);
+    setReference(ADC_REF_3V3);
 
     // set resolution to 10
     setResolution(10);
 
-    // calibrate at low speed and max repetitions
+    // the first calibration will use 32 averages and lowest speed,
+    // when this calibration is over the averages and speed will be set to default by wait_for_cal and init_calib will be cleared.
+    init_calib = 1;
     setAveraging(32);
     setConversionSpeed(ADC_LOW_SPEED);
     setSamplingSpeed(ADC_LOW_SPEED);
+
     // begin init calibration
     calibrate();
 }
@@ -205,10 +194,12 @@ void ADC_Module::calibrate() {
     __disable_irq();
 
     calibrating = 1;
-    *ADC_SC3_cal = 0; // stop possible previous calibration
-    *ADC_SC3_calf = 1; // clear possible previous error
-    //*ADC_SC3 |= ADC_SC3_CAL;
-    *ADC_SC3_cal = 1; // start calibration
+    //*ADC_SC3_cal = 0; // stop possible previous calibration
+    clearBit(ADC_SC3, ADC_SC3_CAL_BIT);
+    //*ADC_SC3_calf = 1; // clear possible previous error
+    setBit(ADC_SC3, ADC_SC3_CALF_BIT);
+    //*ADC_SC3_cal = 1; // start calibration
+    setBit(ADC_SC3, ADC_SC3_CAL_BIT);
 
     __enable_irq();
 }
@@ -221,11 +212,12 @@ void ADC_Module::wait_for_cal(void)
 {
 	uint16_t sum;
 
-	while(*ADC_SC3_cal) { // Bit ADC_SC3_CAL in register ADC0_SC3 cleared when calib. finishes.
-
+	while(getBit(ADC_SC3, ADC_SC3_CAL_BIT)) { // Bit ADC_SC3_CAL in register ADC0_SC3 cleared when calib. finishes.
+                yield();
 	}
-	if(*ADC_SC3_calf) { // calibration failed
-        fail_flag |= ADC_ERROR_CALIB; // the user should know and recalibrate manually
+
+	if(getBit(ADC_SC3, ADC_SC3_CALF_BIT)) { // calibration failed
+                fail_flag |= ADC_ERROR_CALIB; // the user should know and recalibrate manually
 	}
 
 	__disable_irq();
@@ -243,19 +235,19 @@ void ADC_Module::wait_for_cal(void)
 	__enable_irq();
 
 	// the first calibration uses 32 averages and lowest speed,
-    // when this calibration is over, set the averages and speed to default.
+        // when this calibration is over, set the averages and speed to default.
 	if(init_calib) {
 
-	    // set conversion speed to medium
-        setConversionSpeed(ADC_MED_SPEED);
+                // set conversion speed to medium
+                setConversionSpeed(ADC_MED_SPEED);
 
-        // set sampling speed to medium
-        setSamplingSpeed(ADC_MED_SPEED);
+                // set sampling speed to medium
+                setSamplingSpeed(ADC_MED_SPEED);
 
-        // number of averages to 4
-        setAveraging(4);
+                // number of averages to 4
+                setAveraging(4);
 
-        init_calib = 0; // clear
+                init_calib = 0; // clear
 	}
 
 }
@@ -276,28 +268,29 @@ void ADC_Module::recalibrate() {
 /////////////// METHODS TO SET/GET SETTINGS OF THE ADC ////////////////////
 
 
-/* Set the voltage reference you prefer, default is vcc
+/* Set the voltage reference you prefer, default is 3.3V
 *   It needs to recalibrate
+*  Use ADC_REF_3V3, ADC_REF_1V2 (not for Teensy LC) or ADC_REF_EXT
 */
 void ADC_Module::setReference(uint8_t type)
 {
-    if (analog_reference_internal==type) { // don't need to change anything
-        return;
-    }
+        if (analog_reference_internal==type) { // don't need to change anything
+                return;
+        }
 
-	if (type == ADC_REF_INTERNAL) { // 1.2V ref
-		// internal reference requested
-        analog_reference_internal = ADC_REF_INTERNAL;
-        //*ADC_SC2 |= ADC_SC2_REFSEL(1);
-        *ADC_SC2_ref = 1; // uses bitband: atomic
-	} else if(type == ADC_REF_EXTERNAL) { // vcc/ext ref
-		// vcc or external reference requested
-        analog_reference_internal = ADC_REF_EXTERNAL;
-        //*ADC_SC2 |= ADC_SC2_REFSEL(0);
-        *ADC_SC2_ref = 0; // uses bitband: atomic
-	}
+        if (type == ADC_REF_ALT) { // 1.2V ref for Teensy 3.x, 3.3 VDD for Teensy LC
+                // internal reference requested
+                analog_reference_internal = ADC_REF_ALT;
+                //*ADC_SC2_ref = 1; // uses bitband: atomic
+                setBit(ADC_SC2, ADC_SC2_REFSEL0_BIT);
+        } else if(type == ADC_REF_DEFAULT) { // ext ref for all Teensys, vcc also for Teensy 3.x
+                // vcc or external reference requested
+                analog_reference_internal = ADC_REF_DEFAULT;
+                //*ADC_SC2_ref = 0; // uses bitband: atomic
+                clearBit(ADC_SC2, ADC_SC2_REFSEL0_BIT);
+        }
 
-    calibrate();
+        calibrate();
 }
 
 
@@ -330,20 +323,28 @@ void ADC_Module::setResolution(uint8_t bits) {
     // conversion resolution
     // single-ended 8 bits is the same as differential 9 bits, etc.
     if ( (config == 8) || (config == 9) )  {
-        *ADC_CFG1_mode1 = 0;
-        *ADC_CFG1_mode0 = 0;
+        //*ADC_CFG1_mode1 = 0;
+        //*ADC_CFG1_mode0 = 0;
+        clearBit(ADC_CFG1, ADC_CFG1_MODE1_BIT);
+        clearBit(ADC_CFG1, ADC_CFG1_MODE0_BIT);
         analog_max_val = 255; // diff mode 9 bits has 1 bit for sign, so max value is the same as single 8 bits
     } else if ( (config == 10 )|| (config == 11) ) {
-        *ADC_CFG1_mode1 = 1;
-        *ADC_CFG1_mode0 = 0;
+        //*ADC_CFG1_mode1 = 1;
+        //*ADC_CFG1_mode0 = 0;
+        setBit(ADC_CFG1, ADC_CFG1_MODE1_BIT);
+        clearBit(ADC_CFG1, ADC_CFG1_MODE0_BIT);
         analog_max_val = 1023;
     } else if ( (config == 12 )|| (config == 13) ) {
-        *ADC_CFG1_mode1 = 0;
-        *ADC_CFG1_mode0 = 1;
+        //*ADC_CFG1_mode1 = 0;
+        //*ADC_CFG1_mode0 = 1;
+        clearBit(ADC_CFG1, ADC_CFG1_MODE1_BIT);
+        setBit(ADC_CFG1, ADC_CFG1_MODE0_BIT);
         analog_max_val = 4095;
     } else {
-        *ADC_CFG1_mode1 = 1;
-        *ADC_CFG1_mode0 = 1;
+        //*ADC_CFG1_mode1 = 1;
+        //*ADC_CFG1_mode0 = 1;
+        setBit(ADC_CFG1, ADC_CFG1_MODE1_BIT);
+        setBit(ADC_CFG1, ADC_CFG1_MODE0_BIT);
         analog_max_val = 65535;
     }
 
@@ -389,43 +390,56 @@ void ADC_Module::setConversionSpeed(uint8_t speed) {
     if (calibrating) wait_for_cal();
 
     // in the future allow the user to select this clock source
-    *ADC_CFG2_adacken = 0; // disable the internal asynchronous clock
+    //*ADC_CFG2_adacken = 0; // disable the internal asynchronous clock
+    clearBit(ADC_CFG2, ADC_CFG2_ADACKEN_BIT);
 
     uint32_t ADC_CFG1_speed; // store the clock and divisor
 
     if(speed == ADC_VERY_LOW_SPEED) {
-        *ADC_CFG2_adhsc = 0; // no high-speed config
-        *ADC_CFG1_adlpc  = 1; // use low power conf.
+        //*ADC_CFG2_adhsc = 0; // no high-speed config
+        //*ADC_CFG1_adlpc  = 1; // use low power conf.
+        clearBit(ADC_CFG2, ADC_CFG2_ADHSC_BIT);
+        setBit(ADC_CFG1, ADC_CFG1_ADLPC_BIT);
 
         ADC_CFG1_speed = ADC_CFG1_VERY_LOW_SPEED;
 
     } else if(speed == ADC_LOW_SPEED) {
-        *ADC_CFG2_adhsc = 0; // no high-speed config
-        *ADC_CFG1_adlpc  = 1; // use low power conf.
+        //*ADC_CFG2_adhsc = 0; // no high-speed config
+        //*ADC_CFG1_adlpc  = 1; // use low power conf.
+        clearBit(ADC_CFG2, ADC_CFG2_ADHSC_BIT);
+        setBit(ADC_CFG1, ADC_CFG1_ADLPC_BIT);
 
         ADC_CFG1_speed = ADC_CFG1_LOW_SPEED;
 
     } else if(speed == ADC_MED_SPEED) {
-        *ADC_CFG2_adhsc = 0; // no high-speed config
-        *ADC_CFG1_adlpc  = 0; // no low power conf.
+        //*ADC_CFG2_adhsc = 0; // no high-speed config
+        //*ADC_CFG1_adlpc  = 0; // no low power conf.
+        clearBit(ADC_CFG2, ADC_CFG2_ADHSC_BIT);
+        clearBit(ADC_CFG1, ADC_CFG1_ADLPC_BIT);
 
         ADC_CFG1_speed = ADC_CFG1_MED_SPEED;
 
     } else if(speed == ADC_HIGH_SPEED_16BITS) {
-        *ADC_CFG2_adhsc = 1; // high-speed config: add 2 ADCK
-        *ADC_CFG1_adlpc  = 0; // no low power conf.
+        //*ADC_CFG2_adhsc = 1; // high-speed config: add 2 ADCK
+        //*ADC_CFG1_adlpc  = 0; // no low power conf.
+        setBit(ADC_CFG2, ADC_CFG2_ADHSC_BIT);
+        clearBit(ADC_CFG1, ADC_CFG1_ADLPC_BIT);
 
         ADC_CFG1_speed = ADC_CFG1_HI_SPEED_16_BITS;
 
     } else if(speed == ADC_HIGH_SPEED) {
-        *ADC_CFG2_adhsc = 1; // high-speed config: add 2 ADCK
-        *ADC_CFG1_adlpc  = 0; // no low power conf.
+        //*ADC_CFG2_adhsc = 1; // high-speed config: add 2 ADCK
+        //*ADC_CFG1_adlpc  = 0; // no low power conf.
+        setBit(ADC_CFG2, ADC_CFG2_ADHSC_BIT);
+        clearBit(ADC_CFG1, ADC_CFG1_ADLPC_BIT);
 
         ADC_CFG1_speed = ADC_CFG1_HI_SPEED;
 
     } else if(speed == ADC_VERY_HIGH_SPEED) { // this speed is most likely out of specs, so accurancy can be bad
-        *ADC_CFG2_adhsc = 1; // high-speed config: add 2 ADCK
-        *ADC_CFG1_adlpc  = 0; // no low power conf.
+        //*ADC_CFG2_adhsc = 1; // high-speed config: add 2 ADCK
+        //*ADC_CFG1_adlpc  = 0; // no low power conf.
+        setBit(ADC_CFG2, ADC_CFG2_ADHSC_BIT);
+        clearBit(ADC_CFG1, ADC_CFG1_ADLPC_BIT);
 
         ADC_CFG1_speed = ADC_CFG1_VERY_HIGH_SPEED;
 
@@ -435,13 +449,17 @@ void ADC_Module::setConversionSpeed(uint8_t speed) {
     }
 
     // clock source is bus or bus/2
-    *ADC_CFG1_adiclk1 = !!(ADC_CFG1_speed & ADC_CFG1_ADICLK_MASK_1); // !!x converts the number x to either 0 or 1.
-    *ADC_CFG1_adiclk0 = !!(ADC_CFG1_speed & ADC_CFG1_ADICLK_MASK_0);
+    //*ADC_CFG1_adiclk1 = !!(ADC_CFG1_speed & ADC_CFG1_ADICLK_MASK_1); // !!x converts the number x to either 0 or 1.
+    //*ADC_CFG1_adiclk0 = !!(ADC_CFG1_speed & ADC_CFG1_ADICLK_MASK_0);
+    changeBit(ADC_CFG1, ADC_CFG1_ADICLK1_BIT, !!(ADC_CFG1_speed & ADC_CFG1_ADICLK_MASK_1));
+    changeBit(ADC_CFG1, ADC_CFG1_ADICLK0_BIT, !!(ADC_CFG1_speed & ADC_CFG1_ADICLK_MASK_0));
 
     // divisor for the clock source: 1, 2, 4 or 8.
     // so total speed can be: bus, bus/2, bus/4, bus/8 or bus/16.
-    *ADC_CFG1_adiv1 = !!(ADC_CFG1_speed & ADC_CFG1_ADIV_MASK_1);
-    *ADC_CFG1_adiv0 = !!(ADC_CFG1_speed & ADC_CFG1_ADIV_MASK_0);
+    //*ADC_CFG1_adiv1 = !!(ADC_CFG1_speed & ADC_CFG1_ADIV_MASK_1);
+    //*ADC_CFG1_adiv0 = !!(ADC_CFG1_speed & ADC_CFG1_ADIV_MASK_0);
+    changeBit(ADC_CFG1, ADC_CFG1_ADIV1_BIT, !!(ADC_CFG1_speed & ADC_CFG1_ADIV_MASK_1));
+    changeBit(ADC_CFG1, ADC_CFG1_ADIV0_BIT, !!(ADC_CFG1_speed & ADC_CFG1_ADIV_MASK_0));
 
     conversion_speed = speed;
 
@@ -468,27 +486,40 @@ void ADC_Module::setSamplingSpeed(uint8_t speed) {
 
     // Select between the settings
     if(speed == ADC_VERY_LOW_SPEED) {
-        *ADC_CFG1_adlsmp = 1; // long sampling time enable
-        *ADC_CFG2_adlsts1 = 0; // maximum sampling time (+24 ADCK)
-        *ADC_CFG2_adlsts0 = 0;
+        //*ADC_CFG1_adlsmp = 1; // long sampling time enable
+        //*ADC_CFG2_adlsts1 = 0; // maximum sampling time (+24 ADCK)
+        //*ADC_CFG2_adlsts0 = 0;
+        setBit(ADC_CFG1, ADC_CFG1_ADLSMP_BIT);
+        clearBit(ADC_CFG2, ADC_CFG2_ADLSTS1_BIT);
+        clearBit(ADC_CFG2, ADC_CFG2_ADLSTS0_BIT);
 
     } else if(speed == ADC_LOW_SPEED) {
-        *ADC_CFG1_adlsmp = 1; // long sampling time enable
-        *ADC_CFG2_adlsts1 = 0;// high sampling time (+16 ADCK)
-        *ADC_CFG2_adlsts0 = 1;
+        //*ADC_CFG1_adlsmp = 1; // long sampling time enable
+        //*ADC_CFG2_adlsts1 = 0;// high sampling time (+16 ADCK)
+        //*ADC_CFG2_adlsts0 = 1;
+        setBit(ADC_CFG1, ADC_CFG1_ADLSMP_BIT);
+        clearBit(ADC_CFG2, ADC_CFG2_ADLSTS1_BIT);
+        setBit(ADC_CFG2, ADC_CFG2_ADLSTS0_BIT);
 
     } else if(speed == ADC_MED_SPEED) {
-        *ADC_CFG1_adlsmp = 1; // long sampling time enable
-        *ADC_CFG2_adlsts1 = 1;// medium sampling time (+10 ADCK)
-        *ADC_CFG2_adlsts0 = 0;
+        //*ADC_CFG1_adlsmp = 1; // long sampling time enable
+        //*ADC_CFG2_adlsts1 = 1;// medium sampling time (+10 ADCK)
+        //*ADC_CFG2_adlsts0 = 0;
+        setBit(ADC_CFG1, ADC_CFG1_ADLSMP_BIT);
+        setBit(ADC_CFG2, ADC_CFG2_ADLSTS1_BIT);
+        clearBit(ADC_CFG2, ADC_CFG2_ADLSTS0_BIT);
 
     } else if( (speed == ADC_HIGH_SPEED) || (speed == ADC_HIGH_SPEED_16BITS) ) {
-        *ADC_CFG1_adlsmp = 1; // long sampling time enable
-        *ADC_CFG2_adlsts1 = 1;// low sampling time (+6 ADCK)
-        *ADC_CFG2_adlsts0 = 1;
+        //*ADC_CFG1_adlsmp = 1; // long sampling time enable
+        //*ADC_CFG2_adlsts1 = 1;// low sampling time (+6 ADCK)
+        //*ADC_CFG2_adlsts0 = 1;
+        setBit(ADC_CFG1, ADC_CFG1_ADLSMP_BIT);
+        setBit(ADC_CFG2, ADC_CFG2_ADLSTS1_BIT);
+        setBit(ADC_CFG2, ADC_CFG2_ADLSTS0_BIT);
 
     } else if(speed == ADC_VERY_HIGH_SPEED) {
-        *ADC_CFG1_adlsmp = 0; // shortest sampling time
+        //*ADC_CFG1_adlsmp = 0; // shortest sampling time
+        clearBit(ADC_CFG1, ADC_CFG1_ADLSMP_BIT);
 
     }
 
@@ -506,31 +537,36 @@ void ADC_Module::setAveraging(uint8_t num) {
 
 	if (num <= 1) {
 		num = 0;
-		//*ADC_SC3 &= ~ADC_SC3_AVGE;
-		*ADC_SC3_avge = 0;
+		//*ADC_SC3_avge = 0;
+		clearBit(ADC_SC3, ADC_SC3_AVGE_BIT);
 	} else {
-	    *ADC_SC3_avge = 1;
-	    if (num <= 4) {
-            num = 4;
-            //*ADC_SC3 |= ADC_SC3_AVGE + ADC_SC3_AVGS(0);
-            *ADC_SC3_avgs0 = 0;
-            *ADC_SC3_avgs1 = 0;
-        } else if (num <= 8) {
-            num = 8;
-            //*ADC_SC3 |= ADC_SC3_AVGE + ADC_SC3_AVGS(1);
-            *ADC_SC3_avgs0 = 1;
-            *ADC_SC3_avgs1 = 0;
-        } else if (num <= 16) {
-            num = 16;
-            //*ADC_SC3 |= ADC_SC3_AVGE + ADC_SC3_AVGS(2);
-            *ADC_SC3_avgs0 = 0;
-            *ADC_SC3_avgs1 = 1;
-        } else {
-            num = 32;
-            //*ADC_SC3 |= ADC_SC3_AVGE + ADC_SC3_AVGS(3);
-            *ADC_SC3_avgs0 = 1;
-            *ADC_SC3_avgs1 = 1;
-        }
+                //*ADC_SC3_avge = 1;
+                setBit(ADC_SC3, ADC_SC3_AVGE_BIT);
+                if (num <= 4) {
+                        num = 4;
+                        //*ADC_SC3_avgs0 = 0;
+                        //*ADC_SC3_avgs1 = 0;
+                        clearBit(ADC_SC3, ADC_SC3_AVGS1_BIT);
+                        clearBit(ADC_SC3, ADC_SC3_AVGS0_BIT);
+                } else if (num <= 8) {
+                        num = 8;
+                        //*ADC_SC3_avgs0 = 1;
+                        //*ADC_SC3_avgs1 = 0;
+                        setBit(ADC_SC3, ADC_SC3_AVGS1_BIT);
+                        clearBit(ADC_SC3, ADC_SC3_AVGS0_BIT);
+                } else if (num <= 16) {
+                        num = 16;
+                        //*ADC_SC3_avgs0 = 0;
+                        //*ADC_SC3_avgs1 = 1;
+                        clearBit(ADC_SC3, ADC_SC3_AVGS1_BIT);
+                        setBit(ADC_SC3, ADC_SC3_AVGS0_BIT);
+                } else {
+                        num = 32;
+                        //*ADC_SC3_avgs0 = 1;
+                        //*ADC_SC3_avgs1 = 1;
+                        setBit(ADC_SC3, ADC_SC3_AVGS1_BIT);
+                        setBit(ADC_SC3, ADC_SC3_AVGS0_BIT);
+                }
 	}
 	analog_num_average = num;
 }
@@ -544,7 +580,8 @@ void ADC_Module::enableInterrupts() {
     if (calibrating) wait_for_cal();
 
     var_enableInterrupts = 1;
-    *ADC_SC1A_aien = 1;
+    //*ADC_SC1A_aien = 1;
+    setBit(ADC_SC1A, ADC_SC1A_AIEN_BIT);
     #if ADC_NUM_ADCS>=2 // Teensy 3.1
     if(ADC_num==1) { // enable correct interrupt
         NVIC_ENABLE_IRQ(IRQ_ADC1);
@@ -563,7 +600,8 @@ void ADC_Module::enableInterrupts() {
 void ADC_Module::disableInterrupts() {
 
     var_enableInterrupts = 0;
-    *ADC_SC1A_aien = 0;
+    //*ADC_SC1A_aien = 0;
+    clearBit(ADC_SC1A, ADC_SC1A_AIEN_BIT);
     #if ADC_NUM_ADCS>=2 // Teensy 3.1
     if(ADC_num==1) { // enable correct interrupt
         NVIC_DISABLE_IRQ(IRQ_ADC1);
@@ -583,8 +621,8 @@ void ADC_Module::enableDMA() {
 
     if (calibrating) wait_for_cal();
 
-    //*ADC_SC2 |= ADC_SC2_DMAEN;
-    *ADC_SC2_dma = 1;
+    //*ADC_SC2_dma = 1;
+    setBit(ADC_SC2, ADC_SC2_DMAEN_BIT);
 }
 
 /* Disable ADC DMA request
@@ -592,8 +630,8 @@ void ADC_Module::enableDMA() {
 */
 void ADC_Module::disableDMA() {
 
-    //*ADC_SC2 &= ~ADC_SC2_DMAEN;
-    *ADC_SC2_dma = 0;
+    //*ADC_SC2_dma = 0;
+    clearBit(ADC_SC2, ADC_SC2_DMAEN_BIT);
 }
 
 
@@ -606,9 +644,11 @@ void ADC_Module::enableCompare(int16_t compValue, bool greaterThan) {
 
     if (calibrating) wait_for_cal(); // if we modify the adc's registers when calibrating, it will fail
 
-    //*ADC_SC2 |= ADC_SC2_ACFE | greaterThan*ADC_SC2_ACFGT;
-    *ADC_SC2_cfe = 1; // enable compare
-    *ADC_SC2_cfgt = (int32_t)greaterThan; // greater or less than?
+    //*ADC_SC2_cfe = 1; // enable compare
+    //*ADC_SC2_cfgt = (int32_t)greaterThan; // greater or less than?
+    setBit(ADC_SC2, ADC_SC2_ACFE_BIT);
+    changeBit(ADC_SC2, ADC_SC2_ACFGT_BIT, greaterThan);
+
     *ADC_CV1 = (int16_t)compValue; // comp value
 }
 
@@ -622,30 +662,32 @@ void ADC_Module::enableCompareRange(int16_t lowerLimit, int16_t upperLimit, bool
 
     if (calibrating) wait_for_cal(); // if we modify the adc's registers when calibrating, it will fail
 
-    *ADC_SC2_cfe = 1; // enable compare
-    *ADC_SC2_cren = 1; // enable compare range
+    //*ADC_SC2_cfe = 1; // enable compare
+    //*ADC_SC2_cren = 1; // enable compare range
+    setBit(ADC_SC2, ADC_SC2_ACFE_BIT);
+    setBit(ADC_SC2, ADC_SC2_ACREN_BIT);
 
     if(insideRange && inclusive) { // True if value is inside the range, including the limits. CV1 <= CV2 and ACFGT=1
-        //*ADC_SC2 |= ADC_SC2_ACFE | ADC_SC2_ACFGT | ADC_SC2_ACREN;
-        *ADC_SC2_cfgt = 1;
+        //*ADC_SC2_cfgt = 1;
+        setBit(ADC_SC2, ADC_SC2_ACFGT_BIT);
 
         *ADC_CV1 = (int16_t)lowerLimit;
         *ADC_CV2 = (int16_t)upperLimit;
     } else if(insideRange && !inclusive) {// True if value is inside the range, excluding the limits. CV1 > CV2 and ACFGT=0
-        //*ADC_SC2 |= ADC_SC2_ACFE | ADC_SC2_ACREN;
-        *ADC_SC2_cfgt = 0;
+        //*ADC_SC2_cfgt = 0;
+        clearBit(ADC_SC2, ADC_SC2_ACFGT_BIT);
 
         *ADC_CV2 = (int16_t)lowerLimit;
         *ADC_CV1 = (int16_t)upperLimit;
     } else if(!insideRange && inclusive) { // True if value is outside of range or is equal to either limit. CV1 > CV2 and ACFGT=1
-        //*ADC_SC2 |= ADC_SC2_ACFE | ADC_SC2_ACFGT | ADC_SC2_ACREN;
-        *ADC_SC2_cfgt = 1;
+        //*ADC_SC2_cfgt = 1;
+        setBit(ADC_SC2, ADC_SC2_ACFGT_BIT);
 
         *ADC_CV2 = (int16_t)lowerLimit;
         *ADC_CV1 = (int16_t)upperLimit;
     } else if(!insideRange && !inclusive) { // True if value is outside of range and not equal to either limit. CV1 > CV2 and ACFGT=0
-        //*ADC_SC2 |= ADC_SC2_ACFE | ADC_SC2_ACREN;
-        *ADC_SC2_cfgt = 0;
+        //*ADC_SC2_cfgt = 0;
+        clearBit(ADC_SC2, ADC_SC2_ACFGT_BIT);
 
         *ADC_CV1 = (int16_t)lowerLimit;
         *ADC_CV2 = (int16_t)upperLimit;
@@ -657,8 +699,8 @@ void ADC_Module::enableCompareRange(int16_t lowerLimit, int16_t upperLimit, bool
 */
 void ADC_Module::disableCompare() {
 
-    //*ADC_SC2 &= ~ADC_SC2_ACFE;
-    *ADC_SC2_cfe = 0;
+    //*ADC_SC2_cfe = 0;
+    clearBit(ADC_SC2, ADC_SC2_ACFE_BIT);
 }
 
 /* Enables the PGA and sets the gain
@@ -667,7 +709,7 @@ void ADC_Module::disableCompare() {
 *
 */
 void ADC_Module::enablePGA(uint8_t gain) {
-    #if defined(__MK20DX256__)
+    #if defined(ADC_TEENSY_3_1)
 
     if (calibrating) wait_for_cal();
 
@@ -702,9 +744,9 @@ uint8_t ADC_Module::getPGA() {
 
 //! Disable PGA
 void ADC_Module::disablePGA() {
-    #if defined(__MK20DX256__)
-    //*ADC_PGA &= ~ADC_PGA_PGAEN;
-    *ADC_PGA_pgaen = 0;
+    #if defined(ADC_TEENSY_3_1)
+    //*ADC_PGA_pgaen = 0;
+    clearBit(ADC_PGA, ADC_PGA_PGAEN_BIT);
     #endif
     pga_value = 1;
 }
@@ -753,27 +795,30 @@ int ADC_Module::analogRead(uint8_t pin)
         // save the current conversion config, we don't want any other interrupts messing up the configs
         __disable_irq();
         //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
-        old_config.savedSC1A = *ADC_SC1A;
-        old_config.savedCFG1 = *ADC_CFG1;
-        old_config.savedCFG2 = *ADC_CFG2;
-        old_config.savedSC2 = *ADC_SC2;
-        old_config.savedSC3 = *ADC_SC3;
+        saveConfig(&old_config);
         __enable_irq();
     }
 
-	#if defined(__MK20DX256__)
+	#if defined(ADC_TEENSY_3_1)
 	// ADC1 has A15=5a and A20=4a so we have to change the mux to read the "a" channels
 	if( (ADC_num==1) && ( (pin==26) || (pin==31) ) ) { // mux a
-        //*ADC_CFG2 &= ~ADC_CFG2_MUXSEL;
-        *ADC_CFG2_muxsel = 0;
+                //*ADC_CFG2_muxsel = 0;
+                clearBit(ADC_CFG2, ADC_CFG2_MUXSEL_BIT);
 	} else { // mux b
-        //*ADC_CFG2 |= ADC_CFG2_MUXSEL;
-        *ADC_CFG2_muxsel = 1;
+                //*ADC_CFG2_muxsel = 1;
+                setBit(ADC_CFG2, ADC_CFG2_MUXSEL_BIT);
+	}
+	#elif defined(ADC_TEENSY_LC)
+	if(pin==A11) { // mux a
+        	clearBit(ADC_CFG2, ADC_CFG2_MUXSEL_BIT);
+	} else { // mux b
+                setBit(ADC_CFG2, ADC_CFG2_MUXSEL_BIT);
 	}
 	#endif
 
     // no continuous mode
-    *ADC_SC3_adco = 0;
+    //*ADC_SC3_adco = 0;
+    clearBit(ADC_SC3, ADC_SC3_ADCO_BIT);
 
     __disable_irq();
     *ADC_SC1A = channel2sc1a[pin] + var_enableInterrupts*ADC_SC1_AIEN; // start conversion on pin and with interrupts enabled if requested
@@ -798,11 +843,7 @@ int ADC_Module::analogRead(uint8_t pin)
     // if we interrupted a conversion, set it again
     if (wasADCInUse) {
         //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
-        *ADC_CFG1 = old_config.savedCFG1;
-        *ADC_CFG2 = old_config.savedCFG2;
-        *ADC_SC2 = old_config.savedSC2;
-        *ADC_SC3 = old_config.savedSC3;
-        *ADC_SC1A = old_config.savedSC1A;
+        loadConfig(&old_config);
     }
 
     num_measurements--;
@@ -842,23 +883,20 @@ int ADC_Module::analogReadDifferential(uint8_t pinP, uint8_t pinN)
     if(wasADCInUse) { // this means we're interrupting a conversion
         // save the current conversion config, we don't want any other interrupts messing up the configs
         __disable_irq();
-        //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
-        old_config.savedSC1A = *ADC_SC1A;
-        old_config.savedCFG1 = *ADC_CFG1;
-        old_config.savedCFG2 = *ADC_CFG2;
-        old_config.savedSC2 = *ADC_SC2;
-        old_config.savedSC3 = *ADC_SC3;
+        saveConfig(&old_config);
         __enable_irq();
     }
 
     // no continuous mode
-    *ADC_SC3_adco = 0;
+    //*ADC_SC3_adco = 0;
+    clearBit(ADC_SC3, ADC_SC3_ADCO_BIT);
 
     // once *ADC_SC1A is set, conversion will start, enable interrupts if requested
 	if ( (pinP == A10) && (pinN == A11) ) { // pins 34 and 35
         __disable_irq();
-        #if defined(__MK20DX256__)
-        if ( *ADC_PGA & ADC_PGA_PGAEN ) { // PGA is enabled
+        #if defined(ADC_TEENSY_3_1)
+        //if ( *ADC_PGA & ADC_PGA_PGAEN ) { // PGA is enabled
+        if(getBit(ADC_PGA, ADC_PGA_PGAEN_BIT)) {
             if(ADC_num == 0) { // PGA0 connects to A10-A11
                 *ADC_SC1A = ADC_SC1_DIFF + 0x2 + var_enableInterrupts*ADC_SC1_AIEN;
                 __enable_irq();
@@ -877,14 +915,15 @@ int ADC_Module::analogReadDifferential(uint8_t pinP, uint8_t pinN)
                 __enable_irq()
             }
         }
-        #elif defined(__MK20DX128__)
+        #elif defined(ADC_TEENSY_3_0) || defined(ADC_TEENSY_LC)
 	    *ADC_SC1A = ADC_SC1_DIFF + 0x0 + var_enableInterrupts*ADC_SC1_AIEN;
         __enable_irq();
         #endif
 	} else if ( (pinP == A12) && (pinN == A13) ) { // pins 36 and 37
         __disable_irq();
-        #if defined(__MK20DX256__)
-        if ( *ADC_PGA & ADC_PGA_PGAEN ) { // PGA is enabled
+        #if defined(ADC_TEENSY_3_1)
+        //if ( *ADC_PGA & ADC_PGA_PGAEN ) { // PGA is enabled
+        if(getBit(ADC_PGA, ADC_PGA_PGAEN_BIT)) {
             if(ADC_num == 1) { // PGA1 connects to A12-A13
                 *ADC_SC1A = ADC_SC1_DIFF + 0x2 + var_enableInterrupts*ADC_SC1_AIEN;
                 __enable_irq();
@@ -903,7 +942,7 @@ int ADC_Module::analogReadDifferential(uint8_t pinP, uint8_t pinN)
                 __enable_irq()
             }
         }
-        #elif defined(__MK20DX128__)
+        #elif defined(ADC_TEENSY_3_0)
 	    *ADC_SC1A = ADC_SC1_DIFF + 0x3 + var_enableInterrupts*ADC_SC1_AIEN;
         __enable_irq();
         #endif
@@ -935,12 +974,7 @@ int ADC_Module::analogReadDifferential(uint8_t pinP, uint8_t pinN)
 
     // if we interrupted a conversion, set it again
     if (wasADCInUse) {
-        //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
-        *ADC_CFG1 = old_config.savedCFG1;
-        *ADC_CFG2 = old_config.savedCFG2;
-        *ADC_SC2 = old_config.savedSC2;
-        *ADC_SC3 = old_config.savedSC3;
-        *ADC_SC1A = old_config.savedSC1A;
+        loadConfig(&old_config);
     }
 
     num_measurements--;
@@ -982,19 +1016,14 @@ int ADC_Module::startSingleRead(uint8_t pin) {
     if(adcWasInUse) { // this means we're interrupting a conversion
         // save the current conversion config, the adc isr will restore the adc
         __disable_irq();
-        //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
-        adc_config.savedSC1A = *ADC_SC1A;
-        adc_config.savedCFG1 = *ADC_CFG1;
-        adc_config.savedCFG2 = *ADC_CFG2;
-        adc_config.savedSC2 = *ADC_SC2;
-        adc_config.savedSC3 = *ADC_SC3;
+        saveConfig(&adc_config);
         __enable_irq();
     }
 
     startSingleReadFast(pin);
 
 /*
-    #if defined(__MK20DX256__)
+    #if defined(ADC_TEENSY_3_1)
 	// ADC1 has A15=5a and A20=4a so we have to change the mux to read the "a" channels
 	if( (ADC_num==1) && ( (pin==26) || (pin==31) ) ) {
         // *ADC_CFG2 &= ~ADC_CFG2_MUXSEL;
@@ -1018,19 +1047,26 @@ int ADC_Module::startSingleRead(uint8_t pin) {
 }
 // Doesn't do any of the checks of the normal version, but it's faster
 int ADC_Module::startSingleReadFast(uint8_t pin) {
-    #if defined(__MK20DX256__)
+    #if defined(ADC_TEENSY_3_1)
 	// ADC1 has A15=5a and A20=4a so we have to change the mux to read the "a" channels
 	if( (ADC_num==1) && ( (pin==26) || (pin==31) ) ) {
-        //*ADC_CFG2 &= ~ADC_CFG2_MUXSEL;
-        *ADC_CFG2_muxsel = 0;
+        //*ADC_CFG2_muxsel = 0;
+        clearBit(ADC_CFG2, ADC_CFG2_MUXSEL_BIT);
 	} else {
-        //*ADC_CFG2 |= ADC_CFG2_MUXSEL;
-        *ADC_CFG2_muxsel = 1;
+        //*ADC_CFG2_muxsel = 1;
+        setBit(ADC_CFG2, ADC_CFG2_MUXSEL_BIT);
+	}
+	#elif defined(ADC_TEENSY_LC)
+	if(pin==A11) { // mux a
+        	clearBit(ADC_CFG2, ADC_CFG2_MUXSEL_BIT);
+	} else { // mux b
+                setBit(ADC_CFG2, ADC_CFG2_MUXSEL_BIT);
 	}
 	#endif
 
 	// no continuous mode
-    *ADC_SC3_adco = 0;
+    //*ADC_SC3_adco = 0;
+    clearBit(ADC_SC3, ADC_SC3_ADCO_BIT);
 
     // select pin for single-ended mode and start conversion, enable interrupts to know when it's done
     __disable_irq();
@@ -1064,11 +1100,7 @@ int ADC_Module::startSingleDifferential(uint8_t pinP, uint8_t pinN) {
         // save the current conversion config, the adc isr will restore the adc
         __disable_irq();
         //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
-        adc_config.savedSC1A = *ADC_SC1A;
-        adc_config.savedCFG1 = *ADC_CFG1;
-        adc_config.savedCFG2 = *ADC_CFG2;
-        adc_config.savedSC2 = *ADC_SC2;
-        adc_config.savedSC3 = *ADC_SC3;
+        saveConfig(&adc_config);
         __enable_irq();
     }
 
@@ -1081,7 +1113,7 @@ int ADC_Module::startSingleDifferential(uint8_t pinP, uint8_t pinN) {
     // once *ADC_SC1A is set, conversion will start, enable interrupts if requested
 	if ( (pinP == A10) && (pinN == A11) ) { // DAD0 selected, pins 34 and 35
         __disable_irq();
-        #if defined(__MK20DX256__)
+        #if defined(ADC_TEENSY_3_1)
         if ( *ADC_PGA & ADC_PGA_PGAEN ) { // PGA is enabled
             if(ADC_num == 0) { // PGA0 connects to A10-A11
                 *ADC_SC1A = ADC_SC1_DIFF + 0x2 + var_enableInterrupts*ADC_SC1_AIEN;
@@ -1100,13 +1132,13 @@ int ADC_Module::startSingleDifferential(uint8_t pinP, uint8_t pinN) {
                 __enable_irq()
             }
         }
-        #elif defined(__MK20DX128__)
+        #elif defined(ADC_TEENSY_3_0)
 	    *ADC_SC1A = ADC_SC1_DIFF + 0x0 + var_enableInterrupts*ADC_SC1_AIEN;
         __enable_irq();
         #endif
 	} else if ( (pinP == A12) && (pinN == A13) ) { // DAD3 selected, pins 36 and 37
         __disable_irq();
-        #if defined(__MK20DX256__)
+        #if defined(ADC_TEENSY_3_1)
         if ( *ADC_PGA & ADC_PGA_PGAEN ) { // PGA is enabled
             if(ADC_num == 1) { // PGA1 connects to A12-A13
                 *ADC_SC1A = ADC_SC1_DIFF + 0x2 + var_enableInterrupts*ADC_SC1_AIEN;
@@ -1125,7 +1157,7 @@ int ADC_Module::startSingleDifferential(uint8_t pinP, uint8_t pinN) {
                 __enable_irq()
             }
         }
-        #elif defined(__MK20DX128__)
+        #elif defined(ADC_TEENSY_3_0)
 	    *ADC_SC1A = ADC_SC1_DIFF + 0x3 + var_enableInterrupts*ADC_SC1_AIEN;
         __enable_irq();
         #endif
@@ -1142,13 +1174,15 @@ int ADC_Module::startSingleDifferential(uint8_t pinP, uint8_t pinN) {
 int ADC_Module::startSingleDifferentialFast(uint8_t pinP, uint8_t pinN) {
 
     // no continuous mode
-    *ADC_SC3_adco = 0;
+    //*ADC_SC3_adco = 0;
+    clearBit(ADC_SC3, ADC_SC3_ADCO_BIT);
 
     // once *ADC_SC1A is set, conversion will start, enable interrupts if requested
 	if ( (pinP == A10) && (pinN == A11) ) { // DAD0 selected, pins 34 and 35
         __disable_irq();
-        #if defined(__MK20DX256__)
-        if ( *ADC_PGA & ADC_PGA_PGAEN ) { // PGA is enabled
+        #if defined(ADC_TEENSY_3_1)
+        //if ( *ADC_PGA & ADC_PGA_PGAEN ) { // PGA is enabled
+        if(getBit(ADC_PGA, ADC_PGA_PGAEN_BIT)) {
             if(ADC_num == 0) { // PGA0 connects to A10-A11
                 *ADC_SC1A = ADC_SC1_DIFF + 0x2 + var_enableInterrupts*ADC_SC1_AIEN;
                 __enable_irq();
@@ -1166,14 +1200,15 @@ int ADC_Module::startSingleDifferentialFast(uint8_t pinP, uint8_t pinN) {
                 __enable_irq()
             }
         }
-        #elif defined(__MK20DX128__)
+        #elif defined(ADC_TEENSY_3_0) || defined(ADC_TEENSY_LC)
 	    *ADC_SC1A = ADC_SC1_DIFF + 0x0 + var_enableInterrupts*ADC_SC1_AIEN;
         __enable_irq();
         #endif
 	} else if ( (pinP == A12) && (pinN == A13) ) { // DAD3 selected, pins 36 and 37
         __disable_irq();
-        #if defined(__MK20DX256__)
-        if ( *ADC_PGA & ADC_PGA_PGAEN ) { // PGA is enabled
+        #if defined(ADC_TEENSY_3_1)
+        //if ( *ADC_PGA & ADC_PGA_PGAEN ) { // PGA is enabled
+        if(getBit(ADC_PGA, ADC_PGA_PGAEN_BIT)) {
             if(ADC_num == 1) { // PGA1 connects to A12-A13
                 *ADC_SC1A = ADC_SC1_DIFF + 0x2 + var_enableInterrupts*ADC_SC1_AIEN;
                 __enable_irq();
@@ -1191,7 +1226,7 @@ int ADC_Module::startSingleDifferentialFast(uint8_t pinP, uint8_t pinN) {
                 __enable_irq()
             }
         }
-        #elif defined(__MK20DX128__)
+        #elif defined(ADC_TEENSY_3_0)
 	    *ADC_SC1A = ADC_SC1_DIFF + 0x3 + var_enableInterrupts*ADC_SC1_AIEN;
         __enable_irq();
         #endif
@@ -1232,21 +1267,27 @@ void ADC_Module::startContinuous(uint8_t pin)
     // increase the counter of measurements
 	num_measurements++;
 
-    #if defined(__MK20DX256__)
+    #if defined(ADC_TEENSY_3_1)
 	// ADC1 has A15=5a and A20=4a so we have to change the mux to read the "a" channels
 	if( (ADC_num==1) && ( (pin==26) || (pin==31) ) ) {
-        //*ADC_CFG2 &= ~ADC_CFG2_MUXSEL;
-        *ADC_CFG2_muxsel = 0;
+        //*ADC_CFG2_muxsel = 0;
+        clearBit(ADC_CFG2, ADC_CFG2_MUXSEL_BIT);
 	} else {
-        //*ADC_CFG2 |= ADC_CFG2_MUXSEL;
-        *ADC_CFG2_muxsel = 1;
+        //*ADC_CFG2_muxsel = 1;
+        setBit(ADC_CFG2, ADC_CFG2_MUXSEL_BIT);
+	}
+	#elif defined(ADC_TEENSY_LC)
+	if(pin==A11) { // mux a
+        	clearBit(ADC_CFG2, ADC_CFG2_MUXSEL_BIT);
+	} else { // mux b
+                setBit(ADC_CFG2, ADC_CFG2_MUXSEL_BIT);
 	}
 	#endif
 
     __disable_irq();
     // set continuous conversion flag
-	//*ADC_SC3 |= ADC_SC3_ADCO;
-	*ADC_SC3_adco = 1;
+	//*ADC_SC3_adco = 1;
+	setBit(ADC_SC3, ADC_SC3_ADCO_BIT);
     // select pin for single-ended mode and start conversion, enable interrupts if requested
     *ADC_SC1A = channel2sc1a[pin] + var_enableInterrupts*ADC_SC1_AIEN;
     __enable_irq();
@@ -1275,15 +1316,16 @@ void ADC_Module::startContinuousDifferential(uint8_t pinP, uint8_t pinN) {
 
     // set continuous conversion flag
 	__disable_irq();
-	//*ADC_SC3 |= ADC_SC3_ADCO;
-	*ADC_SC3_adco = 1;
+	//*ADC_SC3_adco = 1;
+	setBit(ADC_SC3, ADC_SC3_ADCO_BIT);
 	__enable_irq();
 
     // once *ADC_SC1A is set, conversion will start, enable interrupts if requested
 	if ( (pinP == A10) && (pinN == A11) ) { // DAD0 selected, pins 34 and 35
         __disable_irq();
-        #if defined(__MK20DX256__)
-        if ( *ADC_PGA & ADC_PGA_PGAEN ) { // PGA is enabled
+        #if defined(ADC_TEENSY_3_1)
+        //if ( *ADC_PGA & ADC_PGA_PGAEN ) { // PGA is enabled
+        if(getBit(ADC_PGA, ADC_PGA_PGAEN_BIT)) {
             if(ADC_num == 0) { // PGA0 connects to A10-A11
                 *ADC_SC1A = ADC_SC1_DIFF + 0x2 + var_enableInterrupts*ADC_SC1_AIEN;
                 __enable_irq();
@@ -1301,14 +1343,15 @@ void ADC_Module::startContinuousDifferential(uint8_t pinP, uint8_t pinN) {
                 __enable_irq()
             }
         }
-        #elif defined(__MK20DX128__)
+        #elif defined(ADC_TEENSY_3_0) || defined(ADC_TEENSY_LC)
 	    *ADC_SC1A = ADC_SC1_DIFF + 0x0 + var_enableInterrupts*ADC_SC1_AIEN;
         __enable_irq();
         #endif
 	} else if ( (pinP == A12) && (pinN == A13) ) { // DAD3 selected, pins 36 and 37
         __disable_irq();
-        #if defined(__MK20DX256__)
-        if ( *ADC_PGA & ADC_PGA_PGAEN ) { // PGA is enabled
+        #if defined(ADC_TEENSY_3_1)
+        //if ( *ADC_PGA & ADC_PGA_PGAEN ) { // PGA is enabled
+        if(getBit(ADC_PGA, ADC_PGA_PGAEN_BIT)) {
             if(ADC_num == 1) { // PGA1 connects to A12-A13
                 *ADC_SC1A = ADC_SC1_DIFF + 0x2 + var_enableInterrupts*ADC_SC1_AIEN;
                 __enable_irq();
@@ -1326,7 +1369,7 @@ void ADC_Module::startContinuousDifferential(uint8_t pinP, uint8_t pinN) {
                 __enable_irq()
             }
         }
-        #elif defined(__MK20DX128__)
+        #elif defined(ADC_TEENSY_3_0)
 	    *ADC_SC1A = ADC_SC1_DIFF + 0x3 + var_enableInterrupts*ADC_SC1_AIEN;
         __enable_irq();
         #endif

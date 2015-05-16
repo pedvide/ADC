@@ -21,7 +21,8 @@ void setup() {
     Serial.begin(9600);
 
     ///// ADC0 ////
-    //adc->setReference(ADC_REF_INTERNAL, ADC_0); change all 3.3 to 1.2 if you change the reference
+    // reference can be ADC_REF_3V3, ADC_REF_1V2 (not for Teensy LC) or ADC_REF_EXT.
+    //adc->setReference(ADC_REF_1V2, ADC_0); // change all 3.3 to 1.2 if you change the reference to 1V2
 
     adc->setAveraging(1); // set number of averages
     adc->setResolution(12); // set bits of resolution
@@ -111,7 +112,7 @@ void loop() {
             Serial.println("Comparison error in ADC0");
         }
     }
-    #if defined(__MK20DX256__)
+    #if defined(ADC_TEENSY_3_1)
     if(adc->adc1->fail_flag) {
         Serial.print("ADC1 error flags: 0x");
         Serial.println(adc->adc1->fail_flag, HEX);

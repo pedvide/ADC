@@ -40,24 +40,28 @@
 #define ADC_0 0
 #define ADC_1 1
 
+// include ADC module class
+#include "ADC_Module.h"
+
+
 // Teensy 3.1 has 2 ADCs, Teensy 3.0 and LC only 1.
-#if defined(__MK20DX256__) // Teensy 3.1
+#if defined(ADC_TEENSY_3_1) // Teensy 3.1
         #define ADC_NUM_ADCS 2
-#elif defined(__MK20DX128__) // Teensy 3.0
+#elif defined(ADC_TEENSY_3_0) // Teensy 3.0
         #define ADC_NUM_ADCS 1
-#elif defined(__MKL26Z64__) // Teensy LC
+#elif defined(ADC_TEENSY_LC) // Teensy LC
         #define ADC_NUM_ADCS 1
 #endif
 
-#if defined(__MK20DX256__) || defined(__MK20DX128__) // Teensy 3.x
+// Use DMA?
+#if defined(ADC_TEENSY_3_1) // Teensy 3.1
         #define ADC_USE_DMA 1
-#else
+#elif defined(ADC_TEENSY_3_0) // Teensy 3.0
+        #define ADC_USE_DMA 1
+#elif defined(ADC_TEENSY_LC) // Teensy LC
         #define ADC_USE_DMA 0
 #endif
 
-
-// include ADC module class
-#include "ADC_Module.h"
 
 // include the circular buffer
 #include "RingBuffer.h"
@@ -65,9 +69,6 @@
 #if ADC_USE_DMA==1
         #include "RingBufferDMA.h"
 #endif
-
-// dma assigment
-//#include "DMAChannel.h"
 
 
 #ifdef __cplusplus
@@ -88,11 +89,9 @@ class ADC
         // create both adc objects
 
         //! Object to control the ADC0
-        //static ADC_Module *adc0; // adc object
         ADC_Module *adc0; // adc object
-        #if defined(__MK20DX256__)
+        #if ADC_NUM_ADCS>1
         //! Object to control the ADC1
-        //static ADC_Module *adc1; // adc object
         ADC_Module *adc1; // adc object
         #endif
 
@@ -101,7 +100,7 @@ class ADC
 
         //! Set the voltage reference you prefer, default is vcc
         /*!
-        * \param type can be DEFAULT, EXTERNAL or INTERNAL.
+        * \param type can be ADC_REF_3V3, ADC_REF_1V2 (not for Teensy LC) or ADC_REF_EXT.
         *
         *  It recalibrates at the end.
         */
@@ -123,7 +122,7 @@ class ADC
         //! Returns the resolution of the ADC_Module.
         uint8_t getResolution(int8_t adc_num = -1);
 
-        //! Returns the maximum value for a measurement.
+        //! Returns the maximum value for a measurement: 2^res-1.
         uint32_t getMaxValue(int8_t adc_num = -1);
 
 
@@ -317,7 +316,7 @@ class ADC
         */
         inline int analogReadContinuous(int8_t adc_num = -1) { // make it inline so it's a bit faster
             if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
-                #if defined(__MK20DX256__)
+                #if defined(ADC_TEENSY_3_1)
                 return adc1->analogReadContinuous();
                 #else
                 adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
@@ -333,13 +332,14 @@ class ADC
 
 
         /////////// SYNCHRONIZED METHODS ///////////////
+        ///// IF THE BOARD HAS ONLY ONE ADC, THEY ARE EMPYT METHODS /////
 
         //! Struct for synchronous measurements
         /** result_adc0 has the result from ADC0 and result_adc1 from ADC1.
         */
-        typedef struct SYNC_RESULT{
+        struct Sync_result{
             int32_t result_adc0, result_adc1;
-        } Sync_result;
+        };
 
         //////////////// SYNCHRONIZED BLOCKING METHODS //////////////////
 
@@ -374,8 +374,8 @@ class ADC
 
         //! Start a differential conversion between two pins (pin0P - pin0N) and (pin1P - pin1N)
         /** It returns inmediately, get value with readSynchronizedSingle().
-        *   \param pinP must be A10 or A12.
-        *   \param pinN must be A11 (if pinP=A10) or A13 (if pinP=A12).
+        *   \param pin0P, pin1P must be A10 or A12.
+        *   \param pin0N, pin1N must be A11 (if pinP=A10) or A13 (if pinP=A12).
         *   Other pins will return ADC_ERROR_DIFF_VALUE.
         *   If this function interrupts a measurement, it stores the settings in adc_config
         */
@@ -419,12 +419,9 @@ class ADC
         static void dma_isr_0(void);
         static void dma_isr_1(void);
 
-        #if defined(__MK20DX128__)
         //! DMA buffer to store all converted values
         RingBufferDMA *buffer0;
-        #elif defined(__MK20DX256__)
-        //! DMA buffer to store all converted values
-        RingBufferDMA *buffer0;
+        #if defined(ADC_TEENSY_3_1)
         RingBufferDMA *buffer1;
         #endif
 
@@ -437,12 +434,10 @@ class ADC
         //void startPDB(double period);
         //double adc_pdb_period;
 
-        //! Translate pin number to SC1A nomenclature and viceversa
+        //! Translate pin number to SC1A nomenclature
         static const uint8_t channel2sc1aADC0[44];
-        static const uint8_t sc1a2channelADC0[31];
-        #if defined(__MK20DX256__)
+        #if defined(ADC_TEENSY_3_1)
         static const uint8_t channel2sc1aADC1[44];
-        static const uint8_t sc1a2channelADC1[31];
         #endif
 
 

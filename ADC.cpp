@@ -29,13 +29,6 @@
 
 #include "ADC.h"
 
-/*
-// static adc module objects
-ADC_Module *ADC::adc0 = new ADC_Module(0);
-#if defined(__MK20DX256__)
-ADC_Module *ADC::adc1 = new ADC_Module(1);
-#endif
-*/
 
 #if ADC_USE_DMA==1
 uint8_t ADC::dma_Ch0 = -1;
@@ -49,7 +42,7 @@ uint8_t ADC::dma_Ch1 = -1;
 /* channel2sc1aADCx converts a pin number to their value for the SC1A register, for the ADC0 and ADC1
 *  sc1a2channelADCx does the opposite.
 */
-#if !defined(__MKL26Z64__)
+#if defined(ADC_TEENSY_3_0) || defined(ADC_TEENSY_3_1)
 const uint8_t ADC::channel2sc1aADC0[]= { // new version, gives directly the sc1a number. 0x1F=31 deactivates the ADC.
     5, 14, 8, 9, 13, 12, 6, 7, 15, 4, 0, 19, 3, 21, // 0-13, we treat them as A0-A13
     5, 14, 8, 9, 13, 12, 6, 7, 15, 4, // 14-23 (A0-A9)
@@ -57,30 +50,18 @@ const uint8_t ADC::channel2sc1aADC0[]= { // new version, gives directly the sc1a
     0, 19, 3, 21, // 34-37 (A10-A13)
     26, 22, 23, 27, 29, 30 // 38-43: temp. sensor, VREF_OUT, A14, bandgap, VREFH, VREFL. A14 isn't connected to anything in Teensy 3.0.
 };
-const uint8_t ADC::sc1a2channelADC0[]= { // new version, gives directly the pin number
-    34, 0, 0, 36, 23, 14, 20, 21, 16, 17, 0, 0, 19, 18, // 0-13
-    15, 22, 0, 0, 0, 35, 0, 37, // 14-21
-    39, 40, 0, 0, 38, 41, 42, 43, // VREF_OUT, A14, temp. sensor, bandgap, VREFH, VREFL.
-    0 // 31 means disabled, but just in case
-};
-#else
+#elif defined(ADC_TEENSY_LC)
 // Teensy LC
 const uint8_t ADC::channel2sc1aADC0[]= { // new version, gives directly the sc1a number. 0x1F=31 deactivates the ADC.
-    5, 14, 8, 9, 13, 12, 6, 7, 15, 17, 0, 4, 23, 31, // 0-13, we treat them as A0-A12 + A13= doesn't exist
-    5, 14, 8, 9, 13, 12, 6, 7, 15, 17, // 14-23 (A0-A9)
-    31, 31, 31, 31, 31, 31, 31, 31, 31, 31, // 24-33
-    0, 4, 23, 31, // 34-37 (A10-A12) + nothing
+    5, 14, 8, 9, 13, 12, 6, 7, 15, 11, 0, 4, 23, 31, // 0-13, we treat them as A0-A12 + A13= doesn't exist
+    5, 14, 8, 9, 13, 12, 6, 7, 15, 11, // 14-23 (A0-A9)
+    0, 4, 23, 31, 31, 31, 31, 31, 31, 31, // 24-33 ((A10-A12) + nothing)
+    31, 31, 31, 31, // 34-37 nothing
     26, 31, 31, 27, 29, 30 // 38-43: temp. sensor, , , bandgap, VREFH, VREFL.
-};
-const uint8_t ADC::sc1a2channelADC0[]= { // new version, gives directly the pin number
-    34, 0, 0, 0, 35, 14, 20, 21, 16, 17, 0, 0, 19, 18, // 0-13
-    15, 22, 0, 23, 0, 0, 0, 0, // 14-21
-    0, 0, 0, 0, 38, 41, 42, 43, // VREF_OUT, A14, temp. sensor, bandgap, VREFH, VREFL.
-    0 // 31 means disabled, but just in case
 };
 #endif // defined
 
-#if defined(__MK20DX256__)
+#if defined(ADC_TEENSY_3_1)
 const uint8_t ADC::channel2sc1aADC1[]= { // new version, gives directly the sc1a number. 0x1F=31 deactivates the ADC.
     31, 31, 8, 9, 31, 31, 31, 31, 31, 31, 3, 31, 0, 19, // 0-13, we treat them as A0-A13
     31, 31, 8, 9, 31, 31, 31, 31, 31, 31, // 14-23 (A0-A9)
@@ -88,12 +69,6 @@ const uint8_t ADC::channel2sc1aADC1[]= { // new version, gives directly the sc1a
     5, 5, 4, 6, 7, 4, 31, 31, // 26-33 26=5a, 27=5b, 28=4b, 29=6b, 30=7b, 31=4a, 32,33 are digital only
     3, 31, 0, 19, // 34-37 (A10-A13) A11 isn't connected.
     26, 18, 31, 27, 29, 30 // 38-43: temp. sensor, VREF_OUT, A14 (not connected), bandgap, VREFH, VREFL.
-};
-const uint8_t ADC::sc1a2channelADC1[]= { // new version, gives directly the pin number
-    36, 0, 0, 34, 28, 26, 29, 30, 16, 17, 0, 0, 0, 0, // 0-13. 5a=26, 5b=27, 4b=28, 4a=31
-    0, 0, 0, 0, 39, 37, 0, 0, // 14-21
-    0, 0, 0, 0, 38, 41, 0, 42, // 22-29. VREF_OUT, A14, temp. sensor, bandgap, VREFH, VREFL.
-    43
 };
 #endif
 
@@ -103,23 +78,21 @@ ADC::ADC() {
 
     // make sure the clocks to the ADC are on
     SIM_SCGC6 |= SIM_SCGC6_ADC0;
-    #if defined(__MK20DX256__)
+    #if ADC_NUM_ADCS>1
     SIM_SCGC3 |= SIM_SCGC3_ADC1;
     #endif
 
-    adc0 = new ADC_Module(0);
-    #if defined(__MK20DX256__)
-    adc1 = new ADC_Module(1);
+    adc0 = new ADC_Module(0, channel2sc1aADC0);
+    #if ADC_NUM_ADCS>1
+    adc1 = new ADC_Module(1, channel2sc1aADC1);
     #endif
-
-    //dmaControl = new DMAControl;
 
 }
 
 
 
-/* Set the voltage reference you prefer, default is vcc
-*
+/* Set the voltage reference you prefer,
+*  type can be ADC_REF_3V3, ADC_REF_1V2 (not for Teensy LC) or ADC_REF_EXT
 */
 void ADC::setReference(uint8_t type, int8_t adc_num) {
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
@@ -479,19 +452,19 @@ bool ADC::isContinuous(int8_t adc_num) {
 * adc_num. If you select ADC1 in Teensy 3.0 it will return ADC_ERROR_VALUE.
 */
 int ADC::analogRead(uint8_t pin, int8_t adc_num) {
-    #if defined(__MK20DX128__)
+    #if ADC_NUM_ADCS==1
     /* Teensy 3.0
     */
     if( adc_num==1 ) { // If asked to use ADC1, return error
         adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
         return ADC_ERROR_VALUE;
     }
-    if ( (pin <= 23) || (pin>=34) ) { // check that the pin is correct (pin<0 or pin>43 have been ruled out already)
+    if ( (pin <= 26) || (pin>=34) ) { // check that the pin is correct (pin<0 or pin>43 have been ruled out already)
         return adc0->analogRead(pin); // use ADC0
     } else {
         adc0->fail_flag |= ADC_ERROR_WRONG_PIN;
     }
-    #elif defined(__MK20DX256__)
+    #elif ADC_NUM_ADCS==2
     /* Teensy 3.1
     */
     // Check to which ADC the pin corresponds
@@ -594,7 +567,7 @@ int ADC::startSingleRead(uint8_t pin, int8_t adc_num) {
         adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
         return ADC_ERROR_VALUE;
     }
-    if ( (pin <= 23) || (pin>=34) ) { // check that the pin is correct (pin<0 or pin>43 have been ruled out already)
+    if ( (pin <= 26) || (pin>=34) ) { // check that the pin is correct (pin<0 or pin>43 have been ruled out already)
         return adc0->startSingleRead(pin); // use ADC0
     }
 
@@ -696,7 +669,7 @@ void ADC::startContinuous(uint8_t pin, int8_t adc_num) {
         adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
         return;
     }
-    if ( (pin <= 23) || (pin>=34) ) { // check that the pin is correct (pin<0 or pin>43 have been ruled out already)
+    if ( (pin <= 26) || (pin>=34) ) { // check that the pin is correct (pin<0 or pin>43 have been ruled out already)
         adc0->startContinuous(pin); // use ADC0
         return;
     }
@@ -768,6 +741,9 @@ void ADC::stopContinuous(int8_t adc_num) {
 
 
 //////////////// SYNCHRONIZED BLOCKING METHODS //////////////////
+///// IF THE BOARD HAS ONLY ONE ADC, THEY ARE EMPYT METHODS /////
+
+#if ADC_NUM_ADCS>1
 
 /*Returns the analog values of both pins, measured at the same time by the two ADC modules.
 * It waits until the value is read and then returns the result as a struct Sync_result,
@@ -777,8 +753,6 @@ void ADC::stopContinuous(int8_t adc_num) {
 ADC::Sync_result ADC::analogSynchronizedRead(uint8_t pin0, uint8_t pin1) {
 
     Sync_result res;
-
-    #if ADC_NUM_ADCS>=2 // Teensy 3.1
 
     if ( (pin0 < 0) || (pin0 > 43) || (channel2sc1aADC0[pin0]==31) ) {
         adc0->fail_flag |= ADC_ERROR_WRONG_PIN;
@@ -800,11 +774,7 @@ ADC::Sync_result ADC::analogSynchronizedRead(uint8_t pin0, uint8_t pin1) {
         // save the current conversion config, the adc isr will restore the adc
         __disable_irq();
         //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
-        old_adc0_config.savedSC1A = ADC0_SC1A;
-        old_adc0_config.savedCFG1 = ADC0_CFG1;
-        old_adc0_config.savedCFG2 = ADC0_CFG2;
-        old_adc0_config.savedSC2 = ADC0_SC2;
-        old_adc0_config.savedSC3 = ADC0_SC3;
+        adc0->saveConfig(&old_adc0_config);
         __enable_irq();
     }
     ADC_Module::ADC_Config old_adc1_config = {0};
@@ -813,11 +783,7 @@ ADC::Sync_result ADC::analogSynchronizedRead(uint8_t pin0, uint8_t pin1) {
         // save the current conversion config, the adc isr will restore the adc
         __disable_irq();
         //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
-        old_adc1_config.savedSC1A = ADC1_SC1A;
-        old_adc1_config.savedCFG1 = ADC1_CFG1;
-        old_adc1_config.savedCFG2 = ADC1_CFG2;
-        old_adc1_config.savedSC2 = ADC1_SC2;
-        old_adc1_config.savedSC3 = ADC1_SC3;
+        adc1->saveConfig(&old_adc1_config);
         __enable_irq();
     }
 
@@ -851,33 +817,16 @@ ADC::Sync_result ADC::analogSynchronizedRead(uint8_t pin0, uint8_t pin1) {
     // if we interrupted a conversion, set it again
     if (wasADC0InUse) {
         //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
-        ADC0_CFG1 = old_adc0_config.savedCFG1;
-        ADC0_CFG2 = old_adc0_config.savedCFG2;
-        ADC0_SC2 = old_adc0_config.savedSC2;
-        ADC0_SC3 = old_adc0_config.savedSC3;
-        ADC0_SC1A = old_adc0_config.savedSC1A;
+        adc0->loadConfig(&old_adc0_config);
     }
     if (wasADC1InUse) {
         //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
-        ADC1_CFG1 = old_adc1_config.savedCFG1;
-        ADC1_CFG2 = old_adc1_config.savedCFG2;
-        ADC1_SC2 = old_adc1_config.savedSC2;
-        ADC1_SC3 = old_adc1_config.savedSC3;
-        ADC1_SC1A = old_adc1_config.savedSC1A;
+        adc1->loadConfig(&old_adc1_config);
     }
 
     //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
 
     return res;
-
-    #else // Teensy 3.0 and LC
-
-    res.result_adc0 = ADC_ERROR_VALUE;
-    res.result_adc1 = ADC_ERROR_VALUE;
-    adc0->fail_flag |= ADC_ERROR_SYNCH;
-    return res;
-    #endif
-
 }
 
 /*Returns the diff analog values of both sets of pins, measured at the same time by the two ADC modules.
@@ -889,8 +838,6 @@ ADC::Sync_result ADC::analogSynchronizedReadDifferential(uint8_t pin0P, uint8_t 
 
     ADC::Sync_result res;
 
-    #if ADC_NUM_ADCS>=2 // Teensy 3.1
-
     // check if we are interrupting a measurement, store setting if so.
     // vars to save the current state of the ADC in case it's in use
     ADC_Module::ADC_Config old_adc0_config = {0};
@@ -899,11 +846,7 @@ ADC::Sync_result ADC::analogSynchronizedReadDifferential(uint8_t pin0P, uint8_t 
         // save the current conversion config, the adc isr will restore the adc
         __disable_irq();
         //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
-        old_adc0_config.savedSC1A = ADC0_SC1A;
-        old_adc0_config.savedCFG1 = ADC0_CFG1;
-        old_adc0_config.savedCFG2 = ADC0_CFG2;
-        old_adc0_config.savedSC2 = ADC0_SC2;
-        old_adc0_config.savedSC3 = ADC0_SC3;
+        adc0->saveConfig(&old_adc0_config);
         __enable_irq();
     }
     ADC_Module::ADC_Config old_adc1_config = {0};
@@ -912,11 +855,7 @@ ADC::Sync_result ADC::analogSynchronizedReadDifferential(uint8_t pin0P, uint8_t 
         // save the current conversion config, the adc isr will restore the adc
         __disable_irq();
         //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
-        old_adc1_config.savedSC1A = ADC1_SC1A;
-        old_adc1_config.savedCFG1 = ADC1_CFG1;
-        old_adc1_config.savedCFG2 = ADC1_CFG2;
-        old_adc1_config.savedSC2 = ADC1_SC2;
-        old_adc1_config.savedSC3 = ADC1_SC3;
+        adc1->saveConfig(&old_adc1_config);
         __enable_irq();
     }
 
@@ -948,34 +887,16 @@ ADC::Sync_result ADC::analogSynchronizedReadDifferential(uint8_t pin0P, uint8_t 
     // if we interrupted a conversion, set it again
     if (wasADC0InUse) {
         //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
-        ADC0_CFG1 = old_adc0_config.savedCFG1;
-        ADC0_CFG2 = old_adc0_config.savedCFG2;
-        ADC0_SC2 = old_adc0_config.savedSC2;
-        ADC0_SC3 = old_adc0_config.savedSC3;
-        ADC0_SC1A = old_adc0_config.savedSC1A;
+        adc0->loadConfig(&old_adc0_config);
     }
     if (wasADC1InUse) {
         //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
-        ADC1_CFG1 = old_adc1_config.savedCFG1;
-        ADC1_CFG2 = old_adc1_config.savedCFG2;
-        ADC1_SC2 = old_adc1_config.savedSC2;
-        ADC1_SC3 = old_adc1_config.savedSC3;
-        ADC1_SC1A = old_adc1_config.savedSC1A;
+        adc1->loadConfig(&old_adc1_config);
     }
 
     //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
 
     return res;
-
-    #else // Teensy 3.0, LC
-
-    res.result_adc0 = ADC_ERROR_VALUE;
-    res.result_adc1 = ADC_ERROR_VALUE;
-    adc0->fail_flag |= ADC_ERROR_SYNCH;
-    return res;
-
-    #endif
-
 }
 
 /////////////// SYNCHRONIZED NON-BLOCKING METHODS //////////////
@@ -987,19 +908,13 @@ ADC::Sync_result ADC::analogSynchronizedReadDifferential(uint8_t pin0P, uint8_t 
 */
 int ADC::startSynchronizedSingleRead(uint8_t pin0, uint8_t pin1) {
 
-    #if ADC_NUM_ADCS>=2 // Teensy 3.1
-
     // check if we are interrupting a measurement, store setting if so.
     adc0->adcWasInUse = adc0->isConverting(); // is the ADC running now?
     if(adc0->adcWasInUse) { // this means we're interrupting a conversion
         // save the current conversion config, the adc isr will restore the adc
         __disable_irq();
         //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
-        adc0->adc_config.savedSC1A = ADC0_SC1A;
-        adc0->adc_config.savedCFG1 = ADC0_CFG1;
-        adc0->adc_config.savedCFG2 = ADC0_CFG2;
-        adc0->adc_config.savedSC2 = ADC0_SC2;
-        adc0->adc_config.savedSC3 = ADC0_SC3;
+        adc0->saveConfig(&adc0->adc_config);
         __enable_irq();
     }
     adc1->adcWasInUse = adc1->isConverting(); // is the ADC running now?
@@ -1007,11 +922,7 @@ int ADC::startSynchronizedSingleRead(uint8_t pin0, uint8_t pin1) {
         // save the current conversion config, the adc isr will restore the adc
         __disable_irq();
         //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
-        adc1->adc_config.savedSC1A = ADC0_SC1A;
-        adc1->adc_config.savedCFG1 = ADC0_CFG1;
-        adc1->adc_config.savedCFG2 = ADC0_CFG2;
-        adc1->adc_config.savedSC2 = ADC0_SC2;
-        adc1->adc_config.savedSC3 = ADC0_SC3;
+        adc1->saveConfig(&adc1->adc_config);
         __enable_irq();
     }
 
@@ -1024,12 +935,6 @@ int ADC::startSynchronizedSingleRead(uint8_t pin0, uint8_t pin1) {
     //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
     return true;
 
-    #else  // Teensy 3.0, LC
-
-    adc0->fail_flag |= ADC_ERROR_SYNCH;
-    return false;
-
-    #endif
 }
 
 // Start a differential conversion between two pins (pin0P - pin0N) and (pin1P - pin1N)
@@ -1041,19 +946,13 @@ int ADC::startSynchronizedSingleRead(uint8_t pin0, uint8_t pin1) {
 */
 int ADC::startSynchronizedSingleDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N) {
 
-    #if ADC_NUM_ADCS>=2 // Teensy 3.1
-
     // check if we are interrupting a measurement, store setting if so.
     adc0->adcWasInUse = adc0->isConverting(); // is the ADC running now?
     if(adc0->adcWasInUse) { // this means we're interrupting a conversion
         // save the current conversion config, the adc isr will restore the adc
         __disable_irq();
         //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
-        adc0->adc_config.savedSC1A = ADC0_SC1A;
-        adc0->adc_config.savedCFG1 = ADC0_CFG1;
-        adc0->adc_config.savedCFG2 = ADC0_CFG2;
-        adc0->adc_config.savedSC2 = ADC0_SC2;
-        adc0->adc_config.savedSC3 = ADC0_SC3;
+        adc0->saveConfig(&adc0->adc_config);
         __enable_irq();
     }
     adc1->adcWasInUse = adc1->isConverting(); // is the ADC running now?
@@ -1061,11 +960,7 @@ int ADC::startSynchronizedSingleDifferential(uint8_t pin0P, uint8_t pin0N, uint8
         // save the current conversion config, the adc isr will restore the adc
         __disable_irq();
         //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
-        adc1->adc_config.savedSC1A = ADC0_SC1A;
-        adc1->adc_config.savedCFG1 = ADC0_CFG1;
-        adc1->adc_config.savedCFG2 = ADC0_CFG2;
-        adc1->adc_config.savedSC2 = ADC0_SC2;
-        adc1->adc_config.savedSC3 = ADC0_SC3;
+        adc1->saveConfig(&adc1->adc_config);
         __enable_irq();
     }
 
@@ -1076,14 +971,6 @@ int ADC::startSynchronizedSingleDifferential(uint8_t pin0P, uint8_t pin0N, uint8
     //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
 
     return true;
-
-    #else
-
-    adc0->fail_flag |= ADC_ERROR_SYNCH;
-    return false;
-
-    #endif
-
 }
 
 // Reads the analog value of a single conversion.
@@ -1093,15 +980,8 @@ int ADC::startSynchronizedSingleDifferential(uint8_t pin0P, uint8_t pin0N, uint8
 ADC::Sync_result ADC::readSynchronizedSingle() {
     ADC::Sync_result res;
 
-
-    #if ADC_NUM_ADCS>=2 // Teensy 3.1
     res.result_adc0 = adc0->readSingle();
     res.result_adc1 = adc1->readSingle();
-    #else
-    res.result_adc0 = ADC_ERROR_VALUE;
-    res.result_adc1 = ADC_ERROR_VALUE;
-    adc0->fail_flag |= ADC_ERROR_SYNCH;
-    #endif
 
     return res;
 }
@@ -1114,8 +994,6 @@ ADC::Sync_result ADC::readSynchronizedSingle() {
 *
 */
 void ADC::startSynchronizedContinuous(uint8_t pin0, uint8_t pin1) {
-
-    #if ADC_NUM_ADCS>=2 // Teensy 3.1
 
     adc0->startContinuous(pin0);
     adc1->startContinuous(pin1);
@@ -1130,11 +1008,6 @@ void ADC::startSynchronizedContinuous(uint8_t pin0, uint8_t pin1) {
     ADC1_SC1A = temp_ADC1_SC1A;
     __enable_irq();
 
-    #else
-    adc0->fail_flag |= ADC_ERROR_SYNCH;
-    return;
-
-    #endif
 }
 
 //! Starts a continuous differential conversion in both ADCs simultaneously
@@ -1143,7 +1016,6 @@ void ADC::startSynchronizedContinuous(uint8_t pin0, uint8_t pin1) {
 */
 void ADC::startSynchronizedContinuousDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N) {
 
-    #if ADC_NUM_ADCS>=2 // Teensy 3.1
     adc0->startContinuousDifferential(pin0P, pin0N);
     adc1->startContinuousDifferential(pin1P, pin1N);
 
@@ -1157,25 +1029,14 @@ void ADC::startSynchronizedContinuousDifferential(uint8_t pin0P, uint8_t pin0N, 
     ADC1_SC1A = temp_ADC1_SC1A;
     __enable_irq();
 
-    #else
-    adc0->fail_flag |= ADC_ERROR_SYNCH;
-    return;
-
-    #endif
 }
 
 //! Returns the values of both ADCs.
 ADC::Sync_result ADC::readSynchronizedContinuous() {
     ADC::Sync_result res;
 
-    #if ADC_NUM_ADCS>=2 // Teensy 3.1
     res.result_adc0 = adc0->analogReadContinuous();
     res.result_adc1 = adc1->analogReadContinuous();
-    #else
-    res.result_adc0 = ADC_ERROR_VALUE;
-    res.result_adc1 = ADC_ERROR_VALUE;
-    adc0->fail_flag |= ADC_ERROR_SYNCH;
-    #endif
 
     return res;
 }
@@ -1183,17 +1044,32 @@ ADC::Sync_result ADC::readSynchronizedContinuous() {
 //! Stops synchronous continuous conversion
 void ADC::stopSynchronizedContinuous() {
 
-    #if ADC_NUM_ADCS>=2 // Teensy 3.1
     adc0->stopContinuous();
     adc1->stopContinuous();
-    #else
-    adc0->fail_flag |= ADC_ERROR_SYNCH;
-    return;
-    #endif // defined
-
 }
 
-#if ADC_USE_DMA==1
+#else // ADC_NUM_ADCS=1
+// Empty definitions so code writen for all Teensy will compile
+
+ADC::Sync_result ADC::analogSynchronizedRead(uint8_t pin0, uint8_t pin1) {ADC::Sync_result res={0}; return res;}
+ADC::Sync_result ADC::analogSynchronizedReadDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N) {
+        ADC::Sync_result res={0};
+        return res;
+}
+
+int ADC::startSynchronizedSingleRead(uint8_t pin0, uint8_t pin1) { return true; }
+int ADC::startSynchronizedSingleDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N) { return true; }
+
+ADC::Sync_result ADC::readSynchronizedSingle() {ADC::Sync_result res={0}; return res;}
+
+void ADC::startSynchronizedContinuous(uint8_t pin0, uint8_t pin1) {}
+void ADC::startSynchronizedContinuousDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N) {}
+ADC::Sync_result ADC::readSynchronizedContinuous() {ADC::Sync_result res={0}; return res;}
+void ADC::stopSynchronizedContinuous() {}
+
+#endif
+
+#if ADC_USE_DMA==1 // temporary hack until I fix the DMA stuff
 
 //Our dma ISR
 void dma_isr_0(void)
@@ -1221,12 +1097,12 @@ void ADC::useDMA(uint8_t ch0, uint8_t ch1) {
     // Initialize buffers
     //channel
 
-    #if defined(__MK20DX128__)
+    #if defined(ADC_TEENSY_3_0)
     dma_Ch0 = dma0.channel;
     if(dma_Ch0!=-1) {
         buffer0 = new RingBufferDMA(dma_Ch0);
     }
-    #elif defined(__MK20DX256__)
+    #elif defined(ADC_TEENSY_3_1)
     dma_Ch0 = dma0.channel;
     dma_Ch1 = dma1.channel;
     if(dma_Ch0!=-1) {

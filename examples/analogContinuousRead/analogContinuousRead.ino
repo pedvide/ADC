@@ -22,22 +22,29 @@ void setup() {
     Serial.begin(9600);
 
     ///// ADC0 ////
-    //adc->setReference(ADC_REF_INTERNAL, ADC_0); change all 3.3 to 1.2 if you change the reference
+    // reference can be ADC_REF_3V3, ADC_REF_1V2 (not for Teensy LC) or ADC_REF_EXT.
+    //adc->setReference(ADC_REF_1V2, ADC_0); // change all 3.3 to 1.2 if you change the reference to 1V2
 
     adc->setAveraging(1); // set number of averages
     adc->setResolution(16); // set bits of resolution
 
     // it can be ADC_VERY_LOW_SPEED, ADC_LOW_SPEED, ADC_MED_SPEED, ADC_HIGH_SPEED_16BITS, ADC_HIGH_SPEED or ADC_VERY_HIGH_SPEED
     // see the documentation for more information
-    adc->setConversionSpeed(ADC_HIGH_SPEED); // change the conversion speed
+    adc->setConversionSpeed(ADC_MED_SPEED); // change the conversion speed
     // it can be ADC_VERY_LOW_SPEED, ADC_LOW_SPEED, ADC_MED_SPEED, ADC_HIGH_SPEED or ADC_VERY_HIGH_SPEED
-    adc->setSamplingSpeed(ADC_HIGH_SPEED); // change the sampling speed
+    adc->setSamplingSpeed(ADC_MED_SPEED); // change the sampling speed
 
     // always call the compare functions after changing the resolution!
-    adc->enableCompare(1.0/3.3*adc->getMaxValue(ADC_0), 0, ADC_0); // measurement will be ready if value < 1.0V
+    //adc->enableCompare(1.0/3.3*adc->getMaxValue(ADC_0), 0, ADC_0); // measurement will be ready if value < 1.0V
     //adc->enableCompareRange(1.0*adc->getMaxValue(ADC_0)/3.3, 2.0*adc->getMaxValue(ADC_0)/3.3, 0, 1, ADC_0); // ready if value lies out of [1.0,2.0] V
 
+    // If you enable interrupts, notice that the isr will read the result, so that isComplete() will return false (most of the time)
+    //adc->enableInterrupts(ADC_0);
+
+    adc->startContinuous(readPin, ADC_0);
+
     ////// ADC1 /////
+    #if defined(ADC_TEENSY_3_1)
     adc->setAveraging(32, ADC_1); // set number of averages
     adc->setResolution(12, ADC_1); // set bits of resolution
     adc->setConversionSpeed(ADC_VERY_LOW_SPEED, ADC_1); // change the conversion speed
@@ -45,17 +52,15 @@ void setup() {
 
     // always call the compare functions after changing the resolution!
     //adc->enableCompare(1.0/3.3*adc->getMaxValue(ADC_1), 0, ADC_1); // measurement will be ready if value < 1.0V
-    adc->enableCompareRange(1.0*adc->getMaxValue(ADC_1)/3.3, 2.0*adc->getMaxValue(ADC_1)/3.3, 0, 1, ADC_1); // ready if value lies out of [1.0,2.0] V
+    //adc->enableCompareRange(1.0*adc->getMaxValue(ADC_1)/3.3, 2.0*adc->getMaxValue(ADC_1)/3.3, 0, 1, ADC_1); // ready if value lies out of [1.0,2.0] V
 
 
     // If you enable interrupts, notice that the isr will read the result, so that isComplete() will return false (most of the time)
-    //adc->enableInterrupts(ADC_0); // enable interrupts BEFORE calling a measurement method
     //adc->enableInterrupts(ADC_1);
 
-
-    adc->startContinuous(readPin, ADC_0);
-
     adc->startContinuous(readPin2, ADC_1);
+
+    #endif
 
     delay(500);
 }
@@ -65,7 +70,6 @@ int value2 = 0;
 char c=0;
 
 void loop() {
-
 
     if (Serial.available()) {
         c = Serial.read();
@@ -115,14 +119,14 @@ void loop() {
         Serial.print("ADC0 error flags: 0x");
         Serial.println(adc->adc0->fail_flag, HEX);
     }
-    #if defined(__MK20DX256__)
+    #if defined(ADC_TEENSY_3_1)
     if(adc->adc1->fail_flag) {
         Serial.print("ADC1 error flags: 0x");
         Serial.println(adc->adc1->fail_flag, HEX);
     }
     #endif
 
-    //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
+    digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
 
     delay(100);
 
@@ -132,9 +136,8 @@ void adc0_isr(void) {
     adc->analogReadContinuous(ADC_0);
     digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN)); // Toggle the led
 }
-#if defined(__MK20DX256__)
+#if defined(ADC_TEENSY_3_1)
 void adc1_isr(void) {
-    // Low-level code
     adc->analogReadContinuous(ADC_1);
     digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
 

@@ -1,13 +1,11 @@
 var class_a_d_c___module =
 [
-    [ "ADC_CONFIG", "struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g.html", "struct_a_d_c___module_1_1_a_d_c___c_o_n_f_i_g" ],
-    [ "ADC_POWER_SPEED_CONFIG", "struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g.html", "struct_a_d_c___module_1_1_a_d_c___p_o_w_e_r___s_p_e_e_d___c_o_n_f_i_g" ],
-    [ "ADC_Config", "class_a_d_c___module.html#a0092e0915c562b4e318b0aff575315d1", null ],
-    [ "ADC_Power_Speed_Config", "class_a_d_c___module.html#a893a14998c08fb929fdfd570ff981ccd", null ],
-    [ "ADC_Module", "class_a_d_c___module.html#abd04dee9e56c5b8f0ba8c11d646e635e", null ],
+    [ "ADC_Config", "struct_a_d_c___module_1_1_a_d_c___config.html", "struct_a_d_c___module_1_1_a_d_c___config" ],
+    [ "ADC_Module", "class_a_d_c___module.html#a51cd4b1fe51139194aa7fc0f816226f0", null ],
     [ "analogRead", "class_a_d_c___module.html#ad492adad4a9fa728625be82602bf1672", null ],
     [ "analogReadContinuous", "class_a_d_c___module.html#a8bddd248a9d52110b923fa94438f7f0a", null ],
     [ "analogReadDifferential", "class_a_d_c___module.html#a4a57f6a9b0e3884f3862062b33f1a447", null ],
+    [ "calibrate", "class_a_d_c___module.html#a037ab0589e2966cd07292c8186cad83e", null ],
     [ "disableCompare", "class_a_d_c___module.html#ac635f675a9690a4db016c73c31818262", null ],
     [ "disableDMA", "class_a_d_c___module.html#ac1610dcab46476f287c2dd4d96465c47", null ],
     [ "disableInterrupts", "class_a_d_c___module.html#aa4509062644982526fee3c02e0b528fc", null ],
@@ -24,8 +22,10 @@ var class_a_d_c___module =
     [ "isContinuous", "class_a_d_c___module.html#ae1aa7278d64d55bed0be5779378858a5", null ],
     [ "isConverting", "class_a_d_c___module.html#a1e2730c5910f386f3e3b76b9eacc0268", null ],
     [ "isDifferential", "class_a_d_c___module.html#ac74cc58870ff82be8ea91a40cd4a7a63", null ],
+    [ "loadConfig", "class_a_d_c___module.html#a4d1cbfb738093cf0f18c28f82dd95be9", null ],
     [ "readSingle", "class_a_d_c___module.html#a60d0edc82fd1dbb2e20d090a53718ce2", null ],
     [ "recalibrate", "class_a_d_c___module.html#afe8ed6f2a6c811ec3ef2c4aba768982f", null ],
+    [ "saveConfig", "class_a_d_c___module.html#af2ee5bc5b76647506e597c178c9691d3", null ],
     [ "setAveraging", "class_a_d_c___module.html#a55954618c5c27c1ffce4321e912bac52", null ],
     [ "setConversionSpeed", "class_a_d_c___module.html#a9dcb1b6195ab05fdee708472e4da939f", null ],
     [ "setPGA", "class_a_d_c___module.html#a37d4a3f4fc3499823e51de7f9cf02678", null ],
@@ -39,11 +39,10 @@ var class_a_d_c___module =
     [ "startSingleRead", "class_a_d_c___module.html#a3930aceb90a0c3b33c881c90d0a05236", null ],
     [ "startSingleReadFast", "class_a_d_c___module.html#a785d9d4fd9b54cb8e0c8ab3326c48f94", null ],
     [ "stopContinuous", "class_a_d_c___module.html#a9af29f865bdd376d954112d36b0992f0", null ],
-    [ "ADC", "class_a_d_c___module.html#a15c3621696d3a37e8253160e8f8fdb5c", null ],
+    [ "wait_for_cal", "class_a_d_c___module.html#a4fb69b5b2d07c3fc8f5f0bbbf05dfa2a", null ],
     [ "adc_config", "class_a_d_c___module.html#ad4ffd455f5c162d15fb4078aa90b5cbe", null ],
     [ "adcWasInUse", "class_a_d_c___module.html#a34f6f7878889aa3644b279f9440dc0bf", null ],
-    [ "channel2sc1a", "class_a_d_c___module.html#a7ac619afe41bd32e546cf5018efc9baf", null ],
+    [ "channel2sc1a", "class_a_d_c___module.html#a6817bc2043854126a56b411478c4b4eb", null ],
     [ "fail_flag", "class_a_d_c___module.html#a6187e43b6b3ea1a42c6bb17f2c10f099", null ],
-    [ "num_measurements", "class_a_d_c___module.html#a27fdc83a7dbe3a8c8c24fc4273414256", null ],
-    [ "sc1a2channel", "class_a_d_c___module.html#a85269783274d11b1c7760fd929945380", null ]
+    [ "num_measurements", "class_a_d_c___module.html#a27fdc83a7dbe3a8c8c24fc4273414256", null ]
 ];

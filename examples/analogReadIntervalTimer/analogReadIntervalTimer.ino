@@ -28,10 +28,10 @@
 const int ledPin = LED_BUILTIN;
 
 const int readPin0 = A9;
-const int period0 = 100; // us
+const int period0 = 1000; // us
 
 const int readPin1 = A8;
-const int period1 = 100; // us
+const int period1 = 1000; // us
 
 const int readPeriod = 100000; // us
 
@@ -43,6 +43,34 @@ RingBuffer *buffer0 = new RingBuffer; // buffers to store the values
 RingBuffer *buffer1 = new RingBuffer;
 
 int startTimerValue0 = 0, startTimerValue1 = 0;
+
+// translate SC1A to pin number
+
+#if defined(ADC_TEENSY_3_0) || defined(ADC_TEENSY_3_1)
+const uint8_t sc1a2channelADC0[]= { // new version, gives directly the pin number
+    34, 0, 0, 36, 23, 14, 20, 21, 16, 17, 0, 0, 19, 18, // 0-13
+    15, 22, 0, 0, 0, 35, 0, 37, // 14-21
+    39, 40, 0, 0, 38, 41, 42, 43, // VREF_OUT, A14, temp. sensor, bandgap, VREFH, VREFL.
+    0 // 31 means disabled, but just in case
+};
+#elif defined(ADC_TEENSY_LC)
+// Teensy LC
+const uint8_t sc1a2channelADC0[]= { // new version, gives directly the pin number
+    24, 0, 0, 0, 25, 14, 20, 21, 16, 17, 0, 23, 19, 18, // 0-13
+    15, 22, 0, 0, 0, 0, 0, 0, // 14-21
+    26, 0, 0, 0, 38, 41, 0, 42, 43, // A12, temp. sensor, bandgap, VREFH, VREFL.
+    0 // 31 means disabled, but just in case
+};
+#endif // defined
+
+#if defined(ADC_TEENSY_3_1)
+const uint8_t sc1a2channelADC1[]= { // new version, gives directly the pin number
+    36, 0, 0, 34, 28, 26, 29, 30, 16, 17, 0, 0, 0, 0, // 0-13. 5a=26, 5b=27, 4b=28, 4a=31
+    0, 0, 0, 0, 39, 37, 0, 0, // 14-21
+    0, 0, 0, 0, 38, 41, 0, 42, // 22-29. VREF_OUT, A14, temp. sensor, bandgap, VREFH, VREFL.
+    43
+};
+#endif
 
 void setup() {
 
@@ -57,7 +85,8 @@ void setup() {
     delay(1000);
 
     ///// ADC0 ////
-    //adc->setReference(ADC_REF_INTERNAL, ADC_0); change all 3.3 to 1.2 if you change the reference
+    // reference can be ADC_REF_3V3, ADC_REF_1V2 (not for Teensy LC) or ADC_REF_EXT.
+    //adc->setReference(ADC_REF_1V2, ADC_0); // change all 3.3 to 1.2 if you change the reference to 1V2
 
     adc->setAveraging(16); // set number of averages
     adc->setResolution(12); // set bits of resolution
@@ -164,7 +193,7 @@ void adc0_isr() {
 
     digitalWriteFast(ledPin+3, HIGH);
 
-    uint8_t pin = ADC::sc1a2channelADC0[ADC0_SC1A&ADC_SC1A_CHANNELS]; // the bits 0-4 of ADC0_SC1A have the channel
+    uint8_t pin = sc1a2channelADC0[ADC0_SC1A&ADC_SC1A_CHANNELS]; // the bits 0-4 of ADC0_SC1A have the channel
 
     // add value to correct buffer
     if(pin==readPin0) {
@@ -178,11 +207,7 @@ void adc0_isr() {
     // restore ADC config if it was in use before being interrupted by the analog timer
     if (adc->adc0->adcWasInUse) {
         // restore ADC config, and restart conversion
-        ADC0_CFG1 = adc->adc0->adc_config.savedCFG1;
-        ADC0_CFG2 = adc->adc0->adc_config.savedCFG2;
-        ADC0_SC2 = adc->adc0->adc_config.savedSC2;
-        ADC0_SC3 = adc->adc0->adc_config.savedSC3;
-        ADC0_SC1A = adc->adc0->adc_config.savedSC1A;
+        adc->adc0->loadConfig(&adc->adc0->adc_config);
     }
 
 

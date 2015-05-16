@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['saveconfig',['saveConfig',['../class_a_d_c___module.html#af2ee5bc5b76647506e597c178c9691d3',1,'ADC_Module']]],
   ['setaveraging',['setAveraging',['../class_a_d_c.html#a6fd39809addc247f13004687d201003d',1,'ADC::setAveraging()'],['../class_a_d_c___module.html#a55954618c5c27c1ffce4321e912bac52',1,'ADC_Module::setAveraging()']]],
   ['setconversionspeed',['setConversionSpeed',['../class_a_d_c.html#a004d0b11f4bf0ad8328fdf1a7e2897b0',1,'ADC::setConversionSpeed()'],['../class_a_d_c___module.html#a9dcb1b6195ab05fdee708472e4da939f',1,'ADC_Module::setConversionSpeed()']]],
   ['setpga',['setPGA',['../class_a_d_c___module.html#a37d4a3f4fc3499823e51de7f9cf02678',1,'ADC_Module']]],

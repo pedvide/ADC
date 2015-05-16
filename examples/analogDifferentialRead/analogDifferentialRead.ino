@@ -17,7 +17,8 @@ void setup() {
     Serial.begin(9600);
 
     ///// ADC0 ////
-    //adc->setReference(ADC_REF_INTERNAL, ADC_0); change all 3.3 to 1.2 if you change the reference
+    // reference can be ADC_REF_3V3, ADC_REF_1V2 (not for Teensy LC) or ADC_REF_EXT.
+    //adc->setReference(ADC_REF_1V2, ADC_0); // change all 3.3 to 1.2 if you change the reference to 1V2
 
     adc->setAveraging(1); // set number of averages
     adc->setResolution(13); // set bits of resolution
@@ -30,7 +31,7 @@ void setup() {
 
     // always call the compare functions after changing the resolution!
     // Compare values at 16 bits differential resolution are twice what you write!
-    adc->enableCompare(1.0/3.3*adc->getMaxValue(ADC_0), 0, ADC_0); // measurement will be ready if value < 1.0V
+    //adc->enableCompare(1.0/3.3*adc->getMaxValue(ADC_0), 0, ADC_0); // measurement will be ready if value < 1.0V
     //adc->enableCompareRange(-1.0*adc->getMaxValue(ADC_0)/3.3, 2.0*adc->getMaxValue(ADC_0)/3.3, 0, 1, ADC_0); // ready if value lies out of [-1.0,2.0] V
 
     ////// ADC1 /////
@@ -54,7 +55,6 @@ int value2 = ADC_ERROR_VALUE;
 void loop() {
 
     value = adc->analogReadDifferential(A10, A11, ADC_0); // read a new value, will return ADC_ERROR_VALUE if the comparison is false.
-    value2 = adc->analogReadDifferential(A12,A13, ADC_1);
 
     if(value!=ADC_ERROR_VALUE ) {
 
@@ -73,7 +73,11 @@ void loop() {
     } else {
       Serial.println("ADC0 Comparison failed");
     }
-    #if defined(__MK20DX256__)
+
+    #if defined(ADC_TEENSY_3_1)
+
+    value2 = adc->analogReadDifferential(A12,A13, ADC_1);
+
     if(value2!=ADC_ERROR_VALUE) {
 
       //Serial.print("Raw value ADC1: ");
@@ -109,7 +113,7 @@ void loop() {
             Serial.println("Comparison error in ADC0");
         }
     }
-    #if defined(__MK20DX256__)
+    #if defined(ADC_TEENSY_3_1)
     if(adc->adc1->fail_flag) {
         Serial.print("ADC1 error flags: 0x");
         Serial.println(adc->adc1->fail_flag, HEX);

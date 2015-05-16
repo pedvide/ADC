@@ -31,9 +31,16 @@
 #ifndef ADC_MODULE_H
 #define ADC_MODULE_H
 
-//#include "mk20dx128.h"
-
 #include <Arduino.h>
+
+// Easier names for the boards
+#if defined(__MK20DX256__) // Teensy 3.1
+        #define ADC_TEENSY_3_1
+#elif defined(__MK20DX128__) // Teensy 3.0
+        #define ADC_TEENSY_3_0
+#elif defined(__MKL26Z64__) // Teensy LC
+        #define ADC_TEENSY_LC
+#endif
 
 /* MK20DX256 Datasheet:
 The 16-bit accuracy specifications listed in Table 24 and Table 25 are achievable on the
@@ -62,6 +69,7 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
 // calibration works best when averages are 32 and speed is less than 4 MHz
 // ADC_CFG1_ADICLK: 0=bus, 1=bus/2, 2=(alternative clk) altclk, 3=(async. clk) adack
 // See below for an explanation of VERY_LOW_SPEED, LOW_SPEED, etc.
+// TODO: add support for ADACK (asynch clock, that goes from about 2 to 6 MHz)
 #if F_BUS == 60000000
   #define ADC_CFG1_3_75MHZ      (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))
   #define ADC_CFG1_7_5MHZ       (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1))
@@ -126,7 +134,7 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
   #define ADC_CFG1_VERY_HIGH_SPEED ADC_CFG1_HI_SPEED
 
 #elif F_BUS == 24000000
-  #define ADC_CFG1_1_5MHZ   (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))
+  #define ADC_CFG1_1_5MHZ   (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1)) // Clock divide select: 3=div8 + Input clock: 1=bus/2
   #define ADC_CFG1_3MHZ     (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(0)) // Clock divide select: 3=div8 + Input clock: 0=bus
   #define ADC_CFG1_6MHZ     (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(0)) // Clock divide select: 2=div4 + Input clock: 0=bus
   #define ADC_CFG1_12MHZ    (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(0)) // Clock divide select: 1=div2 + Input clock: 0=bus
@@ -177,6 +185,12 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
 // useful if you want to get the channel number from ADCx_SC1A
 #define ADC_SC1A_CHANNELS 0x1F
 
+// little hack to avoid changing a lot of code in the differential functions in ADC_Module.cpp
+// A13 isn't defined for Teensy LC, define it here as a 0
+#if defined(ADC_TEENSY_LC)
+const static uint8_t A13 = 0;
+#endif
+
 // Settings for the power/speed of conversions/sampling
 /* For conversion speeds:
     ADC_VERY_LOW_SPEED is guaranteed to be the lowest possible speed within specs for resolutions less than 16 bits (higher than 1 MHz),
@@ -203,13 +217,22 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
 
 
 // ADCx_SC2[REFSEL] bit selects the voltage reference sources for ADC.
-//   VREFH/VREFL - connected as the primary reference option
-//   1.2 V VREF_OUT - connected as the VALT reference option
-#define ADC_REF_DEFAULT         0
-#define ADC_REF_EXTERNAL        0
-#define ADC_REF_INTERNAL        2
-#define ADC_REF_INTERNAL1V2     2
-#define ADC_REF_INTERNAL1V1     2
+#define ADC_REF_DEFAULT    0
+#define ADC_REF_ALT        1
+#if defined(ADC_TEENSY_3_0) || defined(ADC_TEENSY_3_1)
+// default is the external, that is connected to the 3.3V supply.
+// To use the external simply connect AREF to a different voltage
+// Internal is connected to the 1.2 V ref.
+        #define ADC_REF_3V3    ADC_REF_DEFAULT
+        #define ADC_REF_1V2    ADC_REF_ALT
+        #define ADC_REF_EXT    ADC_REF_DEFAULT
+
+#elif defined(ADC_TEENSY_LC)
+// default is the internal ref, 3.3 V
+// the external is AREF
+        #define ADC_REF_3V3    ADC_REF_ALT
+        #define ADC_REF_EXT    ADC_REF_DEFAULT
+#endif
 
 
 // Error codes for analogRead and analogReadDifferential
@@ -218,6 +241,7 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
 
 // Error flag masks.
 // Possible errors are: other, calibration, wrong pin, analogRead, analogDifferentialRead, continuous, continuousDifferential
+// To globaly disable an error simply change (1<<x) to (0<<x), revert to enable the error again.
 #define ADC_ERROR_ALL               0x3FF
 #define ADC_ERROR_CLEAR             0x0
 #define ADC_ERROR_OTHER             (1<<0)
@@ -228,14 +252,14 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
 #define ADC_ERROR_ANALOG_DIFF_READ  (1<<5)
 #define ADC_ERROR_CONT              (1<<6)
 #define ADC_ERROR_CONT_DIFF         (1<<7)
-#define ADC_ERROR_WRONG_ADC         (1<<8)
+#define ADC_ERROR_WRONG_ADC         (0<<8)
 #define ADC_ERROR_SYNCH             (1<<9)
 
 
 // Other things to measure with the ADC that don't use external pins
-// In my Teensy I read 1.22 V for the ADC_VREF_OUT, random values for ADC_BANDGAP,
+// In my Teensy I read 1.22 V for the ADC_VREF_OUT (doesn't exist in Teensy LC), random values for ADC_BANDGAP,
 // 3.3 V for ADC_VREFH and 0.0 V for ADC_VREFL.
-#define ADC_TEMP_SENSOR     38
+#define ADC_TEMP_SENSOR     38 // 0.719 V at 25ºC and slope of 1.715 mV/ºC for Teensy 3.x and 0.716 V, 1.62 mV/ºC for Teensy LC
 #define ADC_VREF_OUT        39
 #define ADC_BANDGAP         41
 #define ADC_VREFH           42
@@ -246,19 +270,55 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
 #define ADC_debug 0
 
 
+// defines for the bit position in the registers, this makes it easy in case they change in different boards
+#define ADC_SC1A_COCO_BIT (7)
+#define ADC_SC1A_AIEN_BIT (6)
+#define ADC_SC1_DIFF_BIT (5)
+
+#define ADC_CFG1_ADLPC_BIT (7)
+#define ADC_CFG1_ADIV1_BIT (6)
+#define ADC_CFG1_ADIV0_BIT (5)
+#define ADC_CFG1_ADLSMP_BIT (4)
+#define ADC_CFG1_MODE1_BIT (3)
+#define ADC_CFG1_MODE0_BIT (2)
+#define ADC_CFG1_ADICLK1_BIT (1)
+#define ADC_CFG1_ADICLK0_BIT (0)
+
+#define ADC_CFG2_MUXSEL_BIT (4)
+#define ADC_CFG2_ADACKEN_BIT (3)
+#define ADC_CFG2_ADHSC_BIT (2)
+#define ADC_CFG2_ADLSTS1_BIT (1)
+#define ADC_CFG2_ADLSTS0_BIT (0)
+
+#define ADC_SC2_ADACT_BIT (7)
+#define ADC_SC2_ACFE_BIT (5)
+#define ADC_SC2_ACFGT_BIT (4)
+#define ADC_SC2_ACREN_BIT (3)
+#define ADC_SC2_DMAEN_BIT (2)
+#define ADC_SC2_REFSEL0_BIT (0)
+
+#define ADC_SC3_CAL_BIT (7)
+#define ADC_SC3_CALF_BIT (6)
+#define ADC_SC3_ADCO_BIT (3)
+#define ADC_SC3_AVGE_BIT (2)
+#define ADC_SC3_AVGS1_BIT (1)
+#define ADC_SC3_AVGS0_BIT (0)
+
+#define ADC_PGA_PGAEN_BIT (23)
+
 /** Class ADC_Module: Implements all functions of the Teensy 3.x analog to digital converter
 *
 */
 class ADC_Module
 {
-    friend class ADC;
 
     public:
 
         /** Constructor
         *
+        *   Pass the ADC number and the Channel number to SC1A number array.
         */
-        ADC_Module(uint8_t ADC_number = 0);
+        ADC_Module(uint8_t ADC_number, const uint8_t *a_channel2sc1a);
 
 
         //! Starts the calibration sequence, waits until it's done and writes the results
@@ -267,12 +327,18 @@ class ADC_Module
         */
         void recalibrate();
 
+        //! Starts the calibration sequence
+        void calibrate();
+
+        //! Waits until calibration is finished and writes the corresponding registers
+        void wait_for_cal();
+
 
         /////////////// METHODS TO SET/GET SETTINGS OF THE ADC ////////////////////
 
         //! Set the voltage reference you prefer, default is vcc
         /*!
-        * \param type can be DEFAULT, EXTERNAL or INTERNAL.
+        * \param type can be ADC_REF_3V3, ADC_REF_1V2 (not for Teensy LC) or ADC_REF_EXT
         *
         *  It recalibrates at the end.
         */
@@ -294,7 +360,7 @@ class ADC_Module
         //! Returns the resolution of the ADC_Module.
         uint8_t getResolution();
 
-        //! Returns the maximum value for a measurement.
+        //! Returns the maximum value for a measurement: 2^res-1.
         uint32_t getMaxValue();
 
 
@@ -397,8 +463,9 @@ class ADC_Module
         ////////////// INFORMATION ABOUT THE STATE OF THE ADC /////////////////
 
         //! Is the ADC converting at the moment?
-        inline bool isConverting() {
-            return (*ADC_SC2_adact);
+        bool isConverting() {
+            //return (*ADC_SC2_adact);
+            return getBit(ADC_SC2, ADC_SC2_ADACT_BIT);
             //return ((*ADC_SC2) & ADC_SC2_ADACT) >> 7;
         }
 
@@ -408,19 +475,22 @@ class ADC_Module
         *  When a value is read this function returns 0 until a new value exists
         *  So it only makes sense to call it before analogReadContinuous() or readSingle()
         */
-        inline bool isComplete() {
-            return (*ADC_SC1A_coco);
+        bool isComplete() {
+            //return (*ADC_SC1A_coco);
+            return getBit(ADC_SC1A, ADC_SC1A_COCO_BIT);
             //return ((*ADC_SC1A) & ADC_SC1_COCO) >> 7;
         }
 
         //! Is the ADC in differential mode?
-        inline bool isDifferential() {
-            return ((*ADC_SC1A) & ADC_SC1_DIFF) >> 5;
+        bool isDifferential() {
+            //return ((*ADC_SC1A) & ADC_SC1_DIFF) >> 5;
+            return getBit(ADC_SC1A, ADC_SC1_DIFF_BIT);
         }
 
         //! Is the ADC in continuous mode?
-        inline bool isContinuous() {
-            return (*ADC_SC3_adco);
+        bool isContinuous() {
+            //return (*ADC_SC3_adco);
+            return getBit(ADC_SC3, ADC_SC3_ADCO_BIT);
             //return ((*ADC_SC3) & ADC_SC3_ADCO) >> 3;
         }
 
@@ -469,7 +539,7 @@ class ADC_Module
         /** Set the conversion with with startSingleRead(pin) or startSingleDifferential(pinP, pinN).
         *   \return the converted value.
         */
-        inline int readSingle(){ return analogReadContinuous(); }
+        int readSingle(){ return analogReadContinuous(); }
 
 
         ///////////// CONTINUOUS CONVERSION METHODS ////////////
@@ -493,7 +563,7 @@ class ADC_Module
         *   If single-ended and 16 bits it's necessary to typecast it to an unsigned type (like uint16_t),
         *   otherwise values larger than 3.3/2 V are interpreted as negative!
         */
-        inline int analogReadContinuous() {
+        int analogReadContinuous() {
             return (int16_t)(int32_t)*ADC_RA;
         }
 
@@ -504,69 +574,76 @@ class ADC_Module
         //////// OTHER STUFF ///////////
 
         // struct to store the config of the adc
-        typedef struct ADC_CONFIG{
+        struct ADC_Config{
             uint32_t savedSC1A, savedSC2, savedSC3, savedCFG1, savedCFG2;
-        } ADC_Config;
+        };
 
         ADC_Config adc_config; // store ADC config
         uint8_t adcWasInUse; // was the adc in use before an analog timer call?
 
+        // save config of the ADC
+        void saveConfig(ADC_Config* config) {
+                config->savedSC1A = *ADC_SC1A;
+                config->savedCFG1 = *ADC_CFG1;
+                config->savedCFG2 = *ADC_CFG2;
+                config->savedSC2 = *ADC_SC2;
+                config->savedSC3 = *ADC_SC3;
+        }
 
-        // struct stores the relevant bits that affect power and speed of conversion
-        typedef struct ADC_POWER_SPEED_CONFIG{
-            //   low power, low sampling speed, enable async. clock, high speed config
-            bool adlpc, adlsmp, adacken, adhsc;
-            //      divide input clk, select input clk, long sampling time
-            uint8_t adiv, adiclk, adlsts;
-        } ADC_Power_Speed_Config;
+        // load config to the ADC
+        void loadConfig(ADC_Config* config) {
+                *ADC_CFG1 = config->savedCFG1;
+                *ADC_CFG2 = config->savedCFG2;
+                *ADC_SC2 = config->savedSC2;
+                *ADC_SC3 = config->savedSC3;
+                *ADC_SC1A = config->savedSC1A; // restore last
+        }
 
 
         // number of measurements that the ADC is performing
         uint8_t num_measurements = 0;
 
 
-        // translate pin number to SC1A nomenclature and viceversa
-        uint8_t channel2sc1a[44];
-        uint8_t sc1a2channel[31];
+        // translate pin number to SC1A nomenclature
+        const uint8_t* channel2sc1a;
 
 
         // This flag indicates that some kind of error took place
         // Use the defines at the beggining of this file to find out what caused the fail.
         uint16_t fail_flag;
 
-
     private:
 
         // is set to 1 when the calibration procedure is taking place
-        uint8_t calibrating;
+        volatile uint8_t calibrating;
 
         // the first calibration will use 32 averages and lowest speed,
         // when this calibration is over the averages and speed will be set to default.
-        uint8_t init_calib;
+        volatile uint8_t init_calib;
 
         // resolution
-        uint8_t analog_res_bits;
+        volatile uint8_t analog_res_bits;
 
         // maximum value possible 2^res-1
-        uint32_t analog_max_val;
+        volatile uint32_t analog_max_val;
 
         // num of averages
-        uint8_t analog_num_average;
+        volatile uint8_t analog_num_average;
 
         // reference can be internal or external
-        uint8_t analog_reference_internal;
+        volatile uint8_t analog_reference_internal;
 
         // are interrupts enabled?
-        uint8_t var_enableInterrupts;
+        volatile uint8_t var_enableInterrupts;
 
         // value of the pga
-        uint8_t pga_value;
+        volatile uint8_t pga_value;
 
         // conversion speed
-        uint8_t conversion_speed;
+        volatile uint8_t conversion_speed;
 
         // sampling speed
-        uint8_t sampling_speed;
+        volatile uint8_t sampling_speed;
 
 
         // which adc is this?
@@ -577,32 +654,70 @@ class ADC_Module
         void analog_init();
 
 
-        //! Starts the calibration sequence
-        void calibrate();
-
-        /** Waits until calibration is finished and writes the corresponding registers
-        *
+         /////// Atomic bit set/clear
+        /* Clear bit in address (make it zero), set bit (make it one) or return the value of that bit
+        *   We can change this functions depending on the board.
+        *   Teensy 3.x use bitband while Teensy LC has a more advanced bit manipulation engine.
         */
-        void wait_for_cal(void);
+        #if defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_0)
+        // bitband
+        #define ADC_BITBAND_ADDR(reg, bit) (((uint32_t)(reg) - 0x40000000) * 32 + (bit) * 4 + 0x42000000)
 
-
-        // returns the bitband address of the adc_register's bit.
-        // use it for atomic access.
-        inline volatile uint32_t* adc_bitband(uint32_t adc_register, uint8_t bit) {
-            //return (uint32_t*)(((uint32_t)adc_register&0xBFFFFFFF)<<5) + 0x42000000 + 4*bit;
-            return (uint32_t*)(((uint32_t)(adc_register) - 0x40000000)*32 + 0x42000000 + 4*bit);
+        void setBit(volatile uint32_t* reg, uint8_t bit) {
+                (*(uint32_t *)ADC_BITBAND_ADDR((reg), (bit))) = 1;
         }
+        void clearBit(volatile uint32_t* reg, uint8_t bit) {
+                (*(uint32_t *)ADC_BITBAND_ADDR((reg), (bit))) = 0;
+        }
+
+        void changeBit(volatile uint32_t* reg, uint8_t bit, bool state) {
+                (*(uint32_t *)ADC_BITBAND_ADDR((reg), (bit))) = state;
+        }
+
+        volatile bool getBit(volatile uint32_t* reg, uint8_t bit) {
+                return (volatile bool)*(uint32_t*)(ADC_BITBAND_ADDR(reg, bit));
+        }
+
+        #elif defined(ADC_TEENSY_LC)
+        // bit manipulation engine
+        //#define ADC_SETBIT_ATOMIC(reg, bit) (*(uint32_t *)(((uint32_t)&(reg) - 0xF8000000) | 0x48000000) = 1 << (bit)) // OR
+        //#define ADC_CLRBIT_ATOMIC(reg, bit) (*(uint32_t *)(((uint32_t)&(reg) - 0xF8000000) | 0x44000000) = ~(1 << (bit))) // XOR
+
+        void setBit(volatile uint32_t* reg, uint8_t bit) {
+                //temp = *(uint32_t *)((uint32_t)(reg) | (1<<26) | (bit<<21)); // LAS
+                *(volatile uint32_t*)((uint32_t)(reg) | (1<<27)) = 1<<bit; // OR
+        }
+        void clearBit(volatile uint32_t* reg, uint8_t bit) {
+                //temp = *(uint32_t *)((uint32_t)(reg) | (3<<27) | (bit<<21)); // LAC
+                *(volatile uint32_t*)((uint32_t)(reg) | (1<<26)) = ~(1<<bit); // AND
+        }
+
+        void changeBit(volatile uint32_t* reg, uint8_t bit, bool state) {
+                //temp = *(uint32_t *)((uint32_t)(reg) | ((3-2*!!state)<<27) | (bit<<21)); // LAS/LAC
+                if(state) { // set
+                        *(volatile uint32_t*)((uint32_t)(reg) | (1<<27)) = 1<<bit; // OR
+                } else { // clear
+                        *(volatile uint32_t*)((uint32_t)(reg) | (1<<26)) = ~(1<<bit); // AND
+                }
+
+        }
+
+        volatile bool getBit(volatile uint32_t* reg, uint8_t bit) {
+                return (volatile bool)*(uint32_t *)((uint32_t)(reg) | (1<<28) | (bit<<23) ); // UBFX
+        }
+
+        #endif
 
         // registers point to the correct ADC module
         typedef volatile uint32_t* reg;
 
         // registers that control the adc module
-        reg ADC_SC1A; reg ADC_SC1A_aien; reg ADC_SC1A_coco;
+        reg ADC_SC1A; //reg ADC_SC1A_aien; reg ADC_SC1A_coco;
         reg ADC_SC1B;
 
-        reg ADC_CFG1; reg ADC_CFG1_adlpc; reg ADC_CFG1_adiv0, ADC_CFG1_adiv1; reg ADC_CFG1_adlsmp;
-                        reg ADC_CFG1_mode0, ADC_CFG1_mode1; reg ADC_CFG1_adiclk0, ADC_CFG1_adiclk1;
-        reg ADC_CFG2; reg ADC_CFG2_muxsel; reg ADC_CFG2_adacken; reg ADC_CFG2_adhsc; reg ADC_CFG2_adlsts1, ADC_CFG2_adlsts0;
+        reg ADC_CFG1; //reg ADC_CFG1_adlpc; reg ADC_CFG1_adiv0, ADC_CFG1_adiv1; reg ADC_CFG1_adlsmp;
+                      //  reg ADC_CFG1_mode0, ADC_CFG1_mode1; reg ADC_CFG1_adiclk0, ADC_CFG1_adiclk1;
+        reg ADC_CFG2; //reg ADC_CFG2_muxsel; reg ADC_CFG2_adacken; reg ADC_CFG2_adhsc; reg ADC_CFG2_adlsts1, ADC_CFG2_adlsts0;
 
         reg ADC_RA;
         reg ADC_RB;
@@ -610,10 +725,10 @@ class ADC_Module
         reg ADC_CV1;
         reg ADC_CV2;
 
-        reg ADC_SC2; reg ADC_SC2_adact; reg ADC_SC2_ref; reg ADC_SC2_dma; reg ADC_SC2_cfe; reg ADC_SC2_cfgt; reg ADC_SC2_cren;
-        reg ADC_SC3; reg ADC_SC3_cal, ADC_SC3_calf; reg ADC_SC3_avge; reg ADC_SC3_avgs0, ADC_SC3_avgs1; reg ADC_SC3_adco;
+        reg ADC_SC2; //reg ADC_SC2_adact; reg ADC_SC2_ref; reg ADC_SC2_dma; reg ADC_SC2_cfe; reg ADC_SC2_cfgt; reg ADC_SC2_cren;
+        reg ADC_SC3; //reg ADC_SC3_cal, ADC_SC3_calf; reg ADC_SC3_avge; reg ADC_SC3_avgs0, ADC_SC3_avgs1; reg ADC_SC3_adco;
 
-        reg ADC_PGA; reg ADC_PGA_pgaen;
+        reg ADC_PGA; //reg ADC_PGA_pgaen;
 
         reg ADC_OFS;
         reg ADC_PG;
