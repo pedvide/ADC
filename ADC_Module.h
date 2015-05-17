@@ -181,16 +181,6 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
 #define ADC_CFG1_ADIV_MASK_1 (1<<6)
 #define ADC_CFG1_ADIV_MASK_0 (1<<5)
 
-// Mask for the channel selection in ADCx_SC1A,
-// useful if you want to get the channel number from ADCx_SC1A
-#define ADC_SC1A_CHANNELS 0x1F
-
-// little hack to avoid changing a lot of code in the differential functions in ADC_Module.cpp
-// A13 isn't defined for Teensy LC, define it here as a 0
-#if defined(ADC_TEENSY_LC)
-const static uint8_t A13 = 0;
-#endif
-
 // Settings for the power/speed of conversions/sampling
 /* For conversion speeds:
     ADC_VERY_LOW_SPEED is guaranteed to be the lowest possible speed within specs for resolutions less than 16 bits (higher than 1 MHz),
@@ -214,6 +204,24 @@ const static uint8_t A13 = 0;
 #define ADC_HIGH_SPEED_16BITS   3
 #define ADC_HIGH_SPEED          4
 #define ADC_VERY_HIGH_SPEED     5
+
+// Alternative asynchronous clock for ADC.
+// 2.4, 4.0, 5.2 and 6.2 MHz clock independent on the bus frequency.
+#define ADC_ADACK_2_4   16
+#define ADC_ADACK_4_0   17
+#define ADC_ADACK_5_2   18
+#define ADC_ADACK_6_2   19
+
+
+// Mask for the channel selection in ADCx_SC1A,
+// useful if you want to get the channel number from ADCx_SC1A
+#define ADC_SC1A_CHANNELS 0x1F
+
+// little hack to avoid changing a lot of code in the differential functions in ADC_Module.cpp
+// A13 isn't defined for Teensy LC, define it here as a 0
+#if defined(ADC_TEENSY_LC)
+const static uint8_t A13 = 0;
+#endif
 
 
 // ADCx_SC2[REFSEL] bit selects the voltage reference sources for ADC.
@@ -369,12 +377,18 @@ class ADC_Module
         * \param speed can be ADC_VERY_LOW_SPEED, ADC_LOW_SPEED, ADC_MED_SPEED, ADC_HIGH_SPEED_16BITS, ADC_HIGH_SPEED or ADC_VERY_HIGH_SPEED.
         *
         * ADC_VERY_LOW_SPEED is guaranteed to be the lowest possible speed within specs for resolutions less than 16 bits (higher than 1 MHz),
-        * it's different from ADC_LOW_SPEED only for 24, 4 or 2 MHz.
+        * it's different from ADC_LOW_SPEED only for 24, 4 or 2 MHz bus frequency.
         * ADC_LOW_SPEED is guaranteed to be the lowest possible speed within specs for all resolutions (higher than 2 MHz).
         * ADC_MED_SPEED is always >= ADC_LOW_SPEED and <= ADC_HIGH_SPEED.
         * ADC_HIGH_SPEED_16BITS is guaranteed to be the highest possible speed within specs for all resolutions (lower or eq than 12 MHz).
         * ADC_HIGH_SPEED is guaranteed to be the highest possible speed within specs for resolutions less than 16 bits (lower or eq than 18 MHz).
-        * ADC_VERY_HIGH_SPEED may be out of specs, it's different from ADC_HIGH_SPEED only for 48, 40 or 24 MHz.
+        * ADC_VERY_HIGH_SPEED may be out of specs, it's different from ADC_HIGH_SPEED only for 48, 40 or 24 MHz bus frequency.
+        *
+        * Additionally the conversion speed can also be ADC_ADACK_2_4, ADC_ADACK_4_0, ADC_ADACK_5_2 and ADC_ADACK_6_2,
+        * where the numbers are the frequency of the ADC clock (ADCK) in MHz and are independent on the bus speed.
+        * This is useful if you are using the Teensy at a very low clock frequency but want faster conversions,
+        * but if F_BUS<F_ADCK, you can't use ADC_VERY_HIGH_SPEED for sampling speed.
+        *
         */
         void setConversionSpeed(uint8_t speed);
 

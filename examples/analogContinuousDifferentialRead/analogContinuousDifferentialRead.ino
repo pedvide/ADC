@@ -23,18 +23,20 @@ void setup() {
     // reference can be ADC_REF_3V3, ADC_REF_1V2 (not for Teensy LC) or ADC_REF_EXT.
     //adc->setReference(ADC_REF_1V2, ADC_0); // change all 3.3 to 1.2 if you change the reference to 1V2
 
-    adc->setAveraging(32); // set number of averages
+    adc->setAveraging(1); // set number of averages
     adc->setResolution(9); // set bits of resolution
 
     // it can be ADC_VERY_LOW_SPEED, ADC_LOW_SPEED, ADC_MED_SPEED, ADC_HIGH_SPEED_16BITS, ADC_HIGH_SPEED or ADC_VERY_HIGH_SPEED
     // see the documentation for more information
-    adc->setConversionSpeed(ADC_LOW_SPEED); // change the conversion speed
+    // additionally the conversion speed can also be ADC_ADACK_2_4, ADC_ADACK_4_0, ADC_ADACK_5_2 and ADC_ADACK_6_2,
+    // where the numbers are the frequency of the ADC clock in MHz and are independent on the bus speed.
+    adc->setConversionSpeed(ADC_MED_SPEED); // change the conversion speed
     // it can be ADC_VERY_LOW_SPEED, ADC_LOW_SPEED, ADC_MED_SPEED, ADC_HIGH_SPEED or ADC_VERY_HIGH_SPEED
-    adc->setSamplingSpeed(ADC_LOW_SPEED); // change the sampling speed
+    adc->setSamplingSpeed(ADC_MED_SPEED); // change the sampling speed
 
     // always call the compare functions after changing the resolution!
     // Compare values at 16 bits differential resolution are twice what you write!
-    adc->enableCompare(-1.0/3.3*adc->getMaxValue(ADC_0), 0, ADC_0); // measurement will be ready if value < -1.0V
+    //adc->enableCompare(-1.0/3.3*adc->getMaxValue(ADC_0), 0, ADC_0); // measurement will be ready if value < -1.0V
     //adc->enableCompareRange(-1.0*adc->getMaxValue(ADC_0)/3.3, 2.0*adc->getMaxValue(ADC_0)/3.3, 0, 1, ADC_0); // ready if value lies out of [-1.0,2.0] V
 
     // If you enable interrupts, notice that the isr will read the result, so that isComplete() will return false (most of the time)
@@ -143,7 +145,7 @@ void adc1_isr(void) {
 #endif
 
 
-// RESULTS OF THE TEST
+// RESULTS OF THE TEST Teesny 3.x
 // Measure continuously a voltage divider.
 // Measurement pin A9 (23). Clock speed 96 Mhz, bus speed 48 MHz.
 
@@ -151,14 +153,14 @@ void adc1_isr(void) {
 //  Using ADC_LOW_SPEED (same as ADC_VERY_LOW_SPEED) for sampling and conversion speeds
 // ADC resolution     Measurement frequency                 Num. averages
 //     16  bits            64 kHz                               1
-//     12  bits            71 kHz                               1
-//     10  bits            71 kHz                               1
-//      8  bits            77 kHz                               1
+//     13  bits            71 kHz                               1
+//     11  bits            71 kHz                               1
+//      9  bits            77 kHz                               1
 
 //     16  bits             2.0 kHz                              32
-//     12  bits             2.2 kHz                              32
-//     10  bits             2.2 kHz                              32
-//      8  bits             2.4 kHz                              32
+//     13  bits             2.2 kHz                              32
+//     11  bits             2.2 kHz                              32
+//      9  bits             2.4 kHz                              32
 
 //
 //  Using ADC_MED_SPEED for sampling and conversion speeds
@@ -194,3 +196,34 @@ void adc1_isr(void) {
 
 
 // At 96 Mhz (bus at 48 MHz), 414 KHz is the fastest we can do within the specs, and only if the sample's impedance is low enough.
+
+// RESULTS OF THE TEST Teensy LC
+// Measure continuously a voltage divider.
+// Measurement pin A9 (23). Clock speed 48 Mhz, bus speed 24 MHz.
+
+//
+//  Using ADC_VERY_LOW_SPEED for sampling and conversion speeds
+// ADC resolution     Measurement frequency                 Num. averages
+//     16  bits            27.8 kHz                             1
+//     13  bits            30 kHz                               1
+//     11  bits            30 kHz                               1
+//      9  bits            31.9 kHz                             1
+
+//     16  bits             0.87 kHz                            32
+//     13  bits             0.94 kHz                            32
+//     11  bits             0.94 kHz                            32
+//      9  bits             0.99 kHz                            32
+
+//
+//  ADC_LOW_SPEED, ADC_MED_SPEED, ADC_HIGH_SPEED_16BITS, ADC_HIGH_SPEED and ADC_VERY_HIGH_SPEED are the same for Teensy 3.x and LC,
+//  except for a very small ammount that depends on the bus speed and not on the ADC clock (which is the same for those speeds).
+//  This difference corresponds to 5 bus clock cycles, which is about 0.1 us.
+//
+//  For 9 bits resolution, 1 average, ADC_MED_SPEED sampling speed the measurement frequencies for the different ADACK are:
+//  ADC_ADACK_2_4        74.4 kHz
+//  ADC_ADACK_4_0       116.1 kHz
+//  ADC_ADACK_5_2       163.8 kHz
+//  ADC_ADACK_6_2       188.2 kHz
+//  For Teensy 3.x the results are similar but not identical for two reasons: the bus clock plays a small role in the total time and
+//  the frequency of this ADACK clock is acually quite variable, the values are the typical ones, but in the electrical datasheet
+//  it says that they can range from +-50% their values aproximately, so every Teensy can have different frequencies.

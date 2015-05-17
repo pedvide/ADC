@@ -150,7 +150,7 @@ void ADC_Module::analog_init() {
     analog_res_bits = 0;
     analog_max_val = 0;
     analog_num_average = 0;
-    analog_reference_internal = 1;
+    analog_reference_internal = 2;
     var_enableInterrupts = 0;
     pga_value = 1;
 
@@ -171,7 +171,7 @@ void ADC_Module::analog_init() {
     //*ADC_CFG2_muxsel = 1;
     setBit(ADC_CFG2, ADC_CFG2_MUXSEL_BIT);
 
-    // set reference to vcc/external
+    // set reference to vcc
     setReference(ADC_REF_3V3);
 
     // set resolution to 10
@@ -389,7 +389,35 @@ void ADC_Module::setConversionSpeed(uint8_t speed) {
 
     if (calibrating) wait_for_cal();
 
-    // in the future allow the user to select this clock source
+    // internal asynchronous clock settings: fADK = 2.4, 4.0, 5.2 or 6.2 MHz
+    if(speed >= ADC_ADACK_2_4) {
+            setBit(ADC_CFG2, ADC_CFG2_ADACKEN_BIT); // enable ADACK (takes max 5us to be ready)
+            setBit(ADC_CFG1, ADC_CFG1_ADICLK1_BIT); // select ADACK as clock source
+            setBit(ADC_CFG1, ADC_CFG1_ADICLK0_BIT);
+
+            clearBit(ADC_CFG1, ADC_CFG1_ADIV0_BIT); // select divider 1
+            clearBit(ADC_CFG1, ADC_CFG1_ADIV1_BIT); // we could divide this clk, but it would be too small for ADC use.
+
+            if(speed == ADC_ADACK_2_4) {
+                    clearBit(ADC_CFG2, ADC_CFG2_ADHSC_BIT);
+                    setBit(ADC_CFG1, ADC_CFG1_ADLPC_BIT);
+            } else if(speed == ADC_ADACK_4_0) {
+                    setBit(ADC_CFG2, ADC_CFG2_ADHSC_BIT);
+                    setBit(ADC_CFG1, ADC_CFG1_ADLPC_BIT);
+            } else if(speed == ADC_ADACK_5_2) {
+                    clearBit(ADC_CFG2, ADC_CFG2_ADHSC_BIT);
+                    clearBit(ADC_CFG1, ADC_CFG1_ADLPC_BIT);
+            } else if(speed == ADC_ADACK_6_2) {
+                    setBit(ADC_CFG2, ADC_CFG2_ADHSC_BIT);
+                    clearBit(ADC_CFG1, ADC_CFG1_ADLPC_BIT);
+            }
+            conversion_speed = speed;
+            return;
+    }
+
+
+    // normal bus clock used
+
     //*ADC_CFG2_adacken = 0; // disable the internal asynchronous clock
     clearBit(ADC_CFG2, ADC_CFG2_ADACKEN_BIT);
 
@@ -521,6 +549,8 @@ void ADC_Module::setSamplingSpeed(uint8_t speed) {
         //*ADC_CFG1_adlsmp = 0; // shortest sampling time
         clearBit(ADC_CFG1, ADC_CFG1_ADLSMP_BIT);
 
+    } else { // incorrect speeds have no effect.
+        return;
     }
 
     sampling_speed =  speed;
