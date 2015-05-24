@@ -6,17 +6,17 @@
 #include <ADC.h>
 
 const int readPin = A9; // ADC0
-const int readPin2 = A3; // ADC1
+const int readPin2 = A2; // ADC1
 
 ADC *adc;
-
-
 
 void setup() {
 
     pinMode(LED_BUILTIN, OUTPUT);
     pinMode(readPin, INPUT); //pin 23 single ended
     pinMode(readPin2, INPUT); //pin 23 single ended
+
+    pinMode(LED_BUILTIN+1, OUTPUT);
 
     Serial.begin(9600);
 
@@ -37,6 +37,8 @@ void setup() {
     // it can be ADC_VERY_LOW_SPEED, ADC_LOW_SPEED, ADC_MED_SPEED, ADC_HIGH_SPEED or ADC_VERY_HIGH_SPEED
     adc->setSamplingSpeed(ADC_HIGH_SPEED); // change the sampling speed
 
+    //adc->enableInterrupts(ADC_0);
+
     // always call the compare functions after changing the resolution!
     //adc->enableCompare(1.0/3.3*adc->getMaxValue(ADC_0), 0, ADC_0); // measurement will be ready if value < 1.0V
     //adc->enableCompareRange(1.0*adc->getMaxValue(ADC_0)/3.3, 2.0*adc->getMaxValue(ADC_0)/3.3, 0, 1, ADC_0); // ready if value lies out of [1.0,2.0] V
@@ -50,7 +52,7 @@ void setup() {
 
     // always call the compare functions after changing the resolution!
     //adc->enableCompare(1.0/3.3*adc->getMaxValue(ADC_1), 0, ADC_1); // measurement will be ready if value < 1.0V
-    adc->enableCompareRange(1.0*adc->getMaxValue(ADC_1)/3.3, 2.0*adc->getMaxValue(ADC_1)/3.3, 0, 1, ADC_1); // ready if value lies out of [1.0,2.0] V
+    //adc->enableCompareRange(1.0*adc->getMaxValue(ADC_1)/3.3, 2.0*adc->getMaxValue(ADC_1)/3.3, 0, 1, ADC_1); // ready if value lies out of [1.0,2.0] V
     #endif
 
     Serial.println("End setup");
@@ -63,7 +65,7 @@ char c;
 
 void loop() {
 
-    value = adc->analogRead(readPin, ADC_0); // read a new value, will return ADC_ERROR_VALUE if the comparison is false.
+    value = adc->analogRead(readPin); // read a new value, will return ADC_ERROR_VALUE if the comparison is false.
 
     Serial.print("Pin: ");
     Serial.print(readPin);
@@ -75,7 +77,7 @@ void loop() {
 
     Serial.print("Pin: ");
     Serial.print(readPin2);
-    Serial.println(", value ADC1: ");
+    Serial.print(", value ADC1: ");
     Serial.println(value2*3.3/adc->getMaxValue(ADC_1), DEC);
     #endif
 
@@ -117,8 +119,10 @@ void loop() {
 
     digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
 
-
     delay(500);
 }
 
-
+// If you enable interrupts make sure to call readSingle() to clear the interrupt.
+void adc0_isr() {
+        adc->adc0->readSingle();
+}

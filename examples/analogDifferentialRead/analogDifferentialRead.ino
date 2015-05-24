@@ -29,6 +29,10 @@ void setup() {
     // it can be ADC_VERY_LOW_SPEED, ADC_LOW_SPEED, ADC_MED_SPEED, ADC_HIGH_SPEED or ADC_VERY_HIGH_SPEED
     adc->setSamplingSpeed(ADC_HIGH_SPEED); // change the sampling speed
 
+    // PGA, use only for signals lower than 1.2 V. Activate the 1.2V reference (ADC_REF_1V2)
+    // the gain can be 1, 2, 4, 8, 16, 32 or 64
+    //adc->enablePGA(2);
+
     // always call the compare functions after changing the resolution!
     // Compare values at 16 bits differential resolution are twice what you write!
     //adc->enableCompare(1.0/3.3*adc->getMaxValue(ADC_0), 0, ADC_0); // measurement will be ready if value < 1.0V
@@ -56,37 +60,15 @@ void loop() {
 
     value = adc->analogReadDifferential(A10, A11, ADC_0); // read a new value, will return ADC_ERROR_VALUE if the comparison is false.
 
-    if(value!=ADC_ERROR_VALUE ) {
-
-      //Serial.print("Raw value ADC0: ");
-      //Serial.print(ADC0_RA, DEC);
-      //Serial.print("raw Value: : ");
-      //Serial.print(value, DEC);
-      Serial.print(" Value ADC0: ");
-      Serial.print("(PGA: ");
-      Serial.print(adc->getPGA());
-      Serial.print(" , MaxVal: ");
-      Serial.print(adc->getMaxValue());
-      Serial.print(") ");
-      // Divide by the maximum possible value and the PGA level
-      Serial.println(value*3.3/adc->getPGA()/adc->getMaxValue(), DEC);
-    } else {
-      Serial.println("ADC0 Comparison failed");
-    }
+    Serial.print(" Value ADC0: ");
+    // Divide by the maximum possible value and the PGA level
+    Serial.println(value*3.3/adc->getPGA()/adc->getMaxValue(), DEC);
 
     #if defined(ADC_TEENSY_3_1)
-
     value2 = adc->analogReadDifferential(A12,A13, ADC_1);
 
-    if(value2!=ADC_ERROR_VALUE) {
-
-      //Serial.print("Raw value ADC1: ");
-      //Serial.print(value2, DEC);
-      Serial.print(" Value ADC1: ");
-      Serial.println(value2*3.3/adc->getPGA(ADC_1)/adc->getMaxValue(ADC_1), DEC);
-    } else {
-      Serial.println("ADC1 Comparison failed");
-    }
+    //Serial.print(" Value ADC1: ");
+    //Serial.println(value2*3.3/adc->getPGA(ADC_1)/adc->getMaxValue(ADC_1), DEC);
     #endif
 
     /* fail_flag contains all possible errors,
@@ -124,8 +106,8 @@ void loop() {
     }
     #endif
 
-    digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
+    //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
 
 
-    delay(1000);
+    delay(500);
 }

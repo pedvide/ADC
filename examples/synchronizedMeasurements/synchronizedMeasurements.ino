@@ -25,7 +25,7 @@ void setup() {
     //adc->setReference(ADC_REF_1V2, ADC_0); // change all 3.3 to 1.2 if you change the reference to 1V2
 
     adc->setAveraging(1); // set number of averages
-    adc->setResolution(12); // set bits of resolution
+    adc->setResolution(8); // set bits of resolution
 
     // it can be ADC_VERY_LOW_SPEED, ADC_LOW_SPEED, ADC_MED_SPEED, ADC_HIGH_SPEED_16BITS, ADC_HIGH_SPEED or ADC_VERY_HIGH_SPEED
     // see the documentation for more information
@@ -39,7 +39,7 @@ void setup() {
 
     ////// ADC1 /////
     adc->setAveraging(1, ADC_1); // set number of averages
-    adc->setResolution(12, ADC_1); // set bits of resolution
+    adc->setResolution(8, ADC_1); // set bits of resolution
     adc->setConversionSpeed(ADC_HIGH_SPEED, ADC_1); // change the conversion speed
     adc->setSamplingSpeed(ADC_HIGH_SPEED, ADC_1); // change the sampling speed
 
@@ -50,11 +50,11 @@ void setup() {
 
 
     // You can also try:
-    //adc->startSynchronizedContinuous(readPin, readPin2);
+    adc->startSynchronizedContinuous(readPin, readPin2);
     //adc->startSynchronizedContinuousDifferential(A10, A11, A12, A13);
     // Read the values in the loop() with readSynchronizedContinuous()
 
-    delay(500);
+    delay(100);
     Serial.println("end setup");
 }
 
@@ -65,28 +65,25 @@ ADC::Sync_result result;
 
 void loop() {
 
-    result = adc->analogSynchronizedRead(readPin, readPin2);
+    //result = adc->analogSynchronizedRead(readPin, readPin2);
 
     //result = adc->analogSynchronizedReadDifferential(A10, A11, A12, A13);
 
-    //result = adc->readSynchronizedContinuous();
+    result = adc->readSynchronizedContinuous();
     // if using 16 bits and single-ended is necessary to typecast to unsigned,
     // otherwise values larger than 3.3/2 will be interpreted as negative
-    //result.result_adc0 = (uint16_t)result.result_adc0;
-    //result.result_adc1 = (uint16_t)result.result_adc1;
+    result.result_adc0 = (uint16_t)result.result_adc0;
+    result.result_adc1 = (uint16_t)result.result_adc1;
 
-    if( (result.result_adc0 !=ADC_ERROR_VALUE) && (result.result_adc1 !=ADC_ERROR_VALUE) ) {
+    //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
 
-      // the test results below were obtained commenting out all Serial.print*() and the delay() lines
-      //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
+    //Serial.print("Value ADC0: ");
+    Serial.print(time, DEC);
+    Serial.print(" ");
+    Serial.print(result.result_adc0*3.3/adc->getMaxValue(ADC_0), DEC);
+    Serial.print(" ");
+    Serial.println(result.result_adc1*3.3/adc->getMaxValue(ADC_1), DEC);
 
-      //Serial.print("Value ADC0: ");
-      Serial.print(time, DEC);
-      Serial.print(" ");
-      Serial.print(result.result_adc0*3.3/adc->getMaxValue(ADC_0), DEC);
-      Serial.print(" ");
-      Serial.println(result.result_adc1*3.3/adc->getMaxValue(ADC_1), DEC);
-    }
 
     /* fail_flag contains all possible errors,
         They are defined in  ADC_Module.h as
@@ -126,7 +123,7 @@ void loop() {
     digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
 
 
-  delay(50);
+  //delay(100);
 }
 
 /*

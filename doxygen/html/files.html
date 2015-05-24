@@ -69,7 +69,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
       <li class="current"><a href="files.html"><span>File&#160;List</span></a></li>
-      <li><a href="globals.html"><span>File&#160;Members</span></a></li>
     </ul>
   </div>
 </div><!-- top -->
@@ -92,7 +91,7 @@ $(document).ready(function(){initNavTree('files.html','');});
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -106,16 +105,12 @@ $(document).ready(function(){initNavTree('files.html','');});
 <div class="title">File List</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock">Here is a list of all files with brief descriptions:</div><div class="directory">
+<div class="textblock">Here is a list of all documented files with brief descriptions:</div><div class="directory">
 <table class="directory">
-<tr id="row_0_" class="even"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2doc.png" alt="*" width="24" height="22" /><a class="el" href="_a_d_c_8cpp.html" target="_self">ADC.cpp</a></td><td class="desc"></td></tr>
-<tr id="row_1_"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><a href="_a_d_c_8h_source.html"><img src="ftv2doc.png" alt="*" width="24" height="22" /></a><a class="el" href="_a_d_c_8h.html" target="_self">ADC.h</a></td><td class="desc"></td></tr>
-<tr id="row_2_" class="even"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2doc.png" alt="*" width="24" height="22" /><a class="el" href="_a_d_c___module_8cpp.html" target="_self">ADC_Module.cpp</a></td><td class="desc"></td></tr>
-<tr id="row_3_"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><a href="_a_d_c___module_8h_source.html"><img src="ftv2doc.png" alt="*" width="24" height="22" /></a><a class="el" href="_a_d_c___module_8h.html" target="_self">ADC_Module.h</a></td><td class="desc"></td></tr>
-<tr id="row_4_" class="even"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2doc.png" alt="*" width="24" height="22" /><a class="el" href="_ring_buffer_8cpp.html" target="_self">RingBuffer.cpp</a></td><td class="desc"></td></tr>
-<tr id="row_5_"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><a href="_ring_buffer_8h_source.html"><img src="ftv2doc.png" alt="*" width="24" height="22" /></a><a class="el" href="_ring_buffer_8h.html" target="_self">RingBuffer.h</a></td><td class="desc"></td></tr>
-<tr id="row_6_" class="even"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2doc.png" alt="*" width="24" height="22" /><a class="el" href="_ring_buffer_d_m_a_8cpp.html" target="_self">RingBufferDMA.cpp</a></td><td class="desc"></td></tr>
-<tr id="row_7_"><td class="entry"><img src="ftv2lastnode.png" alt="\" width="16" height="22" /><a href="_ring_buffer_d_m_a_8h_source.html"><img src="ftv2doc.png" alt="*" width="24" height="22" /></a><a class="el" href="_ring_buffer_d_m_a_8h.html" target="_self">RingBufferDMA.h</a></td><td class="desc"></td></tr>
+<tr id="row_0_" class="even"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><a href="_a_d_c_8h_source.html"><img src="ftv2doc.png" alt="*" width="24" height="22" /></a><b>ADC.h</b></td><td class="desc"></td></tr>
+<tr id="row_1_"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><a href="_a_d_c___module_8h_source.html"><img src="ftv2doc.png" alt="*" width="24" height="22" /></a><b>ADC_Module.h</b></td><td class="desc"></td></tr>
+<tr id="row_2_" class="even"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><a href="_ring_buffer_8h_source.html"><img src="ftv2doc.png" alt="*" width="24" height="22" /></a><b>RingBuffer.h</b></td><td class="desc"></td></tr>
+<tr id="row_3_"><td class="entry"><img src="ftv2lastnode.png" alt="\" width="16" height="22" /><a href="_ring_buffer_d_m_a_8h_source.html"><img src="ftv2doc.png" alt="*" width="24" height="22" /></a><b>RingBufferDMA.h</b></td><td class="desc"></td></tr>
 </table>
 </div><!-- directory -->
 </div><!-- contents -->
@@ -123,7 +118,7 @@ $(document).ready(function(){initNavTree('files.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sat May 16 2015 22:23:02 for ADC by
+    <li class="footer">Generated on Sun May 24 2015 13:20:36 for ADC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

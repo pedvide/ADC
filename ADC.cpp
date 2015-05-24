@@ -40,24 +40,35 @@ uint8_t ADC::dma_Ch1 = -1;
 // we need to create this static const arrays so that we can assign the "normal arrays" to the correct one
 // depending on which ADC module we will be.
 /* channel2sc1aADCx converts a pin number to their value for the SC1A register, for the ADC0 and ADC1
-*  sc1a2channelADCx does the opposite.
+*  numbers with +ADC_SC1A_PIN_MUX (128) means those pins use mux a, the rest use mux b.
+*  numbers with +ADC_SC1A_PIN_DIFF (64) means it's also a differential pin (treated also in the channel2sc1a_diff_ADCx)
+*  For channel2sc1a_diff_ADCx, +ADC_SC1A_PIN_PGA means the pin can use PGA on that ADC
+*  channel2sc1a_diff uses "base A10", that is channel2sc1a_diff[0] corresponds to A10,
+*  this assumes that the differential pins will always start at A10-A11, etc.
 */
+
 #if defined(ADC_TEENSY_3_0) || defined(ADC_TEENSY_3_1)
 const uint8_t ADC::channel2sc1aADC0[]= { // new version, gives directly the sc1a number. 0x1F=31 deactivates the ADC.
     5, 14, 8, 9, 13, 12, 6, 7, 15, 4, 0, 19, 3, 21, // 0-13, we treat them as A0-A13
     5, 14, 8, 9, 13, 12, 6, 7, 15, 4, // 14-23 (A0-A9)
     31, 31, 31, 31, 31, 31, 31, 31, 31, 31, // 24-33
-    0, 19, 3, 21, // 34-37 (A10-A13)
+    0+ADC_SC1A_PIN_DIFF, 19+ADC_SC1A_PIN_DIFF, 3+ADC_SC1A_PIN_DIFF, 21+ADC_SC1A_PIN_DIFF, // 34-37 (A10-A13)
     26, 22, 23, 27, 29, 30 // 38-43: temp. sensor, VREF_OUT, A14, bandgap, VREFH, VREFL. A14 isn't connected to anything in Teensy 3.0.
+};
+const uint8_t ADC::channel2sc1a_diff_ADC0[]= {
+    0+ADC_SC1A_PIN_PGA, 0+ADC_SC1A_PIN_PGA, 3, 3 // A10-A11 (DAD0, PGA0), A12-A13 (DAD3)
 };
 #elif defined(ADC_TEENSY_LC)
 // Teensy LC
 const uint8_t ADC::channel2sc1aADC0[]= { // new version, gives directly the sc1a number. 0x1F=31 deactivates the ADC.
-    5, 14, 8, 9, 13, 12, 6, 7, 15, 11, 0, 4, 23, 31, // 0-13, we treat them as A0-A12 + A13= doesn't exist
+    5, 14, 8, 9, 13, 12, 6, 7, 15, 11, 0, 4+ADC_SC1A_PIN_MUX, 23, 31, // 0-13, we treat them as A0-A12 + A13= doesn't exist
     5, 14, 8, 9, 13, 12, 6, 7, 15, 11, // 14-23 (A0-A9)
-    0, 4, 23, 31, 31, 31, 31, 31, 31, 31, // 24-33 ((A10-A12) + nothing)
+    0+ADC_SC1A_PIN_DIFF, 4+ADC_SC1A_PIN_MUX+ADC_SC1A_PIN_DIFF, 23, 31, 31, 31, 31, 31, 31, 31, // 24-33 ((A10-A12) + nothing), A11 uses mux a
     31, 31, 31, 31, // 34-37 nothing
     26, 31, 31, 27, 29, 30 // 38-43: temp. sensor, , , bandgap, VREFH, VREFL.
+};
+const uint8_t ADC::channel2sc1a_diff_ADC0[]= {
+    0, 0, 31, 31 // A10-A11 (DAD0), A12 is single-ended and A13 doesn't exist
 };
 #endif // defined
 
@@ -66,9 +77,12 @@ const uint8_t ADC::channel2sc1aADC1[]= { // new version, gives directly the sc1a
     31, 31, 8, 9, 31, 31, 31, 31, 31, 31, 3, 31, 0, 19, // 0-13, we treat them as A0-A13
     31, 31, 8, 9, 31, 31, 31, 31, 31, 31, // 14-23 (A0-A9)
     31, 31,  // 24,25 are digital only pins
-    5, 5, 4, 6, 7, 4, 31, 31, // 26-33 26=5a, 27=5b, 28=4b, 29=6b, 30=7b, 31=4a, 32,33 are digital only
-    3, 31, 0, 19, // 34-37 (A10-A13) A11 isn't connected.
+    5+ADC_SC1A_PIN_MUX, 5, 4, 6, 7, 4+ADC_SC1A_PIN_MUX, 31, 31, // 26-33 26=5a, 27=5b, 28=4b, 29=6b, 30=7b, 31=4a, 32,33 are digital only
+    3+ADC_SC1A_PIN_DIFF, 31+ADC_SC1A_PIN_DIFF, 0+ADC_SC1A_PIN_DIFF, 19+ADC_SC1A_PIN_DIFF, // 34-37 (A10-A13) A11 isn't connected.
     26, 18, 31, 27, 29, 30 // 38-43: temp. sensor, VREF_OUT, A14 (not connected), bandgap, VREFH, VREFL.
+};
+const uint8_t ADC::channel2sc1a_diff_ADC1[]= {
+    3, 3, 0+ADC_SC1A_PIN_PGA, 0+ADC_SC1A_PIN_PGA // A10-A11 (DAD3), A12-A13 (DAD0, PGA1)
 };
 #endif
 
@@ -82,9 +96,9 @@ ADC::ADC() {
     SIM_SCGC3 |= SIM_SCGC3_ADC1;
     #endif
 
-    adc0 = new ADC_Module(0, channel2sc1aADC0);
+    adc0 = new ADC_Module(0, channel2sc1aADC0, channel2sc1a_diff_ADC0);
     #if ADC_NUM_ADCS>1
-    adc1 = new ADC_Module(1, channel2sc1aADC1);
+    adc1 = new ADC_Module(1, channel2sc1aADC1, channel2sc1a_diff_ADC1);
     #endif
 
 }
@@ -453,43 +467,46 @@ bool ADC::isContinuous(int8_t adc_num) {
 */
 int ADC::analogRead(uint8_t pin, int8_t adc_num) {
     #if ADC_NUM_ADCS==1
-    /* Teensy 3.0
+    /* Teensy 3.0, LC
     */
     if( adc_num==1 ) { // If asked to use ADC1, return error
         adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
         return ADC_ERROR_VALUE;
     }
-    if ( (pin <= 26) || (pin>=34) ) { // check that the pin is correct (pin<0 or pin>43 have been ruled out already)
-        return adc0->analogRead(pin); // use ADC0
-    } else {
-        adc0->fail_flag |= ADC_ERROR_WRONG_PIN;
-    }
+    return adc0->analogRead(pin); // use ADC0
     #elif ADC_NUM_ADCS==2
     /* Teensy 3.1
     */
-    // Check to which ADC the pin corresponds
-    if( (pin==16) || (pin==17) || (pin>=34 && pin<=37) )  { // Both ADCs: pins 16, 17, 34, 35, 36, and 37.
-        if( adc_num==-1 ) { // use no ADC in particular
+    if( adc_num==-1 ) { // use no ADC in particular
+        // check which ADC can read the pin
+        bool adc0Pin = adc0->checkPin(pin);
+        bool adc1Pin = adc1->checkPin(pin);
+
+        if(adc0Pin && adc1Pin)  { // Both ADCs
             if( (adc0->num_measurements) >= (adc1->num_measurements)) { // use the ADC with less workload
                 return adc1->analogRead(pin);
             } else {
                 return adc0->analogRead(pin);
             }
-        }
-        else if( adc_num==0 ) { // user wants ADC0
+        } else if(adc0Pin) { // ADC0
             return adc0->analogRead(pin);
-        }
-        else if( adc_num==1 ){ // user wants ADC 1
+        } else if(adc1Pin) { // ADC1
             return adc1->analogRead(pin);
+        } else { // pin not valid in any ADC
+            adc0->fail_flag |= ADC_ERROR_WRONG_PIN;
+            adc1->fail_flag |= ADC_ERROR_WRONG_PIN;
+            return ADC_ERROR_VALUE;   // all others are invalid
         }
-    } else if(pin>=26) { // Those pins correspond to ADC1 only
-        return adc1->analogRead(pin);
-    } else if(pin<=23){ // Pin corresponds to ADC0
+    }
+    else if( adc_num==0 ) { // user wants ADC0
         return adc0->analogRead(pin);
     }
-    #endif
+    else if( adc_num==1 ){ // user wants ADC 1
+        return adc1->analogRead(pin);
+    }
     adc0->fail_flag |= ADC_ERROR_OTHER;
     return ADC_ERROR_VALUE;
+    #endif
 }
 
 /* Reads the differential analog value of two pins (pinP - pinN).
@@ -503,30 +520,48 @@ int ADC::analogRead(uint8_t pin, int8_t adc_num) {
 * adc_num. If you select ADC1 in Teensy 3.0 it will return ADC_ERROR_VALUE.
 */
 int ADC::analogReadDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num) {
-    if( adc_num==-1 ) { // adc_num isn't changed
-        #if ADC_NUM_ADCS>=2 // Teensy 3.1
-        if( (adc0->num_measurements) >= (adc1->num_measurements)) { // use the ADC with less workload
-            return adc1->analogReadDifferential(pinP, pinN);
-        } else {
-            return adc0->analogReadDifferential(pinP, pinN);
-        }
-        #else
-        return adc0->analogReadDifferential(pinP, pinN); // use ADC0
-        #endif
-    }
-    else if( adc_num==0 ) { // use ADC0
-        return adc0->analogReadDifferential(pinP, pinN);
-    }
-    else if( adc_num==1 ){ // user wants ADC 1, do nothing if it's a Teensy 3.0
-        #if ADC_NUM_ADCS>=2 // Teensy 3.1
-        return adc1->analogReadDifferential(pinP, pinN);
-        #else
+
+    #if ADC_NUM_ADCS==1
+    /* Teensy 3.0, LC
+    */
+    if( adc_num==1 ) { // If asked to use ADC1, return error
         adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
         return ADC_ERROR_VALUE;
-        #endif
     }
-    adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+    return adc0->analogReadDifferential(pinP, pinN); // use ADC0
+    #elif ADC_NUM_ADCS==2
+    /* Teensy 3.1
+    */
+    if( adc_num==-1 ) { // use no ADC in particular
+        // check which ADC can read the pin
+        bool adc0Pin = adc0->checkDifferentialPins(pinP, pinN);
+        bool adc1Pin = adc1->checkDifferentialPins(pinP, pinN);
+
+        if(adc0Pin && adc1Pin)  { // Both ADCs
+            if( (adc0->num_measurements) >= (adc1->num_measurements)) { // use the ADC with less workload
+                return adc1->analogReadDifferential(pinP, pinN);
+            } else {
+                return adc0->analogReadDifferential(pinP, pinN);
+            }
+        } else if(adc0Pin) { // ADC0
+            return adc0->analogReadDifferential(pinP, pinN);
+        } else if(adc1Pin) { // ADC1
+            return adc1->analogReadDifferential(pinP, pinN);
+        } else { // pins not valid in any ADC
+            adc0->fail_flag |= ADC_ERROR_WRONG_PIN;
+            adc1->fail_flag |= ADC_ERROR_WRONG_PIN;
+            return ADC_ERROR_VALUE;   // all others are invalid
+        }
+    }
+    else if( adc_num==0 ) { // user wants ADC0
+        return adc0->analogReadDifferential(pinP, pinN);
+    }
+    else if( adc_num==1 ){ // user wants ADC 1
+        return adc1->analogReadDifferential(pinP, pinN);
+    }
+    adc0->fail_flag |= ADC_ERROR_OTHER;
     return ADC_ERROR_VALUE;
+    #endif
 }
 
 
@@ -536,45 +571,48 @@ int ADC::analogReadDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num) {
 *   This function is interrupt safe. The ADC interrupt will restore the adc to its previous settings and
 *   restart the adc if it stopped a measurement. If you modify the adc_isr then this won't happen.
 */
-int ADC::startSingleRead(uint8_t pin, int8_t adc_num) {
+bool ADC::startSingleRead(uint8_t pin, int8_t adc_num) {
+    #if ADC_NUM_ADCS==1
+    /* Teensy 3.0, LC
+    */
+    if( adc_num==1 ) { // If asked to use ADC1, return error
+        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        return false;
+    }
+    return adc0->startSingleRead(pin); // use ADC0
+    #elif ADC_NUM_ADCS==2
+    /* Teensy 3.1
+    */
+    if( adc_num==-1 ) { // use no ADC in particular
+        // check which ADC can read the pin
+        bool adc0Pin = adc0->checkPin(pin);
+        bool adc1Pin = adc1->checkPin(pin);
 
-    #if ADC_NUM_ADCS>=2 // Teensy 3.1
-
-    // Check to which ADC the pin corresponds
-    if( (pin==16) || (pin==17) || (pin>=34 && pin<=37) )  { // Both ADCs: pins 16, 17, 34, 35, 36, and 37.
-        if( adc_num==-1 ) { // use no ADC in particular
+        if(adc0Pin && adc1Pin)  { // Both ADCs
             if( (adc0->num_measurements) >= (adc1->num_measurements)) { // use the ADC with less workload
                 return adc1->startSingleRead(pin);
             } else {
                 return adc0->startSingleRead(pin);
             }
-        }
-        else if( adc_num==0 ) { // use ADC0
+        } else if(adc0Pin) { // ADC0
             return adc0->startSingleRead(pin);
-        }
-        else if( adc_num==1 ){ // user wants ADC 1
+        } else if(adc1Pin) { // ADC1
             return adc1->startSingleRead(pin);
+        } else { // pin not valid in any ADC
+            adc0->fail_flag |= ADC_ERROR_WRONG_PIN;
+            adc1->fail_flag |= ADC_ERROR_WRONG_PIN;
+            return false;   // all others are invalid
         }
-    } else if(pin>=26) { // Those pins correspond to ADC1 only
-        return adc1->startSingleRead(pin);
-    } else if(pin<=23){ // Pin corresponds to ADC0
+    }
+    else if( adc_num==0 ) { // user wants ADC0
         return adc0->startSingleRead(pin);
     }
-
-    #else
-
-    if( adc_num==1 ) { // If asked to use ADC1, return error
-        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
-        return ADC_ERROR_VALUE;
+    else if( adc_num==1 ){ // user wants ADC 1
+        return adc1->startSingleRead(pin);
     }
-    if ( (pin <= 26) || (pin>=34) ) { // check that the pin is correct (pin<0 or pin>43 have been ruled out already)
-        return adc0->startSingleRead(pin); // use ADC0
-    }
-
-    #endif
-
     adc0->fail_flag |= ADC_ERROR_OTHER;
-    return ADC_ERROR_VALUE;
+    return false;
+    #endif
 }
 
 // Start a differential conversion between two pins (pinP - pinN) and enables interrupts.
@@ -585,31 +623,48 @@ int ADC::startSingleRead(uint8_t pin, int8_t adc_num) {
 *   This function is interrupt safe. The ADC interrupt will restore the adc to its previous settings and
 *   restart the adc if it stopped a measurement. If you modify the adc_isr then this won't happen.
 */
-int ADC::startSingleDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num) {
-    if( adc_num==-1 ) { // adc_num isn't changed
-        #if ADC_NUM_ADCS>=2 // Teensy 3.1
-        if( (adc0->num_measurements) >= (adc1->num_measurements)) { // use the ADC with less workload
-            return adc1->startSingleDifferential(pinP, pinN);
-        } else {
-            return adc0->startSingleDifferential(pinP, pinN);
-        }
-        #else
-        return adc0->startSingleDifferential(pinP, pinN); // use ADC0
-        #endif
+bool ADC::startSingleDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num) {
+    #if ADC_NUM_ADCS==1
+    /* Teensy 3.0, LC
+    */
+    if( adc_num==1 ) { // If asked to use ADC1, return error
+        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        return false;
     }
-    else if( adc_num==0 ) { // use ADC0
+    return adc0->startSingleDifferential(pinP, pinN); // use ADC0
+    #elif ADC_NUM_ADCS==2
+    /* Teensy 3.1
+    */
+    if( adc_num==-1 ) { // use no ADC in particular
+        // check which ADC can read the pin
+        bool adc0Pin = adc0->checkDifferentialPins(pinP, pinN);
+        bool adc1Pin = adc1->checkDifferentialPins(pinP, pinN);
+
+        if(adc0Pin && adc1Pin)  { // Both ADCs
+            if( (adc0->num_measurements) >= (adc1->num_measurements)) { // use the ADC with less workload
+                return adc1->startSingleDifferential(pinP, pinN);
+            } else {
+                return adc0->startSingleDifferential(pinP, pinN);
+            }
+        } else if(adc0Pin) { // ADC0
+            return adc0->startSingleDifferential(pinP, pinN);
+        } else if(adc1Pin) { // ADC1
+            return adc1->startSingleDifferential(pinP, pinN);
+        } else { // pins not valid in any ADC
+            adc0->fail_flag |= ADC_ERROR_WRONG_PIN;
+            adc1->fail_flag |= ADC_ERROR_WRONG_PIN;
+            return false;   // all others are invalid
+        }
+    }
+    else if( adc_num==0 ) { // user wants ADC0
         return adc0->startSingleDifferential(pinP, pinN);
     }
-    else if( adc_num==1 ){ // user wants ADC 1, do nothing if it's a Teensy 3.0
-        #if ADC_NUM_ADCS>=2 // Teensy 3.1
+    else if( adc_num==1 ){ // user wants ADC 1
         return adc1->startSingleDifferential(pinP, pinN);
-        #else
-        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
-        return ADC_ERROR_VALUE;
-        #endif
     }
     adc0->fail_flag |= ADC_ERROR_OTHER;
-    return ADC_ERROR_VALUE;
+    return false;
+    #endif
 }
 
 // Reads the analog value of a single conversion.
@@ -622,8 +677,8 @@ int ADC::readSingle(int8_t adc_num) {
         return adc1->readSingle();
         #else
         adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        return ADC_ERROR_VALUE;
         #endif
-        return false;
     }
     return adc0->readSingle();
 }
@@ -632,52 +687,49 @@ int ADC::readSingle(int8_t adc_num) {
 // Starts continuous conversion on the pin.
 /* It returns as soon as the ADC is set, use analogReadContinuous() to read the value.
 */
-void ADC::startContinuous(uint8_t pin, int8_t adc_num) {
+bool ADC::startContinuous(uint8_t pin, int8_t adc_num) {
 
-    #if ADC_NUM_ADCS>=2 // Teensy 3.1
-
-    // Check to which ADC the pin corresponds
-    if( (pin==16) || (pin==17) || (pin>=34 && pin<=37) )  { // Both ADCs: pins 16, 17, 34, 35, 36, and 37.
-        if( adc_num==-1 ) { // use no ADC in particular
-            if( (adc0->num_measurements) >= (adc1->num_measurements)) { // use the ADC with less workload
-                adc1->startContinuous(pin);
-                return;
-            } else {
-                adc0->startContinuous(pin);
-                return;
-            }
-        }
-        else if( adc_num==0 ) { // use ADC0
-            adc0->startContinuous(pin);
-            return;
-        }
-        else if( adc_num==1 ){ // user wants ADC 1
-            adc1->startContinuous(pin);
-            return;
-        }
-    } else if(pin>=26) { // Those pins correspond to ADC1 only
-        adc1->startContinuous(pin);
-        return;
-    } else if(pin<=23){ // Pin corresponds to ADC0
-        adc0->startContinuous(pin);
-        return;
-    }
-
-    #else
-
+    #if ADC_NUM_ADCS==1
+    /* Teensy 3.0, LC
+    */
     if( adc_num==1 ) { // If asked to use ADC1, return error
         adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
-        return;
+        return false;
     }
-    if ( (pin <= 26) || (pin>=34) ) { // check that the pin is correct (pin<0 or pin>43 have been ruled out already)
-        adc0->startContinuous(pin); // use ADC0
-        return;
+    return adc0->startContinuous(pin); // use ADC0
+    #elif ADC_NUM_ADCS==2
+    /* Teensy 3.1
+    */
+    if( adc_num==-1 ) { // use no ADC in particular
+        // check which ADC can read the pin
+        bool adc0Pin = adc0->checkPin(pin);
+        bool adc1Pin = adc1->checkPin(pin);
+
+        if(adc0Pin && adc1Pin)  { // Both ADCs
+            if( (adc0->num_measurements) >= (adc1->num_measurements)) { // use the ADC with less workload
+                return adc1->startContinuous(pin);
+            } else {
+                return adc0->startContinuous(pin);
+            }
+        } else if(adc0Pin) { // ADC0
+            return adc0->startContinuous(pin);
+        } else if(adc1Pin) { // ADC1
+            return adc1->startContinuous(pin);
+        } else { // pin not valid in any ADC
+            adc0->fail_flag |= ADC_ERROR_WRONG_PIN;
+            adc1->fail_flag |= ADC_ERROR_WRONG_PIN;
+            return false;   // all others are invalid
+        }
     }
-
-    #endif
-
+    else if( adc_num==0 ) { // user wants ADC0
+        return adc0->startContinuous(pin);
+    }
+    else if( adc_num==1 ){ // user wants ADC 1
+        return adc1->startContinuous(pin);
+    }
     adc0->fail_flag |= ADC_ERROR_OTHER;
-    return;
+    return false;
+    #endif
 }
 
 // Starts continuous conversion between the pins (pinP-pinN).
@@ -686,43 +738,67 @@ void ADC::startContinuous(uint8_t pin, int8_t adc_num) {
 * \param pinN must be A11 (if pinP=A10) or A13 (if pinP=A12).
 * Other pins will return ADC_ERROR_DIFF_VALUE.
 */
-void ADC::startContinuousDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num) {
-    if( adc_num==-1 ) { // adc_num isn't changed
-        #if ADC_NUM_ADCS>=2 // Teensy 3.1
-        if( (adc0->num_measurements) >= (adc1->num_measurements)) { // use the ADC with less workload
-            adc1->startContinuousDifferential(pinP, pinN);
-            return;
-        } else {
-            adc0->startContinuousDifferential(pinP, pinN);
-            return;
-        }
-        #else
-        adc0->startContinuousDifferential(pinP, pinN); // use ADC0
-        return;
-        #endif
-    }
-    else if( adc_num==0 ) { // use ADC0
-        adc0->startContinuousDifferential(pinP, pinN);
-        return;
-    }
-    else if( adc_num==1 ){ // user wants ADC 1, do nothing if it's a Teensy 3.0
-        #if ADC_NUM_ADCS>=2 // Teensy 3.1
-        adc1->startContinuousDifferential(pinP, pinN);
-        return;
-        #else
+bool ADC::startContinuousDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num) {
+    #if ADC_NUM_ADCS==1
+    /* Teensy 3.0, LC
+    */
+    if( adc_num==1 ) { // If asked to use ADC1, return error
         adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
-        return;
-        #endif
+        return false;
+    }
+    return adc0->startContinuousDifferential(pinP, pinN); // use ADC0
+    #elif ADC_NUM_ADCS==2
+    /* Teensy 3.1
+    */
+    if( adc_num==-1 ) { // use no ADC in particular
+        // check which ADC can read the pin
+        bool adc0Pin = adc0->checkDifferentialPins(pinP, pinN);
+        bool adc1Pin = adc1->checkDifferentialPins(pinP, pinN);
+
+        if(adc0Pin && adc1Pin)  { // Both ADCs
+            if( (adc0->num_measurements) >= (adc1->num_measurements)) { // use the ADC with less workload
+                return adc1->startContinuousDifferential(pinP, pinN);
+            } else {
+                return adc0->startContinuousDifferential(pinP, pinN);
+            }
+        } else if(adc0Pin) { // ADC0
+            return adc0->startContinuousDifferential(pinP, pinN);
+        } else if(adc1Pin) { // ADC1
+            return adc1->startContinuousDifferential(pinP, pinN);
+        } else { // pins not valid in any ADC
+            adc0->fail_flag |= ADC_ERROR_WRONG_PIN;
+            adc1->fail_flag |= ADC_ERROR_WRONG_PIN;
+            return false;   // all others are invalid
+        }
+    }
+    else if( adc_num==0 ) { // user wants ADC0
+        return adc0->startContinuousDifferential(pinP, pinN);
+    }
+    else if( adc_num==1 ){ // user wants ADC 1
+        return adc1->startContinuousDifferential(pinP, pinN);
     }
     adc0->fail_flag |= ADC_ERROR_OTHER;
-    return;
+    return false;
+    #endif
 }
 
-// Reads the analog value of a continuous conversion.
-/* Set the continuous conversion with with analogStartContinuous(pin) or startContinuousDifferential(pinP, pinN).
+//! Reads the analog value of a continuous conversion.
+/** Set the continuous conversion with with analogStartContinuous(pin) or startContinuousDifferential(pinP, pinN).
 *   \return the last converted value.
+*   If single-ended and 16 bits it's necessary to typecast it to an unsigned type (like uint16_t),
+*   otherwise values larger than 3.3/2 V are interpreted as negative!
 */
-// inlined! see .h
+int ADC::analogReadContinuous(int8_t adc_num) {
+    if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
+        #if ADC_NUM_ADCS>=2
+        return adc1->analogReadContinuous();
+        #else
+        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        #endif
+        return false;
+    }
+    return adc0->analogReadContinuous();
+}
 
 //! Stops continuous conversion
 void ADC::stopContinuous(int8_t adc_num) {
@@ -742,6 +818,7 @@ void ADC::stopContinuous(int8_t adc_num) {
 
 //////////////// SYNCHRONIZED BLOCKING METHODS //////////////////
 ///// IF THE BOARD HAS ONLY ONE ADC, THEY ARE EMPYT METHODS /////
+/////////////////////////////////////////////////////////////////
 
 #if ADC_NUM_ADCS>1
 
@@ -752,16 +829,15 @@ void ADC::stopContinuous(int8_t adc_num) {
 */
 ADC::Sync_result ADC::analogSynchronizedRead(uint8_t pin0, uint8_t pin1) {
 
-    Sync_result res;
+    Sync_result res = {ADC_ERROR_VALUE, ADC_ERROR_VALUE};
 
-    if ( (pin0 < 0) || (pin0 > 43) || (channel2sc1aADC0[pin0]==31) ) {
+    // check pins
+    if ( !adc0->checkPin(pin0) ) {
         adc0->fail_flag |= ADC_ERROR_WRONG_PIN;
-        res.result_adc0 = ADC_ERROR_VALUE;
         return res;
     }
-    if ( (pin1 < 0) || (pin1 > 43) || (channel2sc1aADC1[pin1]==31) ) {
+    if ( !adc1->checkPin(pin1) ) {
         adc1->fail_flag |= ADC_ERROR_WRONG_PIN;
-        res.result_adc1 = ADC_ERROR_VALUE;
         return res;
     }
 
@@ -787,31 +863,33 @@ ADC::Sync_result ADC::analogSynchronizedRead(uint8_t pin0, uint8_t pin1) {
         __enable_irq();
     }
 
+    // no continuous mode
+    adc0->singleMode();
+    adc1->singleMode();
 
     // start both measurements
-    adc0->startSingleReadFast(pin0);
-    adc1->startSingleReadFast(pin1);
+    adc0->startReadFast(pin0);
+    adc1->startReadFast(pin1);
 
     // wait for both ADCs to finish
     while( (adc0->isConverting()) || (adc1->isConverting()) ) { // wait for both to finish
         yield();
         //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
     }
+
+
     __disable_irq(); // make sure nothing interrupts this part
     if ( adc0->isComplete() ) { // conversion succeded
         res.result_adc0 = adc0->readSingle();
     } else { // comparison was false
         adc0->fail_flag |= ADC_ERROR_COMPARISON;
-        res.result_adc0 = ADC_ERROR_VALUE;
     }
     if ( adc1->isComplete() ) { // conversion succeded
         res.result_adc1 = adc1->readSingle();
     } else { // comparison was false
         adc1->fail_flag |= ADC_ERROR_COMPARISON;
-        res.result_adc1 = ADC_ERROR_VALUE;
     }
     __enable_irq();
-
 
 
     // if we interrupted a conversion, set it again
@@ -836,7 +914,17 @@ ADC::Sync_result ADC::analogSynchronizedRead(uint8_t pin0, uint8_t pin1) {
 */
 ADC::Sync_result ADC::analogSynchronizedReadDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N) {
 
-    ADC::Sync_result res;
+    Sync_result res = {ADC_ERROR_VALUE, ADC_ERROR_VALUE};;
+
+    // check pins
+    if(!adc0->checkDifferentialPins(pin0P, pin0N)) {
+        adc0->fail_flag |= ADC_ERROR_WRONG_PIN;
+        return res;   // all others are invalid
+    }
+    if(!adc1->checkDifferentialPins(pin1P, pin1N)) {
+        adc1->fail_flag |= ADC_ERROR_WRONG_PIN;
+        return res;   // all others are invalid
+    }
 
     // check if we are interrupting a measurement, store setting if so.
     // vars to save the current state of the ADC in case it's in use
@@ -859,9 +947,13 @@ ADC::Sync_result ADC::analogSynchronizedReadDifferential(uint8_t pin0P, uint8_t 
         __enable_irq();
     }
 
+    // no continuous mode
+    adc0->singleMode();
+    adc1->singleMode();
+
     // start both measurements
-    adc0->startSingleDifferentialFast(pin0P, pin0N);
-    adc1->startSingleDifferentialFast(pin1P, pin1N);
+    adc0->startDifferentialFast(pin0P, pin0N);
+    adc1->startDifferentialFast(pin1P, pin1N);
 
     // wait for both ADCs to finish
     while( (adc0->isConverting()) || (adc1->isConverting()) ) {
@@ -873,13 +965,11 @@ ADC::Sync_result ADC::analogSynchronizedReadDifferential(uint8_t pin0P, uint8_t 
         res.result_adc0 = adc0->readSingle();
     } else { // comparison was false
         adc0->fail_flag |= ADC_ERROR_COMPARISON;
-        res.result_adc0 = ADC_ERROR_VALUE;
     }
     if (adc1->isComplete()) { // conversion succeded
         res.result_adc1 = adc1->readSingle();
     } else { // comparison was false
         adc1->fail_flag |= ADC_ERROR_COMPARISON;
-        res.result_adc1 = ADC_ERROR_VALUE;
     }
     __enable_irq();
 
@@ -903,10 +993,20 @@ ADC::Sync_result ADC::analogSynchronizedReadDifferential(uint8_t pin0P, uint8_t 
 
 // Starts an analog measurement at the same time on the two ADC modules
 /* It returns inmediately, get value with readSynchronizedSingle().
-*   If the pin is incorrect it returns ADC_ERROR_VALUE
+*   If the pin is incorrect it returns false
 *   If this function interrupts a measurement, it stores the settings in adc_config
 */
-int ADC::startSynchronizedSingleRead(uint8_t pin0, uint8_t pin1) {
+bool ADC::startSynchronizedSingleRead(uint8_t pin0, uint8_t pin1) {
+
+    // check pins
+    if ( !adc0->checkPin(pin0) ) {
+        adc0->fail_flag |= ADC_ERROR_WRONG_PIN;
+        return false;
+    }
+    if ( !adc1->checkPin(pin1) ) {
+        adc1->fail_flag |= ADC_ERROR_WRONG_PIN;
+        return false;
+    }
 
     // check if we are interrupting a measurement, store setting if so.
     adc0->adcWasInUse = adc0->isConverting(); // is the ADC running now?
@@ -926,10 +1026,13 @@ int ADC::startSynchronizedSingleRead(uint8_t pin0, uint8_t pin1) {
         __enable_irq();
     }
 
+    // no continuous mode
+    adc0->singleMode();
+    adc1->singleMode();
 
     // start both measurements
-    adc0->startSingleReadFast(pin0);
-    adc1->startSingleReadFast(pin1);
+    adc0->startReadFast(pin0);
+    adc1->startReadFast(pin1);
 
 
     //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
@@ -941,10 +1044,20 @@ int ADC::startSynchronizedSingleRead(uint8_t pin0, uint8_t pin1) {
 /* It returns inmediately, get value with readSynchronizedSingle().
 *   \param pinP must be A10 or A12.
 *   \param pinN must be A11 (if pinP=A10) or A13 (if pinP=A12).
-*   Other pins will return ADC_ERROR_DIFF_VALUE.
+*   Other pins will return false.
 *   If this function interrupts a measurement, it stores the settings in adc_config
 */
-int ADC::startSynchronizedSingleDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N) {
+bool ADC::startSynchronizedSingleDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N) {
+
+    // check pins
+    if(!adc0->checkDifferentialPins(pin0P, pin0N)) {
+        adc0->fail_flag |= ADC_ERROR_WRONG_PIN;
+        return false;   // all others are invalid
+    }
+    if(!adc1->checkDifferentialPins(pin1P, pin1N)) {
+        adc1->fail_flag |= ADC_ERROR_WRONG_PIN;
+        return false;   // all others are invalid
+    }
 
     // check if we are interrupting a measurement, store setting if so.
     adc0->adcWasInUse = adc0->isConverting(); // is the ADC running now?
@@ -964,9 +1077,13 @@ int ADC::startSynchronizedSingleDifferential(uint8_t pin0P, uint8_t pin0N, uint8
         __enable_irq();
     }
 
+    // no continuous mode
+    adc0->singleMode();
+    adc1->singleMode();
+
     // start both measurements
-    adc0->startSingleDifferentialFast(pin0P, pin0N);
-    adc1->startSingleDifferentialFast(pin1P, pin1N);
+    adc0->startDifferentialFast(pin0P, pin0N);
+    adc1->startDifferentialFast(pin1P, pin1N);
 
     //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
 
@@ -993,42 +1110,65 @@ ADC::Sync_result ADC::readSynchronizedSingle() {
 /** Use readSynchronizedContinuous to get the values
 *
 */
-void ADC::startSynchronizedContinuous(uint8_t pin0, uint8_t pin1) {
+bool ADC::startSynchronizedContinuous(uint8_t pin0, uint8_t pin1) {
+
+    // check pins
+    if ( !adc0->checkPin(pin0) ) {
+        adc0->fail_flag |= ADC_ERROR_WRONG_PIN;
+        return false;
+    }
+    if ( !adc1->checkPin(pin1) ) {
+        adc1->fail_flag |= ADC_ERROR_WRONG_PIN;
+        return false;
+    }
 
     adc0->startContinuous(pin0);
     adc1->startContinuous(pin1);
 
     // setup the conversions the usual way, but to make sure that they are
     // as synchronized as possible we stop and restart them one after the other.
-    uint32_t temp_ADC0_SC1A = ADC0_SC1A; ADC0_SC1A = 0x1F;
-    uint32_t temp_ADC1_SC1A = ADC1_SC1A; ADC1_SC1A = 0x1F;
+    const uint32_t temp_ADC0_SC1A = ADC0_SC1A; ADC0_SC1A = 0x1F;
+    const uint32_t temp_ADC1_SC1A = ADC1_SC1A; ADC1_SC1A = 0x1F;
 
     __disable_irq(); // both measurements should have a maximum delay of an instruction time
     ADC0_SC1A = temp_ADC0_SC1A;
     ADC1_SC1A = temp_ADC1_SC1A;
     __enable_irq();
 
+    return true;
 }
 
 //! Starts a continuous differential conversion in both ADCs simultaneously
 /** Use readSynchronizedContinuous to get the values
 *
 */
-void ADC::startSynchronizedContinuousDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N) {
+bool ADC::startSynchronizedContinuousDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N) {
+
+    // check pins
+    if(!adc0->checkDifferentialPins(pin0P, pin0N)) {
+        adc0->fail_flag |= ADC_ERROR_WRONG_PIN;
+        return false;   // all others are invalid
+    }
+    if(!adc1->checkDifferentialPins(pin1P, pin1N)) {
+        adc1->fail_flag |= ADC_ERROR_WRONG_PIN;
+        return false;   // all others are invalid
+    }
 
     adc0->startContinuousDifferential(pin0P, pin0N);
     adc1->startContinuousDifferential(pin1P, pin1N);
 
     // setup the conversions the usual way, but to make sure that they are
     // as synchronized as possible we stop and restart them one after the other.
-    uint32_t temp_ADC0_SC1A = ADC0_SC1A; ADC0_SC1A = 0x1F;
-    uint32_t temp_ADC1_SC1A = ADC1_SC1A; ADC1_SC1A = 0x1F;
+    const uint32_t temp_ADC0_SC1A = ADC0_SC1A; ADC0_SC1A = 0x1F;
+    const uint32_t temp_ADC1_SC1A = ADC1_SC1A; ADC1_SC1A = 0x1F;
 
     __disable_irq();
     ADC0_SC1A = temp_ADC0_SC1A;
     ADC1_SC1A = temp_ADC1_SC1A;
     __enable_irq();
 
+
+    return true;
 }
 
 //! Returns the values of both ADCs.
@@ -1057,13 +1197,13 @@ ADC::Sync_result ADC::analogSynchronizedReadDifferential(uint8_t pin0P, uint8_t 
         return res;
 }
 
-int ADC::startSynchronizedSingleRead(uint8_t pin0, uint8_t pin1) { return true; }
-int ADC::startSynchronizedSingleDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N) { return true; }
+bool ADC::startSynchronizedSingleRead(uint8_t pin0, uint8_t pin1) { return false; }
+bool ADC::startSynchronizedSingleDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N) { return false; }
 
 ADC::Sync_result ADC::readSynchronizedSingle() {ADC::Sync_result res={0}; return res;}
 
-void ADC::startSynchronizedContinuous(uint8_t pin0, uint8_t pin1) {}
-void ADC::startSynchronizedContinuousDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N) {}
+bool ADC::startSynchronizedContinuous(uint8_t pin0, uint8_t pin1) {return false;}
+bool ADC::startSynchronizedContinuousDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N) {return false;}
 ADC::Sync_result ADC::readSynchronizedContinuous() {ADC::Sync_result res={0}; return res;}
 void ADC::stopSynchronizedContinuous() {}
 

@@ -10,14 +10,16 @@
 
 const int readPin = A9; // ADC0
 const int readPin2 = A3; // ADC1
+const int readPin3 = A2; // ADC0 or ADC1
 
 ADC *adc = new ADC(); // adc object
 
 void setup() {
 
     pinMode(LED_BUILTIN, OUTPUT);
-    pinMode(readPin, INPUT); //pin 23 single ended
-    pinMode(readPin2, INPUT); //pin 23 single ended
+    pinMode(readPin, INPUT);
+    pinMode(readPin2, INPUT);
+    pinMode(readPin3, INPUT);
 
     Serial.begin(9600);
 
@@ -26,7 +28,7 @@ void setup() {
     //adc->setReference(ADC_REF_1V2, ADC_0); // change all 3.3 to 1.2 if you change the reference to 1V2
 
     adc->setAveraging(1); // set number of averages
-    adc->setResolution(8); // set bits of resolution
+    adc->setResolution(12); // set bits of resolution
 
     // it can be ADC_VERY_LOW_SPEED, ADC_LOW_SPEED, ADC_MED_SPEED, ADC_HIGH_SPEED_16BITS, ADC_HIGH_SPEED or ADC_VERY_HIGH_SPEED
     // see the documentation for more information
@@ -78,16 +80,20 @@ void loop() {
         if(c=='c') { // conversion active?
             Serial.print("Converting? ADC0: ");
             Serial.println(adc->isConverting(ADC_0));
+            #if defined(ADC_TEENSY_3_1)
             Serial.print("Converting? ADC1: ");
             Serial.println(adc->isConverting(ADC_1));
+            #endif
         } else if(c=='s') { // stop conversion
             adc->stopContinuous(ADC_0);
             Serial.println("Stopped");
         } else if(c=='t') { // conversion successful?
             Serial.print("Conversion successful? ADC0: ");
             Serial.println(adc->isComplete(ADC_0));
+            #if defined(ADC_TEENSY_3_1)
             Serial.print("Conversion successful? ADC1: ");
             Serial.println(adc->isComplete(ADC_1));
+            #endif
         } else if(c=='r') { // restart conversion
             Serial.println("Restarting conversions ");
             adc->startContinuous(readPin, ADC_0);
@@ -95,9 +101,16 @@ void loop() {
             Serial.print("Value ADC0: ");
             value = (uint16_t)adc->analogReadContinuous(ADC_0); // the unsigned is necessary for 16 bits, otherwise values larger than 3.3/2 V are negative!
             Serial.println(value*3.3/adc->getMaxValue(ADC_0), DEC);
+            #if defined(ADC_TEENSY_3_1)
             Serial.print("Value ADC1: ");
             value2 = (uint16_t)adc->analogReadContinuous(ADC_1); // the unsigned is necessary for 16 bits, otherwise values larger than 3.3/2 V are negative!
             Serial.println(value2*3.3/adc->getMaxValue(ADC_1), DEC);
+            #endif
+        } else if(c=='n') { // new single conversion on readPin3
+            // this shows how even when both ADCs are busy with continuous measurements
+            // you can still call analogRead, it will pause the conversion, get the value and resume the continuous conversion automatically.
+            Serial.print("Single read on readPin3: ");
+            Serial.println(adc->analogRead(readPin3)*3.3/adc->getMaxValue(ADC_0), DEC);
         }
     }
 

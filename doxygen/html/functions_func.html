@@ -116,7 +116,7 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -140,7 +140,7 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 : <a class="el" href="class_a_d_c.html#a60b6e21403b1f30984f63832c0562960">ADC</a>
 </li>
 <li>ADC_Module()
-: <a class="el" href="class_a_d_c___module.html#a51cd4b1fe51139194aa7fc0f816226f0">ADC_Module</a>
+: <a class="el" href="class_a_d_c___module.html#a00b68ad621e3791747c061ce342d533f">ADC_Module</a>
 </li>
 <li>analogRead()
 : <a class="el" href="class_a_d_c___module.html#ad492adad4a9fa728625be82602bf1672">ADC_Module</a>
@@ -151,8 +151,8 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 , <a class="el" href="class_a_d_c___module.html#a8bddd248a9d52110b923fa94438f7f0a">ADC_Module</a>
 </li>
 <li>analogReadDifferential()
-: <a class="el" href="class_a_d_c___module.html#a4a57f6a9b0e3884f3862062b33f1a447">ADC_Module</a>
-, <a class="el" href="class_a_d_c.html#aec3464cdb697f89cf162813b00b2e965">ADC</a>
+: <a class="el" href="class_a_d_c.html#aec3464cdb697f89cf162813b00b2e965">ADC</a>
+, <a class="el" href="class_a_d_c___module.html#a4a57f6a9b0e3884f3862062b33f1a447">ADC_Module</a>
 </li>
 <li>analogSynchronizedRead()
 : <a class="el" href="class_a_d_c.html#ac8067db45057f691e664f414d1376d1e">ADC</a>
@@ -160,18 +160,21 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 <li>analogSynchronizedReadDifferential()
 : <a class="el" href="class_a_d_c.html#a156bb3fe55e8155dc42fd7e9df1eaa55">ADC</a>
 </li>
-<li>analogSyncRead()
-: <a class="el" href="class_a_d_c.html#a8980e0b1c619d0a39beaf98228053e3d">ADC</a>
-</li>
-<li>analogSyncReadDifferential()
-: <a class="el" href="class_a_d_c.html#a709a33de52fa14673be6170a869be22a">ADC</a>
-</li>
 </ul>
 
 
 <h3><a class="anchor" id="index_c"></a>- c -</h3><ul>
 <li>calibrate()
 : <a class="el" href="class_a_d_c___module.html#a037ab0589e2966cd07292c8186cad83e">ADC_Module</a>
+</li>
+<li>checkDifferentialPins()
+: <a class="el" href="class_a_d_c___module.html#a80d29662a1a32a51fec606351685ebaf">ADC_Module</a>
+</li>
+<li>checkPin()
+: <a class="el" href="class_a_d_c___module.html#a9fd95a61d263a9d82918b50e81aee2e9">ADC_Module</a>
+</li>
+<li>continuousMode()
+: <a class="el" href="class_a_d_c___module.html#a8b00e0669bbc7917544d4e2e543f1a27">ADC_Module</a>
 </li>
 </ul>
 
@@ -254,12 +257,15 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 , <a class="el" href="class_a_d_c.html#a1bd89979194f6c9b0aa08463373aaa15">ADC</a>
 </li>
 <li>isEmpty()
-: <a class="el" href="class_ring_buffer_d_m_a.html#a0c10d34a151d2b9960e2ae58084e5baa">RingBufferDMA</a>
-, <a class="el" href="class_ring_buffer.html#a041d2e0a3ec68f91ea9847e220ed2501">RingBuffer</a>
+: <a class="el" href="class_ring_buffer.html#a041d2e0a3ec68f91ea9847e220ed2501">RingBuffer</a>
+, <a class="el" href="class_ring_buffer_d_m_a.html#a0c10d34a151d2b9960e2ae58084e5baa">RingBufferDMA</a>
 </li>
 <li>isFull()
 : <a class="el" href="class_ring_buffer.html#a47f4fd274ccf142f55092ed851640201">RingBuffer</a>
 , <a class="el" href="class_ring_buffer_d_m_a.html#a52f974a38148e4baab0acbd2edb5c0e0">RingBufferDMA</a>
+</li>
+<li>isPGAEnabled()
+: <a class="el" href="class_a_d_c___module.html#ad59124572e18595e3f27778dc9425f89">ADC_Module</a>
 </li>
 </ul>
 
@@ -277,7 +283,7 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 , <a class="el" href="class_ring_buffer_d_m_a.html#aad5fc1bf31314e717c4f47c3d62e7b31">RingBufferDMA</a>
 </li>
 <li>readSingle()
-: <a class="el" href="class_a_d_c___module.html#a60d0edc82fd1dbb2e20d090a53718ce2">ADC_Module</a>
+: <a class="el" href="class_a_d_c___module.html#a01d8bbca381dccfda87b7f6d27487340">ADC_Module</a>
 , <a class="el" href="class_a_d_c.html#aee7423bfcbb03465bb0bd1e3c6474452">ADC</a>
 </li>
 <li>readSynchronizedContinuous()
@@ -311,7 +317,7 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 , <a class="el" href="class_a_d_c___module.html#a9dcb1b6195ab05fdee708472e4da939f">ADC_Module</a>
 </li>
 <li>setPGA()
-: <a class="el" href="class_a_d_c___module.html#a37d4a3f4fc3499823e51de7f9cf02678">ADC_Module</a>
+: <a class="el" href="class_a_d_c___module.html#aa6f4444c77d25bebddb67fb9d48d614f">ADC_Module</a>
 </li>
 <li>setReference()
 : <a class="el" href="class_a_d_c___module.html#aa14ea3e2c5f7d0ba794628e92a2573da">ADC_Module</a>
@@ -325,42 +331,45 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 : <a class="el" href="class_a_d_c.html#a6e01908bf556b00a73023eaddfe8e67f">ADC</a>
 , <a class="el" href="class_a_d_c___module.html#a94a585ac8079de091133b0ef4588b037">ADC_Module</a>
 </li>
+<li>singleMode()
+: <a class="el" href="class_a_d_c___module.html#a0f7d83ced9a5159b1f25bd998cea2bd0">ADC_Module</a>
+</li>
 <li>start()
 : <a class="el" href="class_ring_buffer_d_m_a.html#ac04b74b351c1b37876ad0c954deab5a7">RingBufferDMA</a>
 </li>
 <li>startContinuous()
-: <a class="el" href="class_a_d_c.html#a26880802b2677ae59a3090340cee4fb0">ADC</a>
-, <a class="el" href="class_a_d_c___module.html#a6fbb49ad99a9d28b07b8686021f6126e">ADC_Module</a>
+: <a class="el" href="class_a_d_c___module.html#a2b6284a613c9d3e452d2fc708bf6ce98">ADC_Module</a>
+, <a class="el" href="class_a_d_c.html#ad592f87ec644457b5056ae41c645ac0a">ADC</a>
 </li>
 <li>startContinuousDifferential()
-: <a class="el" href="class_a_d_c.html#ac2f4928dbd50593404a63d0510af1296">ADC</a>
-, <a class="el" href="class_a_d_c___module.html#a2fbc6fa04cbdb56e60b2f92a19826b26">ADC_Module</a>
+: <a class="el" href="class_a_d_c.html#ae6179fc2e5ca7de1b0a3eb1f36985885">ADC</a>
+, <a class="el" href="class_a_d_c___module.html#a23fd4fa6b759dcc0c029b3266f6a5fb7">ADC_Module</a>
+</li>
+<li>startDifferentialFast()
+: <a class="el" href="class_a_d_c___module.html#aa503b484e691fe31172033fc928576bd">ADC_Module</a>
+</li>
+<li>startReadFast()
+: <a class="el" href="class_a_d_c___module.html#a33cc7fbfcb158a33e8ca276cc7b309b5">ADC_Module</a>
 </li>
 <li>startSingleDifferential()
-: <a class="el" href="class_a_d_c.html#a71ca08292a2a9dfe0337d0c2ba5cab6d">ADC</a>
-, <a class="el" href="class_a_d_c___module.html#a4a8feb071fe092bd904a98714f63976b">ADC_Module</a>
-</li>
-<li>startSingleDifferentialFast()
-: <a class="el" href="class_a_d_c___module.html#aa0d60a43c585ea80055aa55bf9786e74">ADC_Module</a>
+: <a class="el" href="class_a_d_c.html#ac1016c1d107118a0064c2b627dbd831b">ADC</a>
+, <a class="el" href="class_a_d_c___module.html#abe85ed1855a09f18c5d2026cf08968a7">ADC_Module</a>
 </li>
 <li>startSingleRead()
-: <a class="el" href="class_a_d_c.html#ad7e03972aff4b6f517c33b44e3935adc">ADC</a>
-, <a class="el" href="class_a_d_c___module.html#a3930aceb90a0c3b33c881c90d0a05236">ADC_Module</a>
-</li>
-<li>startSingleReadFast()
-: <a class="el" href="class_a_d_c___module.html#a785d9d4fd9b54cb8e0c8ab3326c48f94">ADC_Module</a>
+: <a class="el" href="class_a_d_c.html#a113479488fae5f5407f884dd95fbec72">ADC</a>
+, <a class="el" href="class_a_d_c___module.html#af8a13facb0c15ef14e527a37f2386ce5">ADC_Module</a>
 </li>
 <li>startSynchronizedContinuous()
-: <a class="el" href="class_a_d_c.html#a020e4d7338565d5ef0161b7145c1b1a5">ADC</a>
+: <a class="el" href="class_a_d_c.html#af50305b76bf8798da1dd26f654b4f0e3">ADC</a>
 </li>
 <li>startSynchronizedContinuousDifferential()
-: <a class="el" href="class_a_d_c.html#a924757183c6a0561978bb7e058f563df">ADC</a>
+: <a class="el" href="class_a_d_c.html#a29851ff11635dcd85cff21a92271b571">ADC</a>
 </li>
 <li>startSynchronizedSingleDifferential()
-: <a class="el" href="class_a_d_c.html#ac77b97b722784ad911235eda97ad0456">ADC</a>
+: <a class="el" href="class_a_d_c.html#a9cebd13de5da420591c779916865824a">ADC</a>
 </li>
 <li>startSynchronizedSingleRead()
-: <a class="el" href="class_a_d_c.html#ac88add8a6c58bd94d64073d6f9cf0a90">ADC</a>
+: <a class="el" href="class_a_d_c.html#acbdb0f3a7419e5a0cd8b2c031dc8b9d7">ADC</a>
 </li>
 <li>stopContinuous()
 : <a class="el" href="class_a_d_c___module.html#a9af29f865bdd376d954112d36b0992f0">ADC_Module</a>
@@ -396,7 +405,7 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sat May 16 2015 22:23:02 for ADC by
+    <li class="footer">Generated on Sun May 24 2015 13:20:36 for ADC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

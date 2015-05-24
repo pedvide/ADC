@@ -27,11 +27,11 @@
 
 const int ledPin = LED_BUILTIN;
 
-const int readPin0 = A9;
-const int period0 = 1000; // us
+const int readPin0 = A10;
+const int period0 = 120; // us
 
-const int readPin1 = A8;
-const int period1 = 1000; // us
+const int readPin1 = A11;
+const int period1 = 120; // us
 
 const int readPeriod = 100000; // us
 
@@ -49,7 +49,7 @@ int startTimerValue0 = 0, startTimerValue1 = 0;
 #if defined(ADC_TEENSY_3_0) || defined(ADC_TEENSY_3_1)
 const uint8_t sc1a2channelADC0[]= { // new version, gives directly the pin number
     34, 0, 0, 36, 23, 14, 20, 21, 16, 17, 0, 0, 19, 18, // 0-13
-    15, 22, 0, 0, 0, 35, 0, 37, // 14-21
+    15, 22, 23, 0, 0, 35, 0, 37, // 14-21
     39, 40, 0, 0, 38, 41, 42, 43, // VREF_OUT, A14, temp. sensor, bandgap, VREFH, VREFL.
     0 // 31 means disabled, but just in case
 };
@@ -57,7 +57,7 @@ const uint8_t sc1a2channelADC0[]= { // new version, gives directly the pin numbe
 // Teensy LC
 const uint8_t sc1a2channelADC0[]= { // new version, gives directly the pin number
     24, 0, 0, 0, 25, 14, 20, 21, 16, 17, 0, 23, 19, 18, // 0-13
-    15, 22, 0, 0, 0, 0, 0, 0, // 14-21
+    15, 22, 23, 0, 0, 0, 0, 0, // 14-21
     26, 0, 0, 0, 38, 41, 0, 42, 43, // A12, temp. sensor, bandgap, VREFH, VREFL.
     0 // 31 means disabled, but just in case
 };
@@ -75,10 +75,13 @@ const uint8_t sc1a2channelADC1[]= { // new version, gives directly the pin numbe
 void setup() {
 
     pinMode(ledPin, OUTPUT); // led blinks every loop
+
     pinMode(ledPin+1, OUTPUT); // timer0 starts a measurement
     pinMode(ledPin+2, OUTPUT); // timer1 starts a measurement
-    pinMode(ledPin+3, OUTPUT); // adc0_isr, measurement finished
-    pinMode(readPin0, INPUT); pinMode(readPin1, INPUT); //pin 23 single ended
+    pinMode(ledPin+3, OUTPUT); // adc0_isr, measurement finished for readPin0
+    pinMode(ledPin+4, OUTPUT); // adc0_isr, measurement finished for readPin1
+
+    pinMode(readPin0, INPUT); pinMode(readPin1, INPUT);
 
     Serial.begin(9600);
 
@@ -93,26 +96,31 @@ void setup() {
 
     // it can be ADC_VERY_LOW_SPEED, ADC_LOW_SPEED, ADC_MED_SPEED, ADC_HIGH_SPEED_16BITS, ADC_HIGH_SPEED or ADC_VERY_HIGH_SPEED
     // see the documentation for more information
-    adc->setConversionSpeed(ADC_HIGH_SPEED); // change the conversion speed
+    adc->setConversionSpeed(ADC_MED_SPEED); // change the conversion speed
     // it can be ADC_VERY_LOW_SPEED, ADC_LOW_SPEED, ADC_MED_SPEED, ADC_HIGH_SPEED or ADC_VERY_HIGH_SPEED
-    adc->setSamplingSpeed(ADC_HIGH_SPEED); // change the sampling speed
+    adc->setSamplingSpeed(ADC_MED_SPEED); // change the sampling speed
     // with 16 averages, 12 bits resolution and ADC_HIGH_SPEED conversion and sampling it takes about 32.5 us for a conversion
 
     Serial.println("Starting Timers");
 
     // start the timers, if it's not possible, startTimerValuex will be false
     startTimerValue0 = timer0.begin(timer0_callback, period0);
-    //delayMicroseconds(period0/2); // wait enough time for the first timer conversion to finish (depends on resolution and averaging)
-    delayMicroseconds(20); // with the current settings, waiting so little time means the timer1 will interrupt the conversion
+    // wait enough time for the first timer conversion to finish (depends on resolution and averaging),
+    // with 16 averages, 12 bits, and ADC_MED_SPEED in both sampling and conversion speeds it takes about 36 us.
+    delayMicroseconds(25); // if we wait less than 36us the timer1 will interrupt the conversion
     // initiated by timer0. The adc_isr will restart the timer0's measurement.
+
     // You can check with an oscilloscope:
     // Pin 14 corresponds to the timer0 initiating a measurement
     // Pin 15 the same for the timer1
-    // Pin 16 is the adc_isr.
-    // Timer0 starts a comversion and 20 us later timer1 starts a new one, "pausing" the first, about 32 us later timer1's conversion
-    // is done, and timer0's is restarted, 32 us later timer0's conversion finishes. About 5 us later timer0 starts a new conversion again.
-    // (times don't add up to 100 us because the timer_callbacks and adc_isr take time to execute)
+    // Pin 16 is the adc_isr when there's a new measurement on readpin0
+    // Pin 17 is the adc_isr when there's a new measurement on readpin1
+
+    // Timer0 starts a comversion and 25 us later timer1 starts a new one, "pausing" the first, about 36 us later timer1's conversion
+    // is done, and timer0's is restarted, 36 us later timer0's conversion finishes. About 14 us later timer0 starts a new conversion again.
+    // (times don't add up to 120 us because the timer_callbacks and adc_isr take time to execute, about 2.5 us and 1 us, respectively)
     // so in the worst case timer0 gets a new value in about twice as long as it would take alone.
+    // if you change the periods, make sure you don't go into a loop, with the timers always interrupting each other
     startTimerValue1 = timer1.begin(timer1_callback, period1);
 
     adc->enableInterrupts(ADC_0);
@@ -148,17 +156,20 @@ void loop() {
     if (Serial.available()) {
         c = Serial.read();
         if(c=='s') { // stop timer
-            Serial.println("Stop timer");
-            timer0.end();
+            Serial.println("Stop timer1");
+            timer1.end();
         } else if(c=='r') { // restart timer
-            Serial.println("Restart timer");
-            startTimerValue0 = timer0.begin(timer0_callback, period0);
+            Serial.println("Restart timer1");
+            startTimerValue1 = timer1.begin(timer1_callback, period1);
+        } else if(c=='p') { // restart timer
+            Serial.print("isContinuous: ");
+            Serial.println(adc->adc0->isContinuous());
         }
     }
 
-    digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
+    //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
 
-  delayMicroseconds(readPeriod);
+    delayMicroseconds(readPeriod);
 }
 
 // This function will be called with the desired frequency
@@ -191,27 +202,33 @@ void timer1_callback(void) {
 // first: see which pin finished and then save the measurement into the correct buffer
 void adc0_isr() {
 
-    digitalWriteFast(ledPin+3, HIGH);
-
     uint8_t pin = sc1a2channelADC0[ADC0_SC1A&ADC_SC1A_CHANNELS]; // the bits 0-4 of ADC0_SC1A have the channel
 
     // add value to correct buffer
     if(pin==readPin0) {
+        digitalWriteFast(ledPin+3, HIGH);
         buffer0->write(adc->readSingle());
+        digitalWriteFast(ledPin+3, LOW);
     } else if(pin==readPin1) {
+        digitalWriteFast(ledPin+4, HIGH);
         buffer1->write(adc->readSingle());
+        if(adc->adc0->isConverting()) {
+            digitalWriteFast(LED_BUILTIN, 1);
+        }
+        digitalWriteFast(ledPin+4, LOW);
     } else { // clear interrupt anyway
-        ADC0_RA;
+        adc->readSingle();
     }
 
     // restore ADC config if it was in use before being interrupted by the analog timer
     if (adc->adc0->adcWasInUse) {
         // restore ADC config, and restart conversion
         adc->adc0->loadConfig(&adc->adc0->adc_config);
+        // avoid a conversion started by this isr to repeat itself
+        adc->adc0->adcWasInUse = false;
     }
 
 
-    digitalWriteFast(ledPin+3, LOW);
     //digitalWriteFast(ledPin+2, !digitalReadFast(ledPin+2));
 
 }

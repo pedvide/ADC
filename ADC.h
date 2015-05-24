@@ -43,26 +43,6 @@
 // include ADC module class
 #include "ADC_Module.h"
 
-
-// Teensy 3.1 has 2 ADCs, Teensy 3.0 and LC only 1.
-#if defined(ADC_TEENSY_3_1) // Teensy 3.1
-        #define ADC_NUM_ADCS 2
-#elif defined(ADC_TEENSY_3_0) // Teensy 3.0
-        #define ADC_NUM_ADCS 1
-#elif defined(ADC_TEENSY_LC) // Teensy LC
-        #define ADC_NUM_ADCS 1
-#endif
-
-// Use DMA?
-#if defined(ADC_TEENSY_3_1) // Teensy 3.1
-        #define ADC_USE_DMA 1
-#elif defined(ADC_TEENSY_3_0) // Teensy 3.0
-        #define ADC_USE_DMA 1
-#elif defined(ADC_TEENSY_LC) // Teensy LC
-        #define ADC_USE_DMA 0
-#endif
-
-
 // include the circular buffer
 #include "RingBuffer.h"
 
@@ -98,7 +78,7 @@ class ADC
 
         /////////////// METHODS TO SET/GET SETTINGS OF THE ADC ////////////////////
 
-        //! Set the voltage reference you prefer, default is vcc
+        //! Set the voltage reference you prefer, default is 3.3 V (VCC)
         /*!
         * \param type can be ADC_REF_3V3, ADC_REF_1V2 (not for Teensy LC) or ADC_REF_EXT.
         *
@@ -162,7 +142,7 @@ class ADC
 
         //! Set the number of averages
         /*!
-        * \param num can be 0, 4, 8, 16 or 32..
+        * \param num can be 0, 4, 8, 16 or 32.
         */
         void setAveraging(uint8_t num, int8_t adc_num = -1);
 
@@ -279,7 +259,7 @@ class ADC
         *   If the pin is incorrect it returns ADC_ERROR_VALUE
         *   If this function interrupts a measurement, it stores the settings in adc_config
         */
-        int startSingleRead(uint8_t pin, int8_t adc_num = -1);
+        bool startSingleRead(uint8_t pin, int8_t adc_num = -1);
 
         //! Start a differential conversion between two pins (pinP - pinN) and enables interrupts.
         /** It returns inmediately, get value with readSingle().
@@ -289,7 +269,7 @@ class ADC
         *   Other pins will return ADC_ERROR_DIFF_VALUE.
         *   If this function interrupts a measurement, it stores the settings in adc_config
         */
-        int startSingleDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num = -1);
+        bool startSingleDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num = -1);
 
         //! Reads the analog value of a single conversion.
         /** Set the conversion with with startSingleRead(pin) or startSingleDifferential(pinP, pinN).
@@ -304,7 +284,7 @@ class ADC
         //! Starts continuous conversion on the pin.
         /** It returns as soon as the ADC is set, use analogReadContinuous() to read the value.
         */
-        void startContinuous(uint8_t pin, int8_t adc_num = -1);
+        bool startContinuous(uint8_t pin, int8_t adc_num = -1);
 
         //! Starts continuous conversion between the pins (pinP-pinN).
         /** It returns as soon as the ADC is set, use analogReadContinuous() to read the value.
@@ -312,7 +292,7 @@ class ADC
         * \param pinN must be A11 (if pinP=A10) or A13 (if pinP=A12).
         * Other pins will return ADC_ERROR_DIFF_VALUE.
         */
-        void startContinuousDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num = -1);
+        bool startContinuousDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num = -1);
 
         //! Reads the analog value of a continuous conversion.
         /** Set the continuous conversion with with analogStartContinuous(pin) or startContinuousDifferential(pinP, pinN).
@@ -320,17 +300,7 @@ class ADC
         *   If single-ended and 16 bits it's necessary to typecast it to an unsigned type (like uint16_t),
         *   otherwise values larger than 3.3/2 V are interpreted as negative!
         */
-        inline int analogReadContinuous(int8_t adc_num = -1) { // make it inline so it's a bit faster
-            if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
-                #if defined(ADC_TEENSY_3_1)
-                return adc1->analogReadContinuous();
-                #else
-                adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
-                #endif
-                return false;
-            }
-            return adc0->analogReadContinuous();
-        }
+        int analogReadContinuous(int8_t adc_num = -1);
 
         //! Stops continuous conversion
         void stopContinuous(int8_t adc_num = -1);
@@ -356,7 +326,8 @@ class ADC
         * This function is interrupt safe, so it will restore the adc to the state it was before being called
         */
         Sync_result analogSynchronizedRead(uint8_t pin0, uint8_t pin1);
-        inline Sync_result analogSyncRead(uint8_t pin0, uint8_t pin1) {return analogSynchronizedRead(pin0, pin1);}
+
+        Sync_result analogSyncRead(uint8_t pin0, uint8_t pin1) __attribute__((always_inline)) {return analogSynchronizedRead(pin0, pin1);}
 
         //! Returns the differential analog values of both sets of pins, measured at the same time by the two ADC modules.
         /** It waits until the values are read and then returns the result as a struct Sync_result,
@@ -365,7 +336,8 @@ class ADC
         * This function is interrupt safe, so it will restore the adc to the state it was before being called
         */
         Sync_result analogSynchronizedReadDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N);
-        inline Sync_result analogSyncReadDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N) {
+
+        Sync_result analogSyncReadDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N) __attribute__((always_inline)) {
             return analogSynchronizedReadDifferential(pin0P, pin0N, pin1P, pin1N);
         }
 
@@ -373,19 +345,19 @@ class ADC
 
         //! Starts an analog measurement at the same time on the two ADC modules
         /** It returns inmediately, get value with readSynchronizedSingle().
-        *   If the pin is incorrect it returns ADC_ERROR_VALUE
+        *   If the pin is incorrect it returns false
         *   If this function interrupts a measurement, it stores the settings in adc_config
         */
-        int startSynchronizedSingleRead(uint8_t pin0, uint8_t pin1);
+        bool startSynchronizedSingleRead(uint8_t pin0, uint8_t pin1);
 
         //! Start a differential conversion between two pins (pin0P - pin0N) and (pin1P - pin1N)
         /** It returns inmediately, get value with readSynchronizedSingle().
         *   \param pin0P, pin1P must be A10 or A12.
         *   \param pin0N, pin1N must be A11 (if pinP=A10) or A13 (if pinP=A12).
-        *   Other pins will return ADC_ERROR_DIFF_VALUE.
+        *   Other pins will return false.
         *   If this function interrupts a measurement, it stores the settings in adc_config
         */
-        int startSynchronizedSingleDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N);
+        bool startSynchronizedSingleDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N);
 
         //! Reads the analog value of a single conversion.
         /**
@@ -400,13 +372,13 @@ class ADC
         /** Use readSynchronizedContinuous to get the values
         *
         */
-        void startSynchronizedContinuous(uint8_t pin0, uint8_t pin1);
+        bool startSynchronizedContinuous(uint8_t pin0, uint8_t pin1);
 
         //! Starts a continuous differential conversion in both ADCs simultaneously
         /** Use readSynchronizedContinuous to get the values
         *
         */
-        void startSynchronizedContinuousDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N);
+        bool startSynchronizedContinuousDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N);
 
         //! Returns the values of both ADCs.
         Sync_result readSynchronizedContinuous();
@@ -441,9 +413,19 @@ class ADC
         //double adc_pdb_period;
 
         //! Translate pin number to SC1A nomenclature
+        // should this be a constexpr?
         static const uint8_t channel2sc1aADC0[44];
-        #if defined(ADC_TEENSY_3_1)
+        #if ADC_NUM_ADCS>1
+        //! Translate pin number to SC1A nomenclature
         static const uint8_t channel2sc1aADC1[44];
+        #endif
+
+        //! Translate pin number to SC1A nomenclature for differential pins
+        /** uses base A10, that is, channel2sc1a_diff_ADC0[0] corresponds to pin A10.
+        */
+        static const uint8_t channel2sc1a_diff_ADC0[4];
+        #if ADC_NUM_ADCS>1
+        static const uint8_t channel2sc1a_diff_ADC1[4];
         #endif
 
 

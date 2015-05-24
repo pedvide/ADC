@@ -69,7 +69,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
       <li><a href="files.html"><span>File&#160;List</span></a></li>
-      <li><a href="globals.html"><span>File&#160;Members</span></a></li>
     </ul>
   </div>
 </div><!-- top -->
@@ -92,7 +91,7 @@ $(document).ready(function(){initNavTree('_ring_buffer_8h_source.html','');});
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -106,7 +105,7 @@ $(document).ready(function(){initNavTree('_ring_buffer_8h_source.html','');});
 <div class="title">RingBuffer.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="_ring_buffer_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/* Teensy 3.x, LC ADC library</span></div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/* Teensy 3.x, LC ADC library</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> * https://github.com/pedvide/ADC</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> * Copyright (c) 2015 Pedro Villanueva</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> *</span></div>
@@ -138,7 +137,7 @@ $(document).ready(function(){initNavTree('_ring_buffer_8h_source.html','');});
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &lt;Arduino.h&gt;</span></div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="comment">// THE SIZE MUST BE A POWER OF 2!!</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="_ring_buffer_8h.html#a231c232364ab25ef40c9a718b277074f">   33</a></span>&#160;<span class="preprocessor">#define RING_BUFFER_DEFAULT_BUFFER_SIZE 8</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#define RING_BUFFER_DEFAULT_BUFFER_SIZE 8</span></div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;</div>
@@ -162,11 +161,11 @@ $(document).ready(function(){initNavTree('_ring_buffer_8h_source.html','');});
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="keywordtype">int</span> increase(<span class="keywordtype">int</span> p);</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="keywordtype">int</span> b_size = <a class="code" href="_ring_buffer_8h.html#a231c232364ab25ef40c9a718b277074f">RING_BUFFER_DEFAULT_BUFFER_SIZE</a>;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="keywordtype">int</span> b_size = RING_BUFFER_DEFAULT_BUFFER_SIZE;</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="keywordtype">int</span> b_start = 0;</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keywordtype">int</span> b_end = 0;</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="comment">//int *elems;</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keywordtype">int</span> elems[<a class="code" href="_ring_buffer_8h.html#a231c232364ab25ef40c9a718b277074f">RING_BUFFER_DEFAULT_BUFFER_SIZE</a>];</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keywordtype">int</span> elems[RING_BUFFER_DEFAULT_BUFFER_SIZE];</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;};</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
@@ -178,14 +177,13 @@ $(document).ready(function(){initNavTree('_ring_buffer_8h_source.html','');});
 <div class="ttc" id="class_ring_buffer_html_aa14c47f5bbd73b5f8d2b83a86f01ccf2"><div class="ttname"><a href="class_ring_buffer.html#aa14c47f5bbd73b5f8d2b83a86f01ccf2">RingBuffer::write</a></div><div class="ttdeci">void write(int value)</div><div class="ttdoc">Write a value into the buffer. </div><div class="ttdef"><b>Definition:</b> RingBuffer.cpp:47</div></div>
 <div class="ttc" id="class_ring_buffer_html_a47f4fd274ccf142f55092ed851640201"><div class="ttname"><a href="class_ring_buffer.html#a47f4fd274ccf142f55092ed851640201">RingBuffer::isFull</a></div><div class="ttdeci">int isFull()</div><div class="ttdoc">Returns 1 (true) if the buffer is full. </div><div class="ttdef"><b>Definition:</b> RingBuffer.cpp:39</div></div>
 <div class="ttc" id="class_ring_buffer_html"><div class="ttname"><a href="class_ring_buffer.html">RingBuffer</a></div><div class="ttdef"><b>Definition:</b> RingBuffer.h:40</div></div>
-<div class="ttc" id="_ring_buffer_8h_html_a231c232364ab25ef40c9a718b277074f"><div class="ttname"><a href="_ring_buffer_8h.html#a231c232364ab25ef40c9a718b277074f">RING_BUFFER_DEFAULT_BUFFER_SIZE</a></div><div class="ttdeci">#define RING_BUFFER_DEFAULT_BUFFER_SIZE</div><div class="ttdef"><b>Definition:</b> RingBuffer.h:33</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="_ring_buffer_8h.html">RingBuffer.h</a></li>
-    <li class="footer">Generated on Sat May 16 2015 22:23:01 for ADC by
+    <li class="navelem"><b>RingBuffer.h</b></li>
+    <li class="footer">Generated on Sun May 24 2015 13:20:35 for ADC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

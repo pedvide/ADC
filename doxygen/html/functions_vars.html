@@ -100,7 +100,7 @@ $(document).ready(function(){initNavTree('functions_vars.html','');});
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -114,8 +114,8 @@ $(document).ready(function(){initNavTree('functions_vars.html','');});
 <li>adc0
 : <a class="el" href="class_a_d_c.html#ab8deee5fdd0fec290faa1f01c1d4b7d7">ADC</a>
 </li>
-<li>adc_config
-: <a class="el" href="class_a_d_c___module.html#ad4ffd455f5c162d15fb4078aa90b5cbe">ADC_Module</a>
+<li>ADC_num
+: <a class="el" href="class_a_d_c___module.html#ac821322a022652d2a33cc29a8a7ba4aa">ADC_Module</a>
 </li>
 <li>ADC_number
 : <a class="el" href="class_ring_buffer_d_m_a.html#a293d8fa003796812801612f64c1d7aa6">RingBufferDMA</a>
@@ -123,8 +123,8 @@ $(document).ready(function(){initNavTree('functions_vars.html','');});
 <li>adcWasInUse
 : <a class="el" href="class_a_d_c___module.html#a34f6f7878889aa3644b279f9440dc0bf">ADC_Module</a>
 </li>
-<li>channel2sc1a
-: <a class="el" href="class_a_d_c___module.html#a6817bc2043854126a56b411478c4b4eb">ADC_Module</a>
+<li>channel2sc1a_diff_ADC0
+: <a class="el" href="class_a_d_c.html#a55a93e145e1036d6bbcb97704238dd14">ADC</a>
 </li>
 <li>channel2sc1aADC0
 : <a class="el" href="class_a_d_c.html#aa1d33f4140e156f28052b6f6096681f6">ADC</a>
@@ -133,31 +133,10 @@ $(document).ready(function(){initNavTree('functions_vars.html','');});
 : <a class="el" href="class_ring_buffer_d_m_a.html#a58cb9dfc9b223725ac546c723beac5aa">RingBufferDMA</a>
 </li>
 <li>fail_flag
-: <a class="el" href="class_a_d_c___module.html#a6187e43b6b3ea1a42c6bb17f2c10f099">ADC_Module</a>
+: <a class="el" href="class_a_d_c___module.html#a955464266681b30897677ec31a40e529">ADC_Module</a>
 </li>
 <li>num_measurements
 : <a class="el" href="class_a_d_c___module.html#a27fdc83a7dbe3a8c8c24fc4273414256">ADC_Module</a>
-</li>
-<li>result_adc0
-: <a class="el" href="struct_a_d_c_1_1_sync__result.html#aa523cf5b3ed9823c0ff672a4b8eb3f4e">ADC::Sync_result</a>
-</li>
-<li>result_adc1
-: <a class="el" href="struct_a_d_c_1_1_sync__result.html#a652c42a16111d4edeb3cd7b324b382c7">ADC::Sync_result</a>
-</li>
-<li>savedCFG1
-: <a class="el" href="struct_a_d_c___module_1_1_a_d_c___config.html#a54092156c81d6dc11b521faf791751f6">ADC_Module::ADC_Config</a>
-</li>
-<li>savedCFG2
-: <a class="el" href="struct_a_d_c___module_1_1_a_d_c___config.html#ab1fc8559f2f2f9b9fc0c77a9e67ff2a6">ADC_Module::ADC_Config</a>
-</li>
-<li>savedSC1A
-: <a class="el" href="struct_a_d_c___module_1_1_a_d_c___config.html#a708e83c3bbd11a06d88802b8941e19a8">ADC_Module::ADC_Config</a>
-</li>
-<li>savedSC2
-: <a class="el" href="struct_a_d_c___module_1_1_a_d_c___config.html#a9f2fc51728d47cd8f6e8b00e8f400296">ADC_Module::ADC_Config</a>
-</li>
-<li>savedSC3
-: <a class="el" href="struct_a_d_c___module_1_1_a_d_c___config.html#ae04df65edae35a9beaaec59ce39b1e9e">ADC_Module::ADC_Config</a>
 </li>
 </ul>
 </div><!-- contents -->
@@ -165,7 +144,7 @@ $(document).ready(function(){initNavTree('functions_vars.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sat May 16 2015 22:23:02 for ADC by
+    <li class="footer">Generated on Sun May 24 2015 13:20:36 for ADC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>
