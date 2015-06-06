@@ -29,12 +29,12 @@
 
 #include "ADC.h"
 
-
+/*
 #if ADC_USE_DMA==1
 uint8_t ADC::dma_Ch0 = -1;
 uint8_t ADC::dma_Ch1 = -1;
 #endif
-
+*/
 
 // translate pin number to SC1A nomenclature and viceversa
 // we need to create this static const arrays so that we can assign the "normal arrays" to the correct one
@@ -1208,58 +1208,6 @@ ADC::Sync_result ADC::readSynchronizedContinuous() {ADC::Sync_result res={0}; re
 void ADC::stopSynchronizedContinuous() {}
 
 #endif
-
-#if ADC_USE_DMA==1 // temporary hack until I fix the DMA stuff
-
-//Our dma ISR
-void dma_isr_0(void)
-{
-        #if ADC_NUM_ADCS>=2 // Teensy 3.1
-    DMA_CINT = ADC::dma_Ch0;
-	Serial.print("isr, dma_chanel: "); Serial.println(ADC::dma_Ch0);
-	digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
-	#endif
-}
-void dma_isr_1(void)
-{
-        #if ADC_NUM_ADCS>=2 // Teensy 3.1
-    DMA_CINT = ADC::dma_Ch1;
-	Serial.print("isr, dma_chanel: "); Serial.println(ADC::dma_Ch1);
-	digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
-	#endif
-}
-
-void ADC::useDMA(uint8_t ch0, uint8_t ch1) {
-/*
-    // request channels
-    DMAChannel dma0, dma1;
-
-    // Initialize buffers
-    //channel
-
-    #if defined(ADC_TEENSY_3_0)
-    dma_Ch0 = dma0.channel;
-    if(dma_Ch0!=-1) {
-        buffer0 = new RingBufferDMA(dma_Ch0);
-    }
-    #elif defined(ADC_TEENSY_3_1)
-    dma_Ch0 = dma0.channel;
-    dma_Ch1 = dma1.channel;
-    if(dma_Ch0!=-1) {
-        buffer0 = new RingBufferDMA(dma_Ch0);
-        buffer0->start();
-    }
-    if(dma_Ch1!=-1) {
-        buffer1 = new RingBufferDMA(dma_Ch1);
-        buffer1->start();
-    }
-    #endif
-
-*/
-}
-
-#endif
-
 
 
 /*

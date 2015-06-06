@@ -1,4 +1,5 @@
 #include "ADC.h"
+#include "RingBuffer.h"
 
 // Teensy 3.0 has the LED on pin 13
 const int ledPin = 13;

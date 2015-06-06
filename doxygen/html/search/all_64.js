@@ -4,5 +4,5 @@ var searchData=
   ['disabledma',['disableDMA',['../class_a_d_c.html#ac53578061bc8bbbd1652b718c6032d07',1,'ADC::disableDMA()'],['../class_a_d_c___module.html#ac1610dcab46476f287c2dd4d96465c47',1,'ADC_Module::disableDMA()']]],
   ['disableinterrupts',['disableInterrupts',['../class_a_d_c.html#a269ea8bf6891c3095eea3b9d6decce67',1,'ADC::disableInterrupts()'],['../class_a_d_c___module.html#aa4509062644982526fee3c02e0b528fc',1,'ADC_Module::disableInterrupts()']]],
   ['disablepga',['disablePGA',['../class_a_d_c.html#ab9cb3e1c0ee39b45b4b84630606d85e1',1,'ADC::disablePGA()'],['../class_a_d_c___module.html#a734ac9cf07a54e91707c78d753d3d3dd',1,'ADC_Module::disablePGA()']]],
-  ['dma_5fchannel',['DMA_channel',['../class_ring_buffer_d_m_a.html#a58cb9dfc9b223725ac546c723beac5aa',1,'RingBufferDMA']]]
+  ['dmachannel',['dmaChannel',['../class_ring_buffer_d_m_a.html#a289ca5377bb36f35f87127ce9719cbb7',1,'RingBufferDMA']]]
 ];

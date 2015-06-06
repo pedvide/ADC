@@ -43,14 +43,6 @@
 // include ADC module class
 #include "ADC_Module.h"
 
-// include the circular buffer
-#include "RingBuffer.h"
-
-#if ADC_USE_DMA==1
-        #include "RingBufferDMA.h"
-#endif
-
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -385,27 +377,6 @@ class ADC
 
         //! Stops synchronous continuous conversion
         void stopSynchronizedContinuous();
-
-
-        /////////// DMA METHODS ///////////////
-
-        #if ADC_USE_DMA==1
-
-        // DMA stuff
-        static uint8_t dma_Ch0, dma_Ch1;
-
-        static void dma_isr_0(void);
-        static void dma_isr_1(void);
-
-        //! DMA buffer to store all converted values
-        RingBufferDMA *buffer0;
-        #if defined(ADC_TEENSY_3_1)
-        RingBufferDMA *buffer1;
-        #endif
-
-        void useDMA(uint8_t ch0=0, uint8_t ch1=1);
-
-        #endif
 
 
         // PDB stuff

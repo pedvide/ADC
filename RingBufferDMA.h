@@ -26,10 +26,9 @@
 #ifndef RINGBUFFERDMA_H
 #define RINGBUFFERDMA_H
 
-#include <Arduino.h>
-
-// THE SIZE MUST BE A POWER OF 2!!
-#define DMA_BUFFER_SIZE 8
+#include <Arduino.h> // for digitalWrite
+#include "DMAChannel.h"
+//#include <stdlib.h> // malloc
 
 
 /** Class RingBufferDMA implements a circular buffer of fixed size (must be power of 2)
@@ -38,17 +37,51 @@
 class RingBufferDMA
 {
     public:
-        //! Constructor, buffer has a size DEFAULT_BUFFER_SIZE
-        RingBufferDMA(uint8_t dma_channel, uint8_t ADC_num = 0);
+        //! Constructor, buffer has a size len and stores the conversions of ADC number ADC_num
+        RingBufferDMA(volatile int16_t* elems, uint32_t len, uint8_t ADC_num = 0);
 
         //! Destructor
         ~RingBufferDMA();
 
-        //! Returns 1 (true) if the buffer is full
+        //! Returns true if the buffer is full
         bool isFull();
 
-        //! Returns 1 (true) if the buffer is empty
+        //! Returns true if the buffer is empty
         bool isEmpty();
+
+        //! Read a value from the buffer, make sure it's not emtpy by calling isEmpty() first
+        int16_t read();
+
+        //! Start DMA operation
+        void start();
+
+        //! This function will be called when a DMA transfer finishes
+        void void_isr();
+
+        //! DMAChannel to handle all low level DMA code.
+        DMAChannel* dmaChannel;
+
+        //! Pointer to the elements of the buffer
+        volatile int16_t* const p_elems;
+
+        //! Size of buffer
+        uint16_t b_size;
+
+        //! ADC module of the instance
+        uint8_t ADC_number;
+
+        // the buffer needs to be aligned, so use malloc instead of new
+        // see http://stackoverflow.com/questions/227897/solve-the-memory-alignment-in-c-interview-question-that-stumped-me/
+        //uint8_t alignment;
+        //void *p_mem;
+
+        // this static pointer is set to point to this object and
+        // call_dma_isr calls the void_isr()
+        static RingBufferDMA *static_ringbuffer_dma;
+        static void call_dma_isr(void);
+
+    protected:
+    private:
 
         //! Write a value into the buffer
         /** The actual value is copied by DMA, this function only updates the buffer pointers to reflect that fact.
@@ -56,61 +89,15 @@ class RingBufferDMA
         */
         void write();
 
-        //! Read a value from the buffer, make sure it's not emtpy by calling isEmpty() first
-        int read();
+        //! Increases the pointer modulo 2*size-1
+        uint16_t increase(uint16_t p);
 
-        //! Start DMA operation
-        void start();
-
-
-        //! Elements of the buffer, aligned to 16 bits
-        int16_t elems[DMA_BUFFER_SIZE] __attribute__((aligned(0x10))); // align to 16 bits
-
-        //! DMA channel of the instance
-        uint8_t DMA_channel;
-
-        //! ADC module of the instance
-        uint8_t ADC_number;
-
-
-    protected:
-    private:
-
-        //! Size of buffer
-        uint16_t b_size;
+        volatile uint32_t* const ADC_RA;
 
         //! Start pointer: Read here
         uint16_t b_start;
         //! End pointer: Write here
         uint16_t b_end;
-
-        //! Increases the pointer modulo 2*size-1
-        uint16_t increase(uint16_t p);
-
-
-        // Registers to point to the correct DMA channel
-        uint8_t IRQ_DMA_CH;
-
-        volatile uint8_t* DMAMUX0_CHCFG;
-
-        volatile uint16_t* DMA_TCD_CSR; // TCD Control and Status
-
-        volatile const void * volatile * DMA_TCD_SADDR; // TCD Source Address
-        volatile int16_t* DMA_TCD_SOFF;  // TCD Signed Source Address Offset
-        volatile int32_t* DMA_TCD_SLAST; // TCD Last Source Address Adjustment
-
-        volatile void * volatile * DMA_TCD_DADDR; // TCD Destination Address
-        volatile int16_t* DMA_TCD_DOFF; // TCD Signed Destination Address Offset
-        volatile int32_t* DMA_TCD_DLASTSGA; // TCD Last Destination Address Adjustment/Scatter Gather Address
-
-        volatile uint16_t* DMA_TCD_ATTR; // TCD Transfer Attributes
-        volatile uint32_t* DMA_TCD_NBYTES_MLNO; // TCD Minor Byte Count (Minor Loop Disabled)
-
-        volatile uint16_t* DMA_TCD_CITER_ELINKNO; // TCD Current Minor Loop Link, Major Loop Count, Channel Linking Disabled
-        volatile uint16_t* DMA_TCD_BITER_ELINKNO; // TCD Beginning Minor Loop Link, Major Loop Count, Channel Linking Disabled
-
-        volatile uint32_t* ADC_RA; // adc module
-
 
 
 };

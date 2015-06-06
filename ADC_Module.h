@@ -57,7 +57,7 @@
 #elif defined(ADC_TEENSY_3_0) // Teensy 3.0
         #define ADC_USE_DMA 1
 #elif defined(ADC_TEENSY_LC) // Teensy LC
-        #define ADC_USE_DMA 0
+        #define ADC_USE_DMA 1
 #endif
 
 // Use PGA?
@@ -492,10 +492,6 @@ public:
     *
     */
     void enablePGA(uint8_t gain);
-    //! Same as enablePGA(gain)
-    void setPGA(uint8_t gain) __attribute__((always_inline)) {
-        enablePGA(gain);
-    }
 
     //! Returns the PGA level
     /** PGA from 1 to 64
@@ -507,11 +503,11 @@ public:
 
 
     //! Set continuous conversion mode (helper method)
-    void continuousMode() {
+    void continuousMode() __attribute__((always_inline)) {
         setBit(ADC_SC3, ADC_SC3_ADCO_BIT);
     }
     //! Set continuous conversion mode (helper method)
-    void singleMode() {
+    void singleMode() __attribute__((always_inline)) {
         clearBit(ADC_SC3, ADC_SC3_ADCO_BIT);
     }
 
@@ -519,7 +515,7 @@ public:
     ////////////// INFORMATION ABOUT THE STATE OF THE ADC /////////////////
 
     //! Is the ADC converting at the moment?
-    bool isConverting() {
+    bool isConverting() __attribute__((always_inline)) {
         //return (*ADC_SC2_adact);
         return getBit(ADC_SC2, ADC_SC2_ADACT_BIT);
         //return ((*ADC_SC2) & ADC_SC2_ADACT) >> 7;
@@ -531,27 +527,27 @@ public:
     *  When a value is read this function returns 0 until a new value exists
     *  So it only makes sense to call it before analogReadContinuous() or readSingle()
     */
-    bool isComplete() {
+    bool isComplete() __attribute__((always_inline)) {
         //return (*ADC_SC1A_coco);
         return getBit(ADC_SC1A, ADC_SC1A_COCO_BIT);
         //return ((*ADC_SC1A) & ADC_SC1_COCO) >> 7;
     }
 
     //! Is the ADC in differential mode?
-    bool isDifferential() {
+    bool isDifferential() __attribute__((always_inline)) {
         //return ((*ADC_SC1A) & ADC_SC1_DIFF) >> 5;
         return getBit(ADC_SC1A, ADC_SC1_DIFF_BIT);
     }
 
     //! Is the ADC in continuous mode?
-    bool isContinuous() {
+    bool isContinuous() __attribute__((always_inline)) {
         //return (*ADC_SC3_adco);
         return getBit(ADC_SC3, ADC_SC3_ADCO_BIT);
         //return ((*ADC_SC3) & ADC_SC3_ADCO) >> 3;
     }
 
     //! Is the PGA function enabled?
-    bool isPGAEnabled() {
+    bool isPGAEnabled() __attribute__((always_inline)) {
         return getBit(ADC_PGA, ADC_PGA_PGAEN_BIT);
     }
 
@@ -651,7 +647,7 @@ public:
     *   If single-ended and 16 bits it's necessary to typecast it to an unsigned type (like uint16_t),
     *   otherwise values larger than 3.3/2 V are interpreted as negative!
     */
-    int analogReadContinuous() {
+    int analogReadContinuous() __attribute__((always_inline)) {
         return (int16_t)(int32_t)*ADC_RA;
     }
 
@@ -736,10 +732,10 @@ private:
     volatile uint8_t sampling_speed;
 
     // translate pin number to SC1A nomenclature
-    const uint8_t* channel2sc1a;
+    const uint8_t* const channel2sc1a;
 
     // same for differential pins
-    const uint8_t* channel2sc1a_diff;
+    const uint8_t* const channel2sc1a_diff;
 
 
 
@@ -801,8 +797,10 @@ private:
 
 #endif
 
+    uint32_t adc_offset;
+
     // registers point to the correct ADC module
-    typedef volatile uint32_t* reg;
+    typedef volatile uint32_t* const reg;
 
     // registers that control the adc module
     reg ADC_SC1A; //reg ADC_SC1A_aien; reg ADC_SC1A_coco;

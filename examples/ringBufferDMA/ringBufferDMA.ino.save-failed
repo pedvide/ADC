@@ -5,23 +5,11 @@ const int readPin = A9;
 
 ADC *adc = new ADC(); // adc object
 
-
-// Define the array that holds the conversions here.
-// buffer_size must be a power of two.
-// The buffer is stored with the correct alignment in the DMAMEM section
-// the +0 in the aligned attribute is necessary b/c of a bug in gcc.
-const int buffer_size = 8;
-DMAMEM static volatile int16_t __attribute__((aligned(buffer_size+0))) buffer[buffer_size];
-
-// use dma with ADC0
-RingBufferDMA *dmaBuffer = new RingBufferDMA(buffer, buffer_size, ADC_0);
+// use only powers of two for the buffer size!!
+RingBufferDMA *dmaBuffer = new RingBufferDMA(32, ADC_0); // use dma with ADC0
 
 #if defined(ADC_TEENSY_3_1)
-const int buffer_size2 = 8;
-DMAMEM static volatile int16_t __attribute__((aligned(buffer_size2+0))) buffer2[buffer_size2];
-
-// use dma with ADC1
-RingBufferDMA *dmaBuffer2 = new RingBufferDMA(buffer2, buffer_size2, ADC_1);
+//RingBufferDMA *dmaBuffer2 = new RingBufferDMA(8, ADC_1); // use dma with ADC0
 #endif // defined
 
 void setup() {
@@ -98,11 +86,19 @@ void adc1_isr(void) {
 
 
 void printBuffer() {
+    uint32_t* p_dest_addres = (uint32_t*)dmaBuffer->dmaChannel->destinationAddress();
+    Serial.print("Dest address: ");
+    Serial.println((uint32_t)p_dest_addres, HEX);
+    Serial.print("p_elems: ");
+    Serial.println((uint32_t)dmaBuffer->p_elems, HEX);
+    Serial.print("getEnd: ");
+    Serial.println((uint32_t)dmaBuffer->getEnd()/2, DEC);
+
     Serial.println("Buffer: Address, Value");
 
     uint8_t i = 0;
     for (i = 0; i < dmaBuffer->b_size; i++) {
-        Serial.print(uint32_t(&dmaBuffer->p_elems[i]), HEX);
+        Serial.print(int32_t(&dmaBuffer->p_elems[i]), HEX);
         Serial.print(", ");
         Serial.println(dmaBuffer->p_elems[i]);
     }

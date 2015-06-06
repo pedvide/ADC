@@ -6,23 +6,21 @@
 #include <ADC.h>
 
 const int readPin = A9; // ADC0
-const int readPin2 = A2; // ADC1
+//const int readPin2 = A2; // ADC1
 
-ADC *adc;
+ADC *adc = new ADC(); // adc object;
 
 void setup() {
 
     pinMode(LED_BUILTIN, OUTPUT);
     pinMode(readPin, INPUT); //pin 23 single ended
-    pinMode(readPin2, INPUT); //pin 23 single ended
+    //pinMode(readPin2, INPUT); //pin 23 single ended
 
-    pinMode(LED_BUILTIN+1, OUTPUT);
+    //pinMode(LED_BUILTIN+1, OUTPUT);
 
     Serial.begin(9600);
 
     Serial.println("Begin setup");
-
-    adc = new ADC(); // adc object
 
     ///// ADC0 ////
     // reference can be ADC_REF_3V3, ADC_REF_1V2 (not for Teensy LC) or ADC_REF_EXT.
@@ -61,7 +59,6 @@ void setup() {
 
 int value;
 int value2;
-char c;
 
 void loop() {
 
@@ -126,3 +123,4 @@ void loop() {
 void adc0_isr() {
         adc->adc0->readSingle();
 }
+

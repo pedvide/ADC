@@ -27,7 +27,7 @@
 #define RINGBUFFER_H
 
 // include new and delete
-#include <Arduino.h>
+//#include <Arduino.h>
 
 // THE SIZE MUST BE A POWER OF 2!!
 #define RING_BUFFER_DEFAULT_BUFFER_SIZE 8

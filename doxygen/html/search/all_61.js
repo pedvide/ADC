@@ -8,7 +8,7 @@ var searchData=
   ['adc_5fnumber',['ADC_number',['../class_ring_buffer_d_m_a.html#a293d8fa003796812801612f64c1d7aa6',1,'RingBufferDMA']]],
   ['adcwasinuse',['adcWasInUse',['../class_a_d_c___module.html#a34f6f7878889aa3644b279f9440dc0bf',1,'ADC_Module']]],
   ['analogread',['analogRead',['../class_a_d_c.html#aaf6079870b115d8b029d3613d44091dd',1,'ADC::analogRead()'],['../class_a_d_c___module.html#ad492adad4a9fa728625be82602bf1672',1,'ADC_Module::analogRead()']]],
-  ['analogreadcontinuous',['analogReadContinuous',['../class_a_d_c.html#a749efc928425a1eea18341ccfafd1819',1,'ADC::analogReadContinuous()'],['../class_a_d_c___module.html#a8bddd248a9d52110b923fa94438f7f0a',1,'ADC_Module::analogReadContinuous()']]],
+  ['analogreadcontinuous',['analogReadContinuous',['../class_a_d_c.html#a749efc928425a1eea18341ccfafd1819',1,'ADC::analogReadContinuous()'],['../class_a_d_c___module.html#ae3315625f0e0e87ddcf15d6493acb2f4',1,'ADC_Module::analogReadContinuous()']]],
   ['analogreaddifferential',['analogReadDifferential',['../class_a_d_c.html#aec3464cdb697f89cf162813b00b2e965',1,'ADC::analogReadDifferential()'],['../class_a_d_c___module.html#a4a57f6a9b0e3884f3862062b33f1a447',1,'ADC_Module::analogReadDifferential()']]],
   ['analogsynchronizedread',['analogSynchronizedRead',['../class_a_d_c.html#ac8067db45057f691e664f414d1376d1e',1,'ADC']]],
   ['analogsynchronizedreaddifferential',['analogSynchronizedReadDifferential',['../class_a_d_c.html#a156bb3fe55e8155dc42fd7e9df1eaa55',1,'ADC']]],

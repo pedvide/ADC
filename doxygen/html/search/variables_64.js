@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['dma_5fchannel',['DMA_channel',['../class_ring_buffer_d_m_a.html#a58cb9dfc9b223725ac546c723beac5aa',1,'RingBufferDMA']]]
+  ['dmachannel',['dmaChannel',['../class_ring_buffer_d_m_a.html#a289ca5377bb36f35f87127ce9719cbb7',1,'RingBufferDMA']]]
 ];
