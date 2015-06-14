@@ -328,6 +328,7 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
 #define ADC_CFG2_ADLSTS0_BIT (0)
 
 #define ADC_SC2_ADACT_BIT (7)
+#define ADC_SC2_ADTRG_BIT (6)
 #define ADC_SC2_ACFE_BIT (5)
 #define ADC_SC2_ACFGT_BIT (4)
 #define ADC_SC2_ACREN_BIT (3)
@@ -506,9 +507,19 @@ public:
     void continuousMode() __attribute__((always_inline)) {
         setBit(ADC_SC3, ADC_SC3_ADCO_BIT);
     }
-    //! Set continuous conversion mode (helper method)
+    //! Set single-shot conversion mode (helper method)
     void singleMode() __attribute__((always_inline)) {
         clearBit(ADC_SC3, ADC_SC3_ADCO_BIT);
+    }
+
+    //! Use software to trigger the AC, this is the most common setting
+    void setSoftwareTrigger() __attribute__((always_inline)) {
+        clearBit(ADC_SC2, ADC_SC2_ADTRG_BIT);
+    }
+
+    //! Use hardware to trigger the ADC
+    void setHardwareTrigger() __attribute__((always_inline)) {
+        setBit(ADC_SC2, ADC_SC2_ADTRG_BIT);
     }
 
 
@@ -655,6 +666,33 @@ public:
     void stopContinuous();
 
 
+    //////////// PDB ////////////////
+    //// Only works for Teensy 3.0 and 3.1, not LC (it doesn't have PDB)
+    #if defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_0)
+
+    //                  software trigger    enable PDB     PDB interrupt
+    #define PDB_CONFIG (PDB_SC_TRGSEL(15) | PDB_SC_PDBEN | PDB_SC_PDBIE \
+        | PDB_SC_CONT |  PDB_SC_LDMOD(0))
+    //    continuous mode load immediately
+
+    #define PDB_CHnC1_TOS_1 0x0100
+    #define PDB_CHnC1_EN_1 0x01
+
+    #define PDB0_CH1C1		(*(volatile uint32_t *)0x40036038) // Channel 1 Control Register 1
+
+    /*! Start PDB triggering the ADC at the frequency
+    *   Call analogRead on the pin that you want to measure before calling this function.
+    *   See the example.
+    *   @param freq is the frequency of the ADC conversion, at this moment it can't be lower that 6 Hz
+    */
+    void startPDB(uint32_t freq);
+
+    //! Stop the PDB
+    void stopPDB();
+
+    #endif
+
+
     //////// OTHER STUFF ///////////
 
     //! Store the config of the adc
@@ -708,28 +746,28 @@ private:
     uint8_t init_calib;
 
     // resolution
-    volatile uint8_t analog_res_bits;
+    uint8_t analog_res_bits;
 
     // maximum value possible 2^res-1
-    volatile uint32_t analog_max_val;
+    uint32_t analog_max_val;
 
     // num of averages
-    volatile uint8_t analog_num_average;
+    uint8_t analog_num_average;
 
     // reference can be internal or external
-    volatile uint8_t analog_reference_internal;
+    uint8_t analog_reference_internal;
 
     // are interrupts enabled?
-    volatile uint8_t var_enableInterrupts;
+    uint8_t var_enableInterrupts;
 
     // value of the pga
-    volatile uint8_t pga_value;
+    uint8_t pga_value;
 
     // conversion speed
-    volatile uint8_t conversion_speed;
+    uint8_t conversion_speed;
 
     // sampling speed
-    volatile uint8_t sampling_speed;
+    uint8_t sampling_speed;
 
     // translate pin number to SC1A nomenclature
     const uint8_t* const channel2sc1a;
@@ -741,6 +779,13 @@ private:
 
     //! Initialize ADC
     void analog_init();
+
+
+    //! Start the 1.2V internal reference (if present)
+    void startInternalReference();
+
+    //! Stops the internal reference
+    void stopInternalReference();
 
 
     /////// Atomic bit set/clear
@@ -802,7 +847,7 @@ private:
     // registers point to the correct ADC module
     typedef volatile uint32_t* const reg;
 
-    // registers that control the adc module
+    // registers that control the adc modulesetSoftwareTrigger
     reg ADC_SC1A; //reg ADC_SC1A_aien; reg ADC_SC1A_coco;
     reg ADC_SC1B;
 
@@ -838,6 +883,8 @@ private:
     reg ADC_CLM2;
     reg ADC_CLM1;
     reg ADC_CLM0;
+
+    reg PDB0_CHnC1; // PDB channel 0 or 1
 
     uint8_t IRQ_ADC; // IRQ number will be IRQ_ADC0 or IRQ_ADC1
 

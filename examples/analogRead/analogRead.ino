@@ -6,7 +6,7 @@
 #include <ADC.h>
 
 const int readPin = A9; // ADC0
-//const int readPin2 = A2; // ADC1
+const int readPin2 = A2; // ADC1
 
 ADC *adc = new ADC(); // adc object;
 

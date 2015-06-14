@@ -37,7 +37,7 @@
 *   Point the registers to the correct ADC module
 *   Copy the correct channel2sc1a
 *   Call init
-*   The very long initializer list could be shorter using some kind of HAL?
+*   The very long initializer list could be shorter using some kind of struct?
 */
 ADC_Module::ADC_Module(uint8_t ADC_number, const uint8_t* const a_channel2sc1a, const uint8_t* const a_channel2sc1a_diff) :
         ADC_num(ADC_number)
@@ -72,6 +72,7 @@ ADC_Module::ADC_Module(uint8_t ADC_number, const uint8_t* const a_channel2sc1a, 
         , ADC_CLM2(&ADC0_CLM2 + adc_offset*ADC_num)
         , ADC_CLM1(&ADC0_CLM1 + adc_offset*ADC_num)
         , ADC_CLM0(&ADC0_CLM0 + adc_offset*ADC_num)
+        , PDB0_CHnC1(&PDB0_CH0C1 + ADC_num*0xA)
         {
 
     // ADC0 or ADC1?
@@ -197,12 +198,6 @@ void ADC_Module::analog_init() {
 
     num_measurements = 0;
 
-    // Internal reference initialization, Teensy 3.x only!
-#if !defined(ADC_TEENSY_LC)
-    VREF_TRM = VREF_TRM_CHOPEN | 0x20; // enable module and set the trimmer to medium (max=0x3F=63)
-    VREF_SC = VREF_SC_VREFEN | VREF_SC_REGEN | VREF_SC_ICOMPEN | VREF_SC_MODE_LV(1); // (=0xE1) enable 1.2 volt ref with all compensations
-#endif
-
     // select b channels
     // *ADC_CFG2_muxsel = 1;
     setBit(ADC_CFG2, ADC_CFG2_MUXSEL_BIT);
@@ -306,7 +301,6 @@ void ADC_Module::recalibrate() {
 /* Set the voltage reference you prefer, default is 3.3V
 *   It needs to recalibrate
 *  Use ADC_REF_3V3, ADC_REF_1V2 (not for Teensy LC) or ADC_REF_EXT
-* TODO: disable 1.2V reference source when using the external ref (p. 102, 3.7.1.7)
 */
 void ADC_Module::setReference(uint8_t type) {
     if (analog_reference_internal==type) { // don't need to change anything
@@ -315,17 +309,41 @@ void ADC_Module::setReference(uint8_t type) {
 
     if (type == ADC_REF_ALT) { // 1.2V ref for Teensy 3.x, 3.3 VDD for Teensy LC
         // internal reference requested
+
+        startInternalReference(); // enable VREF if Teensy 3.x
+
         analog_reference_internal = ADC_REF_ALT;
+
         // *ADC_SC2_ref = 1; // uses bitband: atomic
         setBit(ADC_SC2, ADC_SC2_REFSEL0_BIT);
+
     } else if(type == ADC_REF_DEFAULT) { // ext ref for all Teensys, vcc also for Teensy 3.x
         // vcc or external reference requested
+
+        stopInternalReference(); // disable 1.2V reference source when using the external ref (p. 102, 3.7.1.7)
+
         analog_reference_internal = ADC_REF_DEFAULT;
+
         // *ADC_SC2_ref = 0; // uses bitband: atomic
         clearBit(ADC_SC2, ADC_SC2_REFSEL0_BIT);
     }
 
     calibrate();
+}
+
+//! Start the 1.2V internal reference (if present)
+void ADC_Module::startInternalReference() {
+#if defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_0)
+    VREF_TRM = VREF_TRM_CHOPEN | 0x20; // enable module and set the trimmer to medium (max=0x3F=63)
+    VREF_SC = VREF_SC_VREFEN | VREF_SC_REGEN | VREF_SC_ICOMPEN | VREF_SC_MODE_LV(1); // (=0xE1) enable 1.2 volt ref with all compensations
+#endif
+}
+
+//! Stops the internal reference
+void ADC_Module::stopInternalReference() {
+#if defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_0)
+    VREF_SC = 0;
+#endif
 }
 
 
@@ -1234,3 +1252,105 @@ void ADC_Module::stopContinuous() {
     return;
 }
 
+//////////// PDB ////////////////
+//// Only works for Teensy 3.0 and 3.1, not LC (it doesn't have PDB)
+
+#if defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_0)
+
+
+// frequency in Hz
+void ADC_Module::startPDB(uint32_t freq) {
+
+    if (!(SIM_SCGC6 & SIM_SCGC6_PDB)) { // setup PDB
+        SIM_SCGC6 |= SIM_SCGC6_PDB; // enable pdb clock
+    }
+
+    if(freq>F_BUS) return; // too high
+    if(freq<1) return; // too low
+
+    // mod will have to be a 16 bit value
+    // we detect if it's higher than 0xFFFF and scale it back acordingly.
+    uint32_t mod = (F_BUS / freq);
+
+    uint8_t prescaler = 0;
+
+    uint8_t mult = 0;
+
+    // if mod is too high we need to use prescaler and mult to bring it down to a 16 bit number
+    uint32_t min_level = 0xFFFF;
+    if(mod>min_level) {
+        if( (mod/2) < min_level ) {
+                prescaler = 1;
+        }
+        else if( (mod/4) < min_level ) {
+                prescaler = 2;
+        }
+        else if( (mod/8) < min_level ) {
+                prescaler = 3;
+        }
+        else if( (mod/10) < min_level ) {
+                mult = 1;
+        }
+        else if( (mod/16) < min_level ) {
+                prescaler = 4;
+        }
+        else if( (mod/20) < min_level ) {
+                mult = 2;
+        }
+        else if( (mod/32) < min_level ) {
+                prescaler = 5;
+        }
+        else if( (mod/40) < min_level ) {
+                mult = 3;
+        }
+        else if( (mod/64) < min_level ) {
+                prescaler = 6;
+        }
+        else if( (mod/128) < min_level ) {
+                prescaler = 7;
+        }
+        else { // frequency too low
+            return;
+        }
+
+        // todo: use prescale*mult to have even higer numbers
+
+        mod >>= prescaler;
+        if(mult>0) {
+                mod /= 10;
+                mod >>= (mult-1);
+        }
+    }
+
+    setHardwareTrigger(); // trigger ADC with hardware
+
+
+    //first we set the period to be closest to the desired period,
+    // then we use MOD to actually get our period
+
+    PDB0_IDLY = 1; // the pdb interrupt happens when IDLY is equal to CNT+1
+
+    PDB0_MOD = (uint16_t)(mod-1);
+
+    PDB0_SC = PDB_CONFIG | PDB_SC_PRESCALER(prescaler) | PDB_SC_MULT(mult) | PDB_SC_LDOK; // load all new values
+
+    PDB0_SC = PDB_CONFIG | PDB_SC_PRESCALER(prescaler) | PDB_SC_MULT(mult) | PDB_SC_SWTRIG; // start the counter!
+
+    *PDB0_CHnC1 = PDB_CHnC1_TOS_1 | PDB_CHnC1_EN_1; // enable pretrigger 0
+
+    NVIC_ENABLE_IRQ(IRQ_PDB);
+
+}
+
+void ADC_Module::stopPDB() {
+    if (!(SIM_SCGC6 & SIM_SCGC6_PDB)) { // if PDB clock wasn't on, return
+        setSoftwareTrigger();
+        return;
+    }
+    PDB0_SC = 0;
+    setSoftwareTrigger();
+
+    NVIC_DISABLE_IRQ(IRQ_PDB);
+}
+
+#endif

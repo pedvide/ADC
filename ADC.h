@@ -379,10 +379,6 @@ class ADC
         void stopSynchronizedContinuous();
 
 
-        // PDB stuff
-        //void startPDB(double period);
-        //double adc_pdb_period;
-
         //! Translate pin number to SC1A nomenclature
         // should this be a constexpr?
         static const uint8_t channel2sc1aADC0[44];

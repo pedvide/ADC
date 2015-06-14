@@ -22,6 +22,7 @@
 
 
 #include "ADC.h"
+#include "RingBuffer.h"
 // and IntervalTimer
 #include <IntervalTimer.h>
 

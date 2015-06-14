@@ -1189,7 +1189,7 @@ void ADC::stopSynchronizedContinuous() {
 }
 
 #else // ADC_NUM_ADCS=1
-// Empty definitions so code writen for all Teensy will compile
+// Empty definitions so code written for all Teensy will compile
 
 ADC::Sync_result ADC::analogSynchronizedRead(uint8_t pin0, uint8_t pin1) {ADC::Sync_result res={0}; return res;}
 ADC::Sync_result ADC::analogSynchronizedReadDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N) {
@@ -1209,57 +1209,3 @@ void ADC::stopSynchronizedContinuous() {}
 
 #endif
 
-
-/*
-// period in seconds
-void ADC_Module::startPDB(double period) {
-    //                  software trigger    enable PDB     PDB interrupt
-    #define PDB_CONFIG (PDB_SC_TRGSEL(15) | PDB_SC_PDBEN | PDB_SC_PDBIE \
-        | PDB_SC_CONT |  PDB_SC_LDMOD(0))
-    //    continuous mode load inmediately
-    // period = (MOD * PRESCALER * MULT)/F_BUS
-
-    #define PDB_CH0C1_TOS 0x0100
-    #define PDB_CH0C1_EN 0x01
-
-    if (!(SIM_SCGC6 & SIM_SCGC6_PDB)) { // setup PDB
-        SIM_SCGC6 |= SIM_SCGC6_PDB; // enable pdb clock
-    }
-
-    uint8_t mult = 0;
-    if(period>0.05) {
-        period = period/10;
-        mult = 1;
-    }
-
-    double temp = period*F_BUS/65535;
-    uint8_t power_2 = ceil(1.443*log(temp)); // max period 0.17 s
-    if(power_2>7) {
-        mult=power_2-7+1; // use mult
-        power_2=7;
-    }
-    uint16_t mult_value = 1;
-    if(mult==2) {
-        mult_value = 10;
-    } else if(mult==3) {
-        mult_value = 20;
-    } else if(mult==4) {
-        mult_value = 40;
-    }
-
-    //first we set the period to be closest to the desired period,
-    // then we use MOD to actually get our period
-
-    PDB0_MOD = (uint16_t)(period/pow(2,power_2)/mult_value*F_BUS); // we adjust the counter to fit the period
-    PDB0_IDLY = 0; // the pdb interrupt happens when IDLY is equal to CNT
-    PDB0_SC = PDB_CONFIG | PDB_SC_PRESCALER(power_2) | PDB_SC_MULT(mult) | PDB_SC_LDOK; // load all new values
-
-    PDB0_SC |= PDB_SC_SWTRIG; // start the counter!
-
-    NVIC_ENABLE_IRQ(IRQ_PDB);
-
-    // real period
-    adc_pdb_period = PDB0_MOD*pow(2,power_2)*mult_value/F_BUS;
-
-}
-*/
