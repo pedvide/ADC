@@ -1,3 +1,7 @@
+/*
+*   It doesn't work for Teensy LC yet!
+*/
+
 #include "ADC.h"
 #include "RingBufferDMA.h"
 

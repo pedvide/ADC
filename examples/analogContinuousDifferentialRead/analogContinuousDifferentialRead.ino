@@ -14,8 +14,11 @@ void setup() {
     pinMode(LED_BUILTIN, OUTPUT);
     pinMode(A10, INPUT); //Diff Channel 0 Positive
     pinMode(A11, INPUT); //Diff Channel 0 Negative
+
+    #if !defined(ADC_TEENSY_LC)
     pinMode(A12, INPUT); //Diff Channel 3 Positive
     pinMode(A13, INPUT); //Diff Channel 3 Negative
+    #endif
 
     Serial.begin(9600);
 
@@ -75,16 +78,20 @@ void loop() {
         if(c=='c') { // conversion active?
             Serial.print("Converting? ADC0: ");
             Serial.println(adc->isConverting(ADC_0));
+            #if defined(ADC_TEENSY_3_1)
             Serial.print("Converting? ADC1: ");
             Serial.println(adc->isConverting(ADC_1));
+            #endif
         } else if(c=='s') { // stop conversion
             adc->stopContinuous(ADC_0);
             Serial.println("Stopped");
         } else if(c=='t') { // conversion complete?
             Serial.print("Conversion successful? ADC0: ");
             Serial.println(adc->isComplete(ADC_0));
+            #if defined(ADC_TEENSY_3_1)
             Serial.print("Conversion successful? ADC1: ");
             Serial.println(adc->isComplete(ADC_1));
+            #endif
         } else if(c=='r') { // restart conversion
             Serial.println("Restarting conversions ");
             adc->startContinuousDifferential(A10, A11, ADC_0);
@@ -92,9 +99,11 @@ void loop() {
             Serial.print("Value ADC0: ");
             value = adc->analogReadContinuous(ADC_0);
             Serial.println(value*3.3/adc->getMaxValue(ADC_0), DEC);
+            #if defined(ADC_TEENSY_3_1)
             Serial.print("Value ADC1: ");
             value2 = adc->analogReadContinuous(ADC_1);
             Serial.println(value2*3.3/adc->getMaxValue(ADC_1), DEC);
+            #endif
         }
     }
 

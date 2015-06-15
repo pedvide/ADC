@@ -11,11 +11,8 @@ void setup() {
     pinMode(LED_BUILTIN, OUTPUT);
     pinMode(A10, INPUT); //Diff Channel 0 Positive
     pinMode(A11, INPUT); //Diff Channel 0 Negative
-
-    #if !defined(ADC_TEENSY_LC)
     pinMode(A12, INPUT); //Diff Channel 3 Positive
     pinMode(A13, INPUT); //Diff Channel 3 Negative
-    #endif
 
     Serial.begin(9600);
 
