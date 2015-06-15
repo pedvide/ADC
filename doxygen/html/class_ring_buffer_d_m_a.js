@@ -8,9 +8,7 @@ var class_ring_buffer_d_m_a =
     [ "start", "class_ring_buffer_d_m_a.html#ac04b74b351c1b37876ad0c954deab5a7", null ],
     [ "void_isr", "class_ring_buffer_d_m_a.html#ad6c8693d4c61182a50a547a3d51aaa28", null ],
     [ "ADC_number", "class_ring_buffer_d_m_a.html#a293d8fa003796812801612f64c1d7aa6", null ],
-    [ "b_end", "class_ring_buffer_d_m_a.html#a738e6dc1618b83178f42638cd9b58662", null ],
     [ "b_size", "class_ring_buffer_d_m_a.html#ac1aeb3b7b58d93a74159d8b1def1193c", null ],
-    [ "b_start", "class_ring_buffer_d_m_a.html#a1145aff44d38f6c8025f28bf082ec8b0", null ],
     [ "dmaChannel", "class_ring_buffer_d_m_a.html#a289ca5377bb36f35f87127ce9719cbb7", null ],
     [ "p_elems", "class_ring_buffer_d_m_a.html#adf857179fa7ae20d8b439ee5794dc4c2", null ]
 ];

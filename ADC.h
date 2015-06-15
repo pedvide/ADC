@@ -395,6 +395,7 @@ class ADC
         static const uint8_t channel2sc1a_diff_ADC1[4];
         #endif
 
+        //! Translate SC1A to pin number
         static const uint8_t sc1a2channelADC0[44];
         #if ADC_NUM_ADCS>1
         static const uint8_t sc1a2channelADC1[44];

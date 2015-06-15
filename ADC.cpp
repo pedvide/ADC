@@ -87,7 +87,6 @@ const uint8_t ADC::channel2sc1a_diff_ADC1[]= {
 #endif
 
 // translate SC1A to pin number
-
 #if defined(ADC_TEENSY_3_0) || defined(ADC_TEENSY_3_1)
 const uint8_t ADC::sc1a2channelADC0[]= { // new version, gives directly the pin number
     34, 0, 0, 36, 23, 14, 20, 21, 16, 17, 0, 0, 19, 18, // 0-13

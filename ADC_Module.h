@@ -680,14 +680,16 @@ public:
 
     #define PDB0_CH1C1		(*(volatile uint32_t *)0x40036038) // Channel 1 Control Register 1
 
-    /*! Start PDB triggering the ADC at the frequency
-    *   Call analogRead on the pin that you want to measure before calling this function.
+    //! Start PDB triggering the ADC at the frequency
+    /**   Call analogRead on the pin that you want to measure before calling this function.
     *   See the example.
     *   @param freq is the frequency of the ADC conversion, at this moment it can't be lower that 6 Hz
     */
     void startPDB(uint32_t freq);
 
     //! Stop the PDB
+    /**
+    */
     void stopPDB();
 
     #endif
