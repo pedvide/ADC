@@ -14,9 +14,7 @@ void setup() {
 
     pinMode(LED_BUILTIN, OUTPUT);
     pinMode(readPin, INPUT); //pin 23 single ended
-    //pinMode(readPin2, INPUT); //pin 23 single ended
-
-    //pinMode(LED_BUILTIN+1, OUTPUT);
+    pinMode(readPin2, INPUT); //pin 23 single ended
 
     Serial.begin(9600);
 

@@ -43,5 +43,6 @@ var class_a_d_c =
     [ "startSynchronizedSingleRead", "class_a_d_c.html#acbdb0f3a7419e5a0cd8b2c031dc8b9d7", null ],
     [ "stopContinuous", "class_a_d_c.html#a436e52cf82ca735f636899de670a2f0c", null ],
     [ "stopSynchronizedContinuous", "class_a_d_c.html#ac2070250dd4d557b27ec0f4f2b360f21", null ],
-    [ "adc0", "class_a_d_c.html#ab8deee5fdd0fec290faa1f01c1d4b7d7", null ]
+    [ "adc0", "class_a_d_c.html#ab8deee5fdd0fec290faa1f01c1d4b7d7", null ],
+    [ "adc1", "class_a_d_c.html#a68fcbf0e8171f0b77b13a24161712c36", null ]
 ];

@@ -1,7 +1,7 @@
 var searchData=
 [
   ['saveconfig',['saveConfig',['../class_a_d_c___module.html#af2ee5bc5b76647506e597c178c9691d3',1,'ADC_Module']]],
-  ['sc1a2channeladc0',['sc1a2channelADC0',['../class_a_d_c.html#af815d201edb9dadd1524035040f581b7',1,'ADC']]],
+  ['sc1a2channeladc0',['sc1a2channelADC0',['../class_a_d_c.html#ac83f0521b05578ac1faf0966a3128f33',1,'ADC']]],
   ['setaveraging',['setAveraging',['../class_a_d_c.html#a6fd39809addc247f13004687d201003d',1,'ADC::setAveraging()'],['../class_a_d_c___module.html#a55954618c5c27c1ffce4321e912bac52',1,'ADC_Module::setAveraging()']]],
   ['setconversionspeed',['setConversionSpeed',['../class_a_d_c.html#a004d0b11f4bf0ad8328fdf1a7e2897b0',1,'ADC::setConversionSpeed()'],['../class_a_d_c___module.html#a9dcb1b6195ab05fdee708472e4da939f',1,'ADC_Module::setConversionSpeed()']]],
   ['sethardwaretrigger',['setHardwareTrigger',['../class_a_d_c___module.html#ab228ecc03cb2c1463371c35ca9cdb091',1,'ADC_Module']]],
@@ -14,6 +14,7 @@ var searchData=
   ['startcontinuous',['startContinuous',['../class_a_d_c.html#ad592f87ec644457b5056ae41c645ac0a',1,'ADC::startContinuous()'],['../class_a_d_c___module.html#a2b6284a613c9d3e452d2fc708bf6ce98',1,'ADC_Module::startContinuous()']]],
   ['startcontinuousdifferential',['startContinuousDifferential',['../class_a_d_c.html#ae6179fc2e5ca7de1b0a3eb1f36985885',1,'ADC::startContinuousDifferential()'],['../class_a_d_c___module.html#a23fd4fa6b759dcc0c029b3266f6a5fb7',1,'ADC_Module::startContinuousDifferential()']]],
   ['startdifferentialfast',['startDifferentialFast',['../class_a_d_c___module.html#aa503b484e691fe31172033fc928576bd',1,'ADC_Module']]],
+  ['startpdb',['startPDB',['../class_a_d_c___module.html#acced2e2266868323ff2c53df96791a15',1,'ADC_Module']]],
   ['startreadfast',['startReadFast',['../class_a_d_c___module.html#a33cc7fbfcb158a33e8ca276cc7b309b5',1,'ADC_Module']]],
   ['startsingledifferential',['startSingleDifferential',['../class_a_d_c.html#ac1016c1d107118a0064c2b627dbd831b',1,'ADC::startSingleDifferential()'],['../class_a_d_c___module.html#abe85ed1855a09f18c5d2026cf08968a7',1,'ADC_Module::startSingleDifferential()']]],
   ['startsingleread',['startSingleRead',['../class_a_d_c.html#a113479488fae5f5407f884dd95fbec72',1,'ADC::startSingleRead()'],['../class_a_d_c___module.html#af8a13facb0c15ef14e527a37f2386ce5',1,'ADC_Module::startSingleRead()']]],
@@ -22,6 +23,7 @@ var searchData=
   ['startsynchronizedsingledifferential',['startSynchronizedSingleDifferential',['../class_a_d_c.html#a9cebd13de5da420591c779916865824a',1,'ADC']]],
   ['startsynchronizedsingleread',['startSynchronizedSingleRead',['../class_a_d_c.html#acbdb0f3a7419e5a0cd8b2c031dc8b9d7',1,'ADC']]],
   ['stopcontinuous',['stopContinuous',['../class_a_d_c.html#a436e52cf82ca735f636899de670a2f0c',1,'ADC::stopContinuous()'],['../class_a_d_c___module.html#a9af29f865bdd376d954112d36b0992f0',1,'ADC_Module::stopContinuous()']]],
+  ['stoppdb',['stopPDB',['../class_a_d_c___module.html#ab25eb12b50ef1002100ac6cd865cc6dc',1,'ADC_Module']]],
   ['stopsynchronizedcontinuous',['stopSynchronizedContinuous',['../class_a_d_c.html#ac2070250dd4d557b27ec0f4f2b360f21',1,'ADC']]],
   ['sync_5fresult',['Sync_result',['../struct_a_d_c_1_1_sync__result.html',1,'ADC']]]
 ];

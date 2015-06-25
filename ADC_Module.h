@@ -69,6 +69,15 @@
         #define ADC_USE_PGA 0
 #endif
 
+// Use PDB?
+#if defined(ADC_TEENSY_3_1) // Teensy 3.1
+        #define ADC_USE_PDB 1
+#elif defined(ADC_TEENSY_3_0) // Teensy 3.0
+        #define ADC_USE_PDB 1
+#elif defined(ADC_TEENSY_LC) // Teensy LC
+        #define ADC_USE_PDB 0
+#endif
+
 /* MK20DX256 Datasheet:
 The 16-bit accuracy specifications listed in Table 24 and Table 25 are achievable on the
 differential pins ADCx_DP0, ADCx_DM0
@@ -503,16 +512,16 @@ public:
     void disablePGA();
 
 
-    //! Set continuous conversion mode (helper method)
+    //! Set continuous conversion mode
     void continuousMode() __attribute__((always_inline)) {
         setBit(ADC_SC3, ADC_SC3_ADCO_BIT);
     }
-    //! Set single-shot conversion mode (helper method)
+    //! Set single-shot conversion mode
     void singleMode() __attribute__((always_inline)) {
         clearBit(ADC_SC3, ADC_SC3_ADCO_BIT);
     }
 
-    //! Use software to trigger the AC, this is the most common setting
+    //! Use software to trigger the ADC, this is the most common setting
     void setSoftwareTrigger() __attribute__((always_inline)) {
         clearBit(ADC_SC2, ADC_SC2_ADTRG_BIT);
     }
@@ -526,7 +535,7 @@ public:
     ////////////// INFORMATION ABOUT THE STATE OF THE ADC /////////////////
 
     //! Is the ADC converting at the moment?
-    bool isConverting() __attribute__((always_inline)) {
+    volatile bool isConverting() __attribute__((always_inline)) {
         //return (*ADC_SC2_adact);
         return getBit(ADC_SC2, ADC_SC2_ADACT_BIT);
         //return ((*ADC_SC2) & ADC_SC2_ADACT) >> 7;
@@ -538,27 +547,27 @@ public:
     *  When a value is read this function returns 0 until a new value exists
     *  So it only makes sense to call it before analogReadContinuous() or readSingle()
     */
-    bool isComplete() __attribute__((always_inline)) {
+    volatile bool isComplete() __attribute__((always_inline)) {
         //return (*ADC_SC1A_coco);
         return getBit(ADC_SC1A, ADC_SC1A_COCO_BIT);
         //return ((*ADC_SC1A) & ADC_SC1_COCO) >> 7;
     }
 
     //! Is the ADC in differential mode?
-    bool isDifferential() __attribute__((always_inline)) {
+    volatile bool isDifferential() __attribute__((always_inline)) {
         //return ((*ADC_SC1A) & ADC_SC1_DIFF) >> 5;
         return getBit(ADC_SC1A, ADC_SC1_DIFF_BIT);
     }
 
     //! Is the ADC in continuous mode?
-    bool isContinuous() __attribute__((always_inline)) {
+    volatile bool isContinuous() __attribute__((always_inline)) {
         //return (*ADC_SC3_adco);
         return getBit(ADC_SC3, ADC_SC3_ADCO_BIT);
         //return ((*ADC_SC3) & ADC_SC3_ADCO) >> 3;
     }
 
     //! Is the PGA function enabled?
-    bool isPGAEnabled() __attribute__((always_inline)) {
+    volatile bool isPGAEnabled() __attribute__((always_inline)) {
         return getBit(ADC_PGA, ADC_PGA_PGAEN_BIT);
     }
 
@@ -668,7 +677,7 @@ public:
 
     //////////// PDB ////////////////
     //// Only works for Teensy 3.0 and 3.1, not LC (it doesn't have PDB)
-    #if defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_0)
+    #if ADC_USE_PDB
 
     //                  software trigger    enable PDB     PDB interrupt
     #define PDB_CONFIG (PDB_SC_TRGSEL(15) | PDB_SC_PDBEN | PDB_SC_PDBIE \
@@ -678,12 +687,10 @@ public:
     #define PDB_CHnC1_TOS_1 0x0100
     #define PDB_CHnC1_EN_1 0x01
 
-    #define PDB0_CH1C1		(*(volatile uint32_t *)0x40036038) // Channel 1 Control Register 1
-
     //! Start PDB triggering the ADC at the frequency
     /**   Call analogRead on the pin that you want to measure before calling this function.
     *   See the example.
-    *   @param freq is the frequency of the ADC conversion, at this moment it can't be lower that 6 Hz
+    *   @param freq is the frequency of the ADC conversion, it can't be lower that 1 Hz
     */
     void startPDB(uint32_t freq);
 
@@ -745,31 +752,31 @@ private:
 
     // the first calibration will use 32 averages and lowest speed,
     // when this calibration is over the averages and speed will be set to default.
-    uint8_t init_calib;
+    volatile uint8_t init_calib;
 
     // resolution
-    uint8_t analog_res_bits;
+    volatile uint8_t analog_res_bits;
 
     // maximum value possible 2^res-1
-    uint32_t analog_max_val;
+    volatile uint32_t analog_max_val;
 
     // num of averages
-    uint8_t analog_num_average;
+    volatile uint8_t analog_num_average;
 
     // reference can be internal or external
-    uint8_t analog_reference_internal;
+    volatile uint8_t analog_reference_internal;
 
     // are interrupts enabled?
-    uint8_t var_enableInterrupts;
+    volatile uint8_t var_enableInterrupts;
 
     // value of the pga
-    uint8_t pga_value;
+    volatile uint8_t pga_value;
 
     // conversion speed
-    uint8_t conversion_speed;
+    volatile uint8_t conversion_speed;
 
     // sampling speed
-    uint8_t sampling_speed;
+    volatile uint8_t sampling_speed;
 
     // translate pin number to SC1A nomenclature
     const uint8_t* const channel2sc1a;

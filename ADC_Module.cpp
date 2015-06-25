@@ -629,20 +629,20 @@ void ADC_Module::setAveraging(uint8_t num) {
             num = 4;
             // *ADC_SC3_avgs0 = 0;
             // *ADC_SC3_avgs1 = 0;
-            clearBit(ADC_SC3, ADC_SC3_AVGS1_BIT);
             clearBit(ADC_SC3, ADC_SC3_AVGS0_BIT);
+            clearBit(ADC_SC3, ADC_SC3_AVGS1_BIT);
         } else if (num <= 8) {
             num = 8;
             // *ADC_SC3_avgs0 = 1;
             // *ADC_SC3_avgs1 = 0;
-            setBit(ADC_SC3, ADC_SC3_AVGS1_BIT);
-            clearBit(ADC_SC3, ADC_SC3_AVGS0_BIT);
+            setBit(ADC_SC3, ADC_SC3_AVGS0_BIT);
+            clearBit(ADC_SC3, ADC_SC3_AVGS1_BIT);
         } else if (num <= 16) {
             num = 16;
             // *ADC_SC3_avgs0 = 0;
             // *ADC_SC3_avgs1 = 1;
-            clearBit(ADC_SC3, ADC_SC3_AVGS1_BIT);
-            setBit(ADC_SC3, ADC_SC3_AVGS0_BIT);
+            clearBit(ADC_SC3, ADC_SC3_AVGS0_BIT);
+            setBit(ADC_SC3, ADC_SC3_AVGS1_BIT);
         } else {
             num = 32;
             // *ADC_SC3_avgs0 = 1;
@@ -945,6 +945,8 @@ void ADC_Module::startDifferentialFast(uint8_t pinP, uint8_t pinN) {
 */
 int ADC_Module::analogRead(uint8_t pin) {
 
+    digitalWriteFast(LED_BUILTIN, HIGH);
+
     // check whether the pin is correct
     if(!checkPin(pin)) {
         fail_flag |= ADC_ERROR_WRONG_PIN;
@@ -954,7 +956,11 @@ int ADC_Module::analogRead(uint8_t pin) {
     // increase the counter of measurements
     num_measurements++;
 
+    //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
+
     if (calibrating) wait_for_cal();
+
+    //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
 
     // check if we are interrupting a measurement, store setting if so.
     // vars to save the current state of the ADC in case it's in use
@@ -968,6 +974,7 @@ int ADC_Module::analogRead(uint8_t pin) {
         saveConfig(&old_config);
         __enable_irq();
     }
+
 
     // no continuous mode
     singleMode();
@@ -1255,8 +1262,7 @@ void ADC_Module::stopContinuous() {
 //////////// PDB ////////////////
 //// Only works for Teensy 3.0 and 3.1, not LC (it doesn't have PDB)
 
-#if defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_0)
-
+#if ADC_USE_PDB
 
 // frequency in Hz
 void ADC_Module::startPDB(uint32_t freq) {
@@ -1272,48 +1278,69 @@ void ADC_Module::startPDB(uint32_t freq) {
     // we detect if it's higher than 0xFFFF and scale it back acordingly.
     uint32_t mod = (F_BUS / freq);
 
-    uint8_t prescaler = 0;
-
-    uint8_t mult = 0;
+    uint8_t prescaler = 0; // from 0 to 7: factor of 1, 2, 4, 8, 16, 32, 64 or 128
+    uint8_t mult = 0; // from 0 to 3, factor of 1, 10, 20 or 40
 
     // if mod is too high we need to use prescaler and mult to bring it down to a 16 bit number
-    uint32_t min_level = 0xFFFF;
+    const uint32_t min_level = 0xFFFF;
     if(mod>min_level) {
-        if( (mod/2) < min_level ) {
+        if( mod < 2*min_level ) {
                 prescaler = 1;
         }
-        else if( (mod/4) < min_level ) {
+        else if( mod < 4*min_level ) {
                 prescaler = 2;
         }
-        else if( (mod/8) < min_level ) {
+        else if( mod < 8*min_level ) {
                 prescaler = 3;
         }
-        else if( (mod/10) < min_level ) {
+        else if( mod < 10*min_level ) {
                 mult = 1;
         }
-        else if( (mod/16) < min_level ) {
+        else if( mod < 16*min_level ) {
                 prescaler = 4;
         }
-        else if( (mod/20) < min_level ) {
+        else if( mod < 20*min_level ) {
                 mult = 2;
         }
-        else if( (mod/32) < min_level ) {
+        else if( mod < 32*min_level ) {
                 prescaler = 5;
         }
-        else if( (mod/40) < min_level ) {
+        else if( mod < 40*min_level ) {
                 mult = 3;
         }
-        else if( (mod/64) < min_level ) {
+        else if( mod < 64*min_level ) {
                 prescaler = 6;
         }
-        else if( (mod/128) < min_level ) {
+        else if( mod < 128*min_level ) {
                 prescaler = 7;
+        }
+        else if( mod < 160*min_level ) { // 16*10
+                prescaler = 4;
+                mult = 1;
+        }
+        else if( mod < 320*min_level ) { // 16*20
+                prescaler = 4;
+                mult = 2;
+        }
+        else if( mod < 640*min_level ) { // 16*40
+                prescaler = 4;
+                mult = 3;
+        }
+        else if( mod < 1280*min_level ) { // 32*40
+                prescaler = 5;
+                mult = 3;
+        }
+        else if( mod < 2560*min_level ) { // 64*40
+                prescaler = 6;
+                mult = 3;
+        }
+        else if( mod < 5120*min_level ) { // 128*40
+                prescaler = 7;
+                mult = 3;
         }
         else { // frequency too low
             return;
         }
-
-        // todo: use prescale*mult to have even higer numbers
 
         mod >>= prescaler;
         if(mult>0) {
@@ -1324,10 +1351,6 @@ void ADC_Module::startPDB(uint32_t freq) {
 
     setHardwareTrigger(); // trigger ADC with hardware
 
-
-    //first we set the period to be closest to the desired period,
-    // then we use MOD to actually get our period
-
     PDB0_IDLY = 1; // the pdb interrupt happens when IDLY is equal to CNT+1
 
     PDB0_MOD = (uint16_t)(mod-1);
@@ -1336,7 +1359,7 @@ void ADC_Module::startPDB(uint32_t freq) {
 
     PDB0_SC = PDB_CONFIG | PDB_SC_PRESCALER(prescaler) | PDB_SC_MULT(mult) | PDB_SC_SWTRIG; // start the counter!
 
-    *PDB0_CHnC1 = PDB_CHnC1_TOS_1 | PDB_CHnC1_EN_1; // enable pretrigger 0
+    *PDB0_CHnC1 = PDB_CHnC1_TOS_1 | PDB_CHnC1_EN_1; // enable pretrigger 0 (SC1A)
 
     NVIC_ENABLE_IRQ(IRQ_PDB);
 
