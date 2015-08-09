@@ -647,8 +647,8 @@ void ADC_Module::setAveraging(uint8_t num) {
             num = 32;
             // *ADC_SC3_avgs0 = 1;
             // *ADC_SC3_avgs1 = 1;
-            setBit(ADC_SC3, ADC_SC3_AVGS1_BIT);
             setBit(ADC_SC3, ADC_SC3_AVGS0_BIT);
+            setBit(ADC_SC3, ADC_SC3_AVGS1_BIT);
         }
     }
     analog_num_average = num;
@@ -1148,9 +1148,9 @@ bool ADC_Module::startSingleDifferential(uint8_t pinP, uint8_t pinN) {
     if (calibrating) wait_for_cal();
 
     // vars to saved the current state of the ADC in case it's in use
-    uint8_t wasADCInUse = isConverting(); // is the ADC running now?
+    adcWasInUse = isConverting(); // is the ADC running now?
 
-    if(wasADCInUse) { // this means we're interrupting a conversion
+    if(adcWasInUse) { // this means we're interrupting a conversion
         // save the current conversion config, we don't want any other interrupts messing up the configs
         __disable_irq();
         saveConfig(&adc_config);
