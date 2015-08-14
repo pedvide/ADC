@@ -945,7 +945,7 @@ void ADC_Module::startDifferentialFast(uint8_t pinP, uint8_t pinN) {
 */
 int ADC_Module::analogRead(uint8_t pin) {
 
-    digitalWriteFast(LED_BUILTIN, HIGH);
+    //digitalWriteFast(LED_BUILTIN, HIGH);
 
     // check whether the pin is correct
     if(!checkPin(pin)) {
