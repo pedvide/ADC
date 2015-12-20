@@ -104,9 +104,11 @@ void RingBufferDMA::start() {
 
 
 	uint8_t DMAMUX_SOURCE_ADC = DMAMUX_SOURCE_ADC0;
+	#if ADC_NUM_ADCS>=2
     if(ADC_number==1){
         DMAMUX_SOURCE_ADC = DMAMUX_SOURCE_ADC1;
     }
+    #endif // ADC_NUM_ADCS
 
     // point here so call_dma_isr actually calls this object's isr function
     static_ringbuffer_dma = this;
