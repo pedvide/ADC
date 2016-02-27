@@ -229,3 +229,4 @@ pip-log.txt
 
 *.cbp
 *.layout
+*.save-failed

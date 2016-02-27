@@ -509,7 +509,7 @@ int ADC::analogRead(uint8_t pin, int8_t adc_num) {
         bool adc1Pin = adc1->checkPin(pin);
 
         if(adc0Pin && adc1Pin)  { // Both ADCs
-            if( (adc0->num_measurements) >= (adc1->num_measurements)) { // use the ADC with less workload
+            if( (adc0->num_measurements) > (adc1->num_measurements)) { // use the ADC with less workload
                 return adc1->analogRead(pin);
             } else {
                 return adc0->analogRead(pin);
@@ -564,7 +564,7 @@ int ADC::analogReadDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num) {
         bool adc1Pin = adc1->checkDifferentialPins(pinP, pinN);
 
         if(adc0Pin && adc1Pin)  { // Both ADCs
-            if( (adc0->num_measurements) >= (adc1->num_measurements)) { // use the ADC with less workload
+            if( (adc0->num_measurements) > (adc1->num_measurements)) { // use the ADC with less workload
                 return adc1->analogReadDifferential(pinP, pinN);
             } else {
                 return adc0->analogReadDifferential(pinP, pinN);
@@ -592,7 +592,7 @@ int ADC::analogReadDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num) {
 
 
 // Starts an analog measurement on the pin and enables interrupts.
-/* It returns inmediately, get value with readSingle().
+/* It returns immediately, get value with readSingle().
 *   If the pin is incorrect it returns ADC_ERROR_VALUE
 *   This function is interrupt safe. The ADC interrupt will restore the adc to its previous settings and
 *   restart the adc if it stopped a measurement. If you modify the adc_isr then this won't happen.
@@ -615,7 +615,8 @@ bool ADC::startSingleRead(uint8_t pin, int8_t adc_num) {
         bool adc1Pin = adc1->checkPin(pin);
 
         if(adc0Pin && adc1Pin)  { // Both ADCs
-            if( (adc0->num_measurements) >= (adc1->num_measurements)) { // use the ADC with less workload
+
+            if( (adc0->num_measurements) > (adc1->num_measurements)) { // use the ADC with less workload
                 return adc1->startSingleRead(pin);
             } else {
                 return adc0->startSingleRead(pin);
@@ -667,7 +668,7 @@ bool ADC::startSingleDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num) {
         bool adc1Pin = adc1->checkDifferentialPins(pinP, pinN);
 
         if(adc0Pin && adc1Pin)  { // Both ADCs
-            if( (adc0->num_measurements) >= (adc1->num_measurements)) { // use the ADC with less workload
+            if( (adc0->num_measurements) > (adc1->num_measurements)) { // use the ADC with less workload
                 return adc1->startSingleDifferential(pinP, pinN);
             } else {
                 return adc0->startSingleDifferential(pinP, pinN);
@@ -732,7 +733,7 @@ bool ADC::startContinuous(uint8_t pin, int8_t adc_num) {
         bool adc1Pin = adc1->checkPin(pin);
 
         if(adc0Pin && adc1Pin)  { // Both ADCs
-            if( (adc0->num_measurements) >= (adc1->num_measurements)) { // use the ADC with less workload
+            if( (adc0->num_measurements) > (adc1->num_measurements)) { // use the ADC with less workload
                 return adc1->startContinuous(pin);
             } else {
                 return adc0->startContinuous(pin);
@@ -782,7 +783,7 @@ bool ADC::startContinuousDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num
         bool adc1Pin = adc1->checkDifferentialPins(pinP, pinN);
 
         if(adc0Pin && adc1Pin)  { // Both ADCs
-            if( (adc0->num_measurements) >= (adc1->num_measurements)) { // use the ADC with less workload
+            if( (adc0->num_measurements) > (adc1->num_measurements)) { // use the ADC with less workload
                 return adc1->startContinuousDifferential(pinP, pinN);
             } else {
                 return adc0->startContinuousDifferential(pinP, pinN);

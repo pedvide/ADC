@@ -833,7 +833,7 @@ bool ADC_Module::checkPin(uint8_t pin) {
     // translate pin number to SC1A number, that also contains MUX a or b info.
     uint8_t sc1a_pin = channel2sc1a[pin];
 
-    //if ( (pin < 0) || (pin > 43) ) {
+    // check for valid pin
     if( (sc1a_pin&ADC_SC1A_CHANNELS) == ADC_SC1A_PIN_INVALID ) {
         return false;   // all others are invalid
     }

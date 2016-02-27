@@ -247,14 +247,14 @@ class ADC
         /////////////// NON-BLOCKING CONVERSION METHODS //////////////
 
         //! Starts an analog measurement on the pin and enables interrupts.
-        /** It returns inmediately, get value with readSingle().
+        /** It returns immediately, get value with readSingle().
         *   If the pin is incorrect it returns ADC_ERROR_VALUE
         *   If this function interrupts a measurement, it stores the settings in adc_config
         */
         bool startSingleRead(uint8_t pin, int8_t adc_num = -1);
 
         //! Start a differential conversion between two pins (pinP - pinN) and enables interrupts.
-        /** It returns inmediately, get value with readSingle().
+        /** It returns immediately, get value with readSingle().
         *   \param pinP must be A10 or A12.
         *   \param pinN must be A11 (if pinP=A10) or A13 (if pinP=A12).
         *
