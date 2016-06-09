@@ -953,6 +953,9 @@ ADC::Sync_result ADC::analogSynchronizedReadDifferential(uint8_t pin0P, uint8_t 
         return res;   // all others are invalid
     }
 
+    uint8_t resolution0 = adc0->getResolution();
+    uint8_t resolution1 = adc1->getResolution();
+
     // check if we are interrupting a measurement, store setting if so.
     // vars to save the current state of the ADC in case it's in use
     ADC_Module::ADC_Config old_adc0_config = {0};
@@ -990,11 +993,17 @@ ADC::Sync_result ADC::analogSynchronizedReadDifferential(uint8_t pin0P, uint8_t 
     __disable_irq(); // make sure nothing interrupts this part
     if (adc0->isComplete()) { // conversion succeded
         res.result_adc0 = adc0->readSingle();
+        if(resolution0==16) { // 16 bit differential is actually 15 bit + 1 bit sign
+            res.result_adc0 *= 2; // multiply by 2 as if it were really 16 bits, so that getMaxValue gives a correct value.
+        }
     } else { // comparison was false
         adc0->fail_flag |= ADC_ERROR_COMPARISON;
     }
     if (adc1->isComplete()) { // conversion succeded
         res.result_adc1 = adc1->readSingle();
+        if(resolution1==16) { // 16 bit differential is actually 15 bit + 1 bit sign
+            res.result_adc1 *= 2; // multiply by 2 as if it were really 16 bits, so that getMaxValue gives a correct value.
+        }
     } else { // comparison was false
         adc1->fail_flag |= ADC_ERROR_COMPARISON;
     }
