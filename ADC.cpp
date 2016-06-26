@@ -68,12 +68,12 @@ const uint8_t ADC::channel2sc1aADC0[]= { // new version, gives directly the sc1a
 };
 #elif defined(ADC_TEENSY_3_4) || defined(ADC_TEENSY_3_5)
 const uint8_t ADC::channel2sc1aADC0[]= { // new version, gives directly the sc1a number. 0x1F=31 deactivates the ADC.
-    5, 14, 8, 9, 13, 12, 6, 7, 15, 4, 3, 19, 31, 31, // 0-13, we treat them as A0-A13
+    5, 14, 8, 9, 13, 12, 6, 7, 15, 4, 3, 31, 31, 31, // 0-13, we treat them as A0-A13
     5, 14, 8, 9, 13, 12, 6, 7, 15, 4, // 14-23 (A0-A9)
     31, 31, 31, 31, 31, 31, 31, // 24-30
     31, 31, 17, 18,// 31-34 A12, A13, A14, A15
     31, 31, 31, 31, 31,// 33-39
-    3+ADC_SC1A_PIN_DIFF, 19+ADC_SC1A_PIN_DIFF, 23, 31 // 40-43: A10, A11, A21, A22
+    3+ADC_SC1A_PIN_DIFF, 31+ADC_SC1A_PIN_DIFF, 23, 31 // 40-43: A10, A11 (cannot be read by ADC0), A21, A22
 };
 #endif // defined
 
@@ -89,7 +89,7 @@ const uint8_t ADC::channel2sc1aADC1[]= { // new version, gives directly the sc1a
 };
 #elif defined(ADC_TEENSY_3_4) || defined(ADC_TEENSY_3_5)
 const uint8_t ADC::channel2sc1aADC1[]= { // new version, gives directly the sc1a number. 0x1F=31 deactivates the ADC.
-    31, 31, 8, 9, 31, 31, 31, 31, 31, 31, 31, 31, 14, 15, // 0-13, we treat them as A0-A13
+    31, 31, 8, 9, 31, 31, 31, 31, 31, 31, 31, 19, 14, 15, // 0-13, we treat them as A0-A13
     31, 31, 8, 9, 31, 31, 31, 31, 31, 31, // 14-23 (A0-A9)
     31, 31, 31, 31, 31, 31, 31,  // 24-30
     14, 15, 31, 31, 4, 5, 6, 7, 17, // 31-39 A12-A20
@@ -167,12 +167,14 @@ const uint8_t ADC::sc1a2channelADC1[]= { // new version, gives directly the pin 
 #endif
 
 
-
-ADC::ADC() :
+// Constructor
+ADC::ADC() : // awkward initialization  so there are no -Wreorder warnings
     adc0_obj(0, channel2sc1aADC0, diff_table_ADC0)
-    , adc0(&adc0_obj)
     #if ADC_NUM_ADCS>1
     , adc1_obj(1, channel2sc1aADC1, diff_table_ADC1)
+    #endif
+    , adc0(&adc0_obj)
+    #if ADC_NUM_ADCS>1
     , adc1(&adc1_obj)
     #endif
     {

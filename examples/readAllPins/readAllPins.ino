@@ -100,6 +100,7 @@ void loop() {
 
     for (int i=0;i<PINS;i++) {
         value = adc->analogRead(adc_pins[i]); // read a new value, will return ADC_ERROR_VALUE if the comparison is false.
+        Serial.print("A");
         Serial.print(i);
         Serial.print(": ");
         Serial.print(value*3.3/adc->getMaxValue(ADC_0), 2);

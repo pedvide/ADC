@@ -52,6 +52,18 @@ extern "C" {
 */
 class ADC
 {
+    protected:
+    private:
+
+        // ADCs objects
+        ADC_Module adc0_obj;
+        #if ADC_NUM_ADCS>1
+        ADC_Module adc1_obj;
+        #endif
+
+        const uint8_t num_ADCs = ADC_NUM_ADCS;
+
+
     public:
 
         /** Default constructor */
@@ -421,17 +433,6 @@ class ADC
         static const ADC_Module::ADC_NLIST diff_table_ADC1[ADC_DIFF_PAIRS];
         #endif
 
-
-    protected:
-    private:
-
-        // ADCs objects
-        ADC_Module adc0_obj;
-        #if ADC_NUM_ADCS>1
-        ADC_Module adc1_obj;
-        #endif
-
-        const uint8_t num_ADCs = ADC_NUM_ADCS;
 
 };
 
