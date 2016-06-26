@@ -444,7 +444,7 @@ public:
     //! Constructor
     /** Pass the ADC number and the Channel number to SC1A number arrays.
     *   @param a_channel2sc1a contains an index that pairs each pin to its SC1A number (used to start a conversion on that pin)
-    *   @param a_channel2sc1a_diff is similar to a_channel2sc1a, but for differential pins. It uses base A10: a_channel2sc1a_diff[0] corresponds to A10.
+    *   @param a_diff_table is similar to a_channel2sc1a, but for differential pins.
     */
     ADC_Module(uint8_t ADC_number, const uint8_t* const a_channel2sc1a, const ADC_NLIST* const a_diff_table);
 
@@ -703,14 +703,14 @@ public:
     /////////////// NON-BLOCKING CONVERSION METHODS //////////////
 
     //! Starts an analog measurement on the pin and enables interrupts.
-    /** It returns inmediately, get value with readSingle().
+    /** It returns immediately, get value with readSingle().
     *   If the pin is incorrect it returns ADC_ERROR_VALUE
     *   If this function interrupts a measurement, it stores the settings in adc_config
     */
     bool startSingleRead(uint8_t pin);
 
     //! Start a differential conversion between two pins (pinP - pinN) and enables interrupts.
-    /** It returns inmediately, get value with readSingle().
+    /** It returns immediately, get value with readSingle().
     *   \param pinP must be A10 or A12.
     *   \param pinN must be A11 (if pinP=A10) or A13 (if pinP=A12).
     *   Other pins will return ADC_ERROR_DIFF_VALUE.
@@ -803,7 +803,7 @@ public:
     }
 
     //! Load config to the ADC
-    void loadConfig(ADC_Config* config) {
+    void loadConfig(const ADC_Config* config) {
         *ADC_CFG1 = config->savedCFG1;
         *ADC_CFG2 = config->savedCFG2;
         *ADC_SC2 = config->savedSC2;
@@ -868,7 +868,7 @@ private:
 
 
     //! Get the SC1A value of the differential pair for this pin
-    int8_t getDifferentialPair(uint8_t pin) {
+    uint8_t getDifferentialPair(uint8_t pin) {
         for(int i=0; i<ADC_DIFF_PAIRS; i++) {
             if(diff_table[i].pin == pin) {
                 return diff_table[i].sc1a;
