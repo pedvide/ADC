@@ -39,10 +39,10 @@
 *   Call init
 *   The very long initializer list could be shorter using some kind of struct?
 */
-ADC_Module::ADC_Module(uint8_t ADC_number, const uint8_t* const a_channel2sc1a, const uint8_t* const a_channel2sc1a_diff) :
+ADC_Module::ADC_Module(uint8_t ADC_number, const uint8_t* const a_channel2sc1a, const ADC_NLIST* const a_diff_table) :
         ADC_num(ADC_number)
         , channel2sc1a(a_channel2sc1a)
-        , channel2sc1a_diff(a_channel2sc1a_diff)
+        , diff_table(a_diff_table)
         , adc_offset((uint32_t)0x20000)
         , ADC_SC1A(&ADC0_SC1A + adc_offset*ADC_num)
         , ADC_SC1B(&ADC0_SC1B + adc_offset*ADC_num)
@@ -73,88 +73,17 @@ ADC_Module::ADC_Module(uint8_t ADC_number, const uint8_t* const a_channel2sc1a, 
         , ADC_CLM1(&ADC0_CLM1 + adc_offset*ADC_num)
         , ADC_CLM0(&ADC0_CLM0 + adc_offset*ADC_num)
         , PDB0_CHnC1(&PDB0_CH0C1 + ADC_num*0xA)
+        , IRQ_ADC(IRQ_ADC0 + ADC_num*1)
         {
 
-    // ADC0 or ADC1?
-    //ADC_num = ADC_number;
-
-    // point the control registers to the correct addresses
-    // use bitband where necessary
-    //uint32_t adc_offset = (uint32_t)0x20000;
-
-    //ADC_SC1A = &ADC0_SC1A + adc_offset*ADC_num;
-//        ADC_SC1A_coco = adc_bitband((uint32_t)ADC_SC1A, 7); // conversion complete
-//        ADC_SC1A_aien = adc_bitband((uint32_t)ADC_SC1A, 6); // interrupts enabled
-    //ADC_SC1B = &ADC0_SC1B + adc_offset*ADC_num;
-
-    //ADC_CFG1 = &ADC0_CFG1 + adc_offset*ADC_num;
-//        ADC_CFG1_adlpc = adc_bitband((uint32_t)ADC_CFG1, 7); // low power conf.
-//        ADC_CFG1_adiv1 = adc_bitband((uint32_t)ADC_CFG1, 6); // divide input clock
-//        ADC_CFG1_adiv0 = adc_bitband((uint32_t)ADC_CFG1, 5); //
-//        ADC_CFG1_adlsmp = adc_bitband((uint32_t)ADC_CFG1, 4); // low sampling speed
-//        ADC_CFG1_mode1 = adc_bitband((uint32_t)ADC_CFG1, 3); // resolution mode
-//        ADC_CFG1_mode0 = adc_bitband((uint32_t)ADC_CFG1, 2); //
-//        ADC_CFG1_adiclk1 = adc_bitband((uint32_t)ADC_CFG1, 1); // input clock
-//        ADC_CFG1_adiclk0 = adc_bitband((uint32_t)ADC_CFG1, 0); //
-    //ADC_CFG2 = &ADC0_CFG2 + adc_offset*ADC_num;
-//        ADC_CFG2_muxsel = adc_bitband((uint32_t)ADC_CFG2, 4); // mux to select a or b channels
-//        ADC_CFG2_adacken = adc_bitband((uint32_t)ADC_CFG2, 3); // enable the async. clock
-//        ADC_CFG2_adhsc = adc_bitband((uint32_t)ADC_CFG2, 2); // high-speed config: add 2 ADCK
-//        ADC_CFG2_adlsts1 = adc_bitband((uint32_t)ADC_CFG2, 1); // loger sampling time
-//        ADC_CFG2_adlsts0 = adc_bitband((uint32_t)ADC_CFG2, 0);
-
-    //ADC_RA = &ADC0_RA + adc_offset*ADC_num;
-    //ADC_RB = &ADC0_RB + adc_offset*ADC_num;
-
-    //ADC_CV1 = &ADC0_CV1 + adc_offset*ADC_num;
-    //ADC_CV2 = &ADC0_CV2 + adc_offset*ADC_num;
-
-    //ADC_SC2 = &ADC0_SC2 + adc_offset*ADC_num;
-//        ADC_SC2_adact = adc_bitband((uint32_t)ADC_SC2, 7); // conversion active
-//        ADC_SC2_cfe = adc_bitband((uint32_t)ADC_SC2, 5); // compare function enable, greater than and range enable
-//        ADC_SC2_cfgt = adc_bitband((uint32_t)ADC_SC2, 4);
-//        ADC_SC2_cren = adc_bitband((uint32_t)ADC_SC2, 3);
-//        ADC_SC2_dma = adc_bitband((uint32_t)ADC_SC2, 2); // dma enable
-//        ADC_SC2_ref = adc_bitband((uint32_t)ADC_SC2, 0); // refsel only uses bit 0, not really bit 1.
 
 
-    //ADC_SC3 = &ADC0_SC3 + adc_offset*ADC_num;
-//        ADC_SC3_cal = adc_bitband((uint32_t)ADC_SC3, 7); // start/stop calibration
-//        ADC_SC3_calf = adc_bitband((uint32_t)ADC_SC3, 6); // calibration failed flag
-//        ADC_SC3_adco = adc_bitband((uint32_t)ADC_SC3, 3); // continuous conversion
-//        ADC_SC3_avge = adc_bitband((uint32_t)ADC_SC3, 2); // enable averages bit
-//        ADC_SC3_avgs1 = adc_bitband((uint32_t)ADC_SC3, 1); // num of averages bits
-//        ADC_SC3_avgs0 = adc_bitband((uint32_t)ADC_SC3, 0);
 
-    //ADC_PGA = &ADC0_PGA + adc_offset*ADC_num;
-//        ADC_PGA_pgaen = adc_bitband((uint32_t)ADC_PGA, 23); // enable pga
-
-//    ADC_OFS = &ADC0_OFS + adc_offset*ADC_num;
-//    ADC_PG = &ADC0_PG + adc_offset*ADC_num;
-//    ADC_MG = &ADC0_MG + adc_offset*ADC_num;
-//    ADC_CLPD = &ADC0_CLPD + adc_offset*ADC_num;
-//    ADC_CLPS = &ADC0_CLPS + adc_offset*ADC_num;
-//    ADC_CLP4 = &ADC0_CLP4 + adc_offset*ADC_num;
-//    ADC_CLP3 = &ADC0_CLP3 + adc_offset*ADC_num;
-//    ADC_CLP2 = &ADC0_CLP2 + adc_offset*ADC_num;
-//    ADC_CLP1 = &ADC0_CLP1 + adc_offset*ADC_num;
-//    ADC_CLP0 = &ADC0_CLP0 + adc_offset*ADC_num;
-//    ADC_CLMD = &ADC0_CLMD + adc_offset*ADC_num;
-//    ADC_CLMS = &ADC0_CLMS + adc_offset*ADC_num;
-//    ADC_CLM4 = &ADC0_CLM4 + adc_offset*ADC_num;
-//    ADC_CLM3 = &ADC0_CLM3 + adc_offset*ADC_num;
-//    ADC_CLM2 = &ADC0_CLM2 + adc_offset*ADC_num;
-//    ADC_CLM1 = &ADC0_CLM1 + adc_offset*ADC_num;
-//    ADC_CLM0 = &ADC0_CLM0 + adc_offset*ADC_num;
-
-    IRQ_ADC = IRQ_ADC0 + ADC_num*1;
-
-    // pointer to channel2sc1a
-    //channel2sc1a = a_channel2sc1a;
-    //channel2sc1a_diff = a_channel2sc1a_diff;
 
     // call our init
     analog_init();
+
+
 
 }
 
@@ -307,6 +236,8 @@ void ADC_Module::setReference(uint8_t type) {
         return;
     }
 
+
+
     if (type == ADC_REF_ALT) { // 1.2V ref for Teensy 3.x, 3.3 VDD for Teensy LC
         // internal reference requested
 
@@ -333,7 +264,7 @@ void ADC_Module::setReference(uint8_t type) {
 
 //! Start the 1.2V internal reference (if present)
 void ADC_Module::startInternalReference() {
-#if defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_0)
+#if ADC_USE_INTERNAL
     VREF_TRM = VREF_TRM_CHOPEN | 0x20; // enable module and set the trimmer to medium (max=0x3F=63)
     VREF_SC = VREF_SC_VREFEN | VREF_SC_REGEN | VREF_SC_ICOMPEN | VREF_SC_MODE_LV(1); // (=0xE1) enable 1.2 volt ref with all compensations
 #endif
@@ -341,7 +272,7 @@ void ADC_Module::startInternalReference() {
 
 //! Stops the internal reference
 void ADC_Module::stopInternalReference() {
-#if defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_0)
+#if ADC_USE_INTERNAL
     VREF_SC = 0;
 #endif
 }
@@ -813,7 +744,7 @@ uint8_t ADC_Module::getPGA() {
 
 //! Disable PGA
 void ADC_Module::disablePGA() {
-#if defined(ADC_USE_PGA)
+#if ADC_USE_PGA
     // *ADC_PGA_pgaen = 0;
     clearBit(ADC_PGA, ADC_PGA_PGAEN_BIT);
 #endif
@@ -831,7 +762,7 @@ bool ADC_Module::checkPin(uint8_t pin) {
     }
 
     // translate pin number to SC1A number, that also contains MUX a or b info.
-    uint8_t sc1a_pin = channel2sc1a[pin];
+    const uint8_t sc1a_pin = channel2sc1a[pin];
 
     // check for valid pin
     if( (sc1a_pin&ADC_SC1A_CHANNELS) == ADC_SC1A_PIN_INVALID ) {
@@ -854,10 +785,8 @@ bool ADC_Module::checkDifferentialPins(uint8_t pinP, uint8_t pinN) {
         return false;   // all others are invalid
     }
 
-    // channel2sc1a_diff uses "base A10", that is channel2sc1a_diff[0] is A10
-    pinP -= A10;
-    // we get more info about the pin: which DAD pair it corresponds to.
-    sc1a_pin = channel2sc1a_diff[pinP];
+    // get SC1A number, also whether it can do PGA
+    sc1a_pin = getDifferentialPair(pinP);
 
     // the pair can't be measured with this ADC
     if( (sc1a_pin&ADC_SC1A_CHANNELS) == ADC_SC1A_PIN_INVALID ) {
@@ -904,9 +833,8 @@ void ADC_Module::startReadFast(uint8_t pin) {
 // It doesn't change the continuous conversion bit
 void ADC_Module::startDifferentialFast(uint8_t pinP, uint8_t pinN) {
 
-    // channel2sc1a_diff uses "base A10", that is channel2sc1a_diff[0] corresponds to A10
-    // we get more info about the pin: which DAD pair it corresponds to.
-    uint8_t sc1a_pin = channel2sc1a_diff[pinP - A10];
+    // get SC1A number
+     uint8_t sc1a_pin = getDifferentialPair(pinP);
 
     #if ADC_USE_PGA
     // check if PGA is enabled

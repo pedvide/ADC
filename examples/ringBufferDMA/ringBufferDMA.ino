@@ -20,7 +20,7 @@ DMAMEM static volatile int16_t __attribute__((aligned(buffer_size+0))) buffer[bu
 // use dma with ADC0
 RingBufferDMA *dmaBuffer = new RingBufferDMA(buffer, buffer_size, ADC_0);
 
-#if defined(ADC_TEENSY_3_1)
+#if ADC_NUM_ADCS>1
 const int buffer_size2 = 8;
 DMAMEM static volatile int16_t __attribute__((aligned(buffer_size2+0))) buffer2[buffer_size2];
 

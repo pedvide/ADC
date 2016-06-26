@@ -40,7 +40,15 @@
 #define ADC_TEENSY_3_0
 #elif defined(__MKL26Z64__) // Teensy LC
 #define ADC_TEENSY_LC
+#elif defined(__MK64FX512__) // Teensy 3.4
+#define ADC_TEENSY_3_4
+#elif defined(__MK66FX1M0__) // Teensy 3.5
+#define ADC_TEENSY_3_5
+#else
+#error "Board not supported!"
 #endif
+
+
 
 // Teensy 3.1 has 2 ADCs, Teensy 3.0 and LC only 1.
 #if defined(ADC_TEENSY_3_1) // Teensy 3.1
@@ -49,6 +57,10 @@
         #define ADC_NUM_ADCS 1
 #elif defined(ADC_TEENSY_LC) // Teensy LC
         #define ADC_NUM_ADCS 1
+#elif defined(ADC_TEENSY_3_4) // Teensy 3.4
+        #define ADC_NUM_ADCS 2
+#elif defined(ADC_TEENSY_3_5) // Teensy 3.5
+        #define ADC_NUM_ADCS 2
 #endif
 
 // Use DMA?
@@ -57,6 +69,10 @@
 #elif defined(ADC_TEENSY_3_0) // Teensy 3.0
         #define ADC_USE_DMA 1
 #elif defined(ADC_TEENSY_LC) // Teensy LC
+        #define ADC_USE_DMA 1
+#elif defined(ADC_TEENSY_3_4) // Teensy 3.4
+        #define ADC_USE_DMA 1
+#elif defined(ADC_TEENSY_3_5) // Teensy 3.5
         #define ADC_USE_DMA 1
 #endif
 
@@ -67,6 +83,10 @@
         #define ADC_USE_PGA 0
 #elif defined(ADC_TEENSY_LC) // Teensy LC
         #define ADC_USE_PGA 0
+#elif defined(ADC_TEENSY_3_4) // Teensy 3.4
+        #define ADC_USE_PGA 0
+#elif defined(ADC_TEENSY_3_5) // Teensy 3.5
+        #define ADC_USE_PGA 0
 #endif
 
 // Use PDB?
@@ -76,6 +96,68 @@
         #define ADC_USE_PDB 1
 #elif defined(ADC_TEENSY_LC) // Teensy LC
         #define ADC_USE_PDB 0
+#elif defined(ADC_TEENSY_3_4) // Teensy 3.4
+        #define ADC_USE_PDB 1
+#elif defined(ADC_TEENSY_3_5) // Teensy 3.5
+        #define ADC_USE_PDB 1
+#endif
+
+// Has internal reference?
+#if defined(ADC_TEENSY_3_1) // Teensy 3.1
+        #define ADC_USE_INTERNAL 1
+#elif defined(ADC_TEENSY_3_0) // Teensy 3.0
+        #define ADC_USE_INTERNAL 1
+#elif defined(ADC_TEENSY_LC) // Teensy LC
+        #define ADC_USE_INTERNAL 0
+#elif defined(ADC_TEENSY_3_4) // Teensy 3.4
+        #define ADC_USE_INTERNAL 1
+#elif defined(ADC_TEENSY_3_5) // Teensy 3.5
+        #define ADC_USE_INTERNAL 1
+#endif
+
+// Select the voltage reference sources for ADC.
+#define ADC_REF_DEFAULT    0
+#define ADC_REF_ALT        1
+#if defined(ADC_TEENSY_3_0) || defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_4) || defined(ADC_TEENSY_3_5)
+// default is the external, that is connected to the 3.3V supply.
+// To use the external simply connect AREF to a different voltage
+// alt is connected to the 1.2 V ref.
+#define ADC_REF_3V3    ADC_REF_DEFAULT
+#define ADC_REF_1V2    ADC_REF_ALT
+#define ADC_REF_EXT    ADC_REF_DEFAULT
+
+#elif defined(ADC_TEENSY_LC)
+// alt is the internal ref, 3.3 V
+// the default is AREF
+#define ADC_REF_3V3    ADC_REF_ALT
+#define ADC_REF_EXT    ADC_REF_DEFAULT
+#endif
+
+// max number of pins, size of channel2sc1aADCx
+#if defined(ADC_TEENSY_3_1) // Teensy 3.1
+        #define ADC_MAX_PIN (40)
+#elif defined(ADC_TEENSY_3_0) // Teensy 3.0
+        #define ADC_MAX_PIN (37)
+#elif defined(ADC_TEENSY_LC) // Teensy LC
+        #define ADC_MAX_PIN (26)
+#elif defined(ADC_TEENSY_3_4) // Teensy 3.4
+        #define ADC_MAX_PIN (43)
+#elif defined(ADC_TEENSY_3_5) // Teensy 3.5
+        #define ADC_MAX_PIN (43)
+#endif
+
+
+// number of differential pairs PER ADC!!
+#if defined(ADC_TEENSY_3_1) // Teensy 3.1
+        #define ADC_DIFF_PAIRS (2) // normal and with PGA
+#elif defined(ADC_TEENSY_3_0) // Teensy 3.0
+        #define ADC_DIFF_PAIRS (2)
+#elif defined(ADC_TEENSY_LC) // Teensy LC
+        #define ADC_DIFF_PAIRS (1)
+#elif defined(ADC_TEENSY_3_4) // Teensy 3.4
+        #define ADC_DIFF_PAIRS (1)
+#elif defined(ADC_TEENSY_3_5) // Teensy 3.5
+        #define ADC_DIFF_PAIRS (1)
 #endif
 
 /* MK20DX256 Datasheet:
@@ -88,7 +170,7 @@ The results in this data sheet were derived from a system which has < 8 Ohm anal
 time constant should be kept to < 1ns.
 
 ADC clock should be 2 to 12 MHz for 16 bit mode
-ADC clock should be 1 to 18 MHz for 8-12 bit mode
+ADC clock should be 1 to 18 MHz for 8-12 bit mode, and 1-24 MHz for Teensy 3.5 (NOT 3.4)
 To use the maximum ADC conversion clock frequency, the ADHSC bit must be set and the ADLPC bit must be clear
 
 The ADHSC bit is used to configure a higher clock input frequency. This will allow
@@ -99,113 +181,125 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
 */
 // the alternate clock is connected to OSCERCLK (16 MHz).
 // datasheet says ADC clock should be 2 to 12 MHz for 16 bit mode
-// datasheet says ADC clock should be 1 to 18 MHz for 8-12 bit mode
+// datasheet says ADC clock should be 1 to 18 MHz for 8-12 bit mode, and 1-24 MHz for Teensy 3.5 (NOT 3.4)
 // calibration works best when averages are 32 and speed is less than 4 MHz
 // ADC_CFG1_ADICLK: 0=bus, 1=bus/2, 2=(alternative clk) altclk, 3=(async. clk) adack
 // See below for an explanation of VERY_LOW_SPEED, LOW_SPEED, etc.
-// TODO: add support for ADACK (asynch clock, that goes from about 2 to 6 MHz)
-#if F_BUS == 60000000
-#define ADC_CFG1_3_75MHZ      (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))
-#define ADC_CFG1_7_5MHZ       (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1))
-#define ADC_CFG1_15MHZ        (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1))
+#if F_BUS == 108000000
+    #define ADC_CFG1_3_375MHZ      (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))
+    #define ADC_CFG1_6_75MHZ       (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1))
+    #define ADC_CFG1_13_5MHZ       (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1))
+    #define ADC_CFG1_27MHZ         (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(1))
 
-#define ADC_CFG1_VERY_LOW_SPEED ADC_CFG1_LOW_SPEED
-#define ADC_CFG1_LOW_SPEED (ADC_CFG1_3_75MHZ)
-#define ADC_CFG1_MED_SPEED (ADC_CFG1_7_5MHZ)
-#define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_7_5MHZ)
-#define ADC_CFG1_HI_SPEED (ADC_CFG1_15MHZ)
-#define ADC_CFG1_VERY_HIGH_SPEED ADC_CFG1_HI_SPEED
+    #define ADC_CFG1_VERY_LOW_SPEED ADC_CFG1_LOW_SPEED
+    #define ADC_CFG1_LOW_SPEED (ADC_CFG1_3_375MHZ)
+    #define ADC_CFG1_MED_SPEED (ADC_CFG1_6_75MHZ)
+    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_6_75MHZ)
+    #define ADC_CFG1_HI_SPEED (ADC_CFG1_13_5MHZ)
+    #define ADC_CFG1_VERY_HIGH_SPEED (ADC_CFG1_27MHZ)
+#elif F_BUS == 60000000
+    #define ADC_CFG1_3_75MHZ      (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))
+    #define ADC_CFG1_7_5MHZ       (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1))
+    #define ADC_CFG1_15MHZ        (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1))
 
-#elif F_BUS == 56000000
-#define ADC_CFG1_3_5MHZ   (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))
-#define ADC_CFG1_7MHZ     (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1))
-#define ADC_CFG1_14MHZ    (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1))
+    #define ADC_CFG1_VERY_LOW_SPEED ADC_CFG1_LOW_SPEED
+    #define ADC_CFG1_LOW_SPEED (ADC_CFG1_3_75MHZ)
+    #define ADC_CFG1_MED_SPEED (ADC_CFG1_7_5MHZ)
+    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_7_5MHZ)
+    #define ADC_CFG1_HI_SPEED (ADC_CFG1_15MHZ)
+    #define ADC_CFG1_VERY_HIGH_SPEED ADC_CFG1_HI_SPEED
 
-#define ADC_CFG1_VERY_LOW_SPEED ADC_CFG1_LOW_SPEED
-#define ADC_CFG1_LOW_SPEED (ADC_CFG1_3_5MHZ)
-#define ADC_CFG1_MED_SPEED (ADC_CFG1_7MHZ)
-#define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_7MHZ)
-#define ADC_CFG1_HI_SPEED (ADC_CFG1_14MHZ)
-#define ADC_CFG1_VERY_HIGH_SPEED ADC_CFG1_HI_SPEED
+#elif F_BUS == 56000000 || F_BUS == 54000000 // frequency numbers are good for 56 MHz and slightly smaller for 54 MHz
+    #define ADC_CFG1_3_5MHZ   (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))
+    #define ADC_CFG1_7MHZ     (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1))
+    #define ADC_CFG1_14MHZ    (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1))
+    #define ADC_CFG1_28MHZ    (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(1))
+
+    #define ADC_CFG1_VERY_LOW_SPEED ADC_CFG1_LOW_SPEED
+    #define ADC_CFG1_LOW_SPEED (ADC_CFG1_3_5MHZ)
+    #define ADC_CFG1_MED_SPEED (ADC_CFG1_7MHZ)
+    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_7MHZ)
+    #define ADC_CFG1_HI_SPEED (ADC_CFG1_14MHZ)
+    #define ADC_CFG1_VERY_HIGH_SPEED (ADC_CFG1_28MHZ)
 
 #elif F_BUS == 48000000
-#define ADC_CFG1_3MHZ   (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1)) // Clock divide select: 3=div8 + Input clock: 1=bus/2
-#define ADC_CFG1_6MHZ   (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1)) // Clock divide select: 2=div4 + Input clock: 1=bus/2
-#define ADC_CFG1_12MHZ  (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1)) // Clock divide select: 1=div2 Input clock: 1=bus/2
-#define ADC_CFG1_24MHZ  (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(1)) // this is way too fast, so accurancy is not guaranteed
+    #define ADC_CFG1_3MHZ   (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1)) // Clock divide select: 3=div8 + Input clock: 1=bus/2
+    #define ADC_CFG1_6MHZ   (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1)) // Clock divide select: 2=div4 + Input clock: 1=bus/2
+    #define ADC_CFG1_12MHZ  (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1)) // Clock divide select: 1=div2 Input clock: 1=bus/2
+    #define ADC_CFG1_24MHZ  (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(1)) // this is way too fast, so accuracy is not guaranteed, except for T3.5
 
-#define ADC_CFG1_VERY_LOW_SPEED ADC_CFG1_LOW_SPEED
-#define ADC_CFG1_LOW_SPEED (ADC_CFG1_3MHZ)
-#define ADC_CFG1_MED_SPEED (ADC_CFG1_6MHZ)
-#define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_12MHZ)
-#define ADC_CFG1_HI_SPEED (ADC_CFG1_12MHZ)
-#define ADC_CFG1_VERY_HIGH_SPEED (ADC_CFG1_24MHZ)
+    #define ADC_CFG1_VERY_LOW_SPEED ADC_CFG1_LOW_SPEED
+    #define ADC_CFG1_LOW_SPEED (ADC_CFG1_3MHZ)
+    #define ADC_CFG1_MED_SPEED (ADC_CFG1_6MHZ)
+    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_12MHZ)
+    #define ADC_CFG1_HI_SPEED (ADC_CFG1_12MHZ)
+    #define ADC_CFG1_VERY_HIGH_SPEED (ADC_CFG1_24MHZ)
 
 #elif F_BUS == 40000000
-#define ADC_CFG1_2_5MHZ   (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))
-#define ADC_CFG1_5MHZ     (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1))
-#define ADC_CFG1_10MHZ    (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1))
-#define ADC_CFG1_20MHZ    (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(1)) // this is too fast, so accurancy is not guaranteed
+    #define ADC_CFG1_2_5MHZ   (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))
+    #define ADC_CFG1_5MHZ     (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1))
+    #define ADC_CFG1_10MHZ    (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1))
+    #define ADC_CFG1_20MHZ    (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(1)) // this is too fast, so accuracy is not guaranteed
 
-#define ADC_CFG1_VERY_LOW_SPEED ADC_CFG1_LOW_SPEED
-#define ADC_CFG1_LOW_SPEED (ADC_CFG1_2_5MHZ)
-#define ADC_CFG1_MED_SPEED (ADC_CFG1_5MHZ)
-#define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_10MHZ)
-#define ADC_CFG1_HI_SPEED (ADC_CFG1_10MHZ)
-#define ADC_CFG1_VERY_HIGH_SPEED (ADC_CFG1_20MHZ)
+    #define ADC_CFG1_VERY_LOW_SPEED ADC_CFG1_LOW_SPEED
+    #define ADC_CFG1_LOW_SPEED (ADC_CFG1_2_5MHZ)
+    #define ADC_CFG1_MED_SPEED (ADC_CFG1_5MHZ)
+    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_10MHZ)
+    #define ADC_CFG1_HI_SPEED (ADC_CFG1_10MHZ)
+    #define ADC_CFG1_VERY_HIGH_SPEED (ADC_CFG1_20MHZ)
 
 #elif F_BUS == 36000000
-#define ADC_CFG1_2_25MHZ      (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))
-#define ADC_CFG1_4_5MHZ       (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1))
-#define ADC_CFG1_9MHZ         (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1))
-#define ADC_CFG1_18MHZ        (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(1))
+    #define ADC_CFG1_2_25MHZ      (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))
+    #define ADC_CFG1_4_5MHZ       (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1))
+    #define ADC_CFG1_9MHZ         (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1))
+    #define ADC_CFG1_18MHZ        (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(1))
 
-#define ADC_CFG1_VERY_LOW_SPEED ADC_CFG1_LOW_SPEED
-#define ADC_CFG1_LOW_SPEED (ADC_CFG1_2_25MHZ)
-#define ADC_CFG1_MED_SPEED (ADC_CFG1_9MHZ)
-#define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_9MHZ)
-#define ADC_CFG1_HI_SPEED (ADC_CFG1_18MHZ)
-#define ADC_CFG1_VERY_HIGH_SPEED ADC_CFG1_HI_SPEED
+    #define ADC_CFG1_VERY_LOW_SPEED ADC_CFG1_LOW_SPEED
+    #define ADC_CFG1_LOW_SPEED (ADC_CFG1_2_25MHZ)
+    #define ADC_CFG1_MED_SPEED (ADC_CFG1_9MHZ)
+    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_9MHZ)
+    #define ADC_CFG1_HI_SPEED (ADC_CFG1_18MHZ)
+    #define ADC_CFG1_VERY_HIGH_SPEED ADC_CFG1_HI_SPEED
 
 #elif F_BUS == 24000000
-#define ADC_CFG1_1_5MHZ   (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1)) // Clock divide select: 3=div8 + Input clock: 1=bus/2
-#define ADC_CFG1_3MHZ     (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(0)) // Clock divide select: 3=div8 + Input clock: 0=bus
-#define ADC_CFG1_6MHZ     (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(0)) // Clock divide select: 2=div4 + Input clock: 0=bus
-#define ADC_CFG1_12MHZ    (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(0)) // Clock divide select: 1=div2 + Input clock: 0=bus
-#define ADC_CFG1_24MHZ    (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(0)) // this is way too fast, so accurancy is not guaranteed
+    #define ADC_CFG1_1_5MHZ   (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1)) // Clock divide select: 3=div8 + Input clock: 1=bus/2
+    #define ADC_CFG1_3MHZ     (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(0)) // Clock divide select: 3=div8 + Input clock: 0=bus
+    #define ADC_CFG1_6MHZ     (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(0)) // Clock divide select: 2=div4 + Input clock: 0=bus
+    #define ADC_CFG1_12MHZ    (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(0)) // Clock divide select: 1=div2 + Input clock: 0=bus
+    #define ADC_CFG1_24MHZ    (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(0)) // this is way too fast, so accuracy is not guaranteed
 
-#define ADC_CFG1_VERY_LOW_SPEED (ADC_CFG1_1_5MHZ)
-#define ADC_CFG1_LOW_SPEED (ADC_CFG1_3MHZ)
-#define ADC_CFG1_MED_SPEED (ADC_CFG1_6MHZ)
-#define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_12MHZ)
-#define ADC_CFG1_HI_SPEED (ADC_CFG1_12MHZ)
-#define ADC_CFG1_VERY_HIGH_SPEED (ADC_CFG1_24MHZ)
+    #define ADC_CFG1_VERY_LOW_SPEED (ADC_CFG1_1_5MHZ)
+    #define ADC_CFG1_LOW_SPEED (ADC_CFG1_3MHZ)
+    #define ADC_CFG1_MED_SPEED (ADC_CFG1_6MHZ)
+    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_12MHZ)
+    #define ADC_CFG1_HI_SPEED (ADC_CFG1_12MHZ)
+    #define ADC_CFG1_VERY_HIGH_SPEED (ADC_CFG1_24MHZ)
 
 #elif F_BUS == 4000000
-#define ADC_CFG1_1MHZ   (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(0))
-#define ADC_CFG1_2MHZ   (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(0))
-#define ADC_CFG1_4MHZ   (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(0))
+    #define ADC_CFG1_1MHZ   (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(0))
+    #define ADC_CFG1_2MHZ   (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(0))
+    #define ADC_CFG1_4MHZ   (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(0))
 
-#define ADC_CFG1_VERY_LOW_SPEED (ADC_CFG1_1MHZ)
-#define ADC_CFG1_LOW_SPEED (ADC_CFG1_2MHZ)
-#define ADC_CFG1_MED_SPEED (ADC_CFG1_4MHZ)
-#define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_4MHZ)
-#define ADC_CFG1_HI_SPEED (ADC_CFG1_4MHZ)
-#define ADC_CFG1_VERY_HIGH_SPEED ADC_CFG1_HI_SPEED
+    #define ADC_CFG1_VERY_LOW_SPEED (ADC_CFG1_1MHZ)
+    #define ADC_CFG1_LOW_SPEED (ADC_CFG1_2MHZ)
+    #define ADC_CFG1_MED_SPEED (ADC_CFG1_4MHZ)
+    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_4MHZ)
+    #define ADC_CFG1_HI_SPEED (ADC_CFG1_4MHZ)
+    #define ADC_CFG1_VERY_HIGH_SPEED ADC_CFG1_HI_SPEED
 
 #elif F_BUS == 2000000
-#define ADC_CFG1_1MHZ   (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(0))
-#define ADC_CFG1_2MHZ   (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(0))
+    #define ADC_CFG1_1MHZ   (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(0))
+    #define ADC_CFG1_2MHZ   (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(0))
 
-#define ADC_CFG1_VERY_LOW_SPEED (ADC_CFG1_1MHZ)
-#define ADC_CFG1_LOW_SPEED (ADC_CFG1_2MHZ)
-#define ADC_CFG1_MED_SPEED (ADC_CFG1_2MHZ)
-#define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_2MHZ)
-#define ADC_CFG1_HI_SPEED (ADC_CFG1_2MHZ)
-#define ADC_CFG1_VERY_HIGH_SPEED ADC_CFG1_HI_SPEED
+    #define ADC_CFG1_VERY_LOW_SPEED (ADC_CFG1_1MHZ)
+    #define ADC_CFG1_LOW_SPEED (ADC_CFG1_2MHZ)
+    #define ADC_CFG1_MED_SPEED (ADC_CFG1_2MHZ)
+    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_2MHZ)
+    #define ADC_CFG1_HI_SPEED (ADC_CFG1_2MHZ)
+    #define ADC_CFG1_VERY_HIGH_SPEED ADC_CFG1_HI_SPEED
 
 #else
-#error "F_BUS must be 60, 56, 48, 40, 36, 24, 4 or 2 MHz"
+#error "F_BUS must be 108, 60, 56, 54, 48, 40, 36, 24, 4 or 2 MHz"
 #endif
 
 // mask the important bit in each register
@@ -252,8 +346,6 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
 #define ADC_SC1A_CHANNELS (0x1F)
 // 0x1F=31 in the channel2sc1aADCx means the pin doesn't belong to the ADC module
 #define ADC_SC1A_PIN_INVALID (0x1F)
-// max number of pins, size of channel2sc1aADCx
-#define ADC_MAX_PIN (44)
 // Muxsel mask, pins in channel2sc1aADCx with bit 7 set use mux A.
 #define ADC_SC1A_PIN_MUX (0x80)
 // Differential pin mask, pins in channel2sc1aADCx with bit 6 set are differential pins.
@@ -262,23 +354,6 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
 #define ADC_SC1A_PIN_PGA (0x80)
 
 
-// ADCx_SC2[REFSEL] bit selects the voltage reference sources for ADC.
-#define ADC_REF_DEFAULT    0
-#define ADC_REF_ALT        1
-#if defined(ADC_TEENSY_3_0) || defined(ADC_TEENSY_3_1)
-// default is the external, that is connected to the 3.3V supply.
-// To use the external simply connect AREF to a different voltage
-// alt is connected to the 1.2 V ref.
-#define ADC_REF_3V3    ADC_REF_DEFAULT
-#define ADC_REF_1V2    ADC_REF_ALT
-#define ADC_REF_EXT    ADC_REF_DEFAULT
-
-#elif defined(ADC_TEENSY_LC)
-// alt is the internal ref, 3.3 V
-// the default is AREF
-#define ADC_REF_3V3    ADC_REF_ALT
-#define ADC_REF_EXT    ADC_REF_DEFAULT
-#endif
 
 
 // Error codes for analogRead and analogReadDifferential
@@ -287,7 +362,7 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
 
 // Error flag masks.
 // Possible errors are: other, calibration, wrong pin, analogRead, analogDifferentialRead, continuous, continuousDifferential
-// To globaly disable an error simply change (1<<x) to (0<<x), revert to enable the error again.
+// To globalLy disable an error simply change (1<<x) to (0<<x), revert to enable the error again.
 #define ADC_ERROR_ALL               0x3FF
 #define ADC_ERROR_CLEAR             0x0
 #define ADC_ERROR_OTHER             (1<<0)
@@ -353,6 +428,7 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
 
 #define ADC_PGA_PGAEN_BIT (23)
 
+
 /** Class ADC_Module: Implements all functions of the Teensy 3.x analog to digital converter
 *
 */
@@ -360,12 +436,17 @@ class ADC_Module {
 
 public:
 
+    //! Dictionary with the differential pins as keys and the SC1A number as values
+    struct ADC_NLIST {
+        uint8_t pin, sc1a;
+    };
+
     //! Constructor
     /** Pass the ADC number and the Channel number to SC1A number arrays.
     *   @param a_channel2sc1a contains an index that pairs each pin to its SC1A number (used to start a conversion on that pin)
     *   @param a_channel2sc1a_diff is similar to a_channel2sc1a, but for differential pins. It uses base A10: a_channel2sc1a_diff[0] corresponds to A10.
     */
-    ADC_Module(uint8_t ADC_number, const uint8_t* const a_channel2sc1a, const uint8_t* const a_channel2sc1a_diff);
+    ADC_Module(uint8_t ADC_number, const uint8_t* const a_channel2sc1a, const ADC_NLIST* const a_diff_table);
 
 
     //! Starts the calibration sequence, waits until it's done and writes the results
@@ -745,6 +826,7 @@ public:
     uint8_t ADC_num;
 
 
+
 private:
 
     // is set to 1 when the calibration procedure is taking place
@@ -782,7 +864,18 @@ private:
     const uint8_t* const channel2sc1a;
 
     // same for differential pins
-    const uint8_t* const channel2sc1a_diff;
+    const ADC_NLIST* const diff_table;
+
+
+    //! Get the SC1A value of the differential pair for this pin
+    int8_t getDifferentialPair(uint8_t pin) {
+        for(int i=0; i<ADC_DIFF_PAIRS; i++) {
+            if(diff_table[i].pin == pin) {
+                return diff_table[i].sc1a;
+            }
+        }
+        return 31;
+    }
 
 
 
@@ -802,7 +895,7 @@ private:
     *   We can change this functions depending on the board.
     *   Teensy 3.x use bitband while Teensy LC has a more advanced bit manipulation engine.
     */
-#if defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_0)
+#if defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_0) || defined(ADC_TEENSY_3_4) || defined(ADC_TEENSY_3_5)
     // bitband
 #define ADC_BITBAND_ADDR(reg, bit) (((uint32_t)(reg) - 0x40000000) * 32 + (bit) * 4 + 0x42000000)
 

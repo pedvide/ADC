@@ -48,7 +48,7 @@ void setup() {
     adc->startContinuousDifferential(A10, A11, ADC_0);
 
     ////// ADC1 /////
-    #if defined(ADC_TEENSY_3_1)
+    #if ADC_NUM_ADCS>1
 
     adc->setAveraging(32, ADC_1); // set number of averages
     adc->setResolution(13, ADC_1); // set bits of resolution
@@ -78,7 +78,7 @@ void loop() {
         if(c=='c') { // conversion active?
             Serial.print("Converting? ADC0: ");
             Serial.println(adc->isConverting(ADC_0));
-            #if defined(ADC_TEENSY_3_1)
+            #if ADC_NUM_ADCS>1
             Serial.print("Converting? ADC1: ");
             Serial.println(adc->isConverting(ADC_1));
             #endif
@@ -88,7 +88,7 @@ void loop() {
         } else if(c=='t') { // conversion complete?
             Serial.print("Conversion successful? ADC0: ");
             Serial.println(adc->isComplete(ADC_0));
-            #if defined(ADC_TEENSY_3_1)
+            #if ADC_NUM_ADCS>1
             Serial.print("Conversion successful? ADC1: ");
             Serial.println(adc->isComplete(ADC_1));
             #endif
@@ -99,7 +99,7 @@ void loop() {
             Serial.print("Value ADC0: ");
             value = adc->analogReadContinuous(ADC_0);
             Serial.println(value*3.3/adc->getMaxValue(ADC_0), DEC);
-            #if defined(ADC_TEENSY_3_1)
+            #if ADC_NUM_ADCS>1
             Serial.print("Value ADC1: ");
             value2 = adc->analogReadContinuous(ADC_1);
             Serial.println(value2*3.3/adc->getMaxValue(ADC_1), DEC);
@@ -128,7 +128,7 @@ void loop() {
         Serial.print("ADC0 error flags: 0x");
         Serial.println(adc->adc0->fail_flag, HEX);
     }
-    #if defined(ADC_TEENSY_3_1)
+    #if ADC_NUM_ADCS>1
     if(adc->adc1->fail_flag) {
         Serial.print("ADC1 error flags: 0x");
         Serial.println(adc->adc1->fail_flag, HEX);
@@ -144,7 +144,7 @@ void adc0_isr(void) {
     adc->analogReadContinuous(ADC_0);
     digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN)); // Toggle the led
 }
-#if defined(ADC_TEENSY_3_1)
+#if ADC_NUM_ADCS>1
 void adc1_isr(void) {
     // Low-level code
     adc->analogReadContinuous(ADC_1);

@@ -1,7 +1,7 @@
 ADC
 ===
 
-Teensy 3.0/3.1, LC ADC implementation library created by Pedro Villanueva.
+Teensy 3.0, 3.1, 3.2, LC, 3.4, and 3.5 ADC implementation library created by Pedro Villanueva.
 
 See examples and documentation.
 
@@ -13,7 +13,7 @@ License
 
 Teensy 3.x, LC ADC library
 https://github.com/pedvide/ADC
-Copyright (c) 2015 Pedro Villanueva
+Copyright (c) 2016 Pedro Villanueva
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

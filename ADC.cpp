@@ -29,12 +29,7 @@
 
 #include "ADC.h"
 
-/*
-#if ADC_USE_DMA==1
-uint8_t ADC::dma_Ch0 = -1;
-uint8_t ADC::dma_Ch1 = -1;
-#endif
-*/
+
 
 // translate pin number to SC1A nomenclature and viceversa
 // we need to create this static const arrays so that we can assign the "normal arrays" to the correct one
@@ -42,12 +37,11 @@ uint8_t ADC::dma_Ch1 = -1;
 /* channel2sc1aADCx converts a pin number to their value for the SC1A register, for the ADC0 and ADC1
 *  numbers with +ADC_SC1A_PIN_MUX (128) means those pins use mux a, the rest use mux b.
 *  numbers with +ADC_SC1A_PIN_DIFF (64) means it's also a differential pin (treated also in the channel2sc1a_diff_ADCx)
-*  For channel2sc1a_diff_ADCx, +ADC_SC1A_PIN_PGA means the pin can use PGA on that ADC
-*  channel2sc1a_diff uses "base A10", that is channel2sc1a_diff[0] corresponds to A10,
-*  this assumes that the differential pins will always start at A10-A11, etc.
+*  For diff_table_ADCx, +ADC_SC1A_PIN_PGA means the pin can use PGA on that ADC
 */
 
-#if defined(ADC_TEENSY_3_0) || defined(ADC_TEENSY_3_1)
+///////// ADC0
+#if defined(ADC_TEENSY_3_0)
 const uint8_t ADC::channel2sc1aADC0[]= { // new version, gives directly the sc1a number. 0x1F=31 deactivates the ADC.
     5, 14, 8, 9, 13, 12, 6, 7, 15, 4, 0, 19, 3, 21, // 0-13, we treat them as A0-A13
     5, 14, 8, 9, 13, 12, 6, 7, 15, 4, // 14-23 (A0-A9)
@@ -55,8 +49,13 @@ const uint8_t ADC::channel2sc1aADC0[]= { // new version, gives directly the sc1a
     0+ADC_SC1A_PIN_DIFF, 19+ADC_SC1A_PIN_DIFF, 3+ADC_SC1A_PIN_DIFF, 21+ADC_SC1A_PIN_DIFF, // 34-37 (A10-A13)
     26, 22, 23, 27, 29, 30 // 38-43: temp. sensor, VREF_OUT, A14, bandgap, VREFH, VREFL. A14 isn't connected to anything in Teensy 3.0.
 };
-const uint8_t ADC::channel2sc1a_diff_ADC0[]= {
-    0+ADC_SC1A_PIN_PGA, 0+ADC_SC1A_PIN_PGA, 3, 3 // A10-A11 (DAD0, PGA0), A12-A13 (DAD3)
+#elif defined(ADC_TEENSY_3_1) // the only difference with 3.0 is that A13 is not connected to ADC0 and that T3.1 has PGA.
+const uint8_t ADC::channel2sc1aADC0[]= { // new version, gives directly the sc1a number. 0x1F=31 deactivates the ADC.
+    5, 14, 8, 9, 13, 12, 6, 7, 15, 4, 0, 19, 3, 31, // 0-13, we treat them as A0-A13
+    5, 14, 8, 9, 13, 12, 6, 7, 15, 4, // 14-23 (A0-A9)
+    31, 31, 31, 31, 31, 31, 31, 31, 31, 31, // 24-33
+    0+ADC_SC1A_PIN_DIFF, 19+ADC_SC1A_PIN_DIFF, 3+ADC_SC1A_PIN_DIFF, 31+ADC_SC1A_PIN_DIFF, // 34-37 (A10-A13)
+    26, 22, 23, 27, 29, 30 // 38-43: temp. sensor, VREF_OUT, A14, bandgap, VREFH, VREFL. A14 isn't connected to anything in Teensy 3.0.
 };
 #elif defined(ADC_TEENSY_LC)
 // Teensy LC
@@ -67,11 +66,18 @@ const uint8_t ADC::channel2sc1aADC0[]= { // new version, gives directly the sc1a
     31, 31, 31, 31, // 34-37 nothing
     26, 31, 31, 27, 29, 30 // 38-43: temp. sensor, , , bandgap, VREFH, VREFL.
 };
-const uint8_t ADC::channel2sc1a_diff_ADC0[]= {
-    0, 0, 31, 31 // A10-A11 (DAD0), A12 is single-ended and A13 doesn't exist
+#elif defined(ADC_TEENSY_3_4) || defined(ADC_TEENSY_3_5)
+const uint8_t ADC::channel2sc1aADC0[]= { // new version, gives directly the sc1a number. 0x1F=31 deactivates the ADC.
+    5, 14, 8, 9, 13, 12, 6, 7, 15, 4, 3, 19, 31, 31, // 0-13, we treat them as A0-A13
+    5, 14, 8, 9, 13, 12, 6, 7, 15, 4, // 14-23 (A0-A9)
+    31, 31, 31, 31, 31, 31, 31, // 24-30
+    31, 31, 17, 18,// 31-34 A12, A13, A14, A15
+    31, 31, 31, 31, 31,// 33-39
+    3+ADC_SC1A_PIN_DIFF, 19+ADC_SC1A_PIN_DIFF, 23, 31 // 40-43: A10, A11, A21, A22
 };
 #endif // defined
 
+///////// ADC1
 #if defined(ADC_TEENSY_3_1)
 const uint8_t ADC::channel2sc1aADC1[]= { // new version, gives directly the sc1a number. 0x1F=31 deactivates the ADC.
     31, 31, 8, 9, 31, 31, 31, 31, 31, 31, 3, 31, 0, 19, // 0-13, we treat them as A0-A13
@@ -81,12 +87,44 @@ const uint8_t ADC::channel2sc1aADC1[]= { // new version, gives directly the sc1a
     3+ADC_SC1A_PIN_DIFF, 31+ADC_SC1A_PIN_DIFF, 0+ADC_SC1A_PIN_DIFF, 19+ADC_SC1A_PIN_DIFF, // 34-37 (A10-A13) A11 isn't connected.
     26, 18, 31, 27, 29, 30 // 38-43: temp. sensor, VREF_OUT, A14 (not connected), bandgap, VREFH, VREFL.
 };
-const uint8_t ADC::channel2sc1a_diff_ADC1[]= {
-    3, 3, 0+ADC_SC1A_PIN_PGA, 0+ADC_SC1A_PIN_PGA // A10-A11 (DAD3), A12-A13 (DAD0, PGA1)
+#elif defined(ADC_TEENSY_3_4) || defined(ADC_TEENSY_3_5)
+const uint8_t ADC::channel2sc1aADC1[]= { // new version, gives directly the sc1a number. 0x1F=31 deactivates the ADC.
+    31, 31, 8, 9, 31, 31, 31, 31, 31, 31, 31, 31, 14, 15, // 0-13, we treat them as A0-A13
+    31, 31, 8, 9, 31, 31, 31, 31, 31, 31, // 14-23 (A0-A9)
+    31, 31, 31, 31, 31, 31, 31,  // 24-30
+    14, 15, 31, 31, 4, 5, 6, 7, 17, // 31-39 A12-A20
+    31+ADC_SC1A_PIN_DIFF, 19+ADC_SC1A_PIN_DIFF, 31, 23 // 40-43: A10, A11, A21, A22
 };
 #endif
 
+#if defined(ADC_TEENSY_3_1) // Teensy 3.1
+    const ADC_Module::ADC_NLIST ADC::diff_table_ADC0[]= {
+        {A10, 0+ADC_SC1A_PIN_PGA}, {A12, 3}
+    };
+    const ADC_Module::ADC_NLIST ADC::diff_table_ADC1[]= {
+        {A10, 3}, {A12, 0+ADC_SC1A_PIN_PGA}
+    };
+#elif defined(ADC_TEENSY_3_0) // Teensy 3.0
+    const ADC_Module::ADC_NLIST ADC::diff_table_ADC0[]= {
+        {A10, 0}, {A12, 3}
+    };
+#elif defined(ADC_TEENSY_LC) // Teensy LC
+    const ADC_Module::ADC_NLIST ADC::diff_table_ADC0[]= {
+        {A10, 0}
+    };
+#elif defined(ADC_TEENSY_3_4) || defined(ADC_TEENSY_3_5) // Teensy 3.5// Teensy 3.4
+    const ADC_Module::ADC_NLIST ADC::diff_table_ADC0[]= {
+        {A10, 3}
+    };
+    const ADC_Module::ADC_NLIST ADC::diff_table_ADC1[]= {
+        {A10, 0}
+    };
+#endif
+
+
+
 // translate SC1A to pin number
+///////// ADC0
 #if defined(ADC_TEENSY_3_0) || defined(ADC_TEENSY_3_1)
 const uint8_t ADC::sc1a2channelADC0[]= { // new version, gives directly the pin number
     34, 0, 0, 36, 23, 14, 20, 21, 16, 17, 0, 0, 19, 18, // 0-13
@@ -102,9 +140,24 @@ const uint8_t ADC::sc1a2channelADC0[]= { // new version, gives directly the pin 
     26, 0, 0, 0, 38, 41, 0, 42, 43, // A12, temp. sensor, bandgap, VREFH, VREFL.
     0 // 31 means disabled, but just in case
 };
+#elif defined(ADC_TEENSY_3_4) || defined(ADC_TEENSY_3_5)
+const uint8_t ADC::sc1a2channelADC0[]= { // new version, gives directly the pin number
+    34, 0, 0, 36, 23, 14, 20, 21, 16, 17, 0, 0, 19, 18, // 0-13
+    15, 22, 23, 0, 0, 35, 0, 37, // 14-21
+    39, 40, 0, 0, 38, 41, 42, 43, // VREF_OUT, A14, temp. sensor, bandgap, VREFH, VREFL.
+    0 // 31 means disabled, but just in case
+};
 #endif // defined
 
+///////// ADC1
 #if defined(ADC_TEENSY_3_1)
+const uint8_t ADC::sc1a2channelADC1[]= { // new version, gives directly the pin number
+    36, 0, 0, 34, 28, 26, 29, 30, 16, 17, 0, 0, 0, 0, // 0-13. 5a=26, 5b=27, 4b=28, 4a=31
+    0, 0, 0, 0, 39, 37, 0, 0, // 14-21
+    0, 0, 0, 0, 38, 41, 0, 42, // 22-29. VREF_OUT, A14, temp. sensor, bandgap, VREFH, VREFL.
+    43
+};
+#elif defined(ADC_TEENSY_3_4) || defined(ADC_TEENSY_3_5)
 const uint8_t ADC::sc1a2channelADC1[]= { // new version, gives directly the pin number
     36, 0, 0, 34, 28, 26, 29, 30, 16, 17, 0, 0, 0, 0, // 0-13. 5a=26, 5b=27, 4b=28, 4a=31
     0, 0, 0, 0, 39, 37, 0, 0, // 14-21
@@ -113,18 +166,24 @@ const uint8_t ADC::sc1a2channelADC1[]= { // new version, gives directly the pin 
 };
 #endif
 
-ADC::ADC() {
+
+
+ADC::ADC() :
+    adc0_obj(0, channel2sc1aADC0, diff_table_ADC0)
+    , adc0(&adc0_obj)
+    #if ADC_NUM_ADCS>1
+    , adc1_obj(1, channel2sc1aADC1, diff_table_ADC1)
+    , adc1(&adc1_obj)
+    #endif
+    {
     //ctor
+
+    //digitalWriteFast(LED_BUILTIN, HIGH);
 
     // make sure the clocks to the ADC are on
     SIM_SCGC6 |= SIM_SCGC6_ADC0;
     #if ADC_NUM_ADCS>1
     SIM_SCGC3 |= SIM_SCGC3_ADC1;
-    #endif
-
-    adc0 = new ADC_Module(0, channel2sc1aADC0, channel2sc1a_diff_ADC0);
-    #if ADC_NUM_ADCS>1
-    adc1 = new ADC_Module(1, channel2sc1aADC1, channel2sc1a_diff_ADC1);
     #endif
 
 }

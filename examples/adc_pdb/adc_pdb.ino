@@ -39,7 +39,7 @@ void setup() {
 
 
     ////// ADC1 /////
-    #if defined(ADC_TEENSY_3_1)
+    #if ADC_NUM_ADCS>1
     adc->setAveraging(32, ADC_1); // set number of averages
     adc->setResolution(16, ADC_1); // set bits of resolution
     adc->setConversionSpeed(ADC_VERY_LOW_SPEED, ADC_1); // change the conversion speed
@@ -66,7 +66,7 @@ void loop() {
             Serial.print("Value ADC0: ");
             value = (uint16_t)adc->analogReadContinuous(ADC_0); // the unsigned is necessary for 16 bits, otherwise values larger than 3.3/2 V are negative!
             Serial.println(value*3.3/adc->getMaxValue(ADC_0), DEC);
-            #if defined(ADC_TEENSY_3_1)
+            #if ADC_NUM_ADCS>1
             Serial.print("Value ADC1: ");
             value2 = (uint16_t)adc->analogReadContinuous(ADC_1); // the unsigned is necessary for 16 bits, otherwise values larger than 3.3/2 V are negative!
             Serial.println(value2*3.3/adc->getMaxValue(ADC_1), DEC);
@@ -78,7 +78,7 @@ void loop() {
             Serial.println(" Hz.");
             adc->adc0->stopPDB();
             adc->adc0->startPDB(freq); //frequency in Hz
-            #if defined(ADC_TEENSY_3_1)
+            #if ADC_NUM_ADCS>1
             adc->adc1->stopPDB();
             adc->adc1->startPDB(freq); //frequency in Hz
             #endif
@@ -118,7 +118,7 @@ void loop() {
             Serial.println("Comparison error in ADC0");
         }
     }
-    #if defined(ADC_TEENSY_3_1)
+    #if ADC_NUM_ADCS>1
     if(adc->adc1->fail_flag) {
         Serial.print("ADC1 error flags: 0x");
         Serial.println(adc->adc1->fail_flag, HEX);
@@ -141,7 +141,7 @@ void adc0_isr() {
         //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
 }
 
-#if defined(ADC_TEENSY_3_1)
+#if ADC_NUM_ADCS>1
 void adc1_isr() {
         adc->adc1->readSingle();
         digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );

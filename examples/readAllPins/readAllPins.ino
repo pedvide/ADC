@@ -8,15 +8,42 @@
 
 #include <ADC.h>
 
-int readPin = A2; // ADC0
-
 ADC *adc = new ADC();; // adc object
+
+#if defined(__MKL26Z64__) // teensy LC
+#define PINS 13
+#define PINS_DIFF 2
+uint8_t adc_pins[] = {A0,A1,A2,A3,A4,A5,A6,A7,A8, A9,A10,A11, A12};
+uint8_t adc_pins_diff[] = {A10, A11};
+
+#elif defined(__MK20DX128__)  // teensy 3.0
+#define PINS 14
+#define PINS_DIFF 4
+uint8_t adc_pins[] = {A0,A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13};
+uint8_t adc_pins_diff[] = {A10, A11, A12, A13};
+
+#elif defined(__MK20DX256__)  // teensy 3.1/3.2
+#define PINS 21
+#define PINS_DIFF 4
+uint8_t adc_pins[] = {A0,A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,
+                      A14, A15,A16,A17,A18,A19,A20 };
+uint8_t adc_pins_diff[] = {A10, A11, A12, A13};
+
+#elif defined(__MK66FX1M0__)  // teensy 3.4/3.5
+#define PINS 23
+#define PINS_DIFF 2
+uint8_t adc_pins[] = {A0,A1,A2,A3,A4,A5,A6,A7,A8, A9, A10,
+                      A11,A12,A13,A14,A15,A16,A17,A18,A19,A20,A21,A22 };
+uint8_t adc_pins_diff[] = {A10, A11};
+#endif // defined
 
 void setup() {
 
     pinMode(LED_BUILTIN, OUTPUT);
-    pinMode(readPin, INPUT);
 
+    for (int i=0;i<PINS;i++) {
+        pinMode(adc_pins[i], INPUT);
+    }
 
     Serial.begin(9600);
 
@@ -69,28 +96,25 @@ int pin=0;
 
 void loop() {
 
-    if (Serial.available()) {
-        pin = Serial.parseInt();
-        if(pin>0) {
-            Serial.print("Changing to pin ");
-            Serial.println(pin);
-            readPin = pin;
-        }
-        if(pin==-1) {
-            Serial.println("Reset error flags.");
-            adc->adc0->fail_flag=ADC_ERROR_CLEAR;
-            #if ADC_NUM_ADCS>1
-            adc->adc1->fail_flag=ADC_ERROR_CLEAR;
-            #endif
-        }
+
+
+    for (int i=0;i<PINS;i++) {
+        value = adc->analogRead(adc_pins[i]); // read a new value, will return ADC_ERROR_VALUE if the comparison is false.
+        Serial.print(i);
+        Serial.print(": ");
+        Serial.print(value*3.3/adc->getMaxValue(ADC_0), 2);
+        Serial.print(". ");
     }
-
-    value = adc->adc0->analogRead(readPin); // read a new value, will return ADC_ERROR_VALUE if the comparison is false.
-
-    Serial.print("Pin: ");
-    Serial.print(readPin);
-    Serial.print(", value: ");
-    Serial.println(value*3.3/adc->getMaxValue(ADC_0), DEC);
+    Serial.println();
+    Serial.print("Differential pairs: ");
+    for (int i=0;i<PINS_DIFF;i+=2) {
+        value = adc->analogReadDifferential(adc_pins_diff[i], adc_pins_diff[i+1]); // read a new value, will return ADC_ERROR_VALUE if the comparison is false.
+        Serial.print(i);
+        Serial.print(": ");
+        Serial.print(value*3.3/adc->getMaxValue(ADC_0), 2);
+        Serial.print(". ");
+    }
+    Serial.println();Serial.println();
 
 
 

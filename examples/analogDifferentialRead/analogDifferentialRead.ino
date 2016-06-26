@@ -42,7 +42,7 @@ void setup() {
     //adc->enableCompareRange(-1.0*adc->getMaxValue(ADC_0)/3.3, 2.0*adc->getMaxValue(ADC_0)/3.3, 0, 1, ADC_0); // ready if value lies out of [-1.0,2.0] V
 
     ////// ADC1 /////
-    #if defined(ADC_TEENSY_3_1)
+    #if ADC_NUM_ADCS>1
     adc->setAveraging(32, ADC_1); // set number of averages
     adc->setResolution(16, ADC_1); // set bits of resolution
     adc->setConversionSpeed(ADC_VERY_LOW_SPEED, ADC_1); // change the conversion speed
@@ -69,7 +69,7 @@ void loop() {
     // Divide by the maximum possible value and the PGA level
     Serial.println(value*3.3/adc->getPGA()/adc->getMaxValue(), DEC);
 
-    #if defined(ADC_TEENSY_3_1)
+    #if ADC_NUM_ADCS>1
     value2 = adc->analogReadDifferential(A12,A13, ADC_1);
 
     //Serial.print(" Value ADC1: ");
@@ -100,7 +100,7 @@ void loop() {
             Serial.println("Comparison error in ADC0");
         }
     }
-    #if defined(ADC_TEENSY_3_1)
+    #if ADC_NUM_ADCS>1
     if(adc->adc1->fail_flag) {
         Serial.print("ADC1 error flags: 0x");
         Serial.println(adc->adc1->fail_flag, HEX);

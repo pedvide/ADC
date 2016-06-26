@@ -61,10 +61,12 @@ class ADC
         // create both adc objects
 
         //! Object to control the ADC0
-        ADC_Module *adc0; // adc object
+        ADC_Module adc0_obj;
+        ADC_Module *const adc0; // adc object pointer
         #if ADC_NUM_ADCS>1
         //! Object to control the ADC1
-        ADC_Module *adc1; // adc object
+        ADC_Module adc1_obj;
+        ADC_Module *const adc1; // adc object pointer
         #endif
 
 
@@ -402,12 +404,25 @@ class ADC
         #endif
 
 
+        // defined in ADC_Module.h
+//        struct ADC_NLIST {
+//            uint8_t pin, sc1a;
+//        };
+
+        static const ADC_Module::ADC_NLIST diff_table_ADC0[ADC_DIFF_PAIRS];
+        #if ADC_NUM_ADCS>1
+        static const ADC_Module::ADC_NLIST diff_table_ADC1[ADC_DIFF_PAIRS];
+        #endif
+
+
     protected:
     private:
 
         const uint8_t num_ADCs = ADC_NUM_ADCS;
 
 };
+
+
 
 
 #ifdef __cplusplus

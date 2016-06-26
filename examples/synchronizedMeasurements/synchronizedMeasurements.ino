@@ -109,7 +109,7 @@ void loop() {
             Serial.println("Comparison error in ADC0");
         }
     }
-    #if defined(ADC_TEENSY_3_1)
+    #if ADC_NUM_ADCS>1
     if(adc->adc1->fail_flag) {
         Serial.print("ADC1 error flags: 0x");
         Serial.println(adc->adc1->fail_flag, HEX);
