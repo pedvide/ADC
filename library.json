@@ -1,0 +1,13 @@
+{
+  "name": "Teensy_ADC",
+  "keywords": "adc, analog, input",
+  "description": "Teensy LC, 3.x ADC implementation library",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/pedvide/ADC.git"
+  },
+  "exclude": "doxygen",
+  "frameworks": "arduino",
+  "platforms": "teensy"
+}
