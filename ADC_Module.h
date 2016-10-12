@@ -40,10 +40,10 @@
 #define ADC_TEENSY_3_0
 #elif defined(__MKL26Z64__) // Teensy LC
 #define ADC_TEENSY_LC
-#elif defined(__MK64FX512__) // Teensy 3.4
-#define ADC_TEENSY_3_4
-#elif defined(__MK66FX1M0__) // Teensy 3.5
+#elif defined(__MK64FX512__) // Teensy 3.5
 #define ADC_TEENSY_3_5
+#elif defined(__MK66FX1M0__) // Teensy 3.6
+#define ADC_TEENSY_3_6
 #else
 #error "Board not supported!"
 #endif
@@ -57,9 +57,9 @@
         #define ADC_NUM_ADCS 1
 #elif defined(ADC_TEENSY_LC) // Teensy LC
         #define ADC_NUM_ADCS 1
-#elif defined(ADC_TEENSY_3_4) // Teensy 3.4
-        #define ADC_NUM_ADCS 2
 #elif defined(ADC_TEENSY_3_5) // Teensy 3.5
+        #define ADC_NUM_ADCS 2
+#elif defined(ADC_TEENSY_3_6) // Teensy 3.6
         #define ADC_NUM_ADCS 2
 #endif
 
@@ -70,9 +70,9 @@
         #define ADC_USE_DMA 1
 #elif defined(ADC_TEENSY_LC) // Teensy LC
         #define ADC_USE_DMA 1
-#elif defined(ADC_TEENSY_3_4) // Teensy 3.4
-        #define ADC_USE_DMA 1
 #elif defined(ADC_TEENSY_3_5) // Teensy 3.5
+        #define ADC_USE_DMA 1
+#elif defined(ADC_TEENSY_3_6) // Teensy 3.6
         #define ADC_USE_DMA 1
 #endif
 
@@ -83,9 +83,9 @@
         #define ADC_USE_PGA 0
 #elif defined(ADC_TEENSY_LC) // Teensy LC
         #define ADC_USE_PGA 0
-#elif defined(ADC_TEENSY_3_4) // Teensy 3.4
-        #define ADC_USE_PGA 0
 #elif defined(ADC_TEENSY_3_5) // Teensy 3.5
+        #define ADC_USE_PGA 0
+#elif defined(ADC_TEENSY_3_6) // Teensy 3.6
         #define ADC_USE_PGA 0
 #endif
 
@@ -96,9 +96,9 @@
         #define ADC_USE_PDB 1
 #elif defined(ADC_TEENSY_LC) // Teensy LC
         #define ADC_USE_PDB 0
-#elif defined(ADC_TEENSY_3_4) // Teensy 3.4
-        #define ADC_USE_PDB 1
 #elif defined(ADC_TEENSY_3_5) // Teensy 3.5
+        #define ADC_USE_PDB 1
+#elif defined(ADC_TEENSY_3_6) // Teensy 3.6
         #define ADC_USE_PDB 1
 #endif
 
@@ -109,16 +109,16 @@
         #define ADC_USE_INTERNAL 1
 #elif defined(ADC_TEENSY_LC) // Teensy LC
         #define ADC_USE_INTERNAL 0
-#elif defined(ADC_TEENSY_3_4) // Teensy 3.4
-        #define ADC_USE_INTERNAL 1
 #elif defined(ADC_TEENSY_3_5) // Teensy 3.5
+        #define ADC_USE_INTERNAL 1
+#elif defined(ADC_TEENSY_3_6) // Teensy 3.6
         #define ADC_USE_INTERNAL 1
 #endif
 
 // Select the voltage reference sources for ADC.
 #define ADC_REF_DEFAULT    0
 #define ADC_REF_ALT        1
-#if defined(ADC_TEENSY_3_0) || defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_4) || defined(ADC_TEENSY_3_5)
+#if defined(ADC_TEENSY_3_0) || defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_5) || defined(ADC_TEENSY_3_6)
 // default is the external, that is connected to the 3.3V supply.
 // To use the external simply connect AREF to a different voltage
 // alt is connected to the 1.2 V ref.
@@ -140,9 +140,9 @@
         #define ADC_MAX_PIN (37)
 #elif defined(ADC_TEENSY_LC) // Teensy LC
         #define ADC_MAX_PIN (26)
-#elif defined(ADC_TEENSY_3_4) // Teensy 3.4
-        #define ADC_MAX_PIN (43)
 #elif defined(ADC_TEENSY_3_5) // Teensy 3.5
+        #define ADC_MAX_PIN (43)
+#elif defined(ADC_TEENSY_3_6) // Teensy 3.6
         #define ADC_MAX_PIN (43)
 #endif
 
@@ -154,9 +154,9 @@
         #define ADC_DIFF_PAIRS (2)
 #elif defined(ADC_TEENSY_LC) // Teensy LC
         #define ADC_DIFF_PAIRS (1)
-#elif defined(ADC_TEENSY_3_4) // Teensy 3.4
-        #define ADC_DIFF_PAIRS (1)
 #elif defined(ADC_TEENSY_3_5) // Teensy 3.5
+        #define ADC_DIFF_PAIRS (1)
+#elif defined(ADC_TEENSY_3_6) // Teensy 3.6
         #define ADC_DIFF_PAIRS (1)
 #endif
 
@@ -170,7 +170,7 @@ The results in this data sheet were derived from a system which has < 8 Ohm anal
 time constant should be kept to < 1ns.
 
 ADC clock should be 2 to 12 MHz for 16 bit mode
-ADC clock should be 1 to 18 MHz for 8-12 bit mode, and 1-24 MHz for Teensy 3.5 (NOT 3.4)
+ADC clock should be 1 to 18 MHz for 8-12 bit mode, and 1-24 MHz for Teensy 3.6 (NOT 3.5)
 To use the maximum ADC conversion clock frequency, the ADHSC bit must be set and the ADLPC bit must be clear
 
 The ADHSC bit is used to configure a higher clock input frequency. This will allow
@@ -181,7 +181,7 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
 */
 // the alternate clock is connected to OSCERCLK (16 MHz).
 // datasheet says ADC clock should be 2 to 12 MHz for 16 bit mode
-// datasheet says ADC clock should be 1 to 18 MHz for 8-12 bit mode, and 1-24 MHz for Teensy 3.5 (NOT 3.4)
+// datasheet says ADC clock should be 1 to 18 MHz for 8-12 bit mode, and 1-24 MHz for Teensy 3.6 (NOT 3.5)
 // calibration works best when averages are 32 and speed is less than 4 MHz
 // ADC_CFG1_ADICLK: 0=bus, 1=bus/2, 2=(alternative clk) altclk, 3=(async. clk) adack
 // See below for an explanation of VERY_LOW_SPEED, LOW_SPEED, etc.
@@ -226,7 +226,7 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
     #define ADC_CFG1_3MHZ   (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1)) // Clock divide select: 3=div8 + Input clock: 1=bus/2
     #define ADC_CFG1_6MHZ   (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1)) // Clock divide select: 2=div4 + Input clock: 1=bus/2
     #define ADC_CFG1_12MHZ  (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1)) // Clock divide select: 1=div2 Input clock: 1=bus/2
-    #define ADC_CFG1_24MHZ  (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(1)) // this is way too fast, so accuracy is not guaranteed, except for T3.5
+    #define ADC_CFG1_24MHZ  (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(1)) // this is way too fast, so accuracy is not guaranteed, except for T3.6
 
     #define ADC_CFG1_VERY_LOW_SPEED ADC_CFG1_LOW_SPEED
     #define ADC_CFG1_LOW_SPEED (ADC_CFG1_3MHZ)
@@ -380,7 +380,7 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
 // Other things to measure with the ADC that don't use external pins
 // In my Teensy I read 1.22 V for the ADC_VREF_OUT (doesn't exist in Teensy LC), random values for ADC_BANDGAP,
 // 3.3 V for ADC_VREFH and 0.0 V for ADC_VREFL.
-#define ADC_TEMP_SENSOR     38 // 0.719 V at 25ºC and slope of 1.715 mV/ºC for Teensy 3.x and 0.716 V, 1.62 mV/ºC for Teensy LC
+#define ADC_TEMP_SENSOR     38 // 0.719 V at 25ÂºC and slope of 1.715 mV/ÂºC for Teensy 3.x and 0.716 V, 1.62 mV/ÂºC for Teensy LC
 #define ADC_VREF_OUT        39
 #define ADC_BANDGAP         41
 #define ADC_VREFH           42
@@ -895,7 +895,7 @@ private:
     *   We can change this functions depending on the board.
     *   Teensy 3.x use bitband while Teensy LC has a more advanced bit manipulation engine.
     */
-#if defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_0) || defined(ADC_TEENSY_3_4) || defined(ADC_TEENSY_3_5)
+#if defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_0) || defined(ADC_TEENSY_3_5) || defined(ADC_TEENSY_3_6)
     // bitband
 #define ADC_BITBAND_ADDR(reg, bit) (((uint32_t)(reg) - 0x40000000) * 32 + (bit) * 4 + 0x42000000)
 

@@ -66,7 +66,7 @@ const uint8_t ADC::channel2sc1aADC0[]= { // new version, gives directly the sc1a
     31, 31, 31, 31, // 34-37 nothing
     26, 31, 31, 27, 29, 30 // 38-43: temp. sensor, , , bandgap, VREFH, VREFL.
 };
-#elif defined(ADC_TEENSY_3_4) || defined(ADC_TEENSY_3_5)
+#elif defined(ADC_TEENSY_3_5) || defined(ADC_TEENSY_3_6)
 const uint8_t ADC::channel2sc1aADC0[]= { // new version, gives directly the sc1a number. 0x1F=31 deactivates the ADC.
     5, 14, 8, 9, 13, 12, 6, 7, 15, 4, 3, 31, 31, 31, // 0-13, we treat them as A0-A13
     5, 14, 8, 9, 13, 12, 6, 7, 15, 4, // 14-23 (A0-A9)
@@ -87,7 +87,7 @@ const uint8_t ADC::channel2sc1aADC1[]= { // new version, gives directly the sc1a
     3+ADC_SC1A_PIN_DIFF, 31+ADC_SC1A_PIN_DIFF, 0+ADC_SC1A_PIN_DIFF, 19+ADC_SC1A_PIN_DIFF, // 34-37 (A10-A13) A11 isn't connected.
     26, 18, 31, 27, 29, 30 // 38-43: temp. sensor, VREF_OUT, A14 (not connected), bandgap, VREFH, VREFL.
 };
-#elif defined(ADC_TEENSY_3_4) || defined(ADC_TEENSY_3_5)
+#elif defined(ADC_TEENSY_3_5) || defined(ADC_TEENSY_3_6)
 const uint8_t ADC::channel2sc1aADC1[]= { // new version, gives directly the sc1a number. 0x1F=31 deactivates the ADC.
     31, 31, 8, 9, 31, 31, 31, 31, 31, 31, 31, 19, 14, 15, // 0-13, we treat them as A0-A13
     31, 31, 8, 9, 31, 31, 31, 31, 31, 31, // 14-23 (A0-A9)
@@ -112,7 +112,7 @@ const uint8_t ADC::channel2sc1aADC1[]= { // new version, gives directly the sc1a
     const ADC_Module::ADC_NLIST ADC::diff_table_ADC0[]= {
         {A10, 0}
     };
-#elif defined(ADC_TEENSY_3_4) || defined(ADC_TEENSY_3_5) // Teensy 3.5// Teensy 3.4
+#elif defined(ADC_TEENSY_3_5) || defined(ADC_TEENSY_3_6) // Teensy 3.5// Teensy 3.6
     const ADC_Module::ADC_NLIST ADC::diff_table_ADC0[]= {
         {A10, 3}
     };
@@ -140,7 +140,7 @@ const uint8_t ADC::sc1a2channelADC0[]= { // new version, gives directly the pin 
     26, 0, 0, 0, 38, 41, 0, 42, 43, // A12, temp. sensor, bandgap, VREFH, VREFL.
     0 // 31 means disabled, but just in case
 };
-#elif defined(ADC_TEENSY_3_4) || defined(ADC_TEENSY_3_5)
+#elif defined(ADC_TEENSY_3_5) || defined(ADC_TEENSY_3_6)
 const uint8_t ADC::sc1a2channelADC0[]= { // new version, gives directly the pin number
     34, 0, 0, 36, 23, 14, 20, 21, 16, 17, 0, 0, 19, 18, // 0-13
     15, 22, 23, 0, 0, 35, 0, 37, // 14-21
@@ -157,7 +157,7 @@ const uint8_t ADC::sc1a2channelADC1[]= { // new version, gives directly the pin 
     0, 0, 0, 0, 38, 41, 0, 42, // 22-29. VREF_OUT, A14, temp. sensor, bandgap, VREFH, VREFL.
     43
 };
-#elif defined(ADC_TEENSY_3_4) || defined(ADC_TEENSY_3_5)
+#elif defined(ADC_TEENSY_3_5) || defined(ADC_TEENSY_3_6)
 const uint8_t ADC::sc1a2channelADC1[]= { // new version, gives directly the pin number
     36, 0, 0, 34, 28, 26, 29, 30, 16, 17, 0, 0, 0, 0, // 0-13. 5a=26, 5b=27, 4b=28, 4a=31
     0, 0, 0, 0, 39, 37, 0, 0, // 14-21
@@ -1305,4 +1305,3 @@ ADC::Sync_result ADC::readSynchronizedContinuous() {ADC::Sync_result res={0}; re
 void ADC::stopSynchronizedContinuous() {}
 
 #endif
-
