@@ -21,22 +21,30 @@ void setup() {
     pinMode(readPin2, INPUT);
     pinMode(readPin3, INPUT);
 
+    pinMode(A10, INPUT); //Diff Channel 0 Positive
+    pinMode(A11, INPUT); //Diff Channel 0 Negative
+
+    #if ADC_NUM_ADCS>1
+    pinMode(A12, INPUT); //Diff Channel 3 Positive
+    pinMode(A13, INPUT); //Diff Channel 3 Negative
+    #endif
+
     Serial.begin(9600);
 
     ///// ADC0 ////
-    // reference can be ADC_REF_3V3, ADC_REF_1V2 (not for Teensy LC) or ADC_REF_EXT.
-    //adc->setReference(ADC_REF_1V2, ADC_0); // change all 3.3 to 1.2 if you change the reference to 1V2
+    // reference can be ADC_REFERENCE::REF_3V3, ADC_REFERENCE::REF_1V2 (not for Teensy LC) or ADC_REFERENCE::REF_EXT.
+    //adc->setReference(ADC_REFERENCE::REF_1V2, ADC_0); // change all 3.3 to 1.2 if you change the reference to 1V2
 
-    adc->setAveraging(1); // set number of averages
-    adc->setResolution(12); // set bits of resolution
+    adc->setAveraging(16); // set number of averages
+    adc->setResolution(16); // set bits of resolution
 
-    // it can be ADC_VERY_LOW_SPEED, ADC_LOW_SPEED, ADC_MED_SPEED, ADC_HIGH_SPEED_16BITS, ADC_HIGH_SPEED or ADC_VERY_HIGH_SPEED
+    // it can be any of the ADC_CONVERSION_SPEED enum: VERY_LOW_SPEED, LOW_SPEED, MED_SPEED, HIGH_SPEED_16BITS, HIGH_SPEED or VERY_HIGH_SPEED
     // see the documentation for more information
-    // additionally the conversion speed can also be ADC_ADACK_2_4, ADC_ADACK_4_0, ADC_ADACK_5_2 and ADC_ADACK_6_2,
+    // additionally the conversion speed can also be ADACK_2_4, ADACK_4_0, ADACK_5_2 and ADACK_6_2,
     // where the numbers are the frequency of the ADC clock in MHz and are independent on the bus speed.
-    adc->setConversionSpeed(ADC_MED_SPEED); // change the conversion speed
-    // it can be ADC_VERY_LOW_SPEED, ADC_LOW_SPEED, ADC_MED_SPEED, ADC_HIGH_SPEED or ADC_VERY_HIGH_SPEED
-    adc->setSamplingSpeed(ADC_MED_SPEED); // change the sampling speed
+    adc->setConversionSpeed(ADC_CONVERSION_SPEED::VERY_LOW_SPEED); // change the conversion speed
+    // it can be any of the ADC_MED_SPEED enum: VERY_LOW_SPEED, LOW_SPEED, MED_SPEED, HIGH_SPEED or VERY_HIGH_SPEED
+    adc->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED); // change the sampling speed
 
     // always call the compare functions after changing the resolution!
     //adc->enableCompare(1.0/3.3*adc->getMaxValue(ADC_0), 0, ADC_0); // measurement will be ready if value < 1.0V
@@ -46,23 +54,28 @@ void setup() {
     //adc->enableInterrupts(ADC_0);
 
     adc->startContinuous(readPin, ADC_0);
+    //adc->startContinuousDifferential(A10, A11, ADC_0);
+
 
     ////// ADC1 /////
     #if ADC_NUM_ADCS>1
-    adc->setAveraging(32, ADC_1); // set number of averages
-    adc->setResolution(12, ADC_1); // set bits of resolution
-    adc->setConversionSpeed(ADC_VERY_LOW_SPEED, ADC_1); // change the conversion speed
-    adc->setSamplingSpeed(ADC_VERY_LOW_SPEED, ADC_1); // change the sampling speed
+    adc->setAveraging(16, ADC_1); // set number of averages
+    adc->setResolution(16, ADC_1); // set bits of resolution
+    adc->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED, ADC_1); // change the conversion speed
+    adc->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED, ADC_1); // change the sampling speed
+
+    //adc->setReference(ADC_REFERENCE::REF_1V2, ADC_1);
 
     // always call the compare functions after changing the resolution!
     //adc->enableCompare(1.0/3.3*adc->getMaxValue(ADC_1), 0, ADC_1); // measurement will be ready if value < 1.0V
     //adc->enableCompareRange(1.0*adc->getMaxValue(ADC_1)/3.3, 2.0*adc->getMaxValue(ADC_1)/3.3, 0, 1, ADC_1); // ready if value lies out of [1.0,2.0] V
 
 
-    // If you enable interrupts, notice that the isr will read the result, so that isComplete() will return false (most of the time)
+    // If you enable interrupts, note that the isr will read the result, so that isComplete() will return false (most of the time)
     //adc->enableInterrupts(ADC_1);
 
     adc->startContinuous(readPin2, ADC_1);
+    //adc->startContinuousDifferential(A12, A13, ADC_1);
 
     #endif
 
@@ -97,6 +110,7 @@ void loop() {
         } else if(c=='r') { // restart conversion
             Serial.println("Restarting conversions ");
             adc->startContinuous(readPin, ADC_0);
+            //adc->startContinuousDifferential(A10, A11, ADC_0);
         } else if(c=='v') { // value
             Serial.print("Value ADC0: ");
             value = (uint16_t)adc->analogReadContinuous(ADC_0); // the unsigned is necessary for 16 bits, otherwise values larger than 3.3/2 V are negative!
@@ -141,7 +155,7 @@ void loop() {
     }
     #endif
 
-    digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
+    //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
 
     delay(100);
 
@@ -231,7 +245,7 @@ void adc1_isr(void) {
 
 //
 //  ADC_LOW_SPEED, ADC_MED_SPEED, ADC_HIGH_SPEED_16BITS, ADC_HIGH_SPEED and ADC_VERY_HIGH_SPEED are the same for Teensy 3.x and LC,
-//  except for a very small ammount that depends on the bus speed and not on the ADC clock (which is the same for those speeds).
+//  except for a very small amount that depends on the bus speed and not on the ADC clock (which is the same for those speeds).
 //  This difference corresponds to 5 bus clock cycles, which is about 0.1 us.
 //
 //  For 8 bits resolution, 1 average, ADC_MED_SPEED sampling speed the measurement frequencies for the different ADACK are:
@@ -240,5 +254,5 @@ void adc1_isr(void) {
 //  ADC_ADACK_5_2       235.1 kHz
 //  ADC_ADACK_6_2       263.3 kHz
 //  For Teensy 3.x the results are similar but not identical for two reasons: the bus clock plays a small role in the total time and
-//  the frequency of this ADACK clock is acually quite variable, the values are the typical ones, but in the electrical datasheet
-//  it says that they can range from +-50% their values aproximately, so every Teensy can have different frequencies.
+//  the frequency of this ADACK clock is actually quite variable, the values are the typical ones, but in the electrical datasheet
+//  it says that they can range from +-50% their values approximately, so every Teensy can have different frequencies.

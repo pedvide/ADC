@@ -1,6 +1,6 @@
 /* Teensy 3.x, LC ADC library
  * https://github.com/pedvide/ADC
- * Copyright (c) 2015 Pedro Villanueva
+ * Copyright (c) 2016 Pedro Villanueva
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -40,10 +40,10 @@
 #define ADC_TEENSY_3_0
 #elif defined(__MKL26Z64__) // Teensy LC
 #define ADC_TEENSY_LC
-#elif defined(__MK64FX512__) // Teensy 3.4
-#define ADC_TEENSY_3_4
-#elif defined(__MK66FX1M0__) // Teensy 3.5
+#elif defined(__MK64FX512__) // Teensy 3.5
 #define ADC_TEENSY_3_5
+#elif defined(__MK66FX1M0__) // Teensy 3.6
+#define ADC_TEENSY_3_6
 #else
 #error "Board not supported!"
 #endif
@@ -52,85 +52,93 @@
 
 // Teensy 3.1 has 2 ADCs, Teensy 3.0 and LC only 1.
 #if defined(ADC_TEENSY_3_1) // Teensy 3.1
-        #define ADC_NUM_ADCS 2
+        #define ADC_NUM_ADCS (2)
 #elif defined(ADC_TEENSY_3_0) // Teensy 3.0
-        #define ADC_NUM_ADCS 1
+        #define ADC_NUM_ADCS (1)
 #elif defined(ADC_TEENSY_LC) // Teensy LC
-        #define ADC_NUM_ADCS 1
-#elif defined(ADC_TEENSY_3_4) // Teensy 3.4
-        #define ADC_NUM_ADCS 2
+        #define ADC_NUM_ADCS (1)
 #elif defined(ADC_TEENSY_3_5) // Teensy 3.5
-        #define ADC_NUM_ADCS 2
+        #define ADC_NUM_ADCS (2)
+#elif defined(ADC_TEENSY_3_6) // Teensy 3.6
+        #define ADC_NUM_ADCS (2)
 #endif
 
 // Use DMA?
 #if defined(ADC_TEENSY_3_1) // Teensy 3.1
-        #define ADC_USE_DMA 1
+        #define ADC_USE_DMA (1)
 #elif defined(ADC_TEENSY_3_0) // Teensy 3.0
-        #define ADC_USE_DMA 1
+        #define ADC_USE_DMA (1)
 #elif defined(ADC_TEENSY_LC) // Teensy LC
-        #define ADC_USE_DMA 1
-#elif defined(ADC_TEENSY_3_4) // Teensy 3.4
-        #define ADC_USE_DMA 1
+        #define ADC_USE_DMA (1)
 #elif defined(ADC_TEENSY_3_5) // Teensy 3.5
-        #define ADC_USE_DMA 1
+        #define ADC_USE_DMA (1)
+#elif defined(ADC_TEENSY_3_6) // Teensy 3.6
+        #define ADC_USE_DMA (1)
 #endif
 
 // Use PGA?
 #if defined(ADC_TEENSY_3_1) // Teensy 3.1
-        #define ADC_USE_PGA 1
+        #define ADC_USE_PGA (1)
 #elif defined(ADC_TEENSY_3_0) // Teensy 3.0
-        #define ADC_USE_PGA 0
+        #define ADC_USE_PGA (0)
 #elif defined(ADC_TEENSY_LC) // Teensy LC
-        #define ADC_USE_PGA 0
-#elif defined(ADC_TEENSY_3_4) // Teensy 3.4
-        #define ADC_USE_PGA 0
+        #define ADC_USE_PGA (0)
 #elif defined(ADC_TEENSY_3_5) // Teensy 3.5
-        #define ADC_USE_PGA 0
+        #define ADC_USE_PGA (0)
+#elif defined(ADC_TEENSY_3_6) // Teensy 3.6
+        #define ADC_USE_PGA (0)
 #endif
 
 // Use PDB?
 #if defined(ADC_TEENSY_3_1) // Teensy 3.1
-        #define ADC_USE_PDB 1
+        #define ADC_USE_PDB (1)
 #elif defined(ADC_TEENSY_3_0) // Teensy 3.0
-        #define ADC_USE_PDB 1
+        #define ADC_USE_PDB (1)
 #elif defined(ADC_TEENSY_LC) // Teensy LC
-        #define ADC_USE_PDB 0
-#elif defined(ADC_TEENSY_3_4) // Teensy 3.4
-        #define ADC_USE_PDB 1
+        #define ADC_USE_PDB (0)
 #elif defined(ADC_TEENSY_3_5) // Teensy 3.5
-        #define ADC_USE_PDB 1
+        #define ADC_USE_PDB (1)
+#elif defined(ADC_TEENSY_3_6) // Teensy 3.6
+        #define ADC_USE_PDB (1)
 #endif
 
 // Has internal reference?
 #if defined(ADC_TEENSY_3_1) // Teensy 3.1
-        #define ADC_USE_INTERNAL 1
+        #define ADC_USE_INTERNAL (1)
 #elif defined(ADC_TEENSY_3_0) // Teensy 3.0
-        #define ADC_USE_INTERNAL 1
+        #define ADC_USE_INTERNAL (1)
 #elif defined(ADC_TEENSY_LC) // Teensy LC
-        #define ADC_USE_INTERNAL 0
-#elif defined(ADC_TEENSY_3_4) // Teensy 3.4
-        #define ADC_USE_INTERNAL 1
+        #define ADC_USE_INTERNAL (0)
 #elif defined(ADC_TEENSY_3_5) // Teensy 3.5
-        #define ADC_USE_INTERNAL 1
+        #define ADC_USE_INTERNAL (1)
+#elif defined(ADC_TEENSY_3_6) // Teensy 3.6
+        #define ADC_USE_INTERNAL (1)
 #endif
 
-// Select the voltage reference sources for ADC.
-#define ADC_REF_DEFAULT    0
-#define ADC_REF_ALT        1
-#if defined(ADC_TEENSY_3_0) || defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_4) || defined(ADC_TEENSY_3_5)
+// Select the voltage reference sources for ADC. This is an internal setting, do not use
+enum class ADC_REF_SOURCE : uint8_t {REF_DEFAULT = 0, REF_ALT = 1, REF_NONE = 2}; // internal, do not use
+#if defined(ADC_TEENSY_3_0) || defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_5) || defined(ADC_TEENSY_3_6)
 // default is the external, that is connected to the 3.3V supply.
 // To use the external simply connect AREF to a different voltage
 // alt is connected to the 1.2 V ref.
-#define ADC_REF_3V3    ADC_REF_DEFAULT
-#define ADC_REF_1V2    ADC_REF_ALT
-#define ADC_REF_EXT    ADC_REF_DEFAULT
-
+/*! \file */
+/*! Reference for the ADC */
+enum class ADC_REFERENCE : uint8_t {
+    REF_3V3 = ADC_REF_SOURCE::REF_DEFAULT, /*!< 3.3 volts */
+    REF_1V2 = ADC_REF_SOURCE::REF_ALT, /*!< 1.2 volts */
+    REF_EXT = ADC_REF_SOURCE::REF_DEFAULT, /*!< External VREF */
+    NONE = ADC_REF_SOURCE::REF_NONE // internal, do not use
+};
 #elif defined(ADC_TEENSY_LC)
 // alt is the internal ref, 3.3 V
 // the default is AREF
-#define ADC_REF_3V3    ADC_REF_ALT
-#define ADC_REF_EXT    ADC_REF_DEFAULT
+/*! \file */
+/*! Reference for the ADC */
+enum class ADC_REFERENCE : uint8_t {
+    REF_3V3 = ADC_REF_SOURCE::REF_ALT, /*!< 3.3 volts */
+    REF_EXT = ADC_REF_SOURCE::REF_DEFAULT, /*!< External VREF */
+    NONE = ADC_REF_SOURCE::REF_NONE // internal, do not use
+};
 #endif
 
 // max number of pins, size of channel2sc1aADCx
@@ -140,9 +148,9 @@
         #define ADC_MAX_PIN (37)
 #elif defined(ADC_TEENSY_LC) // Teensy LC
         #define ADC_MAX_PIN (26)
-#elif defined(ADC_TEENSY_3_4) // Teensy 3.4
-        #define ADC_MAX_PIN (43)
 #elif defined(ADC_TEENSY_3_5) // Teensy 3.5
+        #define ADC_MAX_PIN (43)
+#elif defined(ADC_TEENSY_3_6) // Teensy 3.6
         #define ADC_MAX_PIN (43)
 #endif
 
@@ -154,10 +162,36 @@
         #define ADC_DIFF_PAIRS (2)
 #elif defined(ADC_TEENSY_LC) // Teensy LC
         #define ADC_DIFF_PAIRS (1)
-#elif defined(ADC_TEENSY_3_4) // Teensy 3.4
-        #define ADC_DIFF_PAIRS (1)
 #elif defined(ADC_TEENSY_3_5) // Teensy 3.5
         #define ADC_DIFF_PAIRS (1)
+#elif defined(ADC_TEENSY_3_6) // Teensy 3.6
+        #define ADC_DIFF_PAIRS (1)
+#endif
+
+
+// Other things to measure with the ADC that don't use external pins
+// In my Teensy I read 1.22 V for the ADC_VREF_OUT (doesn't exist in Teensy LC), random values for ADC_BANDGAP,
+// 3.3 V for ADC_VREFH and 0.0 V for ADC_VREFL.
+#if defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_0)  || defined(ADC_TEENSY_LC)
+    /*! Other ADC sources to measure, such as the temperature sensor.
+    */
+    enum class ADC_INTERNAL_SOURCE : uint8_t{
+        TEMP_SENSOR = 38, /*!< Temperature sensor. */ // 0.719 V at 25ºC and slope of 1.715 mV/ºC for Teensy 3.x and 0.716 V, 1.62 mV/ºC for Teensy LC
+        VREF_OUT = 39, /*!< 1.2 V reference */
+        BANDGAP = 41, /*!< BANDGAP */
+        VREFH = 42, /*!< High VREF */
+        VREFL = 43, /*!< Low VREF. */
+    };
+#elif defined(ADC_TEENSY_3_5) || defined(ADC_TEENSY_3_6)
+    /*! Other ADC sources to measure, such as the temperature sensor.
+    */
+    enum class ADC_INTERNAL_SOURCE : uint8_t{
+        TEMP_SENSOR = 24, /*!< Temperature sensor. */ // 0.719 V at 25ºC and slope of 1.715 mV/ºC for Teensy 3.x and 0.716 V, 1.62 mV/ºC for Teensy LC
+        VREF_OUT = 28, /*!< 1.2 V reference */ // only on ADC1
+        BANDGAP = 25, /*!< BANDGAP */
+        VREFH = 26, /*!< High VREF */
+        VREFL = 27, /*!< Low VREF. */
+    };
 #endif
 
 /* MK20DX256 Datasheet:
@@ -170,7 +204,7 @@ The results in this data sheet were derived from a system which has < 8 Ohm anal
 time constant should be kept to < 1ns.
 
 ADC clock should be 2 to 12 MHz for 16 bit mode
-ADC clock should be 1 to 18 MHz for 8-12 bit mode, and 1-24 MHz for Teensy 3.5 (NOT 3.4)
+ADC clock should be 1 to 18 MHz for 8-12 bit mode, and 1-24 MHz for Teensy 3.6 (NOT 3.5)
 To use the maximum ADC conversion clock frequency, the ADHSC bit must be set and the ADLPC bit must be clear
 
 The ADHSC bit is used to configure a higher clock input frequency. This will allow
@@ -181,7 +215,7 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
 */
 // the alternate clock is connected to OSCERCLK (16 MHz).
 // datasheet says ADC clock should be 2 to 12 MHz for 16 bit mode
-// datasheet says ADC clock should be 1 to 18 MHz for 8-12 bit mode, and 1-24 MHz for Teensy 3.5 (NOT 3.4)
+// datasheet says ADC clock should be 1 to 18 MHz for 8-12 bit mode, and 1-24 MHz for Teensy 3.6 (NOT 3.5)
 // calibration works best when averages are 32 and speed is less than 4 MHz
 // ADC_CFG1_ADICLK: 0=bus, 1=bus/2, 2=(alternative clk) altclk, 3=(async. clk) adack
 // See below for an explanation of VERY_LOW_SPEED, LOW_SPEED, etc.
@@ -189,7 +223,7 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
     #define ADC_CFG1_3_375MHZ      (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))
     #define ADC_CFG1_6_75MHZ       (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1))
     #define ADC_CFG1_13_5MHZ       (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1))
-    #define ADC_CFG1_27MHZ         (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(1))
+    #define ADC_CFG1_27MHZ         (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(1)) // too fast
 
     #define ADC_CFG1_VERY_LOW_SPEED ADC_CFG1_LOW_SPEED
     #define ADC_CFG1_LOW_SPEED (ADC_CFG1_3_375MHZ)
@@ -213,7 +247,7 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
     #define ADC_CFG1_3_5MHZ   (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))
     #define ADC_CFG1_7MHZ     (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1))
     #define ADC_CFG1_14MHZ    (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1))
-    #define ADC_CFG1_28MHZ    (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(1))
+    #define ADC_CFG1_28MHZ    (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(1))  // too fast
 
     #define ADC_CFG1_VERY_LOW_SPEED ADC_CFG1_LOW_SPEED
     #define ADC_CFG1_LOW_SPEED (ADC_CFG1_3_5MHZ)
@@ -239,7 +273,7 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
     #define ADC_CFG1_2_5MHZ   (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))
     #define ADC_CFG1_5MHZ     (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1))
     #define ADC_CFG1_10MHZ    (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1))
-    #define ADC_CFG1_20MHZ    (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(1)) // this is too fast, so accuracy is not guaranteed
+    #define ADC_CFG1_20MHZ    (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(1)) // too fast, except for T3.5
 
     #define ADC_CFG1_VERY_LOW_SPEED ADC_CFG1_LOW_SPEED
     #define ADC_CFG1_LOW_SPEED (ADC_CFG1_2_5MHZ)
@@ -266,7 +300,7 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
     #define ADC_CFG1_3MHZ     (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(0)) // Clock divide select: 3=div8 + Input clock: 0=bus
     #define ADC_CFG1_6MHZ     (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(0)) // Clock divide select: 2=div4 + Input clock: 0=bus
     #define ADC_CFG1_12MHZ    (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(0)) // Clock divide select: 1=div2 + Input clock: 0=bus
-    #define ADC_CFG1_24MHZ    (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(0)) // this is way too fast, so accuracy is not guaranteed
+    #define ADC_CFG1_24MHZ    (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(0)) // too fast, except for T3.5
 
     #define ADC_CFG1_VERY_LOW_SPEED (ADC_CFG1_1_5MHZ)
     #define ADC_CFG1_LOW_SPEED (ADC_CFG1_3MHZ)
@@ -310,35 +344,36 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
 #define ADC_CFG1_ADIV_MASK_0 (1<<5)
 
 // Settings for the power/speed of conversions/sampling
-/* For conversion speeds:
-    ADC_VERY_LOW_SPEED is guaranteed to be the lowest possible speed within specs for resolutions less than 16 bits (higher than 1 MHz),
-    it's different from ADC_LOW_SPEED only for 24, 4 or 2 MHz.
-    ADC_LOW_SPEED is guaranteed to be the lowest possible speed within specs for all resolutions (higher than 2 MHz).
-    ADC_MED_SPEED is always >= ADC_LOW_SPEED and <= ADC_HIGH_SPEED.
-    ADC_HIGH_SPEED_16BITS is guaranteed to be the highest possible speed within specs for all resolutions (lower or eq than 12 MHz).
-    ADC_HIGH_SPEED is guaranteed to be the highest possible speed within specs for resolutions less than 16 bits (lower or eq than 18 MHz).
-    ADC_VERY_HIGH_SPEED may be out of specs, it's different from ADC_HIGH_SPEED only for 48, 40 or 24 MHz.
+/*! ADC conversion speed.
+*   Common set of options to select the ADC clock speed F_ADCK, which depends on F_BUS, except for the ADACK_X_Y options that are independent.
+*   This selection affects the sampling speed too.
+*   Note: the F_ADCK speed is not equal to the conversion speed; any measurement takes several F_ADCK cycles to complete including the sampling and conversion steps.
 */
-/* For sampling speeds:
-    ADC_VERY_LOW_SPEED is the lowest possible sampling speed (+24 ADCK).
-    ADC_LOW_SPEED adds +16 ADCK.
-    ADC_MED_SPEED adds +10 ADCK.
-    ADC_HIGH_SPEED (or ADC_HIGH_SPEED_16BITS) adds +6 ADCK.
-    ADC_VERY_HIGH_SPEED is the highest possible sampling speed (0 ADCK added).
-*/
-#define ADC_VERY_LOW_SPEED      0
-#define ADC_LOW_SPEED           1
-#define ADC_MED_SPEED           2
-#define ADC_HIGH_SPEED_16BITS   3
-#define ADC_HIGH_SPEED          4
-#define ADC_VERY_HIGH_SPEED     5
+enum class ADC_CONVERSION_SPEED : uint8_t {
+    VERY_LOW_SPEED, /*!< is guaranteed to be the lowest possible speed within specs for resolutions less than 16 bits (higher than 1 MHz). */
+    LOW_SPEED, /*!< is guaranteed to be the lowest possible speed within specs for all resolutions (higher than 2 MHz). */
+    MED_SPEED, /*!< is always >= LOW_SPEED and <= HIGH_SPEED. */
+    HIGH_SPEED_16BITS, /*!< is guaranteed to be the highest possible speed within specs for all resolutions (lower than or equal to 12 MHz). */
+    HIGH_SPEED, /*!< is guaranteed to be the highest possible speed within specs for resolutions less than 16 bits (lower than or equal to 18 MHz),
+                            except for Teensy 3.6 (NOT 3.5), for which the maximum is 24 MHz. */
+    VERY_HIGH_SPEED, /*!< may be out of specs */
 
-// Alternative asynchronous clock for ADC.
-// 2.4, 4.0, 5.2 and 6.2 MHz clock independent on the bus frequency.
-#define ADC_ADACK_2_4   16
-#define ADC_ADACK_4_0   17
-#define ADC_ADACK_5_2   18
-#define ADC_ADACK_6_2   19
+    ADACK_2_4, /*!< 2.4 MHz asynchronous ADC clock (independent of the global clocks F_CPU or F_BUS) */
+    ADACK_4_0, /*!< 4.0 MHz asynchronous ADC clock (independent of the global clocks F_CPU or F_BUS) */
+    ADACK_5_2, /*!< 5.2 MHz asynchronous ADC clock (independent of the global clocks F_CPU or F_BUS) */
+    ADACK_6_2 /*!< 6.2 MHz asynchronous ADC clock (independent of the global clocks F_CPU or F_BUS) */
+};
+/*! ADC sampling speed.
+*   It selects how many ADCK clock cycles to add.
+*/
+enum class ADC_SAMPLING_SPEED : uint8_t {
+    VERY_LOW_SPEED, /*!< is the lowest possible sampling speed (+24 ADCK). */
+    LOW_SPEED, /*!< adds +16 ADCK. */
+    MED_SPEED, /*!< adds +10 ADCK. */
+    HIGH_SPEED, /*!< adds +6 ADCK. */
+    VERY_HIGH_SPEED, /*!< is the highest possible sampling speed (0 ADCK added). */
+};
+
 
 
 // Mask for the channel selection in ADCx_SC1A,
@@ -352,8 +387,6 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
 #define ADC_SC1A_PIN_DIFF (0x40)
 // PGA mask. The pins can use PGA on that ADC
 #define ADC_SC1A_PIN_PGA (0x80)
-
-
 
 
 // Error codes for analogRead and analogReadDifferential
@@ -375,16 +408,6 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
 #define ADC_ERROR_CONT_DIFF         (1<<7)
 #define ADC_ERROR_WRONG_ADC         (0<<8)
 #define ADC_ERROR_SYNCH             (1<<9)
-
-
-// Other things to measure with the ADC that don't use external pins
-// In my Teensy I read 1.22 V for the ADC_VREF_OUT (doesn't exist in Teensy LC), random values for ADC_BANDGAP,
-// 3.3 V for ADC_VREFH and 0.0 V for ADC_VREFL.
-#define ADC_TEMP_SENSOR     38 // 0.719 V at 25�C and slope of 1.715 mV/�C for Teensy 3.x and 0.716 V, 1.62 mV/�C for Teensy LC
-#define ADC_VREF_OUT        39
-#define ADC_BANDGAP         41
-#define ADC_VREFH           42
-#define ADC_VREFL           43
 
 
 // debug mode: blink the led light
@@ -429,7 +452,7 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
 #define ADC_PGA_PGAEN_BIT (23)
 
 
-/** Class ADC_Module: Implements all functions of the Teensy 3.x analog to digital converter
+/** Class ADC_Module: Implements all functions of the Teensy 3.x, LC analog to digital converter
 *
 */
 class ADC_Module {
@@ -437,20 +460,24 @@ class ADC_Module {
 public:
 
     //! Dictionary with the differential pins as keys and the SC1A number as values
+    /** Internal, do not use.
+    */
     struct ADC_NLIST {
+        //! Pin and corresponding SC1A value.
         uint8_t pin, sc1a;
     };
 
     //! Constructor
     /** Pass the ADC number and the Channel number to SC1A number arrays.
-    *   @param a_channel2sc1a contains an index that pairs each pin to its SC1A number (used to start a conversion on that pin)
-    *   @param a_diff_table is similar to a_channel2sc1a, but for differential pins.
+    *   \param ADC_number Number of the ADC module, from 0.
+    *   \param a_channel2sc1a contains an index that pairs each pin to its SC1A number (used to start a conversion on that pin)
+    *   \param a_diff_table is similar to a_channel2sc1a, but for differential pins.
     */
     ADC_Module(uint8_t ADC_number, const uint8_t* const a_channel2sc1a, const ADC_NLIST* const a_diff_table);
 
 
     //! Starts the calibration sequence, waits until it's done and writes the results
-    /** Usually it's not necessary to call this function directly, but do it if the "enviroment" changed
+    /** Usually it's not necessary to call this function directly, but do it if the "environment" changed
     *   significantly since the program was started.
     */
     void recalibrate();
@@ -466,11 +493,11 @@ public:
 
     //! Set the voltage reference you prefer, default is vcc
     /*!
-    * \param type can be ADC_REF_3V3, ADC_REF_1V2 (not for Teensy LC) or ADC_REF_EXT
+    * \param ref_type can be ADC_REFERENCE::REF_3V3, ADC_REFERENCE::REF_1V2 (not for Teensy LC) or ADC_REFERENCE::REF_EXT
     *
     *  It recalibrates at the end.
     */
-    void setReference(uint8_t type);
+    void setReference(ADC_REFERENCE ref_type);
 
 
     //! Change the resolution of the measurement.
@@ -478,7 +505,7 @@ public:
     *  \param bits is the number of bits of resolution.
     *  For single-ended measurements: 8, 10, 12 or 16 bits.
     *  For differential measurements: 9, 11, 13 or 16 bits.
-    *  If you want something in between (11 bits single-ended for example) select the inmediate higher
+    *  If you want something in between (11 bits single-ended for example) select the immediate higher
     *  and shift the result one to the right.
     *
     *  Whenever you change the resolution, change also the comparison values (if you use them).
@@ -486,44 +513,50 @@ public:
     void setResolution(uint8_t bits);
 
     //! Returns the resolution of the ADC_Module.
+    /**
+    *   \return the resolution of the ADC_Module.
+    */
     uint8_t getResolution();
 
     //! Returns the maximum value for a measurement: 2^res-1.
+    /**
+    *   \return the maximum value for a measurement: 2^res-1.
+    */
     uint32_t getMaxValue();
 
 
-    //! Sets the conversion speed
+    //! Sets the conversion speed (changes the ADC clock, ADCK)
     /**
-    * \param speed can be ADC_VERY_LOW_SPEED, ADC_LOW_SPEED, ADC_MED_SPEED, ADC_HIGH_SPEED_16BITS, ADC_HIGH_SPEED or ADC_VERY_HIGH_SPEED.
+    * \param speed can be any from the ADC_CONVERSION_SPEED enum: VERY_LOW_SPEED, LOW_SPEED, MED_SPEED, HIGH_SPEED_16BITS, HIGH_SPEED, VERY_HIGH_SPEED,
+    *       ADACK_2_4, ADACK_4_0, ADACK_5_2 or ADACK_6_2.
     *
-    * ADC_VERY_LOW_SPEED is guaranteed to be the lowest possible speed within specs for resolutions less than 16 bits (higher than 1 MHz),
-    * it's different from ADC_LOW_SPEED only for 24, 4 or 2 MHz bus frequency.
-    * ADC_LOW_SPEED is guaranteed to be the lowest possible speed within specs for all resolutions (higher than 2 MHz).
-    * ADC_MED_SPEED is always >= ADC_LOW_SPEED and <= ADC_HIGH_SPEED.
-    * ADC_HIGH_SPEED_16BITS is guaranteed to be the highest possible speed within specs for all resolutions (lower or eq than 12 MHz).
-    * ADC_HIGH_SPEED is guaranteed to be the highest possible speed within specs for resolutions less than 16 bits (lower or eq than 18 MHz).
-    * ADC_VERY_HIGH_SPEED may be out of specs, it's different from ADC_HIGH_SPEED only for 48, 40 or 24 MHz bus frequency.
+    * VERY_LOW_SPEED is guaranteed to be the lowest possible speed within specs for resolutions less than 16 bits (higher than 1 MHz),
+    * it's different from LOW_SPEED only for 24, 4 or 2 MHz bus frequency.
+    * LOW_SPEED is guaranteed to be the lowest possible speed within specs for all resolutions (higher than 2 MHz).
+    * MED_SPEED is always >= LOW_SPEED and <= HIGH_SPEED.
+    * HIGH_SPEED_16BITS is guaranteed to be the highest possible speed within specs for all resolutions (lower or eq than 12 MHz).
+    * HIGH_SPEED is guaranteed to be the highest possible speed within specs for resolutions less than 16 bits (lower or eq than 18 MHz).
+    * VERY_HIGH_SPEED may be out of specs, it's different from HIGH_SPEED only for 48, 40 or 24 MHz bus frequency.
     *
-    * Additionally the conversion speed can also be ADC_ADACK_2_4, ADC_ADACK_4_0, ADC_ADACK_5_2 and ADC_ADACK_6_2,
+    * Additionally the conversion speed can also be ADACK_2_4, ADACK_4_0, ADACK_5_2 and ADACK_6_2,
     * where the numbers are the frequency of the ADC clock (ADCK) in MHz and are independent on the bus speed.
     * This is useful if you are using the Teensy at a very low clock frequency but want faster conversions,
-    * but if F_BUS<F_ADCK, you can't use ADC_VERY_HIGH_SPEED for sampling speed.
-    *
+    * but if F_BUS<F_ADCK, you can't use VERY_HIGH_SPEED for sampling speed.
     */
-    void setConversionSpeed(uint8_t speed);
+    void setConversionSpeed(ADC_CONVERSION_SPEED speed);
 
 
     //! Sets the sampling speed
     /** Increase the sampling speed for low impedance sources, decrease it for higher impedance ones.
-    * \param speed can be ADC_VERY_LOW_SPEED, ADC_LOW_SPEED, ADC_MED_SPEED, ADC_HIGH_SPEED or ADC_VERY_HIGH_SPEED.
+    * \param speed can be any of the ADC_SAMPLING_SPEED enum: VERY_LOW_SPEED, LOW_SPEED, MED_SPEED, HIGH_SPEED or VERY_HIGH_SPEED.
     *
-    * ADC_VERY_LOW_SPEED is the lowest possible sampling speed (+24 ADCK).
-    * ADC_LOW_SPEED adds +16 ADCK.
-    * ADC_MED_SPEED adds +10 ADCK.
-    * ADC_HIGH_SPEED (or ADC_HIGH_SPEED_16BITS) adds +6 ADCK.
-    * ADC_VERY_HIGH_SPEED is the highest possible sampling speed (0 ADCK added).
+    * VERY_LOW_SPEED is the lowest possible sampling speed (+24 ADCK).
+    * LOW_SPEED adds +16 ADCK.
+    * MED_SPEED adds +10 ADCK.
+    * HIGH_SPEED adds +6 ADCK.
+    * VERY_HIGH_SPEED is the highest possible sampling speed (0 ADCK added).
     */
-    void setSamplingSpeed(uint8_t speed);
+    void setSamplingSpeed(ADC_SAMPLING_SPEED speed);
 
 
     //! Set the number of averages
@@ -536,7 +569,7 @@ public:
 
 
     //! Enable interrupts
-    /** An IRQ_ADC0 Interrupt will be raised when the conversion is completed
+    /** An IRQ_ADCx Interrupt will be raised when the conversion is completed
     *  (including hardware averages and if the comparison (if any) is true).
     */
     void enableInterrupts();
@@ -560,6 +593,8 @@ public:
     *  is >= compValue (greaterThan=1) or < compValue (greaterThan=0)
     *  Call it after changing the resolution
     *  Use with interrupts or poll conversion completion with isComplete()
+    *   \param compValue value to compare
+    *   \param greaterThan true or false
     */
     void enableCompare(int16_t compValue, bool greaterThan);
 
@@ -569,6 +604,10 @@ public:
     *  See Table 31-78, p. 617 of the freescale manual.
     *  Call it after changing the resolution
     *  Use with interrupts or poll conversion completion with isComplete()
+    *   \param lowerLimit lower value to compare
+    *   \param upperLimit upper value to compare
+    *   \param insideRange true or false
+    *   \param inclusive true or false
     */
     void enableCompareRange(int16_t lowerLimit, int16_t upperLimit, bool insideRange, bool inclusive);
 
@@ -578,14 +617,14 @@ public:
 
     //! Enable and set PGA
     /** Enables the PGA and sets the gain
-    *   Use only for signals lower than 1.2 V
+    *   Use only for signals lower than 1.2 V and only in differential mode
     *   \param gain can be 1, 2, 4, 8, 16, 32 or 64
-    *
     */
     void enablePGA(uint8_t gain);
 
     //! Returns the PGA level
-    /** PGA from 1 to 64
+    /**
+    *   \return PGA level from 1 to 64
     */
     uint8_t getPGA();
 
@@ -616,6 +655,9 @@ public:
     ////////////// INFORMATION ABOUT THE STATE OF THE ADC /////////////////
 
     //! Is the ADC converting at the moment?
+    /**
+    *   \return true or false
+    */
     volatile bool isConverting() __attribute__((always_inline)) {
         //return (*ADC_SC2_adact);
         return getBit(ADC_SC2, ADC_SC2_ADACT_BIT);
@@ -624,9 +666,9 @@ public:
 
     //! Is an ADC conversion ready?
     /**
-    *  \return 1 if yes, 0 if not.
-    *  When a value is read this function returns 0 until a new value exists
-    *  So it only makes sense to call it before analogReadContinuous() or readSingle()
+    *  \return true if yes, false if not.
+    *  When a value is read this function returns false until a new value exists,
+    *  so it only makes sense to call it before analogReadContinuous() or readSingle()
     */
     volatile bool isComplete() __attribute__((always_inline)) {
         //return (*ADC_SC1A_coco);
@@ -635,12 +677,18 @@ public:
     }
 
     //! Is the ADC in differential mode?
+    /**
+    *   \return true or false
+    */
     volatile bool isDifferential() __attribute__((always_inline)) {
         //return ((*ADC_SC1A) & ADC_SC1_DIFF) >> 5;
         return getBit(ADC_SC1A, ADC_SC1_DIFF_BIT);
     }
 
     //! Is the ADC in continuous mode?
+    /**
+    *   \return true or false
+    */
     volatile bool isContinuous() __attribute__((always_inline)) {
         //return (*ADC_SC3_adco);
         return getBit(ADC_SC3, ADC_SC3_ADCO_BIT);
@@ -648,6 +696,9 @@ public:
     }
 
     //! Is the PGA function enabled?
+    /**
+    *   \return true or false
+    */
     volatile bool isPGAEnabled() __attribute__((always_inline)) {
         return getBit(ADC_PGA, ADC_PGA_PGAEN_BIT);
     }
@@ -656,10 +707,17 @@ public:
     //////////////// INFORMATION ABOUT VALID PINS //////////////////
 
     //! Check whether the pin is a valid analog pin
+    /**
+    *   \param pin to check.
+    *   \return true if the pin is valid, false otherwise.
+    */
     bool checkPin(uint8_t pin);
 
     //! Check whether the pins are a valid analog differential pair of pins
     /** If PGA is enabled it also checks that this ADCx can use PGA on this pins
+    *   \param pinP positive pin to check.
+    *   \param pinN negative pin to check.
+    *   \return true if the pin is valid, false otherwise.
     */
     bool checkDifferentialPins(uint8_t pinP, uint8_t pinN);
 
@@ -669,12 +727,15 @@ public:
     //! Starts a single-ended conversion on the pin
     /** It sets the mux correctly, doesn't do any of the checks on the pin and
     *   doesn't change the continuous conversion bit.
+    *   \param pin to read.
     */
     void startReadFast(uint8_t pin); // helper method
 
     //! Starts a differential conversion on the pair of pins
     /** It sets the mux correctly, doesn't do any of the checks on the pin and
     *   doesn't change the continuous conversion bit.
+    *   \param pinP positive pin to read.
+    *   \param pinN negative pin to read.
     */
     void startDifferentialFast(uint8_t pinP, uint8_t pinN);
 
@@ -685,17 +746,34 @@ public:
     /** It waits until the value is read and then returns the result.
     * If a comparison has been set up and fails, it will return ADC_ERROR_VALUE.
     * This function is interrupt safe, so it will restore the adc to the state it was before being called
+    *   \param pin pin to read.
+    *   \return the value of the pin.
     */
     int analogRead(uint8_t pin);
+
+    //! Returns the analog value of the special internal source, such as the temperature sensor.
+    /** It calls analogRead(uint8_t pin) internally, with the correct value for the pin for all boards.
+    *   Possible values:
+    *   TEMP_SENSOR,  Temperature sensor.
+    *   VREF_OUT,  1.2 V reference.
+    *   BANDGAP, BANDGAP.
+    *   VREFH, High VREF.
+    *   VREFL, Low VREF.
+    *   \param pin ADC_INTERNAL_SOURCE to read.
+    *   \return the value of the pin.
+    */
+    int analogRead(ADC_INTERNAL_SOURCE pin) __attribute__((always_inline)) {
+        return analogRead(static_cast<uint8_t>(pin));
+    }
 
 
     //! Reads the differential analog value of two pins (pinP - pinN).
     /** It waits until the value is read and then returns the result.
-    * If a comparison has been set up and fails, it will return ADC_ERROR_DIFF_VALUE.
-    * \param pinP must be A10 or A12.
-    * \param pinN must be A11 (if pinP=A10) or A13 (if pinP=A12)..
-    * Other pins will return ADC_ERROR_DIFF_VALUE.
-    * This function is interrupt safe, so it will restore the adc to the state it was before being called
+    *   If a comparison has been set up and fails, it will return ADC_ERROR_DIFF_VALUE.
+    *   \param pinP must be A10 or A12.
+    *   \param pinN must be A11 (if pinP=A10) or A13 (if pinP=A12).
+    *   \return the difference between the pins if they are valid, othewise returns ADC_ERROR_DIFF_VALUE.
+    *   This function is interrupt safe, so it will restore the adc to the state it was before being called
     */
     int analogReadDifferential(uint8_t pinP, uint8_t pinN);
 
@@ -704,17 +782,18 @@ public:
 
     //! Starts an analog measurement on the pin and enables interrupts.
     /** It returns immediately, get value with readSingle().
-    *   If the pin is incorrect it returns ADC_ERROR_VALUE
     *   If this function interrupts a measurement, it stores the settings in adc_config
+    *   \param pin pin to read.
+    *   \return true if the pin is valid, false otherwise.
     */
     bool startSingleRead(uint8_t pin);
 
     //! Start a differential conversion between two pins (pinP - pinN) and enables interrupts.
     /** It returns immediately, get value with readSingle().
+    *   If this function interrupts a measurement, it stores the settings in adc_config
     *   \param pinP must be A10 or A12.
     *   \param pinN must be A11 (if pinP=A10) or A13 (if pinP=A12).
-    *   Other pins will return ADC_ERROR_DIFF_VALUE.
-    *   If this function interrupts a measurement, it stores the settings in adc_config
+    *   \return true if the pins are valid, false otherwise.
     */
     bool startSingleDifferential(uint8_t pinP, uint8_t pinN);
 
@@ -731,6 +810,8 @@ public:
 
     //! Starts continuous conversion on the pin.
     /** It returns as soon as the ADC is set, use analogReadContinuous() to read the value.
+    *   \param pin can be any of the analog pins
+    *   \return true if the pin is valid, false otherwise.
     */
     bool startContinuous(uint8_t pin);
 
@@ -738,7 +819,7 @@ public:
     /** It returns as soon as the ADC is set, use analogReadContinuous() to read the value.
     * \param pinP must be A10 or A12.
     * \param pinN must be A11 (if pinP=A10) or A13 (if pinP=A12).
-    * Other pins will return ADC_ERROR_DIFF_VALUE.
+    * \return true if the pins are valid, false otherwise.
     */
     bool startContinuousDifferential(uint8_t pinP, uint8_t pinN);
 
@@ -761,7 +842,7 @@ public:
     #if ADC_USE_PDB
 
     //                  software trigger    enable PDB     PDB interrupt
-    #define PDB_CONFIG (PDB_SC_TRGSEL(15) | PDB_SC_PDBEN | PDB_SC_PDBIE \
+    #define ADC_PDB_CONFIG (PDB_SC_TRGSEL(15) | PDB_SC_PDBEN | PDB_SC_PDBIE \
         | PDB_SC_CONT |  PDB_SC_LDMOD(0))
     //    continuous mode load immediately
 
@@ -771,7 +852,7 @@ public:
     //! Start PDB triggering the ADC at the frequency
     /**   Call analogRead on the pin that you want to measure before calling this function.
     *   See the example.
-    *   @param freq is the frequency of the ADC conversion, it can't be lower that 1 Hz
+    *   \param freq is the frequency of the ADC conversion, it can't be lower that 1 Hz
     */
     void startPDB(uint32_t freq);
 
@@ -787,6 +868,7 @@ public:
 
     //! Store the config of the adc
     struct ADC_Config {
+        //! ADC registers
         uint32_t savedSC1A, savedSC2, savedSC3, savedCFG1, savedCFG2;
     } adc_config;
 
@@ -846,7 +928,7 @@ private:
     volatile uint8_t analog_num_average;
 
     // reference can be internal or external
-    volatile uint8_t analog_reference_internal;
+    volatile ADC_REF_SOURCE analog_reference_internal;
 
     // are interrupts enabled?
     volatile uint8_t var_enableInterrupts;
@@ -855,10 +937,10 @@ private:
     volatile uint8_t pga_value;
 
     // conversion speed
-    volatile uint8_t conversion_speed;
+    volatile ADC_CONVERSION_SPEED conversion_speed;
 
     // sampling speed
-    volatile uint8_t sampling_speed;
+    volatile ADC_SAMPLING_SPEED sampling_speed;
 
     // translate pin number to SC1A nomenclature
     const uint8_t* const channel2sc1a;
@@ -869,12 +951,12 @@ private:
 
     //! Get the SC1A value of the differential pair for this pin
     uint8_t getDifferentialPair(uint8_t pin) {
-        for(int i=0; i<ADC_DIFF_PAIRS; i++) {
+        for(uint8_t i=0; i<ADC_DIFF_PAIRS; i++) {
             if(diff_table[i].pin == pin) {
                 return diff_table[i].sc1a;
             }
         }
-        return 31;
+        return ADC_SC1A_PIN_INVALID;
     }
 
 
@@ -891,13 +973,13 @@ private:
 
 
     /////// Atomic bit set/clear
-    /* Clear bit in address (make it zero), set bit (make it one) or return the value of that bit
+    /* Clear bit in address (make it zero), set bit (make it one), or return the value of that bit
     *   We can change this functions depending on the board.
     *   Teensy 3.x use bitband while Teensy LC has a more advanced bit manipulation engine.
     */
-#if defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_0) || defined(ADC_TEENSY_3_4) || defined(ADC_TEENSY_3_5)
+    #if defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_0) || defined(ADC_TEENSY_3_5) || defined(ADC_TEENSY_3_6)
     // bitband
-#define ADC_BITBAND_ADDR(reg, bit) (((uint32_t)(reg) - 0x40000000) * 32 + (bit) * 4 + 0x42000000)
+    #define ADC_BITBAND_ADDR(reg, bit) (((uint32_t)(reg) - 0x40000000) * 32 + (bit) * 4 + 0x42000000)
 
     __attribute__((always_inline)) void setBit(volatile uint32_t* reg, uint8_t bit) {
         (*(uint32_t *)ADC_BITBAND_ADDR((reg), (bit))) = 1;
@@ -914,7 +996,7 @@ private:
         return (volatile bool)*(uint32_t*)(ADC_BITBAND_ADDR(reg, bit));
     }
 
-#elif defined(ADC_TEENSY_LC)
+    #elif defined(ADC_TEENSY_LC)
     // bit manipulation engine
     //#define ADC_SETBIT_ATOMIC(reg, bit) (*(uint32_t *)(((uint32_t)&(reg) - 0xF8000000) | 0x48000000) = 1 << (bit)) // OR
     //#define ADC_CLRBIT_ATOMIC(reg, bit) (*(uint32_t *)(((uint32_t)&(reg) - 0xF8000000) | 0x44000000) = ~(1 << (bit))) // XOR
@@ -931,9 +1013,9 @@ private:
     __attribute__((always_inline)) void changeBit(volatile uint32_t* reg, uint8_t bit, bool state) {
         //temp = *(uint32_t *)((uint32_t)(reg) | ((3-2*!!state)<<27) | (bit<<21)); // LAS/LAC
         if(state) { // set
-            *(volatile uint32_t*)((uint32_t)(reg) | (1<<27)) = 1<<bit; // OR
+            setBit(reg, bit);
         } else { // clear
-            *(volatile uint32_t*)((uint32_t)(reg) | (1<<26)) = ~(1<<bit); // AND
+            clearBit(reg, bit);
         }
 
     }
@@ -942,7 +1024,7 @@ private:
         return (volatile bool)*(uint32_t *)((uint32_t)(reg) | (1<<28) | (bit<<23) ); // UBFX
     }
 
-#endif
+    #endif
 
     uint32_t adc_offset;
 

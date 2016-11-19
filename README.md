@@ -1,7 +1,7 @@
 ADC
 ===
 
-Teensy 3.0, 3.1, 3.2, LC, 3.4, and 3.5 ADC implementation library created by Pedro Villanueva.
+Teensy 3.0, 3.1, 3.2, LC, 3.5, and 3.6 ADC implementation library created by Pedro Villanueva.
 
 See examples and documentation.
 

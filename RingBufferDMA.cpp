@@ -1,6 +1,6 @@
 /* Teensy 3.x, LC ADC library
  * https://github.com/pedvide/ADC
- * Copyright (c) 2015 Pedro Villanueva
+ * Copyright (c) 2016 Pedro Villanueva
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -25,13 +25,7 @@
 
 #include "RingBufferDMA.h"
 
-// Point static_ringbuffer_dma to an RingBufferDMA object
-// so that object's isr is called when DMA finishes
-RingBufferDMA *RingBufferDMA::static_ringbuffer_dma;
-void RingBufferDMA::call_dma_isr(void) {
-        static_ringbuffer_dma->void_isr();
-}
-
+// Constructor
 RingBufferDMA::RingBufferDMA(volatile int16_t* elems, uint32_t len, uint8_t ADC_num) :
         p_elems(elems)
         , b_size(len)
@@ -42,65 +36,29 @@ RingBufferDMA::RingBufferDMA(volatile int16_t* elems, uint32_t len, uint8_t ADC_
     b_start = 0;
     b_end = 0;
 
-    // point to the correct ADC
-    //ADC_RA = &ADC0_RA + (uint32_t)0x20000*ADC_number;
 
     dmaChannel = new DMAChannel(); // reserve a DMA channel
-
-    //p_elems = new int16_t[len];
-
-
-    // len must be power of two. extract the alignment
-    //alignment = 32 - __builtin_clz(len);
-    //uintptr_t mask = ~(uintptr_t)(len - 1);
-    //p_mem = malloc(len+len-1);
-    //p_elems = (int16_t *)(((uintptr_t)p_mem+len-1) & mask);
-
-    // calculate mask
-    //uint8_t mask = (1 << (alignment)) - 1;
-
-    // To align to 16 bytes, allocate 15 bytes more and "move" the pointer to a 16 byte alignment, same for other sizes
-    // we need to free(p_mem), the original pointer returned by malloc.
-    //p_mem = malloc(len+len-1);
-    //p_elems = (int16_t*)(((uintptr_t)p_mem+len-1) & ~ (uintptr_t)mask);
 
 
     //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
 }
 
-void RingBufferDMA::start() {
+void RingBufferDMA::start(void (*call_dma_isr)(void)) {
 
     // set up a DMA channel to store the ADC data
     // The idea is to have ADC_RA as a source,
     // the buffer as a circular buffer
-    // each ADC conversion triggers a DMA transfer (transferCount(1)), of size 2 bytes (transferSize(2))
+    // each ADC conversion triggers a DMA transfer (transferCount(b_size)), of size 2 bytes (transferSize(2))
 
     dmaChannel->source(*ADC_RA);
-//      TCD->SADDR = ADC_RA;
-//		TCD->SOFF = 0;
-//		TCD->ATTR_SRC = 2; // upper 8 bits of TCD->ATTR are TCD->ATTR_SRC
-//		TCD->NBYTES = 4;
-//		TCD->SLAST = 0;
 
-    dmaChannel->destinationCircular((uint16_t*)p_elems, b_size); // 2*b_size is necessary for some reason
-//    TCD->DADDR = p;
-//    TCD->DOFF = 2;
-//    TCD->ATTR_DST = ((31 - __builtin_clz(len)) << 3) | 1;
-//    TCD->NBYTES = 2;
-//    TCD->DLASTSGA = 0;
-//    TCD->BITER = len / 2;
-//    TCD->CITER = len / 2;
+    dmaChannel->destinationCircular((uint16_t*)p_elems, 2*b_size); // 2*b_size is necessary for some reason
 
     dmaChannel->transferSize(2); // both SRC and DST size
-//      TCD->NBYTES = 2;
-//	    TCD->ATTR = (TCD->ATTR & 0xF8F8) | 0x0101;
 
-    dmaChannel->transferCount(1); // transfer 1 value (2 bytes)
-//    TCD->BITER = 1;
-//    TCD->CITER = 1;
+    dmaChannel->transferCount(b_size); // transfer b_size values
 
-    dmaChannel->interruptAtCompletion();
-//    TCD->CSR |= DMA_TCD_CSR_INTMAJOR;
+    dmaChannel->interruptAtCompletion(); //interruptAtHalf or interruptAtCompletion
 
 
 	uint8_t DMAMUX_SOURCE_ADC = DMAMUX_SOURCE_ADC0;
@@ -110,11 +68,10 @@ void RingBufferDMA::start() {
     }
     #endif // ADC_NUM_ADCS
 
-    // point here so call_dma_isr actually calls this object's isr function
-    static_ringbuffer_dma = this;
 
 	dmaChannel->triggerAtHardwareEvent(DMAMUX_SOURCE_ADC); // start DMA channel when ADC finishes a conversion
 	dmaChannel->enable();
+
 	dmaChannel->attachInterrupt(call_dma_isr);
 
     //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
@@ -128,18 +85,18 @@ RingBufferDMA::~RingBufferDMA() {
     delete dmaChannel;
 }
 
-void RingBufferDMA::void_isr() {
-    //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
-    write();
-    dmaChannel->clearInterrupt();
-}
-
 
 bool RingBufferDMA::isFull() {
+    //b_end = uint32_t(dmaChannel->destinationAddress()) - uint32_t(p_elems);
+    //b_end /= 2; // convert from uint16_t to positions
+
     return (b_end == (b_start ^ b_size));
 }
 
 bool RingBufferDMA::isEmpty() {
+    //b_end = uint32_t(dmaChannel->destinationAddress()) - uint32_t(p_elems);
+    //b_end /= 2; // convert from uint16_t to positions
+
     return (b_end == b_start);
 }
 
@@ -152,6 +109,12 @@ void RingBufferDMA::write() {
         b_start = increase(b_start);
     }
     b_end = increase(b_end);
+
+    dmaChannel->clearInterrupt();
+
+//    b_start = increase(b_start);
+//    b_end = uint32_t(dmaChannel->destinationAddress()) - uint32_t(p_elems);
+//    b_end /= 2; // convert from uint16_t to positions
 }
 
 int16_t RingBufferDMA::read() {
