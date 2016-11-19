@@ -29,6 +29,7 @@ var class_a_d_c___module =
     [ "isDifferential", "class_a_d_c___module.html#aa0069ff00c919d00d9769b06dd3cb206", null ],
     [ "isPGAEnabled", "class_a_d_c___module.html#ab512734714c0c3273ceebe8c1b96c5a3", null ],
     [ "loadConfig", "class_a_d_c___module.html#a1bb50f669bbc41937fb5157abe2050ca", null ],
+    [ "printError", "class_a_d_c___module.html#ae34bcdac75a630120799ddb5119191f6", null ],
     [ "readSingle", "class_a_d_c___module.html#a01d8bbca381dccfda87b7f6d27487340", null ],
     [ "recalibrate", "class_a_d_c___module.html#afe8ed6f2a6c811ec3ef2c4aba768982f", null ],
     [ "saveConfig", "class_a_d_c___module.html#af2ee5bc5b76647506e597c178c9691d3", null ],

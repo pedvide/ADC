@@ -2,8 +2,8 @@ var searchData=
 [
   ['saveconfig',['saveConfig',['../class_a_d_c___module.html#af2ee5bc5b76647506e597c178c9691d3',1,'ADC_Module']]],
   ['savedsc1a',['savedSC1A',['../struct_a_d_c___module_1_1_a_d_c___config.html#a708e83c3bbd11a06d88802b8941e19a8',1,'ADC_Module::ADC_Config']]],
-  ['sc1a2channeladc0',['sc1a2channelADC0',['../class_a_d_c.html#ac83f0521b05578ac1faf0966a3128f33',1,'ADC']]],
-  ['sc1a2channeladc1',['sc1a2channelADC1',['../class_a_d_c.html#a8769995229f5dc1f8dc4191eb97f9e09',1,'ADC']]],
+  ['sc1a2channeladc0',['sc1a2channelADC0',['../class_a_d_c.html#aa3fc624721f8108ef8b77b45a857bdc6',1,'ADC']]],
+  ['sc1a2channeladc1',['sc1a2channelADC1',['../class_a_d_c.html#ad1ed91f3ef9e283133455802c37c6501',1,'ADC']]],
   ['setaveraging',['setAveraging',['../class_a_d_c.html#a6fd39809addc247f13004687d201003d',1,'ADC::setAveraging()'],['../class_a_d_c___module.html#a55954618c5c27c1ffce4321e912bac52',1,'ADC_Module::setAveraging()']]],
   ['setconversionspeed',['setConversionSpeed',['../class_a_d_c.html#a16dbaacbe2ffc2d913337498b0495326',1,'ADC::setConversionSpeed()'],['../class_a_d_c___module.html#a281b4f6ca2705f934bc86b1a25679138',1,'ADC_Module::setConversionSpeed()']]],
   ['sethardwaretrigger',['setHardwareTrigger',['../class_a_d_c___module.html#ab228ecc03cb2c1463371c35ca9cdb091',1,'ADC_Module']]],

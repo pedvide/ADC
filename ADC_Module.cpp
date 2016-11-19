@@ -792,7 +792,6 @@ bool ADC_Module::checkDifferentialPins(uint8_t pinP, uint8_t pinN) {
 
     // the pair can't be measured with this ADC
     if( (sc1a_pin&ADC_SC1A_CHANNELS) == ADC_SC1A_PIN_INVALID ) {
-        fail_flag |= ADC_ERROR_WRONG_PIN;
         return false;   // all others are invalid
     }
 

@@ -513,19 +513,28 @@ class ADC
         #endif
 
 
+        //////////// ERROR PRINTING /////
+        //! Prints the human-readable error from all ADC, if any.
+        void printError() {
+            for(int i=0; i< ADC_NUM_ADCS; i++) {
+                adc[i]->printError();
+            }
+        }
+
+
         //! Translate pin number to SC1A nomenclature
         // should this be a constexpr?
-        static const uint8_t channel2sc1aADC0[44];
+        static const uint8_t channel2sc1aADC0[ADC_MAX_PIN+1];
         #if ADC_NUM_ADCS>1
         //! Translate pin number to SC1A nomenclature
-        static const uint8_t channel2sc1aADC1[44];
+        static const uint8_t channel2sc1aADC1[ADC_MAX_PIN+1];
         #endif
 
         //! Translate pin number to SC1A nomenclature for differential pins
-        static const uint8_t sc1a2channelADC0[44];
+        static const uint8_t sc1a2channelADC0[ADC_MAX_PIN+1];
         #if ADC_NUM_ADCS>1
         //! Translate pin number to SC1A nomenclature for differential pins
-        static const uint8_t sc1a2channelADC1[44];
+        static const uint8_t sc1a2channelADC1[ADC_MAX_PIN+1];
         #endif
 
 

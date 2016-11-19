@@ -10,26 +10,26 @@
 
 ADC *adc = new ADC();; // adc object
 
-#if defined(__MKL26Z64__) // teensy LC
+#if defined(ADC_TEENSY_LC) // teensy LC
 #define PINS 13
 #define PINS_DIFF 2
 uint8_t adc_pins[] = {A0,A1,A2,A3,A4,A5,A6,A7,A8, A9,A10,A11, A12};
 uint8_t adc_pins_diff[] = {A10, A11};
 
-#elif defined(__MK20DX128__)  // teensy 3.0
+#elif defined(ADC_TEENSY_3_0)  // teensy 3.0
 #define PINS 14
 #define PINS_DIFF 4
 uint8_t adc_pins[] = {A0,A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13};
 uint8_t adc_pins_diff[] = {A10, A11, A12, A13};
 
-#elif defined(__MK20DX256__)  // teensy 3.1/3.2
+#elif defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_2)  // teensy 3.1/3.2
 #define PINS 21
 #define PINS_DIFF 4
 uint8_t adc_pins[] = {A0,A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,
                       A14, A15,A16,A17,A18,A19,A20 };
 uint8_t adc_pins_diff[] = {A10, A11, A12, A13};
 
-#elif defined(__MK66FX1M0__)  // Teensy 3.5/3.6
+#elif defined(ADC_TEENSY_3_5) || defined(ADC_TEENSY_3_6)  // Teensy 3.5/3.6
 #define PINS 23
 #define PINS_DIFF 2
 uint8_t adc_pins[] = {A0,A1,A2,A3,A4,A5,A6,A7,A8, A9, A10,
@@ -121,45 +121,21 @@ void loop() {
         Serial.print(". ");
     }
     Serial.println();
-    Serial.print("Temperature sensor: ");
+    // the actual parameters for the temperature sensor depend on the board type and
+    // on the actual batch. The printed value is only an approximation
+    Serial.print("Temperature sensor (approx.): ");
     value = adc->analogRead(ADC_INTERNAL_SOURCE::TEMP_SENSOR); // read a new value, will return ADC_ERROR_VALUE if the comparison is false.
     Serial.print(": ");
     float volts = value*3.3/adc->getMaxValue(ADC_0);
     Serial.print(25-(volts-0.72)/1.7*1000, 2); // slope is 1.6 for T3.0
-    Serial.print(" C.");
+    Serial.println(" C.");
+
+
+    // Print errors, if any.
+    adc->printError();
+
 
     Serial.println();Serial.println();
-
-
-
-    /* fail_flag contains all possible errors,
-        They are defined in  ADC_Module.h as
-
-        ADC_ERROR_OTHER
-        ADC_ERROR_CALIB
-        ADC_ERROR_WRONG_PIN
-        ADC_ERROR_ANALOG_READ
-        ADC_ERROR_COMPARISON
-        ADC_ERROR_ANALOG_DIFF_READ
-        ADC_ERROR_CONT
-        ADC_ERROR_CONT_DIFF
-        ADC_ERROR_WRONG_ADC
-        ADC_ERROR_SYNCH
-
-        You can compare the value of the flag with those masks to know what's the error.
-    */
-
-    if(adc->adc0->fail_flag) {
-        Serial.print("ADC0 error flags: 0x");
-        Serial.println(adc->adc0->fail_flag, HEX);
-    }
-    #if ADC_NUM_ADCS>1
-    if(adc->adc1->fail_flag) {
-        Serial.print("ADC1 error flags: 0x");
-        Serial.println(adc->adc1->fail_flag, HEX);
-    }
-    #endif
-
 
 
     //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));

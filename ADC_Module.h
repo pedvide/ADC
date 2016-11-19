@@ -143,15 +143,15 @@ enum class ADC_REFERENCE : uint8_t {
 
 // max number of pins, size of channel2sc1aADCx
 #if defined(ADC_TEENSY_3_1) // Teensy 3.1
-        #define ADC_MAX_PIN (40)
+        #define ADC_MAX_PIN (43)
 #elif defined(ADC_TEENSY_3_0) // Teensy 3.0
-        #define ADC_MAX_PIN (37)
+        #define ADC_MAX_PIN (43)
 #elif defined(ADC_TEENSY_LC) // Teensy LC
-        #define ADC_MAX_PIN (26)
+        #define ADC_MAX_PIN (43)
 #elif defined(ADC_TEENSY_3_5) // Teensy 3.5
-        #define ADC_MAX_PIN (43)
+        #define ADC_MAX_PIN (69)
 #elif defined(ADC_TEENSY_3_6) // Teensy 3.6
-        #define ADC_MAX_PIN (43)
+        #define ADC_MAX_PIN (69)
 #endif
 
 
@@ -172,7 +172,7 @@ enum class ADC_REFERENCE : uint8_t {
 // Other things to measure with the ADC that don't use external pins
 // In my Teensy I read 1.22 V for the ADC_VREF_OUT (doesn't exist in Teensy LC), random values for ADC_BANDGAP,
 // 3.3 V for ADC_VREFH and 0.0 V for ADC_VREFL.
-#if defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_0)  || defined(ADC_TEENSY_LC)
+#if defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_0) || defined(ADC_TEENSY_LC)
     /*! Other ADC sources to measure, such as the temperature sensor.
     */
     enum class ADC_INTERNAL_SOURCE : uint8_t{
@@ -902,6 +902,47 @@ public:
     /** Use the defines at the beggining of this file to find out what caused the fail.
     */
     volatile uint16_t fail_flag;
+
+    //! Prints the human-readable error, if any.
+    void printError() {
+        if(fail_flag != ADC_ERROR_CLEAR) {
+            Serial.print("ADC"); Serial.print(ADC_num);
+            Serial.print(" error: ");
+            switch(fail_flag) {
+                case ADC_ERROR_OTHER:
+                    Serial.print("Unknown");
+                    break;
+                case ADC_ERROR_CALIB:
+                    Serial.print("Calibration");
+                    break;
+                case ADC_ERROR_WRONG_PIN:
+                    Serial.print("Wrong pin");
+                    break;
+                case ADC_ERROR_ANALOG_READ:
+                    Serial.print("Analog read");
+                    break;
+                case ADC_ERROR_COMPARISON:
+                    Serial.print("Comparison");
+                    break;
+                case ADC_ERROR_ANALOG_DIFF_READ:
+                    Serial.print("Analog differential read");
+                    break;
+                case ADC_ERROR_CONT:
+                    Serial.print("Continuous read");
+                    break;
+                case ADC_ERROR_CONT_DIFF:
+                    Serial.print("Continuous differential read");
+                    break;
+                case ADC_ERROR_WRONG_ADC:
+                    Serial.print("Wrong ADC");
+                    break;
+                case ADC_ERROR_SYNCH:
+                    Serial.print("Synchronous");
+                    break;
+            }
+            Serial.println(" error.");
+        }
+    }
 
 
     //! Which adc is this?

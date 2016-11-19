@@ -98,14 +98,14 @@ void loop() {
 
     // Differential reads
 
-    value = adc->analogReadDifferential(A10, A11, ADC_0); // read a new value, will return ADC_ERROR_VALUE if the comparison is false.
+    value = adc->adc0->analogReadDifferential(A10, A11); // read a new value, will return ADC_ERROR_VALUE if the comparison is false.
 
-    Serial.print(" Value A10-A1: ");
+    Serial.print(" Value A10-A11: ");
     // Divide by the maximum possible value and the PGA level
     Serial.println(value*3.3/adc->getPGA()/adc->getMaxValue(), DEC);
 
-    #if ADC_NUM_ADCS>1
-    value2 = adc->analogReadDifferential(A12,A13, ADC_1);
+    #if ADC_NUM_ADCS>1 && ADC_DIFF_PAIRS > 1
+    value2 = adc->analogReadDifferential(A12, A13, ADC_1);
 
     Serial.print(" Value A12-A13: ");
     Serial.println(value2*3.3/adc->getPGA(ADC_1)/adc->getMaxValue(ADC_1), DEC);
@@ -129,21 +129,11 @@ void loop() {
     */
 
     if(adc->adc0->fail_flag) {
-        Serial.print("ADC0 error flags: 0x");
-        Serial.println(adc->adc0->fail_flag, HEX);
-        if(adc->adc0->fail_flag == ADC_ERROR_COMPARISON) {
-            adc->adc0->fail_flag &= ~ADC_ERROR_COMPARISON; // clear that error
-            Serial.println("Comparison error in ADC0");
-        }
+        adc->adc0->printError();
     }
     #if ADC_NUM_ADCS>1
     if(adc->adc1->fail_flag) {
-        Serial.print("ADC1 error flags: 0x");
-        Serial.println(adc->adc1->fail_flag, HEX);
-        if(adc->adc1->fail_flag == ADC_ERROR_COMPARISON) {
-            adc->adc1->fail_flag &= ~ADC_ERROR_COMPARISON; // clear that error
-            Serial.println("Comparison error in ADC1");
-        }
+        adc->adc1->printError();
     }
     #endif
 

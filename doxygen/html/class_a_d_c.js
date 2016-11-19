@@ -47,10 +47,10 @@ var class_a_d_c =
     [ "adc", "class_a_d_c.html#a03e1c7f64c02dec1976810a0a4967cf2", null ],
     [ "adc0", "class_a_d_c.html#a0d5b4dd16bbb03082daeeaadafec2474", null ],
     [ "adc1", "class_a_d_c.html#a8f6c4642e9e5400220452feeb6be13b8", null ],
-    [ "channel2sc1aADC0", "class_a_d_c.html#a7d9a0a2e047047c5148b8b4ed13736de", null ],
-    [ "channel2sc1aADC1", "class_a_d_c.html#a771218b6e00b24c3eee1446e6e480d9f", null ],
+    [ "channel2sc1aADC0", "class_a_d_c.html#ab790c1b44b90ff497cbf3e88f4580be8", null ],
+    [ "channel2sc1aADC1", "class_a_d_c.html#a756fe8fa6da7ab09cde1f7b27aeffd43", null ],
     [ "diff_table_ADC0", "class_a_d_c.html#a3ac941166af84754393ce2e3006a1c16", null ],
     [ "diff_table_ADC1", "class_a_d_c.html#ac75d6d8768a6def95664d8bb00ae502a", null ],
-    [ "sc1a2channelADC0", "class_a_d_c.html#ac83f0521b05578ac1faf0966a3128f33", null ],
-    [ "sc1a2channelADC1", "class_a_d_c.html#a8769995229f5dc1f8dc4191eb97f9e09", null ]
+    [ "sc1a2channelADC0", "class_a_d_c.html#aa3fc624721f8108ef8b77b45a857bdc6", null ],
+    [ "sc1a2channelADC1", "class_a_d_c.html#ad1ed91f3ef9e283133455802c37c6501", null ]
 ];
