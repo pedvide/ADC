@@ -10,30 +10,35 @@
 
 ADC *adc = new ADC(); // adc object
 
-#if defined(__MKL26Z64__) // teensy LC
+#if defined(ADC_TEENSY_LC) // teensy LC
 #define PINS 13
 #define PINS_DIFF 2
 uint8_t adc_pins[] = {A0,A1,A2,A3,A4,A5,A6,A7,A8, A9,A10,A11, A12};
 uint8_t adc_pins_diff[] = {A10, A11};
 
-#elif defined(__MK20DX128__)  // teensy 3.0
+#elif defined(ADC_TEENSY_3_0)  // teensy 3.0
 #define PINS 14
 #define PINS_DIFF 4
 uint8_t adc_pins[] = {A0,A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13};
 uint8_t adc_pins_diff[] = {A10, A11, A12, A13};
 
-#elif defined(__MK20DX256__)  // teensy 3.1/3.2
+#elif defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_2)  // teensy 3.1/3.2
 #define PINS 21
 #define PINS_DIFF 4
 uint8_t adc_pins[] = {A0,A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,
                       A14, A15,A16,A17,A18,A19,A20 };
 uint8_t adc_pins_diff[] = {A10, A11, A12, A13};
 
+<<<<<<< HEAD
 #elif defined(__MK64FX512__) || defined(__MK66FX1M0__)  // teensy 3.5/3.6
 #define PINS 23
+=======
+#elif defined(ADC_TEENSY_3_5) || defined(ADC_TEENSY_3_6)  // Teensy 3.5/3.6
+#define PINS 25
+>>>>>>> refs/remotes/origin/dev
 #define PINS_DIFF 2
 uint8_t adc_pins[] = {A0,A1,A2,A3,A4,A5,A6,A7,A8, A9, A10,
-                      A11,A12,A13,A14,A15,A16,A17,A18,A19,A20,A21,A22 };
+                      A11,A12,A13,A14,A15,A16,A17,A18,A19,A20,A21,A22,A23,A24};
 uint8_t adc_pins_diff[] = {A10, A11};
 #endif // defined
 
@@ -49,19 +54,19 @@ void setup() {
 
 
     ///// ADC0 ////
-    // reference can be ADC_REF_3V3, ADC_REF_1V2 (not for Teensy LC) or ADC_REF_EXT.
-    //adc->setReference(ADC_REF_1V2, ADC_0); // change all 3.3 to 1.2 if you change the reference to 1V2
+    // reference can be ADC_REFERENCE::REF_3V3, ADC_REFERENCE::REF_1V2 (not for Teensy LC) or ADC_REFERENCE::REF_EXT.
+    //adc->setReference(ADC_REFERENCE::REF_1V2, ADC_0); // change all 3.3 to 1.2 if you change the reference to 1V2
 
-    adc->setAveraging(1); // set number of averages
-    adc->setResolution(8); // set bits of resolution
+    adc->setAveraging(16); // set number of averages
+    adc->setResolution(16); // set bits of resolution
 
-    // it can be ADC_VERY_LOW_SPEED, ADC_LOW_SPEED, ADC_MED_SPEED, ADC_HIGH_SPEED_16BITS, ADC_HIGH_SPEED or ADC_VERY_HIGH_SPEED
+    // it can be any of the ADC_CONVERSION_SPEED enum: VERY_LOW_SPEED, LOW_SPEED, MED_SPEED, HIGH_SPEED_16BITS, HIGH_SPEED or VERY_HIGH_SPEED
     // see the documentation for more information
-    // additionally the conversion speed can also be ADC_ADACK_2_4, ADC_ADACK_4_0, ADC_ADACK_5_2 and ADC_ADACK_6_2,
+    // additionally the conversion speed can also be ADACK_2_4, ADACK_4_0, ADACK_5_2 and ADACK_6_2,
     // where the numbers are the frequency of the ADC clock in MHz and are independent on the bus speed.
-    adc->setConversionSpeed(ADC_HIGH_SPEED); // change the conversion speed
-    // it can be ADC_VERY_LOW_SPEED, ADC_LOW_SPEED, ADC_MED_SPEED, ADC_HIGH_SPEED or ADC_VERY_HIGH_SPEED
-    adc->setSamplingSpeed(ADC_HIGH_SPEED); // change the sampling speed
+    adc->setConversionSpeed(ADC_CONVERSION_SPEED::VERY_LOW_SPEED); // change the conversion speed
+    // it can be any of the ADC_MED_SPEED enum: VERY_LOW_SPEED, LOW_SPEED, MED_SPEED, HIGH_SPEED or VERY_HIGH_SPEED
+    adc->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED); // change the sampling speed
 
     // always call the compare functions after changing the resolution!
     //adc->enableCompare(1.0/3.3*adc->getMaxValue(ADC_0), 0, ADC_0); // measurement will be ready if value < 1.0V
@@ -73,17 +78,19 @@ void setup() {
 
     ////// ADC1 /////
     #if ADC_NUM_ADCS>1
-    adc->setAveraging(1, ADC_1); // set number of averages
-    adc->setResolution(8, ADC_1); // set bits of resolution
-    adc->setConversionSpeed(ADC_HIGH_SPEED, ADC_1); // change the conversion speed
-    adc->setSamplingSpeed(ADC_HIGH_SPEED, ADC_1); // change the sampling speed
+    adc->setAveraging(16, ADC_1); // set number of averages
+    adc->setResolution(16, ADC_1); // set bits of resolution
+    adc->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED, ADC_1); // change the conversion speed
+    adc->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED, ADC_1); // change the sampling speed
+
+    //adc->setReference(ADC_REFERENCE::REF_1V2, ADC_1);
 
     // always call the compare functions after changing the resolution!
     //adc->enableCompare(1.0/3.3*adc->getMaxValue(ADC_1), 0, ADC_1); // measurement will be ready if value < 1.0V
     //adc->enableCompareRange(1.0*adc->getMaxValue(ADC_1)/3.3, 2.0*adc->getMaxValue(ADC_1)/3.3, 0, 1, ADC_1); // ready if value lies out of [1.0,2.0] V
 
 
-    // If you enable interrupts, notice that the isr will read the result, so that isComplete() will return false (most of the time)
+    // If you enable interrupts, note that the isr will read the result, so that isComplete() will return false (most of the time)
     //adc->enableInterrupts(ADC_1);
 
     #endif
@@ -105,6 +112,9 @@ void loop() {
         Serial.print(": ");
         Serial.print(value*3.3/adc->getMaxValue(ADC_0), 2);
         Serial.print(". ");
+        if(i==PINS/2 && PINS>15) {
+            Serial.println();
+        }
     }
     Serial.println();
     Serial.print("Differential pairs: ");
@@ -115,38 +125,22 @@ void loop() {
         Serial.print(value*3.3/adc->getMaxValue(ADC_0), 2);
         Serial.print(". ");
     }
+    Serial.println();
+    // the actual parameters for the temperature sensor depend on the board type and
+    // on the actual batch. The printed value is only an approximation
+    Serial.print("Temperature sensor (approx.): ");
+    value = adc->analogRead(ADC_INTERNAL_SOURCE::TEMP_SENSOR); // read a new value, will return ADC_ERROR_VALUE if the comparison is false.
+    Serial.print(": ");
+    float volts = value*3.3/adc->getMaxValue(ADC_0);
+    Serial.print(25-(volts-0.72)/1.7*1000, 2); // slope is 1.6 for T3.0
+    Serial.println(" C.");
+
+
+    // Print errors, if any.
+    adc->printError();
+
+
     Serial.println();Serial.println();
-
-
-
-    /* fail_flag contains all possible errors,
-        They are defined in  ADC_Module.h as
-
-        ADC_ERROR_OTHER
-        ADC_ERROR_CALIB
-        ADC_ERROR_WRONG_PIN
-        ADC_ERROR_ANALOG_READ
-        ADC_ERROR_COMPARISON
-        ADC_ERROR_ANALOG_DIFF_READ
-        ADC_ERROR_CONT
-        ADC_ERROR_CONT_DIFF
-        ADC_ERROR_WRONG_ADC
-        ADC_ERROR_SYNCH
-
-        You can compare the value of the flag with those masks to know what's the error.
-    */
-
-    if(adc->adc0->fail_flag) {
-        Serial.print("ADC0 error flags: 0x");
-        Serial.println(adc->adc0->fail_flag, HEX);
-    }
-    #if ADC_NUM_ADCS>1
-    if(adc->adc1->fail_flag) {
-        Serial.print("ADC1 error flags: 0x");
-        Serial.println(adc->adc1->fail_flag, HEX);
-    }
-    #endif
-
 
 
     //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));

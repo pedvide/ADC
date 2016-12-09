@@ -1,6 +1,6 @@
 /* Teensy 3.x, LC ADC library
  * https://github.com/pedvide/ADC
- * Copyright (c) 2015 Pedro Villanueva
+ * Copyright (c) 2016 Pedro Villanueva
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -28,11 +28,9 @@
 
 #include <Arduino.h> // for digitalWrite
 #include "DMAChannel.h"
-//#include <stdlib.h> // malloc
 
 
-/** Class RingBufferDMA implements a circular buffer of fixed size (must be power of 2)
-*   Code adapted from http://en.wikipedia.org/wiki/Circular_buffer#Mirroring
+/** Class RingBufferDMA implements a DMA ping-pong buffer of fixed size
 */
 class RingBufferDMA
 {
@@ -53,16 +51,40 @@ class RingBufferDMA
         int16_t read();
 
         //! Start DMA operation
-        void start();
+        void start(void (*call_dma_isr)(void));
 
-        //! This function will be called when a DMA transfer finishes
-        void void_isr();
+        //! Write a value into the buffer
+        /** The actual value is copied by DMA, this function only updates the buffer pointers to reflect that fact.
+        */
+        void write();
+
+        //! Length of the buffer
+        uint16_t size() {return b_size; }
+
+        //! Pointer to the data
+        volatile int16_t* const buffer() {return p_elems;}
 
         //! DMAChannel to handle all low level DMA code.
         DMAChannel* dmaChannel;
 
+
+        // the buffer needs to be aligned, so use malloc instead of new
+        // see http://stackoverflow.com/questions/227897/solve-the-memory-alignment-in-c-interview-question-that-stumped-me/
+        //uint8_t alignment;
+        //void *p_mem;
+
+        //! Start pointer: Read here
+        uint16_t b_start;
+        //! End pointer: Write here
+        uint16_t b_end;
+
         //! Pointer to the elements of the buffer
         volatile int16_t* const p_elems;
+
+    protected:
+    private:
+
+
 
         //! Size of buffer
         uint16_t b_size;
@@ -70,34 +92,12 @@ class RingBufferDMA
         //! ADC module of the instance
         uint8_t ADC_number;
 
-        // the buffer needs to be aligned, so use malloc instead of new
-        // see http://stackoverflow.com/questions/227897/solve-the-memory-alignment-in-c-interview-question-that-stumped-me/
-        //uint8_t alignment;
-        //void *p_mem;
-
-        // this static pointer is set to point to this object and
-        // call_dma_isr calls the void_isr()
-        static RingBufferDMA *static_ringbuffer_dma;
-        static void call_dma_isr(void);
-
-    protected:
-    private:
-
-        //! Write a value into the buffer
-        /** The actual value is copied by DMA, this function only updates the buffer pointers to reflect that fact.
-        *
-        */
-        void write();
-
         //! Increases the pointer modulo 2*size-1
         uint16_t increase(uint16_t p);
 
         volatile uint32_t* const ADC_RA;
 
-        //! Start pointer: Read here
-        uint16_t b_start;
-        //! End pointer: Write here
-        uint16_t b_end;
+
 
 
 };

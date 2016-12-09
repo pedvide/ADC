@@ -1,5 +1,5 @@
 /*
-    This example shows how to use the IntervalTimer library and the ADC library in the tensy 3.0/3.1
+    This example shows how to use the IntervalTimer library and the ADC library in the Teensy 3.0/3.1
 
     The three important objects are: the ADC, the (one or more) IntervalTimer and the same number of RingBuffer.
 
@@ -54,25 +54,35 @@ void setup() {
     pinMode(ledPin+3, OUTPUT); // adc0_isr, measurement finished for readPin0
     pinMode(ledPin+4, OUTPUT); // adc0_isr, measurement finished for readPin1
 
-    pinMode(readPin0, INPUT); pinMode(readPin1, INPUT);
+    pinMode(readPin0, INPUT);
+    pinMode(readPin1, INPUT);
 
     Serial.begin(9600);
 
     delay(1000);
 
     ///// ADC0 ////
-    // reference can be ADC_REF_3V3, ADC_REF_1V2 (not for Teensy LC) or ADC_REF_EXT.
-    //adc->setReference(ADC_REF_1V2, ADC_0); // change all 3.3 to 1.2 if you change the reference to 1V2
+    // reference can be ADC_REFERENCE::REF_3V3, ADC_REFERENCE::REF_1V2 (not for Teensy LC) or ADC_REFERENCE::REF_EXT.
+    //adc->setReference(ADC_REFERENCE::REF_1V2, ADC_0); // change all 3.3 to 1.2 if you change the reference to 1V2
 
     adc->setAveraging(16); // set number of averages
     adc->setResolution(12); // set bits of resolution
 
-    // it can be ADC_VERY_LOW_SPEED, ADC_LOW_SPEED, ADC_MED_SPEED, ADC_HIGH_SPEED_16BITS, ADC_HIGH_SPEED or ADC_VERY_HIGH_SPEED
+    // it can be any of the ADC_CONVERSION_SPEED enum: VERY_LOW_SPEED, LOW_SPEED, MED_SPEED, HIGH_SPEED_16BITS, HIGH_SPEED or VERY_HIGH_SPEED
     // see the documentation for more information
-    adc->setConversionSpeed(ADC_MED_SPEED); // change the conversion speed
-    // it can be ADC_VERY_LOW_SPEED, ADC_LOW_SPEED, ADC_MED_SPEED, ADC_HIGH_SPEED or ADC_VERY_HIGH_SPEED
-    adc->setSamplingSpeed(ADC_MED_SPEED); // change the sampling speed
-    // with 16 averages, 12 bits resolution and ADC_HIGH_SPEED conversion and sampling it takes about 32.5 us for a conversion
+    // additionally the conversion speed can also be ADACK_2_4, ADACK_4_0, ADACK_5_2 and ADACK_6_2,
+    // where the numbers are the frequency of the ADC clock in MHz and are independent on the bus speed.
+    adc->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED); // change the conversion speed
+    // it can be any of the ADC_MED_SPEED enum: VERY_LOW_SPEED, LOW_SPEED, MED_SPEED, HIGH_SPEED or VERY_HIGH_SPEED
+    adc->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED); // change the sampling speed
+
+    // always call the compare functions after changing the resolution!
+    //adc->enableCompare(1.0/3.3*adc->getMaxValue(ADC_0), 0, ADC_0); // measurement will be ready if value < 1.0V
+    //adc->enableCompareRange(1.0*adc->getMaxValue(ADC_0)/3.3, 2.0*adc->getMaxValue(ADC_0)/3.3, 0, 1, ADC_0); // ready if value lies out of [1.0,2.0] V
+
+    // If you enable interrupts, notice that the isr will read the result, so that isComplete() will return false (most of the time)
+    //adc->enableInterrupts(ADC_0);
+
 
     Serial.println("Starting Timers");
 

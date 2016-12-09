@@ -1,6 +1,6 @@
 /* Teensy 3.x, LC ADC library
  * https://github.com/pedvide/ADC
- * Copyright (c) 2015 Pedro Villanueva
+ * Copyright (c) 2016 Pedro Villanueva
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -64,16 +64,18 @@ const uint8_t ADC::channel2sc1aADC0[]= { // new version, gives directly the sc1a
     5, 14, 8, 9, 13, 12, 6, 7, 15, 11, // 14-23 (A0-A9)
     0+ADC_SC1A_PIN_DIFF, 4+ADC_SC1A_PIN_MUX+ADC_SC1A_PIN_DIFF, 23, 31, 31, 31, 31, 31, 31, 31, // 24-33 ((A10-A12) + nothing), A11 uses mux a
     31, 31, 31, 31, // 34-37 nothing
-    26, 31, 31, 27, 29, 30 // 38-43: temp. sensor, , , bandgap, VREFH, VREFL.
+    26, 27, 31, 27, 29, 30 // 38-43: temp. sensor, , , bandgap, VREFH, VREFL.
 };
 #elif defined(ADC_TEENSY_3_5) || defined(ADC_TEENSY_3_6)
 const uint8_t ADC::channel2sc1aADC0[]= { // new version, gives directly the sc1a number. 0x1F=31 deactivates the ADC.
     5, 14, 8, 9, 13, 12, 6, 7, 15, 4, 3, 31, 31, 31, // 0-13, we treat them as A0-A13
     5, 14, 8, 9, 13, 12, 6, 7, 15, 4, // 14-23 (A0-A9)
-    31, 31, 31, 31, 31, 31, 31, // 24-30
-    31, 31, 17, 18,// 31-34 A12, A13, A14, A15
-    31, 31, 31, 31, 31,// 33-39
-    3+ADC_SC1A_PIN_DIFF, 31+ADC_SC1A_PIN_DIFF, 23, 31 // 40-43: A10, A11 (cannot be read by ADC0), A21, A22
+    26, 27, 29, 30, 31, 31, 31, // 24-30: Temp_Sensor, bandgap, VREFH, VREFL.
+    31, 31, 17, 18,// 31-34 A12(ADC1), A13(ADC1), A14, A15
+    31, 31, 31, 31, 31, 31, 31, 31, 31, // 35-43
+    31, 31, 31, 31, 31, 31, 31, 31, 31, // 44-52
+    31, 31, 31, 31, 31, 31, 31, 31, 31, // 53-61
+    31, 31, 3+ADC_SC1A_PIN_DIFF, 31+ADC_SC1A_PIN_DIFF, 23, 31, 31, 31 // 62-69 64: A10, 65: A11(ADC1), 66: A21, 67: A22(ADC1)
 };
 #endif // defined
 
@@ -91,9 +93,12 @@ const uint8_t ADC::channel2sc1aADC1[]= { // new version, gives directly the sc1a
 const uint8_t ADC::channel2sc1aADC1[]= { // new version, gives directly the sc1a number. 0x1F=31 deactivates the ADC.
     31, 31, 8, 9, 31, 31, 31, 31, 31, 31, 31, 19, 14, 15, // 0-13, we treat them as A0-A13
     31, 31, 8, 9, 31, 31, 31, 31, 31, 31, // 14-23 (A0-A9)
-    31, 31, 31, 31, 31, 31, 31,  // 24-30
+    26, 27, 29, 30, 18, 31, 31,  // 24-30: Temp_Sensor, bandgap, VREFH, VREFL, VREF_OUT
     14, 15, 31, 31, 4, 5, 6, 7, 17, // 31-39 A12-A20
-    31+ADC_SC1A_PIN_DIFF, 19+ADC_SC1A_PIN_DIFF, 31, 23 // 40-43: A10, A11, A21, A22
+    31, 31, 31, 23, // 40-43: A10(ADC0), A11(ADC0), A21, A22
+    31, 31, 31, 31, 31, 10, 11, 31, 31, // 44-52
+    31, 31, 31, 31, 31, 31, 31, 31, 31, // 53-61
+    31, 31, 31+ADC_SC1A_PIN_DIFF, 19+ADC_SC1A_PIN_DIFF, 31, 23, 31, 31 // 61-69 64: A10(ADC0), 65: A11, 66: A21(ADC0), 67: A22
 };
 #endif
 
@@ -112,7 +117,11 @@ const uint8_t ADC::channel2sc1aADC1[]= { // new version, gives directly the sc1a
     const ADC_Module::ADC_NLIST ADC::diff_table_ADC0[]= {
         {A10, 0}
     };
+<<<<<<< HEAD
 #elif defined(ADC_TEENSY_3_5) || defined(ADC_TEENSY_3_6) // Teensy 3.5// Teensy 3.6
+=======
+#elif defined(ADC_TEENSY_3_5) || defined(ADC_TEENSY_3_6) // Teensy 3.6// Teensy 3.5
+>>>>>>> refs/remotes/origin/dev
     const ADC_Module::ADC_NLIST ADC::diff_table_ADC0[]= {
         {A10, 3}
     };
@@ -195,7 +204,7 @@ ADC::ADC() : // awkward initialization  so there are no -Wreorder warnings
 /* Set the voltage reference you prefer,
 *  type can be ADC_REF_3V3, ADC_REF_1V2 (not for Teensy LC) or ADC_REF_EXT
 */
-void ADC::setReference(uint8_t type, int8_t adc_num) {
+void ADC::setReference(ADC_REFERENCE type, int8_t adc_num) {
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
         #if ADC_NUM_ADCS>=2 // Teensy 3.1
         adc1->setReference(type);
@@ -267,7 +276,7 @@ uint32_t ADC::getMaxValue(int8_t adc_num) {
 *
 *  It recalibrates at the end.
 */
-void ADC::setConversionSpeed(uint8_t speed, int8_t adc_num) {
+void ADC::setConversionSpeed(ADC_CONVERSION_SPEED speed, int8_t adc_num) {
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
         #if ADC_NUM_ADCS>=2 // Teensy 3.1
         adc1->setConversionSpeed(speed);
@@ -283,12 +292,16 @@ void ADC::setConversionSpeed(uint8_t speed, int8_t adc_num) {
 
 
 // Sets the sampling speed
-/*
-* \param speed can be ADC_LOW_SPEED, ADC_MED_SPEED or ADC_HIGH_SPEED
+/* Increase the sampling speed for low impedance sources, decrease it for higher impedance ones.
+* \param speed can be any of the ADC_SAMPLING_SPEED enum: VERY_LOW_SPEED, LOW_SPEED, MED_SPEED, HIGH_SPEED or VERY_HIGH_SPEED.
 *
-*  It recalibrates at the end.
+* VERY_LOW_SPEED is the lowest possible sampling speed (+24 ADCK).
+* LOW_SPEED adds +16 ADCK.
+* MED_SPEED adds +10 ADCK.
+* HIGH_SPEED adds +6 ADCK.
+* VERY_HIGH_SPEED is the highest possible sampling speed (0 ADCK added).
 */
-void ADC::setSamplingSpeed(uint8_t speed, int8_t adc_num) {
+void ADC::setSamplingSpeed(ADC_SAMPLING_SPEED speed, int8_t adc_num) {
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
         #if ADC_NUM_ADCS>=2 // Teensy 3.1
         adc1->setSamplingSpeed(speed);
@@ -321,8 +334,8 @@ void ADC::setAveraging(uint8_t num, int8_t adc_num) {
 }
 
 
-//! Enable interrupts
-/** An IRQ_ADC0 Interrupt will be raised when the conversion is completed
+// Enable interrupts
+/* An IRQ_ADC0 Interrupt will be raised when the conversion is completed
 *  (including hardware averages and if the comparison (if any) is true).
 */
 void ADC::enableInterrupts(int8_t adc_num) {
@@ -338,7 +351,7 @@ void ADC::enableInterrupts(int8_t adc_num) {
     return;
 }
 
-//! Disable interrupts
+// Disable interrupts
 void ADC::disableInterrupts(int8_t adc_num) {
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
         #if ADC_NUM_ADCS>=2 // Teensy 3.1
@@ -353,8 +366,8 @@ void ADC::disableInterrupts(int8_t adc_num) {
 }
 
 
-//! Enable DMA request
-/** An ADC DMA request will be raised when the conversion is completed
+// Enable DMA request
+/* An ADC DMA request will be raised when the conversion is completed
 *  (including hardware averages and if the comparison (if any) is true).
 */
 void ADC::enableDMA(int8_t adc_num) {
@@ -370,7 +383,7 @@ void ADC::enableDMA(int8_t adc_num) {
     return;
 }
 
-//! Disable ADC DMA request
+// Disable ADC DMA request
 void ADC::disableDMA(int8_t adc_num) {
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
         #if ADC_NUM_ADCS>=2 // Teensy 3.1
@@ -905,7 +918,7 @@ void ADC::stopContinuous(int8_t adc_num) {
 
 
 //////////////// SYNCHRONIZED BLOCKING METHODS //////////////////
-///// IF THE BOARD HAS ONLY ONE ADC, THEY ARE EMPYT METHODS /////
+///// ONLY FOR BOARDS WITH MORE THAN ONE ADC /////
 /////////////////////////////////////////////////////////////////
 
 #if ADC_NUM_ADCS>1
@@ -1284,24 +1297,5 @@ void ADC::stopSynchronizedContinuous() {
     adc0->stopContinuous();
     adc1->stopContinuous();
 }
-
-#else // ADC_NUM_ADCS=1
-// Empty definitions so code written for all Teensy will compile
-
-ADC::Sync_result ADC::analogSynchronizedRead(uint8_t pin0, uint8_t pin1) {ADC::Sync_result res={0}; return res;}
-ADC::Sync_result ADC::analogSynchronizedReadDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N) {
-        ADC::Sync_result res={0};
-        return res;
-}
-
-bool ADC::startSynchronizedSingleRead(uint8_t pin0, uint8_t pin1) { return false; }
-bool ADC::startSynchronizedSingleDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N) { return false; }
-
-ADC::Sync_result ADC::readSynchronizedSingle() {ADC::Sync_result res={0}; return res;}
-
-bool ADC::startSynchronizedContinuous(uint8_t pin0, uint8_t pin1) {return false;}
-bool ADC::startSynchronizedContinuousDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N) {return false;}
-ADC::Sync_result ADC::readSynchronizedContinuous() {ADC::Sync_result res={0}; return res;}
-void ADC::stopSynchronizedContinuous() {}
 
 #endif
