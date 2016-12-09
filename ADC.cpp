@@ -117,9 +117,6 @@ const uint8_t ADC::channel2sc1aADC1[]= { // new version, gives directly the sc1a
     const ADC_Module::ADC_NLIST ADC::diff_table_ADC0[]= {
         {A10, 0}
     };
-<<<<<<< HEAD
-#elif defined(ADC_TEENSY_3_5) || defined(ADC_TEENSY_3_6) // Teensy 3.5// Teensy 3.6
-=======
 #elif defined(ADC_TEENSY_3_5) || defined(ADC_TEENSY_3_6) // Teensy 3.6// Teensy 3.5
 >>>>>>> refs/remotes/origin/dev
     const ADC_Module::ADC_NLIST ADC::diff_table_ADC0[]= {

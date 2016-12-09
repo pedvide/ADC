@@ -56,19 +56,11 @@
 #elif defined(ADC_TEENSY_3_0) // Teensy 3.0
         #define ADC_NUM_ADCS (1)
 #elif defined(ADC_TEENSY_LC) // Teensy LC
-<<<<<<< HEAD
-        #define ADC_NUM_ADCS 1
-#elif defined(ADC_TEENSY_3_5) // Teensy 3.5
-        #define ADC_NUM_ADCS 2
-#elif defined(ADC_TEENSY_3_6) // Teensy 3.6
-        #define ADC_NUM_ADCS 2
-=======
         #define ADC_NUM_ADCS (1)
 #elif defined(ADC_TEENSY_3_5) // Teensy 3.5
         #define ADC_NUM_ADCS (2)
 #elif defined(ADC_TEENSY_3_6) // Teensy 3.6
         #define ADC_NUM_ADCS (2)
->>>>>>> refs/remotes/origin/dev
 #endif
 
 // Use DMA?
@@ -77,19 +69,11 @@
 #elif defined(ADC_TEENSY_3_0) // Teensy 3.0
         #define ADC_USE_DMA (1)
 #elif defined(ADC_TEENSY_LC) // Teensy LC
-<<<<<<< HEAD
-        #define ADC_USE_DMA 1
-#elif defined(ADC_TEENSY_3_5) // Teensy 3.5
-        #define ADC_USE_DMA 1
-#elif defined(ADC_TEENSY_3_6) // Teensy 3.6
-        #define ADC_USE_DMA 1
-=======
         #define ADC_USE_DMA (1)
 #elif defined(ADC_TEENSY_3_5) // Teensy 3.5
         #define ADC_USE_DMA (1)
 #elif defined(ADC_TEENSY_3_6) // Teensy 3.6
         #define ADC_USE_DMA (1)
->>>>>>> refs/remotes/origin/dev
 #endif
 
 // Use PGA?
@@ -98,19 +82,11 @@
 #elif defined(ADC_TEENSY_3_0) // Teensy 3.0
         #define ADC_USE_PGA (0)
 #elif defined(ADC_TEENSY_LC) // Teensy LC
-<<<<<<< HEAD
-        #define ADC_USE_PGA 0
-#elif defined(ADC_TEENSY_3_5) // Teensy 3.5
-        #define ADC_USE_PGA 0
-#elif defined(ADC_TEENSY_3_6) // Teensy 3.6
-        #define ADC_USE_PGA 0
-=======
         #define ADC_USE_PGA (0)
 #elif defined(ADC_TEENSY_3_5) // Teensy 3.5
         #define ADC_USE_PGA (0)
 #elif defined(ADC_TEENSY_3_6) // Teensy 3.6
         #define ADC_USE_PGA (0)
->>>>>>> refs/remotes/origin/dev
 #endif
 
 // Use PDB?
@@ -119,19 +95,11 @@
 #elif defined(ADC_TEENSY_3_0) // Teensy 3.0
         #define ADC_USE_PDB (1)
 #elif defined(ADC_TEENSY_LC) // Teensy LC
-<<<<<<< HEAD
-        #define ADC_USE_PDB 0
-#elif defined(ADC_TEENSY_3_5) // Teensy 3.5
-        #define ADC_USE_PDB 1
-#elif defined(ADC_TEENSY_3_6) // Teensy 3.6
-        #define ADC_USE_PDB 1
-=======
         #define ADC_USE_PDB (0)
 #elif defined(ADC_TEENSY_3_5) // Teensy 3.5
         #define ADC_USE_PDB (1)
 #elif defined(ADC_TEENSY_3_6) // Teensy 3.6
         #define ADC_USE_PDB (1)
->>>>>>> refs/remotes/origin/dev
 #endif
 
 // Has internal reference?
@@ -140,18 +108,6 @@
 #elif defined(ADC_TEENSY_3_0) // Teensy 3.0
         #define ADC_USE_INTERNAL (1)
 #elif defined(ADC_TEENSY_LC) // Teensy LC
-<<<<<<< HEAD
-        #define ADC_USE_INTERNAL 0
-#elif defined(ADC_TEENSY_3_5) // Teensy 3.5
-        #define ADC_USE_INTERNAL 1
-#elif defined(ADC_TEENSY_3_6) // Teensy 3.6
-        #define ADC_USE_INTERNAL 1
-#endif
-
-// Select the voltage reference sources for ADC.
-#define ADC_REF_DEFAULT    0
-#define ADC_REF_ALT        1
-=======
         #define ADC_USE_INTERNAL (0)
 #elif defined(ADC_TEENSY_3_5) // Teensy 3.5
         #define ADC_USE_INTERNAL (1)
@@ -161,7 +117,6 @@
 
 // Select the voltage reference sources for ADC. This is an internal setting, do not use
 enum class ADC_REF_SOURCE : uint8_t {REF_DEFAULT = 0, REF_ALT = 1, REF_NONE = 2}; // internal, do not use
->>>>>>> refs/remotes/origin/dev
 #if defined(ADC_TEENSY_3_0) || defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_5) || defined(ADC_TEENSY_3_6)
 // default is the external, that is connected to the 3.3V supply.
 // To use the external simply connect AREF to a different voltage
@@ -192,19 +147,11 @@ enum class ADC_REFERENCE : uint8_t {
 #elif defined(ADC_TEENSY_3_0) // Teensy 3.0
         #define ADC_MAX_PIN (43)
 #elif defined(ADC_TEENSY_LC) // Teensy LC
-<<<<<<< HEAD
-        #define ADC_MAX_PIN (26)
-#elif defined(ADC_TEENSY_3_5) // Teensy 3.5
-        #define ADC_MAX_PIN (43)
-#elif defined(ADC_TEENSY_3_6) // Teensy 3.6
-        #define ADC_MAX_PIN (43)
-=======
         #define ADC_MAX_PIN (43)
 #elif defined(ADC_TEENSY_3_5) // Teensy 3.5
         #define ADC_MAX_PIN (69)
 #elif defined(ADC_TEENSY_3_6) // Teensy 3.6
         #define ADC_MAX_PIN (69)
->>>>>>> refs/remotes/origin/dev
 #endif
 
 
@@ -219,8 +166,6 @@ enum class ADC_REFERENCE : uint8_t {
         #define ADC_DIFF_PAIRS (1)
 #elif defined(ADC_TEENSY_3_6) // Teensy 3.6
         #define ADC_DIFF_PAIRS (1)
-<<<<<<< HEAD
-=======
 #endif
 
 
@@ -247,7 +192,6 @@ enum class ADC_REFERENCE : uint8_t {
         VREFH = 26, /*!< High VREF */
         VREFL = 27, /*!< Low VREF. */
     };
->>>>>>> refs/remotes/origin/dev
 #endif
 
 /* MK20DX256 Datasheet:
@@ -465,20 +409,6 @@ enum class ADC_SAMPLING_SPEED : uint8_t {
 #define ADC_ERROR_WRONG_ADC         (0<<8)
 #define ADC_ERROR_SYNCH             (1<<9)
 
-
-<<<<<<< HEAD
-// Other things to measure with the ADC that don't use external pins
-// In my Teensy I read 1.22 V for the ADC_VREF_OUT (doesn't exist in Teensy LC), random values for ADC_BANDGAP,
-// 3.3 V for ADC_VREFH and 0.0 V for ADC_VREFL.
-#define ADC_TEMP_SENSOR     38 // 0.719 V at 25ºC and slope of 1.715 mV/ºC for Teensy 3.x and 0.716 V, 1.62 mV/ºC for Teensy LC
-#define ADC_VREF_OUT        39
-#define ADC_BANDGAP         41
-#define ADC_VREFH           42
-#define ADC_VREFL           43
-
-
-=======
->>>>>>> refs/remotes/origin/dev
 // debug mode: blink the led light
 #define ADC_debug 0
 
@@ -1087,11 +1017,7 @@ private:
     *   We can change this functions depending on the board.
     *   Teensy 3.x use bitband while Teensy LC has a more advanced bit manipulation engine.
     */
-<<<<<<< HEAD
-#if defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_0) || defined(ADC_TEENSY_3_5) || defined(ADC_TEENSY_3_6)
-=======
     #if defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_0) || defined(ADC_TEENSY_3_5) || defined(ADC_TEENSY_3_6)
->>>>>>> refs/remotes/origin/dev
     // bitband
     #define ADC_BITBAND_ADDR(reg, bit) (((uint32_t)(reg) - 0x40000000) * 32 + (bit) * 4 + 0x42000000)
 
