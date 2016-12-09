@@ -96,7 +96,7 @@ const uint8_t ADC::channel2sc1aADC1[]= { // new version, gives directly the sc1a
     26, 27, 29, 30, 18, 31, 31,  // 24-30: Temp_Sensor, bandgap, VREFH, VREFL, VREF_OUT
     14, 15, 31, 31, 4, 5, 6, 7, 17, // 31-39 A12-A20
     31, 31, 31, 23, // 40-43: A10(ADC0), A11(ADC0), A21, A22
-    31, 31, 31, 31, 31, 31, 31, 31, 31, // 44-52
+    31, 31, 31, 31, 31, 10, 11, 31, 31, // 44-52
     31, 31, 31, 31, 31, 31, 31, 31, 31, // 53-61
     31, 31, 31+ADC_SC1A_PIN_DIFF, 19+ADC_SC1A_PIN_DIFF, 31, 23, 31, 31 // 61-69 64: A10(ADC0), 65: A11, 66: A21(ADC0), 67: A22
 };

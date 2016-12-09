@@ -353,16 +353,14 @@ uint32_t ADC_Module::getMaxValue() {
 
 
 // Sets the conversion speed
-/*
-* \param speed can be ADC_VERY_LOW_SPEED, ADC_LOW_SPEED, ADC_MED_SPEED, ADC_HIGH_SPEED_16BITS, ADC_HIGH_SPEED or ADC_VERY_HIGH_SPEED
-    ADC_VERY_LOW_SPEED is guaranteed to be the lowest possible speed within specs for resolutions less than 16 bits (higher than 1 MHz),
-    it's different from ADC_LOW_SPEED only for 24, 4 or 2 MHz.
-    ADC_LOW_SPEED is guaranteed to be the lowest possible speed within specs for all resolutions (higher than 2 MHz).
-    ADC_MED_SPEED is always >= ADC_LOW_SPEED and <= ADC_HIGH_SPEED.
-    ADC_HIGH_SPEED_16BITS is guaranteed to be the highest possible speed within specs for all resolutions (lower or eq than 12 MHz).
-    ADC_HIGH_SPEED is guaranteed to be the highest possible speed within specs for resolutions less than 16 bits (lower or eq than 18 MHz).
-    ADC_VERY_HIGH_SPEED may be out of specs, it's different from ADC_HIGH_SPEED only for 48, 40 or 24 MHz.
-* It doesn't recalibrate at the end.
+/* Increase the sampling speed for low impedance sources, decrease it for higher impedance ones.
+* \param speed can be any of the ADC_SAMPLING_SPEED enum: VERY_LOW_SPEED, LOW_SPEED, MED_SPEED, HIGH_SPEED or VERY_HIGH_SPEED.
+*
+* VERY_LOW_SPEED is the lowest possible sampling speed (+24 ADCK).
+* LOW_SPEED adds +16 ADCK.
+* MED_SPEED adds +10 ADCK.
+* HIGH_SPEED adds +6 ADCK.
+* VERY_HIGH_SPEED is the highest possible sampling speed (0 ADCK added).
 */
 void ADC_Module::setConversionSpeed(ADC_CONVERSION_SPEED speed) {
 
