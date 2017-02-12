@@ -147,9 +147,9 @@ const uint8_t ADC::sc1a2channelADC0[]= { // new version, gives directly the pin 
 };
 #elif defined(ADC_TEENSY_3_5) || defined(ADC_TEENSY_3_6)
 const uint8_t ADC::sc1a2channelADC0[]= { // new version, gives directly the pin number
-    34, 0, 0, 36, 23, 14, 20, 21, 16, 17, 0, 0, 19, 18, // 0-13
-    15, 22, 23, 0, 0, 35, 0, 37, // 14-21
-    39, 40, 0, 0, 38, 41, 42, 43, // VREF_OUT, A14, temp. sensor, bandgap, VREFH, VREFL.
+    0, 68, 0, 64, 23, 14, 20, 21, 16, 17, 0, 0, 19, 18, // 0-13
+    15, 22, 0, 33, 34, 0, 0, 0, // 14-21
+    0, 66, 0, 0, 70, 0, 0, 0, // 22-29
     0 // 31 means disabled, but just in case
 };
 #endif // defined
@@ -164,10 +164,10 @@ const uint8_t ADC::sc1a2channelADC1[]= { // new version, gives directly the pin 
 };
 #elif defined(ADC_TEENSY_3_5) || defined(ADC_TEENSY_3_6)
 const uint8_t ADC::sc1a2channelADC1[]= { // new version, gives directly the pin number
-    36, 0, 0, 34, 28, 26, 29, 30, 16, 17, 0, 0, 0, 0, // 0-13. 5a=26, 5b=27, 4b=28, 4a=31
-    0, 0, 0, 0, 39, 37, 0, 0, // 14-21
-    0, 0, 0, 0, 38, 41, 0, 42, // 22-29. VREF_OUT, A14, temp. sensor, bandgap, VREFH, VREFL.
-    43
+    0, 69, 0, 0, 35, 36, 37, 38, 0, 0, 49, 50, 0, 0, // 0-13.
+    31, 32, 0, 39, 71, 65, 0, 0, // 14-21
+    0, 67, 0, 0, 0, 0, 0, 0, // 22-29.
+    0
 };
 #endif
 
