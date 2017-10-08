@@ -865,6 +865,17 @@ public:
 
     //////// OTHER STUFF ///////////
 
+    //! Start the 1.2V internal reference (if present)
+    /** This is called automatically by setReference(ADC_REFERENCE::REF_1V2)
+    *   Use it to switch on the internal reference on the VREF_OUT pin
+    */
+    void startInternalReference();
+
+    //! Stops the internal reference
+    /** This is called automatically by setReference(ADC_REFERENCE::REF_1V2)
+    */
+    void stopInternalReference();
+
     //! Store the config of the adc
     struct ADC_Config {
         //! ADC registers
@@ -1003,13 +1014,6 @@ private:
 
     //! Initialize ADC
     void analog_init();
-
-
-    //! Start the 1.2V internal reference (if present)
-    void startInternalReference();
-
-    //! Stops the internal reference
-    void stopInternalReference();
 
 
     /////// Atomic bit set/clear

@@ -212,7 +212,7 @@ void ADC_Module::wait_for_cal(void) {
 }
 
 //! Starts the calibration sequence, waits until it's done and writes the results
-/** Usually it's not necessary to call this function directly, but do it if the "enviroment" changed
+/** Usually it's not necessary to call this function directly, but do it if the "environment" changed
 *   significantly since the program was started.
 */
 void ADC_Module::recalibrate() {
@@ -266,7 +266,8 @@ void ADC_Module::setReference(ADC_REFERENCE type) {
 void ADC_Module::startInternalReference() {
 #if ADC_USE_INTERNAL
     VREF_TRM = VREF_TRM_CHOPEN | 0x20; // enable module and set the trimmer to medium (max=0x3F=63)
-    VREF_SC = VREF_SC_VREFEN | VREF_SC_REGEN | VREF_SC_ICOMPEN | VREF_SC_MODE_LV(1); // (=0xE1) enable 1.2 volt ref with all compensations
+    // enable 1.2 volt ref with all compensations in high power mode
+    VREF_SC = VREF_SC_VREFEN | VREF_SC_REGEN | VREF_SC_ICOMPEN | VREF_SC_MODE_LV(1);
 #endif
 }
 
