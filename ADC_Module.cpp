@@ -263,11 +263,11 @@ void ADC_Module::setReference(ADC_REFERENCE type) {
 }
 
 //! Start the 1.2V internal reference (if present)
-void ADC_Module::startInternalReference() {
+void ADC_Module::startInternalReference(uint8_t mode) {
 #if ADC_USE_INTERNAL
     VREF_TRM = VREF_TRM_CHOPEN | 0x20; // enable module and set the trimmer to medium (max=0x3F=63)
     // enable 1.2 volt ref with all compensations in high power mode
-    VREF_SC = VREF_SC_VREFEN | VREF_SC_REGEN | VREF_SC_ICOMPEN | VREF_SC_MODE_LV(1);
+    VREF_SC = VREF_SC_VREFEN | VREF_SC_REGEN | VREF_SC_ICOMPEN | VREF_SC_MODE_LV(mode);
 #endif
 }
 

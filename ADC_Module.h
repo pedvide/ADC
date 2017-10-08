@@ -867,9 +867,10 @@ public:
 
     //! Start the 1.2V internal reference (if present)
     /** This is called automatically by setReference(ADC_REFERENCE::REF_1V2)
-    *   Use it to switch on the internal reference on the VREF_OUT pin
+    *   Use it to switch on the internal reference on the VREF_OUT pin.
+    *   Mode can be 0 for stand-by, 1 for high-power buffer and 2 for low-power buffer.
     */
-    void startInternalReference();
+    void startInternalReference(uint8_t mode = 1);
 
     //! Stops the internal reference
     /** This is called automatically by setReference(ADC_REFERENCE::REF_1V2)
