@@ -73,7 +73,11 @@ ADC_Module::ADC_Module(uint8_t ADC_number, const uint8_t* const a_channel2sc1a, 
         , ADC_CLM1(&ADC0_CLM1 + adc_offset*ADC_num)
         , ADC_CLM0(&ADC0_CLM0 + adc_offset*ADC_num)
         , PDB0_CHnC1(&PDB0_CH0C1 + ADC_num*0xA)
+#if ADC_NUM_ADCS==2
+        , IRQ_ADC(ADC_num? IRQ_ADC1 : IRQ_ADC0) // fix by SB (Teensy 3.6)
+#else
         , IRQ_ADC(IRQ_ADC0 + ADC_num*1)
+#endif
         {
 
 
