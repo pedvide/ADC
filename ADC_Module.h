@@ -868,14 +868,32 @@ public:
     //! Start the 1.2V internal reference (if present)
     /** This is called automatically by setReference(ADC_REFERENCE::REF_1V2)
     *   Use it to switch on the internal reference on the VREF_OUT pin.
-    *   Mode can be 0 for stand-by, 1 for high-power buffer and 2 for low-power buffer.
+    *   Mode can be: 0 for stand-by, 1 for high-power buffer and 2 for low-power buffer.
+    *    VREF_SC_MODE_LV_BANDGAPONLY for stand-by
+    *    VREF_SC_MODE_LV_HIGHPOWERBUF for high power buffer and
+    *    VREF_SC_MODE_LV_LOWPOWERBUF for low power buffer
+    *    (these are defined in the teensyduino core)
     */
-    void startInternalReference(uint8_t mode = 1);
+    static inline void startInternalReference(uint8_t mode = VREF_SC_MODE_LV_LOWPOWERBUF);
+        
+    //! Check if the internal reference has stabilized.
+    /** This should be polled after enabling the reference after reset, or after changing
+    *   its buffer mode from VREF_SC_MODE_LV_BANDGAPONLY to any of the buffered modes.
+    *   Typical start-up time is 35 ms (as per datasheet).
+    */
+    static inline bool isInternalReferenceStable() {return VREF_SC & VREF_SC_VREFST;}
 
+    //! Wait for the internal reference to stabilize.
+    /** This function can be called to wait for the internal reference to stabilize.
+    *   It will block until the reference has stabilized, or return immediately if the
+    *   reference is not enabled in the first place.
+    */
+    static inline void waitForInternalReference() {while((VREF_SC & VREF_SC_VREFEN) && (!isInternalReferenceStable));}
+        
     //! Stops the internal reference
     /** This is called automatically by setReference(ADC_REFERENCE::REF_1V2)
     */
-    void stopInternalReference();
+    static inline void stopInternalReference();
 
     //! Store the config of the adc
     struct ADC_Config {
