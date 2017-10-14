@@ -40,7 +40,7 @@ void loop() {
 
     buffer->write(value);
 
-    Serial.print("Buffer read: ");
+    Serial.print("Buffer read:");
     Serial.println(buffer->read()*3.3/adc->getMaxValue());
 
     delay(100);
