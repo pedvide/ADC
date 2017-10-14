@@ -20,7 +20,7 @@ void setup() {
 
     Serial.begin(9600);
 
-///// ADC0 ////
+    ///// ADC0 ////
     // reference can be ADC_REFERENCE::REF_3V3, ADC_REFERENCE::REF_1V2 (not for Teensy LC) or ADC_REFERENCE::REF_EXT.
     //adc->setReference(ADC_REFERENCE::REF_1V2, ADC_0); // change all 3.3 to 1.2 if you change the reference to 1V2
 
@@ -79,10 +79,7 @@ void loop() {
         }
         if(pin==-1) {
             Serial.println("Reset error flags.");
-            adc->adc0->fail_flag=ADC_ERROR_CLEAR;
-            #if ADC_NUM_ADCS>1
-            adc->adc1->fail_flag=ADC_ERROR_CLEAR;
-            #endif
+            adc->resetError();
         }
     }
 
@@ -94,35 +91,8 @@ void loop() {
     Serial.println(value*3.3/adc->getMaxValue(ADC_0), DEC);
 
 
-
-    /* fail_flag contains all possible errors,
-        They are defined in  ADC_Module.h as
-
-        ADC_ERROR_OTHER
-        ADC_ERROR_CALIB
-        ADC_ERROR_WRONG_PIN
-        ADC_ERROR_ANALOG_READ
-        ADC_ERROR_COMPARISON
-        ADC_ERROR_ANALOG_DIFF_READ
-        ADC_ERROR_CONT
-        ADC_ERROR_CONT_DIFF
-        ADC_ERROR_WRONG_ADC
-        ADC_ERROR_SYNCH
-
-        You can compare the value of the flag with those masks to know what's the error.
-    */
-
-    if(adc->adc0->fail_flag) {
-        Serial.print("ADC0 error flags: 0x");
-        Serial.println(adc->adc0->fail_flag, HEX);
-    }
-    #if ADC_NUM_ADCS>1
-    if(adc->adc1->fail_flag) {
-        Serial.print("ADC1 error flags: 0x");
-        Serial.println(adc->adc1->fail_flag, HEX);
-    }
-    #endif
-
+    // Print errors, if any.
+    adc->printError();
 
 
     //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));

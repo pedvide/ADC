@@ -521,6 +521,13 @@ class ADC
             }
         }
 
+        //! Resets all errors from all ADCs, if any.
+        void resetError() {
+            for(int i=0; i< ADC_NUM_ADCS; i++) {
+                adc[i]->resetError();
+            }
+        }
+
 
         //! Translate pin number to SC1A nomenclature
         // should this be a constexpr?

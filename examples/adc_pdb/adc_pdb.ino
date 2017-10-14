@@ -92,42 +92,8 @@ void loop() {
     }
 
 
-
-    /* fail_flag contains all possible errors,
-        They are defined in  ADC_Module.h as
-
-        ADC_ERROR_OTHER
-        ADC_ERROR_CALIB
-        ADC_ERROR_WRONG_PIN
-        ADC_ERROR_ANALOG_READ
-        ADC_ERROR_COMPARISON
-        ADC_ERROR_ANALOG_DIFF_READ
-        ADC_ERROR_CONT
-        ADC_ERROR_CONT_DIFF
-        ADC_ERROR_WRONG_ADC
-        ADC_ERROR_SYNCH
-
-        You can compare the value of the flag with those masks to know what's the error.
-    */
-
-    if(adc->adc0->fail_flag) {
-        Serial.print("ADC0 error flags: 0x");
-        Serial.println(adc->adc0->fail_flag, HEX);
-        if(adc->adc0->fail_flag == ADC_ERROR_COMPARISON) {
-            adc->adc0->fail_flag &= ~ADC_ERROR_COMPARISON; // clear that error
-            Serial.println("Comparison error in ADC0");
-        }
-    }
-    #if ADC_NUM_ADCS>1
-    if(adc->adc1->fail_flag) {
-        Serial.print("ADC1 error flags: 0x");
-        Serial.println(adc->adc1->fail_flag, HEX);
-        if(adc->adc1->fail_flag == ADC_ERROR_COMPARISON) {
-            adc->adc1->fail_flag &= ~ADC_ERROR_COMPARISON; // clear that error
-            Serial.println("Comparison error in ADC1");
-        }
-    }
-    #endif
+    // Print errors, if any.
+    adc->printError();
 
     //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
 

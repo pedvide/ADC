@@ -111,31 +111,8 @@ void loop() {
     Serial.println(value2*3.3/adc->getPGA(ADC_1)/adc->getMaxValue(ADC_1), DEC);
     #endif
 
-    /* fail_flag contains all possible errors,
-        They are defined in  ADC_Module.h as
-
-        ADC_ERROR_OTHER
-        ADC_ERROR_CALIB
-        ADC_ERROR_WRONG_PIN
-        ADC_ERROR_ANALOG_READ
-        ADC_ERROR_COMPARISON
-        ADC_ERROR_ANALOG_DIFF_READ
-        ADC_ERROR_CONT
-        ADC_ERROR_CONT_DIFF
-        ADC_ERROR_WRONG_ADC
-        ADC_ERROR_SYNCH
-
-        You can compare the value of the flag with those masks to know what's the error.
-    */
-
-    if(adc->adc0->fail_flag) {
-        adc->adc0->printError();
-    }
-    #if ADC_NUM_ADCS>1
-    if(adc->adc1->fail_flag) {
-        adc->adc1->printError();
-    }
-    #endif
+    // Print errors, if any.
+    adc->printError();
 
     digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
 

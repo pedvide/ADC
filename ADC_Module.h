@@ -219,14 +219,26 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
 // calibration works best when averages are 32 and speed is less than 4 MHz
 // ADC_CFG1_ADICLK: 0=bus, 1=bus/2, 2=(alternative clk) altclk, 3=(async. clk) adack
 // See below for an explanation of VERY_LOW_SPEED, LOW_SPEED, etc.
-#if F_BUS == 108000000
-    #define ADC_CFG1_3_375MHZ      (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))
-    #define ADC_CFG1_6_75MHZ       (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1))
-    #define ADC_CFG1_13_5MHZ       (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1))
-    #define ADC_CFG1_27MHZ         (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(1)) // too fast
+#if F_BUS == 120000000
+    #define ADC_CFG1_7_5MHZ        (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))
+    #define ADC_CFG1_15MHZ         (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1))
+    #define ADC_CFG1_30MHZ         (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1))
+    #define ADC_CFG1_60MHZ         (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(1)) // too fast
 
     #define ADC_CFG1_VERY_LOW_SPEED ADC_CFG1_LOW_SPEED
-    #define ADC_CFG1_LOW_SPEED (ADC_CFG1_3_375MHZ)
+    #define ADC_CFG1_LOW_SPEED (ADC_CFG1_7_5MHZ)
+    #define ADC_CFG1_MED_SPEED (ADC_CFG1_7_5MHZ)
+    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_7_5MHZ)
+    #define ADC_CFG1_HI_SPEED (ADC_CFG1_15MHZ)
+    #define ADC_CFG1_VERY_HIGH_SPEED (ADC_CFG1_15MHZ)
+#elif F_BUS == 108000000
+    #define ADC_CFG1_6_75MHZ        (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))
+    #define ADC_CFG1_13_5MHZ        (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1))
+    #define ADC_CFG1_27MHZ          (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1))
+    #define ADC_CFG1_54MHZ          (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(1)) // too fast
+
+    #define ADC_CFG1_VERY_LOW_SPEED ADC_CFG1_LOW_SPEED
+    #define ADC_CFG1_LOW_SPEED (ADC_CFG1_6_75MHZ)
     #define ADC_CFG1_MED_SPEED (ADC_CFG1_6_75MHZ)
     #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_6_75MHZ)
     #define ADC_CFG1_HI_SPEED (ADC_CFG1_13_5MHZ)
@@ -288,8 +300,8 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
     #define ADC_CFG1_9MHZ         (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1))
     #define ADC_CFG1_18MHZ        (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(1))
 
-    #define ADC_CFG1_VERY_LOW_SPEED ADC_CFG1_LOW_SPEED
-    #define ADC_CFG1_LOW_SPEED (ADC_CFG1_2_25MHZ)
+    #define ADC_CFG1_VERY_LOW_SPEED (ADC_CFG1_2_25MHZ)
+    #define ADC_CFG1_LOW_SPEED (ADC_CFG1_4_5MHZ)
     #define ADC_CFG1_MED_SPEED (ADC_CFG1_9MHZ)
     #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_9MHZ)
     #define ADC_CFG1_HI_SPEED (ADC_CFG1_18MHZ)
@@ -953,6 +965,11 @@ public:
             }
             Serial.println(" error.");
         }
+    }
+
+    //! Resets all errors from the ADC, if any.
+    void resetError() {
+        fail_flag = ADC_ERROR_CLEAR;
     }
 
 
