@@ -32,6 +32,9 @@
 #include "ADC_Module.h"
 //#include "ADC.h"
 
+// internal VREF module
+VREF internal_vref = VREF();
+
 
 /* Constructor
 *   Point the registers to the correct ADC module
@@ -241,7 +244,7 @@ void ADC_Module::setReference(ADC_REFERENCE type) {
     if (ref_type == ADC_REF_SOURCE::REF_ALT) { // 1.2V ref for Teensy 3.x, 3.3 VDD for Teensy LC
         // internal reference requested
 
-        startInternalReference(); // enable VREF if Teensy 3.x
+        internal_vref.start(); // enable VREF if Teensy 3.x
 
         analog_reference_internal = ADC_REF_SOURCE::REF_ALT;
 
@@ -251,7 +254,7 @@ void ADC_Module::setReference(ADC_REFERENCE type) {
     } else if(ref_type == ADC_REF_SOURCE::REF_DEFAULT) { // ext ref for all Teensys, vcc also for Teensy 3.x
         // vcc or external reference requested
 
-        stopInternalReference(); // disable 1.2V reference source when using the external ref (p. 102, 3.7.1.7)
+        internal_vref.stop(); // disable 1.2V reference source when using the external ref (p. 102, 3.7.1.7)
 
         analog_reference_internal = ADC_REF_SOURCE::REF_DEFAULT;
 
@@ -260,22 +263,6 @@ void ADC_Module::setReference(ADC_REFERENCE type) {
     }
 
     calibrate();
-}
-
-//! Start the 1.2V internal reference (if present)
-void ADC_Module::startInternalReference(uint8_t mode) {
-#if ADC_USE_INTERNAL
-    VREF_TRM = VREF_TRM_CHOPEN | 0x20; // enable module and set the trimmer to medium (max=0x3F=63)
-    // enable 1.2 volt ref with all compensations in high power mode
-    VREF_SC = VREF_SC_VREFEN | VREF_SC_REGEN | VREF_SC_ICOMPEN | VREF_SC_MODE_LV(mode);
-#endif
-}
-
-//! Stops the internal reference
-void ADC_Module::stopInternalReference() {
-#if ADC_USE_INTERNAL
-    VREF_SC = 0;
-#endif
 }
 
 
