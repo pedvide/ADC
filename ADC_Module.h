@@ -114,6 +114,8 @@
 #elif defined(ADC_TEENSY_3_6) // Teensy 3.6
         #define ADC_USE_INTERNAL (1)
 #endif
+// include the internal reference
+#include <VREF.h>
 
 // Select the voltage reference sources for ADC. This is an internal setting, do not use
 enum class ADC_REF_SOURCE : uint8_t {REF_DEFAULT = 0, REF_ALT = 1, REF_NONE = 2}; // internal, do not use
@@ -877,18 +879,6 @@ public:
 
     //////// OTHER STUFF ///////////
 
-    //! Start the 1.2V internal reference (if present)
-    /** This is called automatically by setReference(ADC_REFERENCE::REF_1V2)
-    *   Use it to switch on the internal reference on the VREF_OUT pin.
-    *   Mode can be 0 for stand-by, 1 for high-power buffer and 2 for low-power buffer.
-    */
-    void startInternalReference(uint8_t mode = 1);
-
-    //! Stops the internal reference
-    /** This is called automatically by setReference(ADC_REFERENCE::REF_1V2)
-    */
-    void stopInternalReference();
-
     //! Store the config of the adc
     struct ADC_Config {
         //! ADC registers
@@ -976,6 +966,8 @@ public:
     //! Which adc is this?
     uint8_t ADC_num;
 
+    // Internal voltage reference
+    static VREF internal_vref;
 
 
 private:
@@ -1093,7 +1085,7 @@ private:
     // registers point to the correct ADC module
     typedef volatile uint32_t* const reg;
 
-    // registers that control the adc modulesetSoftwareTrigger
+    // registers that control the adc module
     reg ADC_SC1A; //reg ADC_SC1A_aien; reg ADC_SC1A_coco;
     reg ADC_SC1B;
 
