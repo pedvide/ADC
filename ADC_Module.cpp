@@ -32,8 +32,9 @@
 #include "ADC_Module.h"
 //#include "ADC.h"
 
-// internal VREF module
-VREF internal_vref = VREF();
+// include the internal reference
+#include <VREF.h>
+
 
 /* Constructor
 *   Point the registers to the correct ADC module
@@ -243,7 +244,7 @@ void ADC_Module::setReference(ADC_REFERENCE type) {
     if (ref_type == ADC_REF_SOURCE::REF_ALT) { // 1.2V ref for Teensy 3.x, 3.3 VDD for Teensy LC
         // internal reference requested
 
-        internal_vref.start(); // enable VREF if Teensy 3.x
+        VREF::start(); // enable VREF if Teensy 3.x
 
         analog_reference_internal = ADC_REF_SOURCE::REF_ALT;
 
@@ -253,7 +254,7 @@ void ADC_Module::setReference(ADC_REFERENCE type) {
     } else if(ref_type == ADC_REF_SOURCE::REF_DEFAULT) { // ext ref for all Teensys, vcc also for Teensy 3.x
         // vcc or external reference requested
 
-        internal_vref.stop(); // disable 1.2V reference source when using the external ref (p. 102, 3.7.1.7)
+        VREF::stop(); // disable 1.2V reference source when using the external ref (p. 102, 3.7.1.7)
 
         analog_reference_internal = ADC_REF_SOURCE::REF_DEFAULT;
 
