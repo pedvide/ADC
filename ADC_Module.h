@@ -179,7 +179,7 @@ enum class ADC_REFERENCE : uint8_t {
     enum class ADC_INTERNAL_SOURCE : uint8_t{
         TEMP_SENSOR = 38, /*!< Temperature sensor. */ // 0.719 V at 25ºC and slope of 1.715 mV/ºC for Teensy 3.x and 0.716 V, 1.62 mV/ºC for Teensy LC
         VREF_OUT = 39, /*!< 1.2 V reference */
-        BANDGAP = 41, /*!< BANDGAP */
+        BANDGAP = 41, /*!< BANDGAP */ // Enable the Bandgap with PMC_REGSC |= PMC_REGSC_BGBE; (see VREF.h)
         VREFH = 42, /*!< High VREF */
         VREFL = 43, /*!< Low VREF. */
     };
@@ -189,7 +189,7 @@ enum class ADC_REFERENCE : uint8_t {
     enum class ADC_INTERNAL_SOURCE : uint8_t{
         TEMP_SENSOR = 24, /*!< Temperature sensor. */ // 0.719 V at 25ºC and slope of 1.715 mV/ºC for Teensy 3.x and 0.716 V, 1.62 mV/ºC for Teensy LC
         VREF_OUT = 28, /*!< 1.2 V reference */ // only on ADC1
-        BANDGAP = 25, /*!< BANDGAP */
+        BANDGAP = 25, /*!< BANDGAP */ // Enable the Bandgap with PMC_REGSC |= PMC_REGSC_BGBE; (see VREF::start in VREF.h)
         VREFH = 26, /*!< High VREF */
         VREFL = 27, /*!< Low VREF. */
     };
