@@ -171,9 +171,18 @@ enum class ADC_REFERENCE : uint8_t {
 
 
 // Other things to measure with the ADC that don't use external pins
-// In my Teensy I read 1.22 V for the ADC_VREF_OUT (doesn't exist in Teensy LC), random values for ADC_BANDGAP,
+// In my Teensy I read 1.22 V for the ADC_VREF_OUT (see VREF.h), 1.0V for ADC_BANDGAP (after PMC_REGSC |= PMC_REGSC_BGBE),
 // 3.3 V for ADC_VREFH and 0.0 V for ADC_VREFL.
-#if defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_0) || defined(ADC_TEENSY_LC)
+#if defined(ADC_TEENSY_LC)
+    /*! Other ADC sources to measure, such as the temperature sensor.
+    */
+    enum class ADC_INTERNAL_SOURCE : uint8_t{
+        TEMP_SENSOR = 38, /*!< Temperature sensor. */ // 0.719 V at 25ºC and slope of 1.715 mV/ºC for Teensy 3.x and 0.716 V, 1.62 mV/ºC for Teensy LC
+        BANDGAP = 41, /*!< BANDGAP */ // Enable the Bandgap with PMC_REGSC |= PMC_REGSC_BGBE; (see VREF.h)
+        VREFH = 42, /*!< High VREF */
+        VREFL = 43, /*!< Low VREF. */
+    };
+#elif defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_0)
     /*! Other ADC sources to measure, such as the temperature sensor.
     */
     enum class ADC_INTERNAL_SOURCE : uint8_t{
