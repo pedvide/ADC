@@ -17,7 +17,7 @@ namespace VREF
     *   \param trim adjusts the reference value, from 0 to 0x3F (63)
     *
     */
-    void start(uint8_t mode = VREF_SC_MODE_LV_HIGHPOWERBUF, uint8_t trim = 0x20) {
+    __attribute__((always_inline)) inline void start(uint8_t mode = VREF_SC_MODE_LV_HIGHPOWERBUF, uint8_t trim = 0x20) {
         VREF_TRM = VREF_TRM_CHOPEN | trim; // enable module and set the trimmer to medium (max=0x3F=63)
         // enable 1.2 volt ref with all compensations in high power mode
         VREF_SC = VREF_SC_VREFEN | VREF_SC_REGEN | VREF_SC_ICOMPEN | VREF_SC_MODE_LV(mode);
@@ -45,7 +45,7 @@ namespace VREF
     *   It will block until the reference has stabilized, or return immediately if the
     *   reference is not enabled in the first place.
     */
-    void waitUntilStable() {
+    __attribute__((always_inline)) inline void waitUntilStable() {
         while((VREF_SC & VREF_SC_VREFEN) && (!isStable())) {
             yield();
         }
