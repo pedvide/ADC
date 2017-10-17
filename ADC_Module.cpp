@@ -1296,4 +1296,14 @@ void ADC_Module::stopPDB() {
     NVIC_DISABLE_IRQ(IRQ_PDB);
 }
 
+//! Return the PDB's frequency
+uint32_t ADC_Module::getPDBFrequency() {
+    uint32_t mod = (uint32_t)PDB0_MOD;
+    uint8_t prescaler = (PDB0_SC&0x7000)>>12;
+    uint8_t mult = (PDB0_SC&0xC)>>2;
+
+    uint32_t freq = uint32_t((mod + 1)<<(prescaler)) * uint32_t((mult==0) ? 1 : 10<<(mult-1));
+    return F_BUS/freq;
+}
+
 #endif

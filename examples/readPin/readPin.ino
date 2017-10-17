@@ -1,9 +1,7 @@
-/* Example for analogContinuousRead
+/* Example for readPin
 *  It measures continuously the voltage on pin A9,
-*  Write v and press enter on the serial console to get the value
-*  Write c and press enter on the serial console to check that the conversion is taking place,
-*  Write t to check if the voltage agrees with the comparison in the setup()
-*  Write s to stop the conversion, you can restart it writing r.
+*  Write a pin number to measure that instead.
+*  If the pin is wrong, an error message will appear, change the pin and then write -1 to clear error.
 */
 
 #include <ADC.h>
