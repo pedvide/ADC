@@ -10,11 +10,12 @@ namespace VREF
     //! Start the 1.2V internal reference (if present)
     /** This is called automatically by ADC_Module::setReference(ADC_REFERENCE::REF_1V2)
     *   Use it to switch on the internal reference on the VREF_OUT pin.
+    *   You can measure it with adc->analogRead(ADC_INTERNAL_SOURCE::VREF_OUT).
     *   \param mode can be (these are defined in kinetis.h)
     *    VREF_SC_MODE_LV_BANDGAPONLY (0) for stand-by
     *    VREF_SC_MODE_LV_HIGHPOWERBUF (1) for high power buffer and
     *    VREF_SC_MODE_LV_LOWPOWERBUF (2) for low power buffer.
-    *   \param trim adjusts the reference value, from 0 to 0x3F (63)
+    *   \param trim adjusts the reference value, from 0 to 0x3F (63). Default is 32.
     *
     */
     inline void start(uint8_t mode = VREF_SC_MODE_LV_HIGHPOWERBUF, uint8_t trim = 0x20) {
@@ -47,7 +48,7 @@ namespace VREF
         PMC_REGSC &= ~PMC_REGSC_BGBE;
     }
 
-     //! Check if the internal reference has stabilized.
+    //! Check if the internal reference has stabilized.
     /** NOTE: This is valid only when the chop oscillator is not being used.
     *   By default the chop oscillator IS used, so wait the maximum start-up time of 35 ms (as per datasheet).
     *   waitUntilStable waits 35 us.
@@ -61,6 +62,14 @@ namespace VREF
         return VREF_SC & VREF_SC_VREFST;
     }
 
+    //! Check if the internal reference is on.
+    /**
+    *   \return true if the VREF module is switched on.
+    */
+    __attribute__((always_inline)) inline volatile bool isOn() {
+        return VREF_SC & VREF_SC_VREFEN;
+    }
+
     //! Wait for the internal reference to stabilize.
     /** This function can be called to wait for the internal reference to stabilize.
     *   It will block until the reference has stabilized, or return immediately if the
@@ -68,7 +77,7 @@ namespace VREF
     */
     inline void waitUntilStable() {
         delay(35); // see note in isStable()
-        while((VREF_SC & VREF_SC_VREFEN) && !isStable()) {
+        while(isOn() && !isStable()) {
             yield();
         }
     }
