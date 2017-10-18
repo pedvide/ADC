@@ -33,6 +33,8 @@
 
 #include <Arduino.h>
 
+#include <atomic.h>
+
 // Easier names for the boards
 #if defined(__MK20DX256__) // Teensy 3.1
 #define ADC_TEENSY_3_1
@@ -655,21 +657,21 @@ public:
 
     //! Set continuous conversion mode
     void continuousMode() __attribute__((always_inline)) {
-        setBit(ADC_SC3, ADC_SC3_ADCO_BIT);
+        atomic::setBit(ADC_SC3, ADC_SC3_ADCO_BIT);
     }
     //! Set single-shot conversion mode
     void singleMode() __attribute__((always_inline)) {
-        clearBit(ADC_SC3, ADC_SC3_ADCO_BIT);
+        atomic::clearBit(ADC_SC3, ADC_SC3_ADCO_BIT);
     }
 
     //! Use software to trigger the ADC, this is the most common setting
     void setSoftwareTrigger() __attribute__((always_inline)) {
-        clearBit(ADC_SC2, ADC_SC2_ADTRG_BIT);
+        atomic::clearBit(ADC_SC2, ADC_SC2_ADTRG_BIT);
     }
 
     //! Use hardware to trigger the ADC
     void setHardwareTrigger() __attribute__((always_inline)) {
-        setBit(ADC_SC2, ADC_SC2_ADTRG_BIT);
+        atomic::setBit(ADC_SC2, ADC_SC2_ADTRG_BIT);
     }
 
 
@@ -681,7 +683,7 @@ public:
     */
     volatile bool isConverting() __attribute__((always_inline)) {
         //return (*ADC_SC2_adact);
-        return getBit(ADC_SC2, ADC_SC2_ADACT_BIT);
+        return atomic::getBit(ADC_SC2, ADC_SC2_ADACT_BIT);
         //return ((*ADC_SC2) & ADC_SC2_ADACT) >> 7;
     }
 
@@ -693,7 +695,7 @@ public:
     */
     volatile bool isComplete() __attribute__((always_inline)) {
         //return (*ADC_SC1A_coco);
-        return getBit(ADC_SC1A, ADC_SC1A_COCO_BIT);
+        return atomic::getBit(ADC_SC1A, ADC_SC1A_COCO_BIT);
         //return ((*ADC_SC1A) & ADC_SC1_COCO) >> 7;
     }
 
@@ -703,7 +705,7 @@ public:
     */
     volatile bool isDifferential() __attribute__((always_inline)) {
         //return ((*ADC_SC1A) & ADC_SC1_DIFF) >> 5;
-        return getBit(ADC_SC1A, ADC_SC1_DIFF_BIT);
+        return atomic::getBit(ADC_SC1A, ADC_SC1_DIFF_BIT);
     }
 
     //! Is the ADC in continuous mode?
@@ -712,7 +714,7 @@ public:
     */
     volatile bool isContinuous() __attribute__((always_inline)) {
         //return (*ADC_SC3_adco);
-        return getBit(ADC_SC3, ADC_SC3_ADCO_BIT);
+        return atomic::getBit(ADC_SC3, ADC_SC3_ADCO_BIT);
         //return ((*ADC_SC3) & ADC_SC3_ADCO) >> 3;
     }
 
@@ -721,7 +723,7 @@ public:
     *   \return true or false
     */
     volatile bool isPGAEnabled() __attribute__((always_inline)) {
-        return getBit(ADC_PGA, ADC_PGA_PGAEN_BIT);
+        return atomic::getBit(ADC_PGA, ADC_PGA_PGAEN_BIT);
     }
 
 
@@ -1031,60 +1033,6 @@ private:
     //! Initialize ADC
     void analog_init();
 
-
-    /////// Atomic bit set/clear
-    /* Clear bit in address (make it zero), set bit (make it one), or return the value of that bit
-    *   We can change this functions depending on the board.
-    *   Teensy 3.x use bitband while Teensy LC has a more advanced bit manipulation engine.
-    */
-    #if defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_0) || defined(ADC_TEENSY_3_5) || defined(ADC_TEENSY_3_6)
-    // bitband
-    #define ADC_BITBAND_ADDR(reg, bit) (((uint32_t)(reg) - 0x40000000) * 32 + (bit) * 4 + 0x42000000)
-
-    __attribute__((always_inline)) void setBit(volatile uint32_t* reg, uint8_t bit) {
-        (*(uint32_t *)ADC_BITBAND_ADDR((reg), (bit))) = 1;
-    }
-    __attribute__((always_inline)) void clearBit(volatile uint32_t* reg, uint8_t bit) {
-        (*(uint32_t *)ADC_BITBAND_ADDR((reg), (bit))) = 0;
-    }
-
-    __attribute__((always_inline)) void changeBit(volatile uint32_t* reg, uint8_t bit, bool state) {
-        (*(uint32_t *)ADC_BITBAND_ADDR((reg), (bit))) = state;
-    }
-
-    __attribute__((always_inline)) volatile bool getBit(volatile uint32_t* reg, uint8_t bit) {
-        return (volatile bool)*(uint32_t*)(ADC_BITBAND_ADDR(reg, bit));
-    }
-
-    #elif defined(ADC_TEENSY_LC)
-    // bit manipulation engine
-    //#define ADC_SETBIT_ATOMIC(reg, bit) (*(uint32_t *)(((uint32_t)&(reg) - 0xF8000000) | 0x48000000) = 1 << (bit)) // OR
-    //#define ADC_CLRBIT_ATOMIC(reg, bit) (*(uint32_t *)(((uint32_t)&(reg) - 0xF8000000) | 0x44000000) = ~(1 << (bit))) // XOR
-
-    __attribute__((always_inline)) void setBit(volatile uint32_t* reg, uint8_t bit) {
-        //temp = *(uint32_t *)((uint32_t)(reg) | (1<<26) | (bit<<21)); // LAS
-        *(volatile uint32_t*)((uint32_t)(reg) | (1<<27)) = 1<<bit; // OR
-    }
-    __attribute__((always_inline)) void clearBit(volatile uint32_t* reg, uint8_t bit) {
-        //temp = *(uint32_t *)((uint32_t)(reg) | (3<<27) | (bit<<21)); // LAC
-        *(volatile uint32_t*)((uint32_t)(reg) | (1<<26)) = ~(1<<bit); // AND
-    }
-
-    __attribute__((always_inline)) void changeBit(volatile uint32_t* reg, uint8_t bit, bool state) {
-        //temp = *(uint32_t *)((uint32_t)(reg) | ((3-2*!!state)<<27) | (bit<<21)); // LAS/LAC
-        if(state) { // set
-            setBit(reg, bit);
-        } else { // clear
-            clearBit(reg, bit);
-        }
-
-    }
-
-    __attribute__((always_inline)) volatile bool getBit(volatile uint32_t* reg, uint8_t bit) {
-        return (volatile bool)*(uint32_t *)((uint32_t)(reg) | (1<<28) | (bit<<23) ); // UBFX
-    }
-
-    #endif
 
     uint32_t adc_offset;
 
