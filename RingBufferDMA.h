@@ -47,11 +47,19 @@ class RingBufferDMA
         //! Returns true if the buffer is empty
         bool isEmpty();
 
+        //! Read a value from the buffer, make sure it's not emtpy by calling isEmpty() first
+        int16_t read();
+
         //! Start DMA operation
         void start(void (*call_dma_isr)(void));
 
+        //! Write a value into the buffer
+        /** The actual value is copied by DMA, this function only updates the buffer pointers to reflect that fact.
+        */
+        void write();
+
         //! Length of the buffer
-        uint16_t size() {return b_size;}
+        uint16_t size() {return b_size; }
 
         //! Pointer to the data
         volatile int16_t* const buffer() {return p_elems;}
@@ -76,6 +84,8 @@ class RingBufferDMA
     protected:
     private:
 
+
+
         //! Size of buffer
         uint16_t b_size;
 
@@ -86,6 +96,9 @@ class RingBufferDMA
         uint16_t increase(uint16_t p);
 
         volatile uint32_t* const ADC_RA;
+
+
+
 
 };
 
