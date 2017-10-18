@@ -29,8 +29,14 @@ uint8_t adc_pins[] = {A0,A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,
                       A14, A15,A16,A17,A18,A19,A20 };
 uint8_t adc_pins_diff[] = {A10, A11, A12, A13};
 
+#elif defined(ADC_TEENSY_3_5)  // Teensy 3.5
+#define PINS 27
+#define PINS_DIFF 2
+uint8_t adc_pins[] = {A0,A1,A2,A3,A4,A5,A6,A7,A8, A9, A10,
+                      A11,A12,A13,A14,A15,A16,A17,A18,A19,A20,A21,A22,A23,A24, A25, A26};
+uint8_t adc_pins_diff[] = {A10, A11};
 
-#elif defined(ADC_TEENSY_3_5) || defined(ADC_TEENSY_3_6)  // Teensy 3.5/3.6
+#elif defined(ADC_TEENSY_3_6)  // Teensy 3.6
 #define PINS 25
 #define PINS_DIFF 2
 uint8_t adc_pins[] = {A0,A1,A2,A3,A4,A5,A6,A7,A8, A9, A10,
@@ -99,8 +105,6 @@ int pin=0;
 
 void loop() {
 
-
-
     for (int i=0;i<PINS;i++) {
         value = adc->analogRead(adc_pins[i]); // read a new value, will return ADC_ERROR_VALUE if the comparison is false.
         Serial.print("A");
@@ -108,7 +112,13 @@ void loop() {
         Serial.print(": ");
         Serial.print(value*3.3/adc->getMaxValue(ADC_0), 2);
         Serial.print(". ");
-        if(i==PINS/2 && PINS>15) {
+        if(i==9) {
+            Serial.println();
+        } else if(i==11) {
+            Serial.print("\t");
+        } else if(i==13) {
+            Serial.print("\t");
+        } else if(i==22) {
             Serial.println();
         }
     }
@@ -134,6 +144,7 @@ void loop() {
 
     // Print errors, if any.
     adc->printError();
+    adc->resetError();
 
 
     Serial.println();Serial.println();

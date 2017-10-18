@@ -152,7 +152,7 @@ enum class ADC_REFERENCE : uint8_t {
 #elif defined(ADC_TEENSY_3_5) // Teensy 3.5
         #define ADC_MAX_PIN (69)
 #elif defined(ADC_TEENSY_3_6) // Teensy 3.6
-        #define ADC_MAX_PIN (69)
+        #define ADC_MAX_PIN (67)
 #endif
 
 
