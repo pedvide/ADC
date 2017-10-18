@@ -662,6 +662,15 @@ public:
         clearBit(ADC_SC3, ADC_SC3_ADCO_BIT);
     }
 
+    //! Set single-ended conversion mode
+    void singleEndedMode() __attribute__((always_inline)) {
+        atomic::clearBit(ADC_SC1A, ADC_SC1_DIFF_BIT);
+    }
+    //! Set differential conversion mode
+    void differentialMode() __attribute__((always_inline)) {
+        atomic::setBit(ADC_SC1A, ADC_SC1_DIFF_BIT);
+    }
+
     //! Use software to trigger the ADC, this is the most common setting
     void setSoftwareTrigger() __attribute__((always_inline)) {
         clearBit(ADC_SC2, ADC_SC2_ADTRG_BIT);

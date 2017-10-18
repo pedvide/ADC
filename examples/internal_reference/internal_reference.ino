@@ -14,20 +14,27 @@
 ADC* adc = new ADC();
 
 //! change this value to your real input value, measured between AGND and 3.3V
-float voltage_target = 3.3;
+float voltage_target = 3.29;
 
 //! change the TOL (tolerance, minimum difference  in mV between voltage and target that matters)
 //! to refine even more, but not to less than 0.5 mV
-const float TOL = 1.0;
+const float TOL = 2.0;
 // Maximum iterations of the algorithm, no need to change it.
 const uint8_t MAX_ITER = 100;
 
 
+float average = 0;
+const int NUM_AVGS = 100;
 // Get the voltage of VREF using the trim value
 float get_voltage(uint8_t trim) {
+    average = 0;
     VREF::trim(trim);
     VREF::waitUntilStable();
-    return 1.20/adc->analogRead(ADC_INTERNAL_SOURCE::VREF_OUT)*(adc->getMaxValue(ADC_0));
+    delay(50);
+    for(int i=0; i<NUM_AVGS; i++) {
+        average += 1.195/adc->analogRead(ADC_INTERNAL_SOURCE::VREF_OUT)*(adc->getMaxValue(ADC_0));
+    }
+    return average/NUM_AVGS;
 }
 
 // Simple bisection method to get the optimum trim value
@@ -106,26 +113,37 @@ void setup() {
 
     delay(2000);
 
-    uint8_t VREF_trim = optimumTrimValue(voltage_target);
+    int8_t VREF_trim = optimumTrimValue(voltage_target);
     Serial.print("Optimal trim value: "); Serial.println(VREF_trim);
 
     VREF::start(VREF_SC_MODE_LV_HIGHPOWERBUF, VREF_trim);
     VREF::waitUntilStable();
 
-    Serial.print("VREF value: ");
-    Serial.print(1.20/adc->analogRead(ADC_INTERNAL_SOURCE::VREF_OUT)*adc->getMaxValue(ADC_0), 5);
+    Serial.print("3.3V pin value: ");
+    Serial.print(1.195/adc->analogRead(ADC_INTERNAL_SOURCE::VREF_OUT)*adc->getMaxValue(ADC_0), 5);
     Serial.println(" V.");
 
 
     Serial.print("Bandgap value: ");
-    Serial.print(3.3*adc->analogRead(ADC_INTERNAL_SOURCE::BANDGAP)/adc->getMaxValue(ADC_0), 5);
-    Serial.println(" V.");
+    //Serial.print(3.3*adc->analogRead(ADC_INTERNAL_SOURCE::BANDGAP)/adc->getMaxValue(ADC_0), 5);
+    adc->adc0->analogRead(ADC_INTERNAL_SOURCE::BANDGAP);
+    adc->adc0->differentialMode(); // Use differential mode for better precision.
+    Serial.print(voltage_target*adc->adc0->readSingle()/adc->getMaxValue(ADC_0), 5);
+    Serial.println(" V. (Should be between 0.97 and 1.03 V.)");
 
-    VREF::stop();
+    // VREF::stop(); // you can stop it to save power.
 }
 
 
 void loop() {
+
+    // If you now run your teensy from a battery you can check the charge by looking at the 3.3V pin voltage
+    // it should be 3.3V, but it will fall as the battery discharges.
+    Serial.print("3.3V pin value: ");
+    Serial.print(1.195/adc->analogRead(ADC_INTERNAL_SOURCE::VREF_OUT)*adc->getMaxValue(ADC_0), 5);
+    Serial.println(" V.");
+
+    delay(3000);
 }
 
 /*
@@ -135,32 +153,32 @@ My output with a Teensy 3.6 connected to my laptop's USB.
 With a cheap multimeter I measured voltage_target = 3.29 V, the results are:
 
 niter,	a,	b,	midpoint,	diff (mV)
-0,	    0,	63,	31,	    	38.62
-1,  	31,	63,	47,	    	17.06
-2,  	47,	63,	55,	    	6.81
-3,  	55,	63,	59,	    	1.42
-4,  	59,	63,	61,	    	-1.74
-5,  	59,	61,	60,	    	-0.50
-Optimal trim value: 60
-VREF value: 3.28977 V.
-Bandgap value: 1.00256 V.
+0,  	0,	63,	31,	    	24.26
+1,  	31,	63,	47,	    	2.54
+2,	    47,	63,	55,	    	-7.90
+3,  	47,	55,	51,	    	-2.58
+4,  	47,	51,	49,	    	0.03
+Optimal trim value: 49
+VREF value: 3.29024 V.
+Bandgap value: 0.99948 V.
 
 
-Using voltage_target = 3.3, which should be true:
+
+
+For Teensy 3.5 connected to my laptop's USB.
+voltage_target = 3.28 V, the results are:
 
 niter,	a,	b,	midpoint,	diff (mV)
-0,	    0,	63,	31,	    	28.48
-1,	    31,	63,	47,	    	7.20
-2,  	47,	63,	55,	    	-3.33
-3,	    47,	55,	51,	    	1.79
-4,	    51,	55,	53,	    	-0.84
-Optimal trim value: 53
-VREF value: 3.29874 V.
-Bandgap value: 1.00317 V.
+0,  	0,	63,	31,	    	21.97
+1,	    31,	63,	47,	    	0.27
+Optimal trim value: 47
+VREF value: 3.28154 V.
+Bandgap value: 1.00387 V.
 
 
 
-My output with a Teensy 3.0 connected to my laptop's USB.
+
+My output with a (quite old) Teensy 3.0 connected to my laptop's USB.
 voltage_target = 3.22 V, the results are:
 
 niter,	a,	b,	midpoint,	diff (mV)
