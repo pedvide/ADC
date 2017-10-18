@@ -2,12 +2,6 @@
 #define VREF_H
 
 #include <Arduino.h>
-#include <atomic.h>
-
-#define VREF_PMC_REGSC_BGBE_BIT (1)
-#define VREF_SC_VREFEN_BIT      (7)
-#define VREF_SC_VREFST_BIT      (2)
-#define VREF_TRM_CHOPEN_BIT     (6)
 
 //! Controls the Teensy internal voltage reference module (VREFV1)
 namespace VREF
@@ -34,8 +28,6 @@ namespace VREF
         // the system (bandgap) voltage reference must also be enabled."
         // enable bandgap, can be read directly with ADC_INTERNAL_SOURCE::BANDGAP
         PMC_REGSC |= PMC_REGSC_BGBE;
-
-        //atomic::setBit(&PMC_REGSC, VREF_PMC_REGSC_BGBE_BIT);
     }
 
     //! Set the trim
@@ -44,7 +36,6 @@ namespace VREF
     */
     inline void trim(uint8_t trim) {
         bool chopen = VREF_TRM & VREF_TRM_CHOPEN;
-        //bool chopen = atomic::getBit(&VREF_TRM, VREF_TRM_CHOPEN_BIT);
         VREF_TRM = (chopen ? VREF_TRM_CHOPEN : 0) | (trim&0x3F);
     }
 
@@ -54,7 +45,6 @@ namespace VREF
     __attribute__((always_inline)) inline void stop(){
         VREF_SC = 0;
         PMC_REGSC &= ~PMC_REGSC_BGBE;
-        //atomic::clearBit(&PMC_REGSC, VREF_PMC_REGSC_BGBE_BIT);
     }
 
      //! Check if the internal reference has stabilized.
@@ -69,16 +59,6 @@ namespace VREF
     */
     __attribute__((always_inline)) inline volatile bool isStable() {
         return VREF_SC & VREF_SC_VREFST;
-        //return atomic::getBit(&VREF_SC, VREF_SC_VREFST_BIT);
-    }
-
-    //! Check if the internal reference is on.
-    /**
-    *   \return true if the VREF module is switched on.
-    */
-    __attribute__((always_inline)) inline volatile bool isOn() {
-        return VREF_SC & VREF_SC_VREFEN;
-        //return atomic::getBit(&VREF_SC, VREF_SC_VREFEN_BIT);
     }
 
     //! Wait for the internal reference to stabilize.
@@ -88,7 +68,7 @@ namespace VREF
     */
     inline void waitUntilStable() {
         delay(35); // see note in isStable()
-        while(isOn() && !isStable()) {
+        while((VREF_SC & VREF_SC_VREFEN) && !isStable()) {
             yield();
         }
     }

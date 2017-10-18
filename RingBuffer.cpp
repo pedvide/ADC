@@ -31,12 +31,16 @@ RingBuffer::RingBuffer()
     //ctor
 }
 
+RingBuffer::~RingBuffer()
+{
+    // dtor
+}
 
-bool RingBuffer::isFull() {
+int RingBuffer::isFull() {
     return (b_end == (b_start ^ b_size));
 }
 
-bool RingBuffer::isEmpty() {
+int RingBuffer::isEmpty() {
     return (b_end == b_start);
 }
 
