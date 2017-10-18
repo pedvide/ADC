@@ -26,8 +26,6 @@
 #ifndef RINGBUFFER_H
 #define RINGBUFFER_H
 
-// include new and delete
-//#include <Arduino.h>
 
 // THE SIZE MUST BE A POWER OF 2!!
 #define RING_BUFFER_DEFAULT_BUFFER_SIZE 8
@@ -36,6 +34,7 @@
 
 /** Class RingBuffer implements a circular buffer of fixed size (must be power of 2)
 *   Code adapted from http://en.wikipedia.org/wiki/Circular_buffer#Mirroring
+*   This purely a software-based circular buffer.
 */
 class RingBuffer
 {
@@ -43,14 +42,11 @@ class RingBuffer
         //! Default constructor, buffer has a size DEFAULT_BUFFER_SIZE
         RingBuffer();
 
-        /** Default destructor */
-        virtual ~RingBuffer();
-
         //! Returns 1 (true) if the buffer is full
-        int isFull();
+        bool isFull();
 
         //! Returns 1 (true) if the buffer is empty
-        int isEmpty();
+        bool isEmpty();
 
         //! Write a value into the buffer
         void write(int value);
@@ -66,7 +62,6 @@ class RingBuffer
         int b_size = RING_BUFFER_DEFAULT_BUFFER_SIZE;
         int b_start = 0;
         int b_end = 0;
-        //int *elems;
         int elems[RING_BUFFER_DEFAULT_BUFFER_SIZE];
 };
 

@@ -36,9 +36,7 @@ RingBufferDMA::RingBufferDMA(volatile int16_t* elems, uint32_t len, uint8_t ADC_
     b_start = 0;
     b_end = 0;
 
-
     dmaChannel = new DMAChannel(); // reserve a DMA channel
-
 
     //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
 }
@@ -52,9 +50,9 @@ void RingBufferDMA::start(void (*call_dma_isr)(void)) {
 
     dmaChannel->source(*ADC_RA);
 
-    dmaChannel->destinationCircular((uint16_t*)p_elems, 2*b_size); // 2*b_size is necessary for some reason
+    dmaChannel->destinationCircular((uint16_t*)p_elems, b_size); // 2*b_size is necessary for some reason
 
-    dmaChannel->transferSize(2); // both SRC and DST size
+    dmaChannel->transferSize(2); // 2 bytes, both SRC and DST size
 
     dmaChannel->transferCount(b_size); // transfer b_size values
 
@@ -98,39 +96,4 @@ bool RingBufferDMA::isEmpty() {
     //b_end /= 2; // convert from uint16_t to positions
 
     return (b_end == b_start);
-}
-
-// update internal pointers
-// this gets called only by the isr
-void RingBufferDMA::write() {
-    // using DMA:
-    // call this inside the dma_isr to update the b_start and/or b_end pointers
-    if (isFull()) { /* full, overwrite moves start pointer */
-        b_start = increase(b_start);
-    }
-    b_end = increase(b_end);
-
-    dmaChannel->clearInterrupt();
-
-//    b_start = increase(b_start);
-//    b_end = uint32_t(dmaChannel->destinationAddress()) - uint32_t(p_elems);
-//    b_end /= 2; // convert from uint16_t to positions
-}
-
-int16_t RingBufferDMA::read() {
-
-    if(isEmpty()) {
-        return 0;
-    }
-
-    // using DMA:
-    // read last value and update b_start
-    int result = p_elems[b_start&(b_size-1)];
-    b_start = increase(b_start);
-    return result;
-}
-
-// increases the pointer modulo 2*size-1
-uint16_t RingBufferDMA::increase(uint16_t p) {
-    return (p + 1)&(2*b_size-1);
 }

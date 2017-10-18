@@ -5,6 +5,7 @@ const int readPin = A9;
 
 ADC *adc = new ADC(); // adc object
 
+// Software ring buffer
 RingBuffer *buffer = new RingBuffer;
 
 
@@ -40,7 +41,7 @@ void loop() {
 
     buffer->write(value);
 
-    Serial.print("Buffer read:");
+    Serial.print("Buffer read: ");
     Serial.println(buffer->read()*3.3/adc->getMaxValue());
 
     delay(100);
