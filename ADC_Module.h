@@ -115,6 +115,7 @@
         #define ADC_USE_INTERNAL (1)
 #endif
 
+
 // Select the voltage reference sources for ADC. This is an internal setting, do not use
 enum class ADC_REF_SOURCE : uint8_t {REF_DEFAULT = 0, REF_ALT = 1, REF_NONE = 2}; // internal, do not use
 #if defined(ADC_TEENSY_3_0) || defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_5) || defined(ADC_TEENSY_3_6)
@@ -170,15 +171,24 @@ enum class ADC_REFERENCE : uint8_t {
 
 
 // Other things to measure with the ADC that don't use external pins
-// In my Teensy I read 1.22 V for the ADC_VREF_OUT (doesn't exist in Teensy LC), random values for ADC_BANDGAP,
+// In my Teensy I read 1.22 V for the ADC_VREF_OUT (see VREF.h), 1.0V for ADC_BANDGAP (after PMC_REGSC |= PMC_REGSC_BGBE),
 // 3.3 V for ADC_VREFH and 0.0 V for ADC_VREFL.
-#if defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_0) || defined(ADC_TEENSY_LC)
+#if defined(ADC_TEENSY_LC)
+    /*! Other ADC sources to measure, such as the temperature sensor.
+    */
+    enum class ADC_INTERNAL_SOURCE : uint8_t{
+        TEMP_SENSOR = 38, /*!< Temperature sensor. */ // 0.719 V at 25ºC and slope of 1.715 mV/ºC for Teensy 3.x and 0.716 V, 1.62 mV/ºC for Teensy LC
+        BANDGAP = 41, /*!< BANDGAP */ // Enable the Bandgap with PMC_REGSC |= PMC_REGSC_BGBE; (see VREF.h)
+        VREFH = 42, /*!< High VREF */
+        VREFL = 43, /*!< Low VREF. */
+    };
+#elif defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_0)
     /*! Other ADC sources to measure, such as the temperature sensor.
     */
     enum class ADC_INTERNAL_SOURCE : uint8_t{
         TEMP_SENSOR = 38, /*!< Temperature sensor. */ // 0.719 V at 25ºC and slope of 1.715 mV/ºC for Teensy 3.x and 0.716 V, 1.62 mV/ºC for Teensy LC
         VREF_OUT = 39, /*!< 1.2 V reference */
-        BANDGAP = 41, /*!< BANDGAP */
+        BANDGAP = 41, /*!< BANDGAP */ // Enable the Bandgap with PMC_REGSC |= PMC_REGSC_BGBE; (see VREF.h)
         VREFH = 42, /*!< High VREF */
         VREFL = 43, /*!< Low VREF. */
     };
@@ -188,7 +198,7 @@ enum class ADC_REFERENCE : uint8_t {
     enum class ADC_INTERNAL_SOURCE : uint8_t{
         TEMP_SENSOR = 24, /*!< Temperature sensor. */ // 0.719 V at 25ºC and slope of 1.715 mV/ºC for Teensy 3.x and 0.716 V, 1.62 mV/ºC for Teensy LC
         VREF_OUT = 28, /*!< 1.2 V reference */ // only on ADC1
-        BANDGAP = 25, /*!< BANDGAP */
+        BANDGAP = 25, /*!< BANDGAP */ // Enable the Bandgap with PMC_REGSC |= PMC_REGSC_BGBE; (see VREF::start in VREF.h)
         VREFH = 26, /*!< High VREF */
         VREFL = 27, /*!< Low VREF. */
     };
@@ -878,18 +888,6 @@ public:
 
     //////// OTHER STUFF ///////////
 
-    //! Start the 1.2V internal reference (if present)
-    /** This is called automatically by setReference(ADC_REFERENCE::REF_1V2)
-    *   Use it to switch on the internal reference on the VREF_OUT pin.
-    *   Mode can be 0 for stand-by, 1 for high-power buffer and 2 for low-power buffer.
-    */
-    void startInternalReference(uint8_t mode = 1);
-
-    //! Stops the internal reference
-    /** This is called automatically by setReference(ADC_REFERENCE::REF_1V2)
-    */
-    void stopInternalReference();
-
     //! Store the config of the adc
     struct ADC_Config {
         //! ADC registers
@@ -976,7 +974,6 @@ public:
 
     //! Which adc is this?
     uint8_t ADC_num;
-
 
 
 private:
@@ -1094,7 +1091,7 @@ private:
     // registers point to the correct ADC module
     typedef volatile uint32_t* const reg;
 
-    // registers that control the adc modulesetSoftwareTrigger
+    // registers that control the adc module
     reg ADC_SC1A; //reg ADC_SC1A_aien; reg ADC_SC1A_coco;
     reg ADC_SC1B;
 
