@@ -17,12 +17,12 @@ var searchData=
   ['adc_5freference',['ADC_REFERENCE',['../_a_d_c___module_8h.html#a1edb7e48507f5c04ef3db68b5d5b01c9',1,'ADC_Module.h']]],
   ['adc_5fsampling_5fspeed',['ADC_SAMPLING_SPEED',['../_a_d_c___module_8h.html#a3fc99f48d35189e64d2628def313a15d',1,'ADC_Module.h']]],
   ['adcwasinuse',['adcWasInUse',['../class_a_d_c___module.html#a34f6f7878889aa3644b279f9440dc0bf',1,'ADC_Module']]],
-  ['analogread',['analogRead',['../class_a_d_c.html#aaf6079870b115d8b029d3613d44091dd',1,'ADC::analogRead(uint8_t pin, int8_t adc_num=-1)'],['../class_a_d_c.html#a17c4eedd3b304f64139c4bb25e156c91',1,'ADC::analogRead(ADC_INTERNAL_SOURCE pin, int8_t adc_num=-1) __attribute__((always_inline))'],['../class_a_d_c___module.html#ad492adad4a9fa728625be82602bf1672',1,'ADC_Module::analogRead(uint8_t pin)'],['../class_a_d_c___module.html#a62a46c6b418e628585e58441565564bb',1,'ADC_Module::analogRead(ADC_INTERNAL_SOURCE pin) __attribute__((always_inline))']]],
-  ['analogreadcontinuous',['analogReadContinuous',['../class_a_d_c.html#a749efc928425a1eea18341ccfafd1819',1,'ADC::analogReadContinuous()'],['../class_a_d_c___module.html#ae3315625f0e0e87ddcf15d6493acb2f4',1,'ADC_Module::analogReadContinuous()']]],
+  ['analogread',['analogRead',['../class_a_d_c.html#aaf6079870b115d8b029d3613d44091dd',1,'ADC::analogRead(uint8_t pin, int8_t adc_num=-1)'],['../class_a_d_c.html#a4196bada3d9d28af2604175a8a79d872',1,'ADC::analogRead(ADC_INTERNAL_SOURCE pin, int8_t adc_num=-1)'],['../class_a_d_c___module.html#ad492adad4a9fa728625be82602bf1672',1,'ADC_Module::analogRead(uint8_t pin)'],['../class_a_d_c___module.html#a6eaddace77e00a063abeb7331fae6abe',1,'ADC_Module::analogRead(ADC_INTERNAL_SOURCE pin)']]],
+  ['analogreadcontinuous',['analogReadContinuous',['../class_a_d_c.html#a749efc928425a1eea18341ccfafd1819',1,'ADC::analogReadContinuous()'],['../class_a_d_c___module.html#a8bddd248a9d52110b923fa94438f7f0a',1,'ADC_Module::analogReadContinuous()']]],
   ['analogreaddifferential',['analogReadDifferential',['../class_a_d_c.html#aec3464cdb697f89cf162813b00b2e965',1,'ADC::analogReadDifferential()'],['../class_a_d_c___module.html#a4a57f6a9b0e3884f3862062b33f1a447',1,'ADC_Module::analogReadDifferential()']]],
   ['analogsynchronizedread',['analogSynchronizedRead',['../class_a_d_c.html#ac8067db45057f691e664f414d1376d1e',1,'ADC']]],
   ['analogsynchronizedreaddifferential',['analogSynchronizedReadDifferential',['../class_a_d_c.html#a156bb3fe55e8155dc42fd7e9df1eaa55',1,'ADC']]],
-  ['analogsyncread',['analogSyncRead',['../class_a_d_c.html#a13b01aabc3f0560ceb822a04bf936022',1,'ADC']]],
-  ['analogsyncreaddifferential',['analogSyncReadDifferential',['../class_a_d_c.html#a0fc73bc95f8186f524773d9b0282bbf3',1,'ADC']]],
+  ['analogsyncread',['analogSyncRead',['../class_a_d_c.html#a8980e0b1c619d0a39beaf98228053e3d',1,'ADC']]],
+  ['analogsyncreaddifferential',['analogSyncReadDifferential',['../class_a_d_c.html#a709a33de52fa14673be6170a869be22a',1,'ADC']]],
   ['adc',['ADC',['../md_E:_Users_Villanueva_Arduino_libraries_ADC_README.html',1,'']]]
 ];
