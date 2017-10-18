@@ -66,7 +66,7 @@ const uint8_t ADC::channel2sc1aADC0[]= { // new version, gives directly the sc1a
     31, 31, 31, 31, // 34-37 nothing
     26, 27, 31, 27, 29, 30 // 38-43: temp. sensor, , , bandgap, VREFH, VREFL.
 };
-#elif defined(ADC_TEENSY_3_5) || defined(ADC_TEENSY_3_6)
+#elif defined(ADC_TEENSY_3_5)
 const uint8_t ADC::channel2sc1aADC0[]= { // new version, gives directly the sc1a number. 0x1F=31 deactivates the ADC.
     5, 14, 8, 9, 13, 12, 6, 7, 15, 4, 3, 31, 31, 31, // 0-13, we treat them as A0-A13
     5, 14, 8, 9, 13, 12, 6, 7, 15, 4, // 14-23 (A0-A9)
@@ -75,7 +75,18 @@ const uint8_t ADC::channel2sc1aADC0[]= { // new version, gives directly the sc1a
     31, 31, 31, 31, 31, 31, 31, 31, 31, // 35-43
     31, 31, 31, 31, 31, 31, 31, 31, 31, // 44-52
     31, 31, 31, 31, 31, 31, 31, 31, 31, // 53-61
-    31, 31, 3+ADC_SC1A_PIN_DIFF, 31+ADC_SC1A_PIN_DIFF, 23, 31, 31, 31 // 62-69 64: A10, 65: A11(ADC1), 66: A21, 67: A22(ADC1)
+    31, 31, 3+ADC_SC1A_PIN_DIFF, 31+ADC_SC1A_PIN_DIFF, 23, 31, 1, 31 // 62-69 64: A10, 65: A11 (NOT CONNECTED), 66: A21, 68: A25 (no diff)
+};
+#elif defined(ADC_TEENSY_3_6)
+const uint8_t ADC::channel2sc1aADC0[]= { // new version, gives directly the sc1a number. 0x1F=31 deactivates the ADC.
+    5, 14, 8, 9, 13, 12, 6, 7, 15, 4, 3, 31, 31, 31, // 0-13, we treat them as A0-A13
+    5, 14, 8, 9, 13, 12, 6, 7, 15, 4, // 14-23 (A0-A9)
+    26, 27, 29, 30, 31, 31, 31, // 24-30: Temp_Sensor, bandgap, VREFH, VREFL.
+    31, 31, 17, 18,// 31-34 A12(ADC1), A13(ADC1), A14, A15
+    31, 31, 31, 31, 31, 31, 31, 31, 31, // 35-43
+    31, 31, 31, 31, 31, 31, 31, 31, 31, // 44-52
+    31, 31, 31, 31, 31, 31, 31, 31, 31, // 53-61
+    31, 31, 3+ADC_SC1A_PIN_DIFF, 31+ADC_SC1A_PIN_DIFF, 23, 31 // 62-67 64: A10, 65: A11 (NOT CONNECTED), 66: A21, 67: A22(ADC1)
 };
 #endif // defined
 
@@ -89,16 +100,27 @@ const uint8_t ADC::channel2sc1aADC1[]= { // new version, gives directly the sc1a
     3+ADC_SC1A_PIN_DIFF, 31+ADC_SC1A_PIN_DIFF, 0+ADC_SC1A_PIN_DIFF, 19+ADC_SC1A_PIN_DIFF, // 34-37 (A10-A13) A11 isn't connected.
     26, 18, 31, 27, 29, 30 // 38-43: temp. sensor, VREF_OUT, A14 (not connected), bandgap, VREFH, VREFL.
 };
-#elif defined(ADC_TEENSY_3_5) || defined(ADC_TEENSY_3_6)
+#elif defined(ADC_TEENSY_3_5)
+const uint8_t ADC::channel2sc1aADC1[]= { // new version, gives directly the sc1a number. 0x1F=31 deactivates the ADC.
+    31, 31, 8, 9, 31, 31, 31, 31, 31, 31, 31, 19, 14, 15, // 0-13, we treat them as A0-A13
+    31, 31, 8, 9, 31, 31, 31, 31, 31, 31, // 14-23 (A0-A9)
+    26, 27, 29, 30, 18, 31, 31,  // 24-30: Temp_Sensor, bandgap, VREFH, VREFL, VREF_OUT
+    14, 15, 31, 31, 4, 5, 6, 7, 17, // 31-39 A12-A20
+    31, 31, 31, 31, // 40-43
+    31, 31, 31, 31, 31, 10, 11, 31, 31, // 44-52, 49: A23, 50: A24
+    31, 31, 31, 31, 31, 31, 31, 31, 31, // 53-61
+    31, 31, 0+ADC_SC1A_PIN_DIFF, 19+ADC_SC1A_PIN_DIFF, 31, 23, 31, 1 // 62-69 64: A10, 65: A11, 67: A22, 69: A26 (not diff)
+};
+#elif defined(ADC_TEENSY_3_6)
 const uint8_t ADC::channel2sc1aADC1[]= { // new version, gives directly the sc1a number. 0x1F=31 deactivates the ADC.
     31, 31, 8, 9, 31, 31, 31, 31, 31, 31, 31, 19, 14, 15, // 0-13, we treat them as A0-A13
     31, 31, 8, 9, 31, 31, 31, 31, 31, 31, // 14-23 (A0-A9)
     26, 27, 29, 30, 18, 31, 31,  // 24-30: Temp_Sensor, bandgap, VREFH, VREFL, VREF_OUT
     14, 15, 31, 31, 4, 5, 6, 7, 17, // 31-39 A12-A20
     31, 31, 31, 23, // 40-43: A10(ADC0), A11(ADC0), A21, A22
-    31, 31, 31, 31, 31, 10, 11, 31, 31, // 44-52
+    31, 31, 31, 31, 31, 10, 11, 31, 31, // 44-52, 49: A23, 50: A24
     31, 31, 31, 31, 31, 31, 31, 31, 31, // 53-61
-    31, 31, 31+ADC_SC1A_PIN_DIFF, 19+ADC_SC1A_PIN_DIFF, 31, 23, 31, 31 // 61-69 64: A10(ADC0), 65: A11, 66: A21(ADC0), 67: A22
+    31, 31, 0+ADC_SC1A_PIN_DIFF, 19+ADC_SC1A_PIN_DIFF, 31, 23 // 61-67 64: A10, 65: A11, 66: A21(ADC0), 67: A22
 };
 #endif
 
