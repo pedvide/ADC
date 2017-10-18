@@ -152,7 +152,7 @@ enum class ADC_REFERENCE : uint8_t {
 #elif defined(ADC_TEENSY_3_5) // Teensy 3.5
         #define ADC_MAX_PIN (69)
 #elif defined(ADC_TEENSY_3_6) // Teensy 3.6
-        #define ADC_MAX_PIN (69)
+        #define ADC_MAX_PIN (67)
 #endif
 
 
@@ -871,16 +871,17 @@ public:
     #define PDB_CHnC1_EN_1 0x01
 
     //! Start PDB triggering the ADC at the frequency
-    /**   Call analogRead on the pin that you want to measure before calling this function.
-    *   See the example.
+    /** Call startSingleRead or startSingleDifferential on the pin that you want to measure before calling this function.
+    *   See the example adc_pdb.ino.
     *   \param freq is the frequency of the ADC conversion, it can't be lower that 1 Hz
     */
     void startPDB(uint32_t freq);
 
     //! Stop the PDB
-    /**
-    */
     void stopPDB();
+
+    //! Return the PDB's frequency
+    uint32_t getPDBFrequency();
 
     #endif
 

@@ -1,9 +1,7 @@
-/* Example for analogContinuousRead
+/* Example for readPin
 *  It measures continuously the voltage on pin A9,
-*  Write v and press enter on the serial console to get the value
-*  Write c and press enter on the serial console to check that the conversion is taking place,
-*  Write t to check if the voltage agrees with the comparison in the setup()
-*  Write s to stop the conversion, you can restart it writing r.
+*  Write a pin number to measure that instead.
+*  If the pin is wrong, an error message will appear, change the pin and then write -1 to clear error.
 */
 
 #include <ADC.h>
@@ -65,7 +63,7 @@ void setup() {
     delay(500);
 }
 
-int value = 0;
+int value1 = 0, value2 = 0;
 int pin=0;
 
 void loop() {
@@ -83,16 +81,20 @@ void loop() {
         }
     }
 
-    value = adc->adc0->analogRead(readPin); // read a new value, will return ADC_ERROR_VALUE if the comparison is false.
+    value1 = adc->adc0->analogRead(readPin); // read a new value, will return ADC_ERROR_VALUE if the comparison is false.
+    value2 = adc->adc1->analogRead(readPin);
 
     Serial.print("Pin: ");
     Serial.print(readPin);
-    Serial.print(", value: ");
-    Serial.println(value*3.3/adc->getMaxValue(ADC_0), DEC);
+    Serial.print(", ADC0 value: ");
+    Serial.print(value1*3.3/adc->getMaxValue(ADC_0), DEC);
+    Serial.print(", ADC1 value: ");
+    Serial.println(value2*3.3/adc->getMaxValue(ADC_1), DEC);
 
 
     // Print errors, if any.
     adc->printError();
+    adc->resetError();
 
 
     //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
