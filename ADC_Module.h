@@ -360,12 +360,6 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
 #error "F_BUS must be 108, 60, 56, 54, 48, 40, 36, 24, 4 or 2 MHz"
 #endif
 
-// mask the important bit in each register
-#define ADC_CFG1_ADICLK_MASK_1 (1<<1)
-#define ADC_CFG1_ADICLK_MASK_0 (1<<0)
-
-#define ADC_CFG1_ADIV_MASK_1 (1<<6)
-#define ADC_CFG1_ADIV_MASK_0 (1<<5)
 
 // Settings for the power/speed of conversions/sampling
 /*! ADC conversion speed.
@@ -436,43 +430,24 @@ enum class ADC_SAMPLING_SPEED : uint8_t {
 // debug mode: blink the led light
 #define ADC_debug 0
 
+// Define masks for settings that need more than one bit
+#define ADC_CFG1_ADIV_MASK_1 (1<<6)
+#define ADC_CFG1_ADIV_MASK_0 (1<<5)
 
-// defines for the bit position in the registers, this makes it easy in case they change in different boards
-#define ADC_SC1A_COCO_BIT (7)
-#define ADC_SC1A_AIEN_BIT (6)
-#define ADC_SC1_DIFF_BIT (5)
+#define ADC_CFG1_MODE_MASK_1 (1<<3)
+#define ADC_CFG1_MODE_MASK_0 (1<<2)
 
-#define ADC_CFG1_ADLPC_BIT (7)
-#define ADC_CFG1_ADIV1_BIT (6)
-#define ADC_CFG1_ADIV0_BIT (5)
-#define ADC_CFG1_ADLSMP_BIT (4)
-#define ADC_CFG1_MODE1_BIT (3)
-#define ADC_CFG1_MODE0_BIT (2)
-#define ADC_CFG1_ADICLK1_BIT (1)
-#define ADC_CFG1_ADICLK0_BIT (0)
+#define ADC_CFG1_ADICLK_MASK_1 (1<<1)
+#define ADC_CFG1_ADICLK_MASK_0 (1<<0)
 
-#define ADC_CFG2_MUXSEL_BIT (4)
-#define ADC_CFG2_ADACKEN_BIT (3)
-#define ADC_CFG2_ADHSC_BIT (2)
-#define ADC_CFG2_ADLSTS1_BIT (1)
-#define ADC_CFG2_ADLSTS0_BIT (0)
+#define ADC_CFG2_ADLSTS_MASK_1 (1<<1)
+#define ADC_CFG2_ADLSTS_MASK_0 (1<<0)
 
-#define ADC_SC2_ADACT_BIT (7)
-#define ADC_SC2_ADTRG_BIT (6)
-#define ADC_SC2_ACFE_BIT (5)
-#define ADC_SC2_ACFGT_BIT (4)
-#define ADC_SC2_ACREN_BIT (3)
-#define ADC_SC2_DMAEN_BIT (2)
-#define ADC_SC2_REFSEL0_BIT (0)
+#define ADC_SC2_REFSEL_MASK_0 (1<<0)
 
-#define ADC_SC3_CAL_BIT (7)
-#define ADC_SC3_CALF_BIT (6)
-#define ADC_SC3_ADCO_BIT (3)
-#define ADC_SC3_AVGE_BIT (2)
-#define ADC_SC3_AVGS1_BIT (1)
-#define ADC_SC3_AVGS0_BIT (0)
+#define ADC_SC3_AVGS_MASK_1 (1<<1)
+#define ADC_SC3_AVGS_MASK_0 (1<<0)
 
-#define ADC_PGA_PGAEN_BIT (23)
 
 
 /** Class ADC_Module: Implements all functions of the Teensy 3.x, LC analog to digital converter
@@ -657,30 +632,30 @@ public:
 
     //! Set continuous conversion mode
     void continuousMode() __attribute__((always_inline)) {
-        atomic::setBit(ADC_SC3, ADC_SC3_ADCO_BIT);
+        atomic::setBitFlag(ADC_SC3, ADC_SC3_ADCO);
     }
     //! Set single-shot conversion mode
     void singleMode() __attribute__((always_inline)) {
-        atomic::clearBit(ADC_SC3, ADC_SC3_ADCO_BIT);
+        atomic::clearBitFlag(ADC_SC3, ADC_SC3_ADCO);
     }
 
     //! Set single-ended conversion mode
     void singleEndedMode() __attribute__((always_inline)) {
-        atomic::clearBit(ADC_SC1A, ADC_SC1_DIFF_BIT);
+        atomic::clearBitFlag(ADC_SC1A, ADC_SC1_DIFF);
     }
     //! Set differential conversion mode
     void differentialMode() __attribute__((always_inline)) {
-        atomic::setBit(ADC_SC1A, ADC_SC1_DIFF_BIT);
+        atomic::setBitFlag(ADC_SC1A, ADC_SC1_DIFF);
     }
 
     //! Use software to trigger the ADC, this is the most common setting
     void setSoftwareTrigger() __attribute__((always_inline)) {
-        atomic::clearBit(ADC_SC2, ADC_SC2_ADTRG_BIT);
+        atomic::clearBitFlag(ADC_SC2, ADC_SC2_ADTRG);
     }
 
     //! Use hardware to trigger the ADC
     void setHardwareTrigger() __attribute__((always_inline)) {
-        atomic::setBit(ADC_SC2, ADC_SC2_ADTRG_BIT);
+        atomic::setBitFlag(ADC_SC2, ADC_SC2_ADTRG);
     }
 
 
@@ -691,9 +666,9 @@ public:
     *   \return true or false
     */
     volatile bool isConverting() __attribute__((always_inline)) {
-        //return (*ADC_SC2_adact);
-        return atomic::getBit(ADC_SC2, ADC_SC2_ADACT_BIT);
-        //return ((*ADC_SC2) & ADC_SC2_ADACT) >> 7;
+        //return (ADC_SC2_adact);
+        return atomic::getBitFlag(ADC_SC2, ADC_SC2_ADACT);
+        //return ((ADC_SC2) & ADC_SC2_ADACT) >> 7;
     }
 
     //! Is an ADC conversion ready?
@@ -703,9 +678,9 @@ public:
     *  so it only makes sense to call it before analogReadContinuous() or readSingle()
     */
     volatile bool isComplete() __attribute__((always_inline)) {
-        //return (*ADC_SC1A_coco);
-        return atomic::getBit(ADC_SC1A, ADC_SC1A_COCO_BIT);
-        //return ((*ADC_SC1A) & ADC_SC1_COCO) >> 7;
+        //return (ADC_SC1A_coco);
+        return atomic::getBitFlag(ADC_SC1A, ADC_SC1_COCO);
+        //return ((ADC_SC1A) & ADC_SC1_COCO) >> 7;
     }
 
     //! Is the ADC in differential mode?
@@ -713,8 +688,8 @@ public:
     *   \return true or false
     */
     volatile bool isDifferential() __attribute__((always_inline)) {
-        //return ((*ADC_SC1A) & ADC_SC1_DIFF) >> 5;
-        return atomic::getBit(ADC_SC1A, ADC_SC1_DIFF_BIT);
+        //return ((ADC_SC1A) & ADC_SC1_DIFF) >> 5;
+        return atomic::getBitFlag(ADC_SC1A, ADC_SC1_DIFF);
     }
 
     //! Is the ADC in continuous mode?
@@ -722,9 +697,9 @@ public:
     *   \return true or false
     */
     volatile bool isContinuous() __attribute__((always_inline)) {
-        //return (*ADC_SC3_adco);
-        return atomic::getBit(ADC_SC3, ADC_SC3_ADCO_BIT);
-        //return ((*ADC_SC3) & ADC_SC3_ADCO) >> 3;
+        //return (ADC_SC3_adco);
+        return atomic::getBitFlag(ADC_SC3, ADC_SC3_ADCO);
+        //return ((ADC_SC3) & ADC_SC3_ADCO) >> 3;
     }
 
     //! Is the PGA function enabled?
@@ -732,7 +707,7 @@ public:
     *   \return true or false
     */
     volatile bool isPGAEnabled() __attribute__((always_inline)) {
-        return atomic::getBit(ADC_PGA, ADC_PGA_PGAEN_BIT);
+        return atomic::getBitFlag(ADC_PGA, ADC_PGA_PGAEN);
     }
 
 
@@ -862,7 +837,7 @@ public:
     *   otherwise values larger than 3.3/2 V are interpreted as negative!
     */
     int analogReadContinuous() __attribute__((always_inline)) {
-        return (int16_t)(int32_t)*ADC_RA;
+        return (int16_t)(int32_t)ADC_RA;
     }
 
     //! Stops continuous conversion
@@ -910,20 +885,20 @@ public:
 
     //! Save config of the ADC to the ADC_Config struct
     void saveConfig(ADC_Config* config) {
-        config->savedSC1A = *ADC_SC1A;
-        config->savedCFG1 = *ADC_CFG1;
-        config->savedCFG2 = *ADC_CFG2;
-        config->savedSC2 = *ADC_SC2;
-        config->savedSC3 = *ADC_SC3;
+        config->savedSC1A = ADC_SC1A;
+        config->savedCFG1 = ADC_CFG1;
+        config->savedCFG2 = ADC_CFG2;
+        config->savedSC2 = ADC_SC2;
+        config->savedSC3 = ADC_SC3;
     }
 
     //! Load config to the ADC
     void loadConfig(const ADC_Config* config) {
-        *ADC_CFG1 = config->savedCFG1;
-        *ADC_CFG2 = config->savedCFG2;
-        *ADC_SC2 = config->savedSC2;
-        *ADC_SC3 = config->savedSC3;
-        *ADC_SC1A = config->savedSC1A; // restore last
+        ADC_CFG1 = config->savedCFG1;
+        ADC_CFG2 = config->savedCFG2;
+        ADC_SC2 = config->savedSC2;
+        ADC_SC3 = config->savedSC3;
+        ADC_SC1A = config->savedSC1A; // restore last
     }
 
 
@@ -1046,7 +1021,7 @@ private:
     uint32_t adc_offset;
 
     // registers point to the correct ADC module
-    typedef volatile uint32_t* const reg;
+    typedef volatile uint32_t& reg;
 
     // registers that control the adc module
     reg ADC_SC1A; //reg ADC_SC1A_aien; reg ADC_SC1A_coco;
