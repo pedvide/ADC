@@ -664,11 +664,11 @@ public:
 
     //! Set single-ended conversion mode
     void singleEndedMode() __attribute__((always_inline)) {
-        atomic::clearBit(ADC_SC1A, ADC_SC1_DIFF_BIT);
+        clearBit(ADC_SC1A, ADC_SC1_DIFF_BIT);
     }
     //! Set differential conversion mode
     void differentialMode() __attribute__((always_inline)) {
-        atomic::setBit(ADC_SC1A, ADC_SC1_DIFF_BIT);
+        setBit(ADC_SC1A, ADC_SC1_DIFF_BIT);
     }
 
     //! Use software to trigger the ADC, this is the most common setting
