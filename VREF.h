@@ -3,6 +3,8 @@
 
 #include <Arduino.h>
 
+#include <atomic.h>
+
 //! Controls the Teensy internal voltage reference module (VREFV1)
 namespace VREF
 {
@@ -28,7 +30,7 @@ namespace VREF
         // Also "If the chop oscillator is to be used in very low power modes,
         // the system (bandgap) voltage reference must also be enabled."
         // enable bandgap, can be read directly with ADC_INTERNAL_SOURCE::BANDGAP
-        PMC_REGSC |= PMC_REGSC_BGBE;
+        atomic::setBitFlag(PMC_REGSC, PMC_REGSC_BGBE);
     }
 
     //! Set the trim
@@ -36,7 +38,7 @@ namespace VREF
     *   \param trim adjusts the reference value, from 0 to 0x3F (63).
     */
     inline void trim(uint8_t trim) {
-        bool chopen = VREF_TRM & VREF_TRM_CHOPEN;
+        bool chopen = atomic::getBitFlag(VREF_TRM, VREF_TRM_CHOPEN);
         VREF_TRM = (chopen ? VREF_TRM_CHOPEN : 0) | (trim&0x3F);
     }
 
@@ -45,7 +47,7 @@ namespace VREF
     */
     __attribute__((always_inline)) inline void stop(){
         VREF_SC = 0;
-        PMC_REGSC &= ~PMC_REGSC_BGBE;
+        atomic::clearBitFlag(PMC_REGSC, PMC_REGSC_BGBE);
     }
 
     //! Check if the internal reference has stabilized.
@@ -59,7 +61,7 @@ namespace VREF
     *   \return true if the VREF module is already in a stable condition and can be used.
     */
     __attribute__((always_inline)) inline volatile bool isStable() {
-        return VREF_SC & VREF_SC_VREFST;
+        return atomic::getBitFlag(VREF_SC, VREF_SC_VREFST);
     }
 
     //! Check if the internal reference is on.
@@ -67,7 +69,7 @@ namespace VREF
     *   \return true if the VREF module is switched on.
     */
     __attribute__((always_inline)) inline volatile bool isOn() {
-        return VREF_SC & VREF_SC_VREFEN;
+        return atomic::getBitFlag(VREF_SC, VREF_SC_VREFEN);
     }
 
     //! Wait for the internal reference to stabilize.

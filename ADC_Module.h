@@ -33,6 +33,8 @@
 
 #include <Arduino.h>
 
+#include <atomic.h>
+
 // Easier names for the boards
 #if defined(__MK20DX256__) // Teensy 3.1
 #define ADC_TEENSY_3_1
@@ -358,12 +360,6 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
 #error "F_BUS must be 108, 60, 56, 54, 48, 40, 36, 24, 4 or 2 MHz"
 #endif
 
-// mask the important bit in each register
-#define ADC_CFG1_ADICLK_MASK_1 (1<<1)
-#define ADC_CFG1_ADICLK_MASK_0 (1<<0)
-
-#define ADC_CFG1_ADIV_MASK_1 (1<<6)
-#define ADC_CFG1_ADIV_MASK_0 (1<<5)
 
 // Settings for the power/speed of conversions/sampling
 /*! ADC conversion speed.
@@ -434,43 +430,24 @@ enum class ADC_SAMPLING_SPEED : uint8_t {
 // debug mode: blink the led light
 #define ADC_debug 0
 
+// Define masks for settings that need more than one bit
+#define ADC_CFG1_ADIV_MASK_1 (1<<6)
+#define ADC_CFG1_ADIV_MASK_0 (1<<5)
 
-// defines for the bit position in the registers, this makes it easy in case they change in different boards
-#define ADC_SC1A_COCO_BIT (7)
-#define ADC_SC1A_AIEN_BIT (6)
-#define ADC_SC1_DIFF_BIT (5)
+#define ADC_CFG1_MODE_MASK_1 (1<<3)
+#define ADC_CFG1_MODE_MASK_0 (1<<2)
 
-#define ADC_CFG1_ADLPC_BIT (7)
-#define ADC_CFG1_ADIV1_BIT (6)
-#define ADC_CFG1_ADIV0_BIT (5)
-#define ADC_CFG1_ADLSMP_BIT (4)
-#define ADC_CFG1_MODE1_BIT (3)
-#define ADC_CFG1_MODE0_BIT (2)
-#define ADC_CFG1_ADICLK1_BIT (1)
-#define ADC_CFG1_ADICLK0_BIT (0)
+#define ADC_CFG1_ADICLK_MASK_1 (1<<1)
+#define ADC_CFG1_ADICLK_MASK_0 (1<<0)
 
-#define ADC_CFG2_MUXSEL_BIT (4)
-#define ADC_CFG2_ADACKEN_BIT (3)
-#define ADC_CFG2_ADHSC_BIT (2)
-#define ADC_CFG2_ADLSTS1_BIT (1)
-#define ADC_CFG2_ADLSTS0_BIT (0)
+#define ADC_CFG2_ADLSTS_MASK_1 (1<<1)
+#define ADC_CFG2_ADLSTS_MASK_0 (1<<0)
 
-#define ADC_SC2_ADACT_BIT (7)
-#define ADC_SC2_ADTRG_BIT (6)
-#define ADC_SC2_ACFE_BIT (5)
-#define ADC_SC2_ACFGT_BIT (4)
-#define ADC_SC2_ACREN_BIT (3)
-#define ADC_SC2_DMAEN_BIT (2)
-#define ADC_SC2_REFSEL0_BIT (0)
+#define ADC_SC2_REFSEL_MASK_0 (1<<0)
 
-#define ADC_SC3_CAL_BIT (7)
-#define ADC_SC3_CALF_BIT (6)
-#define ADC_SC3_ADCO_BIT (3)
-#define ADC_SC3_AVGE_BIT (2)
-#define ADC_SC3_AVGS1_BIT (1)
-#define ADC_SC3_AVGS0_BIT (0)
+#define ADC_SC3_AVGS_MASK_1 (1<<1)
+#define ADC_SC3_AVGS_MASK_0 (1<<0)
 
-#define ADC_PGA_PGAEN_BIT (23)
 
 
 /** Class ADC_Module: Implements all functions of the Teensy 3.x, LC analog to digital converter
@@ -655,30 +632,30 @@ public:
 
     //! Set continuous conversion mode
     void continuousMode() __attribute__((always_inline)) {
-        setBit(ADC_SC3, ADC_SC3_ADCO_BIT);
+        atomic::setBitFlag(ADC_SC3, ADC_SC3_ADCO);
     }
     //! Set single-shot conversion mode
     void singleMode() __attribute__((always_inline)) {
-        clearBit(ADC_SC3, ADC_SC3_ADCO_BIT);
+        atomic::clearBitFlag(ADC_SC3, ADC_SC3_ADCO);
     }
 
     //! Set single-ended conversion mode
     void singleEndedMode() __attribute__((always_inline)) {
-        clearBit(ADC_SC1A, ADC_SC1_DIFF_BIT);
+        atomic::clearBitFlag(ADC_SC1A, ADC_SC1_DIFF);
     }
     //! Set differential conversion mode
     void differentialMode() __attribute__((always_inline)) {
-        setBit(ADC_SC1A, ADC_SC1_DIFF_BIT);
+        atomic::setBitFlag(ADC_SC1A, ADC_SC1_DIFF);
     }
 
     //! Use software to trigger the ADC, this is the most common setting
     void setSoftwareTrigger() __attribute__((always_inline)) {
-        clearBit(ADC_SC2, ADC_SC2_ADTRG_BIT);
+        atomic::clearBitFlag(ADC_SC2, ADC_SC2_ADTRG);
     }
 
     //! Use hardware to trigger the ADC
     void setHardwareTrigger() __attribute__((always_inline)) {
-        setBit(ADC_SC2, ADC_SC2_ADTRG_BIT);
+        atomic::setBitFlag(ADC_SC2, ADC_SC2_ADTRG);
     }
 
 
@@ -689,9 +666,9 @@ public:
     *   \return true or false
     */
     volatile bool isConverting() __attribute__((always_inline)) {
-        //return (*ADC_SC2_adact);
-        return getBit(ADC_SC2, ADC_SC2_ADACT_BIT);
-        //return ((*ADC_SC2) & ADC_SC2_ADACT) >> 7;
+        //return (ADC_SC2_adact);
+        return atomic::getBitFlag(ADC_SC2, ADC_SC2_ADACT);
+        //return ((ADC_SC2) & ADC_SC2_ADACT) >> 7;
     }
 
     //! Is an ADC conversion ready?
@@ -701,9 +678,9 @@ public:
     *  so it only makes sense to call it before analogReadContinuous() or readSingle()
     */
     volatile bool isComplete() __attribute__((always_inline)) {
-        //return (*ADC_SC1A_coco);
-        return getBit(ADC_SC1A, ADC_SC1A_COCO_BIT);
-        //return ((*ADC_SC1A) & ADC_SC1_COCO) >> 7;
+        //return (ADC_SC1A_coco);
+        return atomic::getBitFlag(ADC_SC1A, ADC_SC1_COCO);
+        //return ((ADC_SC1A) & ADC_SC1_COCO) >> 7;
     }
 
     //! Is the ADC in differential mode?
@@ -711,8 +688,8 @@ public:
     *   \return true or false
     */
     volatile bool isDifferential() __attribute__((always_inline)) {
-        //return ((*ADC_SC1A) & ADC_SC1_DIFF) >> 5;
-        return getBit(ADC_SC1A, ADC_SC1_DIFF_BIT);
+        //return ((ADC_SC1A) & ADC_SC1_DIFF) >> 5;
+        return atomic::getBitFlag(ADC_SC1A, ADC_SC1_DIFF);
     }
 
     //! Is the ADC in continuous mode?
@@ -720,9 +697,9 @@ public:
     *   \return true or false
     */
     volatile bool isContinuous() __attribute__((always_inline)) {
-        //return (*ADC_SC3_adco);
-        return getBit(ADC_SC3, ADC_SC3_ADCO_BIT);
-        //return ((*ADC_SC3) & ADC_SC3_ADCO) >> 3;
+        //return (ADC_SC3_adco);
+        return atomic::getBitFlag(ADC_SC3, ADC_SC3_ADCO);
+        //return ((ADC_SC3) & ADC_SC3_ADCO) >> 3;
     }
 
     //! Is the PGA function enabled?
@@ -730,7 +707,7 @@ public:
     *   \return true or false
     */
     volatile bool isPGAEnabled() __attribute__((always_inline)) {
-        return getBit(ADC_PGA, ADC_PGA_PGAEN_BIT);
+        return atomic::getBitFlag(ADC_PGA, ADC_PGA_PGAEN);
     }
 
 
@@ -785,8 +762,8 @@ public:
     /** It calls analogRead(uint8_t pin) internally, with the correct value for the pin for all boards.
     *   Possible values:
     *   TEMP_SENSOR,  Temperature sensor.
-    *   VREF_OUT,  1.2 V reference.
-    *   BANDGAP, BANDGAP.
+    *   VREF_OUT,  1.2 V reference (switch on first using VREF.h).
+    *   BANDGAP, BANDGAP (switch on first using VREF.h).
     *   VREFH, High VREF.
     *   VREFL, Low VREF.
     *   \param pin ADC_INTERNAL_SOURCE to read.
@@ -860,7 +837,7 @@ public:
     *   otherwise values larger than 3.3/2 V are interpreted as negative!
     */
     int analogReadContinuous() __attribute__((always_inline)) {
-        return (int16_t)(int32_t)*ADC_RA;
+        return (int16_t)(int32_t)ADC_RA;
     }
 
     //! Stops continuous conversion
@@ -908,20 +885,20 @@ public:
 
     //! Save config of the ADC to the ADC_Config struct
     void saveConfig(ADC_Config* config) {
-        config->savedSC1A = *ADC_SC1A;
-        config->savedCFG1 = *ADC_CFG1;
-        config->savedCFG2 = *ADC_CFG2;
-        config->savedSC2 = *ADC_SC2;
-        config->savedSC3 = *ADC_SC3;
+        config->savedSC1A = ADC_SC1A;
+        config->savedCFG1 = ADC_CFG1;
+        config->savedCFG2 = ADC_CFG2;
+        config->savedSC2 = ADC_SC2;
+        config->savedSC3 = ADC_SC3;
     }
 
     //! Load config to the ADC
     void loadConfig(const ADC_Config* config) {
-        *ADC_CFG1 = config->savedCFG1;
-        *ADC_CFG2 = config->savedCFG2;
-        *ADC_SC2 = config->savedSC2;
-        *ADC_SC3 = config->savedSC3;
-        *ADC_SC1A = config->savedSC1A; // restore last
+        ADC_CFG1 = config->savedCFG1;
+        ADC_CFG2 = config->savedCFG2;
+        ADC_SC2 = config->savedSC2;
+        ADC_SC3 = config->savedSC3;
+        ADC_SC1A = config->savedSC1A; // restore last
     }
 
 
@@ -982,7 +959,7 @@ public:
 
 
     //! Which adc is this?
-    uint8_t ADC_num;
+    const uint8_t ADC_num;
 
 
 private:
@@ -1005,9 +982,6 @@ private:
 
     // reference can be internal or external
     ADC_REF_SOURCE analog_reference_internal;
-
-    // are interrupts enabled?
-    volatile uint8_t var_enableInterrupts;
 
     // value of the pga
     uint8_t pga_value;
@@ -1039,64 +1013,8 @@ private:
     //! Initialize ADC
     void analog_init();
 
-
-    /////// Atomic bit set/clear
-    /* Clear bit in address (make it zero), set bit (make it one), or return the value of that bit
-    *   We can change this functions depending on the board.
-    *   Teensy 3.x use bitband while Teensy LC has a more advanced bit manipulation engine.
-    */
-    #if defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_0) || defined(ADC_TEENSY_3_5) || defined(ADC_TEENSY_3_6)
-    // bitband
-    #define ADC_BITBAND_ADDR(reg, bit) (((uint32_t)(reg) - 0x40000000) * 32 + (bit) * 4 + 0x42000000)
-
-    __attribute__((always_inline)) void setBit(volatile uint32_t* reg, uint8_t bit) {
-        (*(uint32_t *)ADC_BITBAND_ADDR((reg), (bit))) = 1;
-    }
-    __attribute__((always_inline)) void clearBit(volatile uint32_t* reg, uint8_t bit) {
-        (*(uint32_t *)ADC_BITBAND_ADDR((reg), (bit))) = 0;
-    }
-
-    __attribute__((always_inline)) void changeBit(volatile uint32_t* reg, uint8_t bit, bool state) {
-        (*(uint32_t *)ADC_BITBAND_ADDR((reg), (bit))) = state;
-    }
-
-    __attribute__((always_inline)) volatile bool getBit(volatile uint32_t* reg, uint8_t bit) {
-        return (volatile bool)*(uint32_t*)(ADC_BITBAND_ADDR(reg, bit));
-    }
-
-    #elif defined(ADC_TEENSY_LC)
-    // bit manipulation engine
-    //#define ADC_SETBIT_ATOMIC(reg, bit) (*(uint32_t *)(((uint32_t)&(reg) - 0xF8000000) | 0x48000000) = 1 << (bit)) // OR
-    //#define ADC_CLRBIT_ATOMIC(reg, bit) (*(uint32_t *)(((uint32_t)&(reg) - 0xF8000000) | 0x44000000) = ~(1 << (bit))) // XOR
-
-    __attribute__((always_inline)) void setBit(volatile uint32_t* reg, uint8_t bit) {
-        //temp = *(uint32_t *)((uint32_t)(reg) | (1<<26) | (bit<<21)); // LAS
-        *(volatile uint32_t*)((uint32_t)(reg) | (1<<27)) = 1<<bit; // OR
-    }
-    __attribute__((always_inline)) void clearBit(volatile uint32_t* reg, uint8_t bit) {
-        //temp = *(uint32_t *)((uint32_t)(reg) | (3<<27) | (bit<<21)); // LAC
-        *(volatile uint32_t*)((uint32_t)(reg) | (1<<26)) = ~(1<<bit); // AND
-    }
-
-    __attribute__((always_inline)) void changeBit(volatile uint32_t* reg, uint8_t bit, bool state) {
-        //temp = *(uint32_t *)((uint32_t)(reg) | ((3-2*!!state)<<27) | (bit<<21)); // LAS/LAC
-        if(state) { // set
-            setBit(reg, bit);
-        } else { // clear
-            clearBit(reg, bit);
-        }
-
-    }
-
-    __attribute__((always_inline)) volatile bool getBit(volatile uint32_t* reg, uint8_t bit) {
-        return (volatile bool)*(uint32_t *)((uint32_t)(reg) | (1<<28) | (bit<<23) ); // UBFX
-    }
-
-    #endif
-
-
     // registers point to the correct ADC module
-    typedef volatile uint32_t* const reg;
+    typedef volatile uint32_t& reg;
 
     // registers that control the adc module
     reg ADC_SC1A;
@@ -1137,7 +1055,7 @@ private:
 
     reg PDB0_CHnC1; // PDB channel 0 or 1
 
-    uint8_t IRQ_ADC; // IRQ number will be IRQ_ADC0 or IRQ_ADC1
+    const uint8_t IRQ_ADC; // IRQ number will be IRQ_ADC0 or IRQ_ADC1
 
 
 protected:
