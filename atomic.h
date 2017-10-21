@@ -75,7 +75,7 @@ namespace atomic
     template<typename T>
     __attribute__((always_inline)) inline void setBitFlag(volatile T& reg, uint32_t flag) {
         //temp = *(uint32_t *)((uint32_t)(reg) | (1<<26) | (bit<<21)); // LAS
-        *(volatile T*)((uint32_t)(&reg) | (1<<27)) = 1<<(31-__builtin_clzl(flag)); // OR
+        *(volatile T*)((uint32_t)(&reg) | (1<<27)) = flag; // OR
     }
 
     template<typename T>
@@ -86,7 +86,7 @@ namespace atomic
     template<typename T>
     __attribute__((always_inline)) inline void clearBitFlag(volatile T& reg, uint32_t flag) {
         //temp = *(uint32_t *)((uint32_t)(reg) | (3<<27) | (bit<<21)); // LAC
-        *(volatile T*)((uint32_t)(&reg) | (1<<26)) = ~(1<<(31-__builtin_clzl(flag))); // AND
+        *(volatile T*)((uint32_t)(&reg) | (1<<26)) = ~flag; // AND
     }
 
     template<typename T>
