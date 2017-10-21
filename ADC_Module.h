@@ -104,15 +104,15 @@
 
 // Has internal reference?
 #if defined(ADC_TEENSY_3_1) // Teensy 3.1
-        #define ADC_USE_INTERNAL (1)
+        #define ADC_USE_INTERNAL_VREF (1)
 #elif defined(ADC_TEENSY_3_0) // Teensy 3.0
-        #define ADC_USE_INTERNAL (1)
+        #define ADC_USE_INTERNAL_VREF (1)
 #elif defined(ADC_TEENSY_LC) // Teensy LC
-        #define ADC_USE_INTERNAL (0)
+        #define ADC_USE_INTERNAL_VREF (0)
 #elif defined(ADC_TEENSY_3_5) // Teensy 3.5
-        #define ADC_USE_INTERNAL (1)
+        #define ADC_USE_INTERNAL_VREF (1)
 #elif defined(ADC_TEENSY_3_6) // Teensy 3.6
-        #define ADC_USE_INTERNAL (1)
+        #define ADC_USE_INTERNAL_VREF (1)
 #endif
 
 
@@ -1036,7 +1036,6 @@ private:
     }
 
 
-
     //! Initialize ADC
     void analog_init();
 
@@ -1095,18 +1094,17 @@ private:
 
     #endif
 
-    uint32_t adc_offset;
 
     // registers point to the correct ADC module
     typedef volatile uint32_t* const reg;
 
     // registers that control the adc module
-    reg ADC_SC1A; //reg ADC_SC1A_aien; reg ADC_SC1A_coco;
+    reg ADC_SC1A;
     reg ADC_SC1B;
 
-    reg ADC_CFG1; //reg ADC_CFG1_adlpc; reg ADC_CFG1_adiv0, ADC_CFG1_adiv1; reg ADC_CFG1_adlsmp;
-    //  reg ADC_CFG1_mode0, ADC_CFG1_mode1; reg ADC_CFG1_adiclk0, ADC_CFG1_adiclk1;
-    reg ADC_CFG2; //reg ADC_CFG2_muxsel; reg ADC_CFG2_adacken; reg ADC_CFG2_adhsc; reg ADC_CFG2_adlsts1, ADC_CFG2_adlsts0;
+    reg ADC_CFG1;
+
+    reg ADC_CFG2;
 
     reg ADC_RA;
     reg ADC_RB;
@@ -1114,10 +1112,10 @@ private:
     reg ADC_CV1;
     reg ADC_CV2;
 
-    reg ADC_SC2; //reg ADC_SC2_adact; reg ADC_SC2_ref; reg ADC_SC2_dma; reg ADC_SC2_cfe; reg ADC_SC2_cfgt; reg ADC_SC2_cren;
-    reg ADC_SC3; //reg ADC_SC3_cal, ADC_SC3_calf; reg ADC_SC3_avge; reg ADC_SC3_avgs0, ADC_SC3_avgs1; reg ADC_SC3_adco;
+    reg ADC_SC2;
+    reg ADC_SC3;
 
-    reg ADC_PGA; //reg ADC_PGA_pgaen;
+    reg ADC_PGA;
 
     reg ADC_OFS;
     reg ADC_PG;

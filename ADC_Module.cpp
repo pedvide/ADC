@@ -243,8 +243,9 @@ void ADC_Module::setReference(ADC_REFERENCE type) {
 
     if (ref_type == ADC_REF_SOURCE::REF_ALT) { // 1.2V ref for Teensy 3.x, 3.3 VDD for Teensy LC
         // internal reference requested
-
+        #if ADC_USE_INTERNAL_VREF
         VREF::start(); // enable VREF if Teensy 3.x
+        #endif
 
         analog_reference_internal = ADC_REF_SOURCE::REF_ALT;
 
@@ -254,7 +255,9 @@ void ADC_Module::setReference(ADC_REFERENCE type) {
     } else if(ref_type == ADC_REF_SOURCE::REF_DEFAULT) { // ext ref for all Teensys, vcc also for Teensy 3.x
         // vcc or external reference requested
 
+        #if ADC_USE_INTERNAL_VREF
         VREF::stop(); // disable 1.2V reference source when using the external ref (p. 102, 3.7.1.7)
+        #endif
 
         analog_reference_internal = ADC_REF_SOURCE::REF_DEFAULT;
 
