@@ -19,8 +19,8 @@ namespace atomic
     *   \return A pointer to the aliased address of the bit of reg
     */
     template<typename T>
-    __attribute__((always_inline)) inline volatile T* bitband_address(const T& reg, uint8_t bit) {
-        return (volatile T*)(((uint32_t)&reg - 0x40000000)*32 + bit*4 + 0x42000000);
+    __attribute__((always_inline)) inline volatile T* const bitband_address(const T& reg, uint8_t bit) {
+        return (volatile T* const)(((uint32_t)&reg - 0x40000000)*32 + bit*4 + 0x42000000);
     }
 
     template<typename T>

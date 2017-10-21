@@ -46,7 +46,6 @@ ADC_Module::ADC_Module(uint8_t ADC_number, const uint8_t* const a_channel2sc1a, 
         ADC_num(ADC_number)
         , channel2sc1a(a_channel2sc1a)
         , diff_table(a_diff_table)
-        , adc_offset((uint32_t)0x20000)
         , ADC_SC1A(*(&ADC0_SC1A + adc_offset*ADC_num))
         , ADC_SC1B(*(&ADC0_SC1B + adc_offset*ADC_num))
         , ADC_CFG1(*(&ADC0_CFG1 + adc_offset*ADC_num))
@@ -879,7 +878,7 @@ int ADC_Module::analogRead(uint8_t pin) {
     // check if we are interrupting a measurement, store setting if so.
     // vars to save the current state of the ADC in case it's in use
     ADC_Config old_config = {0};
-    uint8_t wasADCInUse = isConverting(); // is the ADC running now?
+    const uint8_t wasADCInUse = isConverting(); // is the ADC running now?
 
     if(wasADCInUse) { // this means we're interrupting a conversion
         // save the current conversion config, we don't want any other interrupts messing up the configs

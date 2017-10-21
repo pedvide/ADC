@@ -959,7 +959,7 @@ public:
 
 
     //! Which adc is this?
-    uint8_t ADC_num;
+    const uint8_t ADC_num;
 
 
 private:
@@ -1015,7 +1015,7 @@ private:
     void analog_init();
 
 
-    uint32_t adc_offset;
+    const uint32_t adc_offset = 0x20000;
 
     // registers point to the correct ADC module
     typedef volatile uint32_t& reg;
@@ -1059,7 +1059,7 @@ private:
 
     reg PDB0_CHnC1; // PDB channel 0 or 1
 
-    uint8_t IRQ_ADC; // IRQ number will be IRQ_ADC0 or IRQ_ADC1
+    const uint8_t IRQ_ADC; // IRQ number will be IRQ_ADC0 or IRQ_ADC1
 
 
 protected:
