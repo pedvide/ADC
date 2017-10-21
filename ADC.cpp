@@ -200,10 +200,6 @@ ADC::ADC() : // awkward initialization  so there are no -Wreorder warnings
     #if ADC_NUM_ADCS>1
     , adc1_obj(1, channel2sc1aADC1, diff_table_ADC1)
     #endif
-    , adc0(&adc0_obj)
-    #if ADC_NUM_ADCS>1
-    , adc1(&adc1_obj)
-    #endif
     {
     //ctor
 

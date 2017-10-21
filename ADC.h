@@ -75,10 +75,10 @@ class ADC
         // create both adc objects
 
         //! Object to control the ADC0
-        ADC_Module *const adc0; // adc object pointer
+        ADC_Module *const adc0 = &adc0_obj; // adc object pointer
         #if ADC_NUM_ADCS>1
         //! Object to control the ADC1
-        ADC_Module *const adc1; // adc object pointer
+        ADC_Module *const adc1 = &adc1_obj; // adc object pointer
         #endif
 
         #if ADC_NUM_ADCS==1
