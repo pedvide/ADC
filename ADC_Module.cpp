@@ -90,7 +90,6 @@ ADC_Module::ADC_Module(uint8_t ADC_number, const uint8_t* const a_channel2sc1a, 
 }
 
 /* Initialize stuff:
-*  - Start Vref module
 *  - Clear all fail flags
 *  - Internal reference (default: external vcc)
 *  - Mux between a and b channels (b channels)
