@@ -584,7 +584,6 @@ void ADC_Module::setAveraging(uint8_t num) {
 void ADC_Module::enableInterrupts() {
     if (calibrating) wait_for_cal();
 
-    var_enableInterrupts = 1;
     // ADC_SC1A_aien = 1;
     atomic::setBitFlag(ADC_SC1A, ADC_SC1_AIEN);
 
@@ -595,7 +594,6 @@ void ADC_Module::enableInterrupts() {
 *
 */
 void ADC_Module::disableInterrupts() {
-    var_enableInterrupts = 0;
     // ADC_SC1A_aien = 0;
     atomic::clearBitFlag(ADC_SC1A, ADC_SC1_AIEN);
 
@@ -811,7 +809,7 @@ void ADC_Module::startReadFast(uint8_t pin) {
 
     // select pin for single-ended mode and start conversion, enable interrupts if requested
     __disable_irq();
-    *ADC_SC1A = (sc1a_pin&ADC_SC1A_CHANNELS) + var_enableInterrupts*ADC_SC1_AIEN;
+    ADC_SC1A = (sc1a_pin&ADC_SC1A_CHANNELS) + atomic::getBitFlag(ADC_SC1A, ADC_SC1_AIEN)*ADC_SC1_AIEN;
     __enable_irq();
 
 }
@@ -832,7 +830,6 @@ void ADC_Module::startDifferentialFast(uint8_t pinP, uint8_t pinN) {
     #endif // ADC_USE_PGA
 
     __disable_irq();
-    *ADC_SC1A = ADC_SC1_DIFF + (sc1a_pin&ADC_SC1A_CHANNELS) + var_enableInterrupts*ADC_SC1_AIEN;
     ADC_SC1A = ADC_SC1_DIFF + (sc1a_pin&ADC_SC1A_CHANNELS) + atomic::getBitFlag(ADC_SC1A, ADC_SC1_AIEN)*ADC_SC1_AIEN;
     __enable_irq();
 
@@ -1165,6 +1162,7 @@ bool ADC_Module::startContinuousDifferential(uint8_t pinP, uint8_t pinN) {
 void ADC_Module::stopContinuous() {
 
     // set channel select to all 1's (31) to stop it.
+    ADC_SC1A = ADC_SC1A_PIN_INVALID + atomic::getBitFlag(ADC_SC1A, ADC_SC1_AIEN)*ADC_SC1_AIEN;
 
     // decrease the counter of measurements (unless it's 0)
     if(!num_measurements) {

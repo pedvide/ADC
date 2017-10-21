@@ -983,9 +983,6 @@ private:
     // reference can be internal or external
     volatile ADC_REF_SOURCE analog_reference_internal;
 
-    // are interrupts enabled?
-    volatile uint8_t var_enableInterrupts;
-
     // value of the pga
     volatile uint8_t pga_value;
 
