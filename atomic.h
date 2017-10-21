@@ -12,48 +12,54 @@ namespace atomic
     *   Teensy 3.x use bitband while Teensy LC has a more advanced bit manipulation engine.
     */
     #if defined(KINETISK) // Teensy 3.x
-    // bitband
+    //! Bitband address
+    /** Gets the aliased address of the bit-band register
+    *   \param reg  Register in the bit-band area
+    *   \param bit  Bit number of reg to read/modify
+    *   \return A pointer to the aliased address of the bit of reg
+    */
     template<typename T>
-    __attribute__((always_inline)) inline volatile T* bitband_address(volatile T* reg, uint8_t bit) {
-        return (volatile T*)(((uint32_t)reg - 0x40000000)*32 + bit*4 + 0x42000000);
+    __attribute__((always_inline)) inline volatile T* bitband_address(const T& reg, uint8_t bit) {
+        return (volatile T*)(((uint32_t)&reg - 0x40000000)*32 + bit*4 + 0x42000000);
     }
 
     template<typename T>
-    __attribute__((always_inline)) inline void setBit(volatile T* reg, uint8_t bit) {
+    __attribute__((always_inline)) inline void setBit(volatile T& reg, uint8_t bit) {
         *bitband_address(reg, bit) = 1;
     }
     template<typename T>
     __attribute__((always_inline)) inline void setBitFlag(volatile T& reg, uint32_t flag) {
         // 31-__builtin_clzl(flag) = gets bit number in flag
         // __builtin_clzl works for long ints, which are guaranteed by standard to be at least 32 bit wide.
-        *bitband_address(&reg, 31-__builtin_clzl(flag)) = 1;
+        // there's no difference in the asm emitted.
+        *bitband_address(reg, 31-__builtin_clzl(flag)) = 1;
     }
 
     template<typename T>
-    __attribute__((always_inline)) inline void clearBit(volatile T* reg, uint8_t bit) {
+    __attribute__((always_inline)) inline void clearBit(volatile T& reg, uint8_t bit) {
         *bitband_address(reg, bit) = 0;
     }
     template<typename T>
     __attribute__((always_inline)) inline void clearBitFlag(volatile T& reg, uint32_t flag) {
-        *bitband_address(&reg, 31-__builtin_clzl(flag)) = 0;
+        *bitband_address(reg, 31-__builtin_clzl(flag)) = 0;
     }
 
     template<typename T>
-    __attribute__((always_inline)) inline void changeBit(volatile T* reg, uint8_t bit, bool state) {
+    __attribute__((always_inline)) inline void changeBit(volatile T& reg, uint8_t bit, bool state) {
         *bitband_address(reg, bit) = state;
     }
     template<typename T>
     __attribute__((always_inline)) inline void changeBitFlag(volatile T& reg, uint32_t flag, bool state) {
-        *bitband_address(&reg, 31-__builtin_clzl(flag)) = state;
+        *bitband_address(reg, 31-__builtin_clzl(flag)) = state;
     }
 
     template<typename T>
-    __attribute__((always_inline)) inline volatile bool getBit(volatile T* reg, uint8_t bit) {
+    __attribute__((always_inline)) inline volatile bool getBit(volatile T& reg, uint8_t bit) {
         return (volatile bool)*bitband_address(reg, bit);
     }
     template<typename T>
     __attribute__((always_inline)) inline volatile bool getBitFlag(volatile T& reg, uint32_t flag) {
-        return (volatile bool)*bitband_address(&reg, 31-__builtin_clzl(flag));
+        return (volatile bool)*bitband_address(reg, 31-__builtin_clzl(flag));
     }
 
     #elif defined(KINETISL) // Teensy LC
