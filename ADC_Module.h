@@ -965,32 +965,32 @@ public:
 private:
 
     // is set to 1 when the calibration procedure is taking place
-    volatile uint8_t calibrating;
+    uint8_t calibrating;
 
     // the first calibration will use 32 averages and lowest speed,
     // when this calibration is over the averages and speed will be set to default.
-    volatile uint8_t init_calib;
+    uint8_t init_calib;
 
     // resolution
-    volatile uint8_t analog_res_bits;
+    uint8_t analog_res_bits;
 
     // maximum value possible 2^res-1
-    volatile uint32_t analog_max_val;
+    uint32_t analog_max_val;
 
     // num of averages
-    volatile uint8_t analog_num_average;
+    uint8_t analog_num_average;
 
     // reference can be internal or external
-    volatile ADC_REF_SOURCE analog_reference_internal;
+    ADC_REF_SOURCE analog_reference_internal;
 
     // value of the pga
-    volatile uint8_t pga_value;
+    uint8_t pga_value;
 
     // conversion speed
-    volatile ADC_CONVERSION_SPEED conversion_speed;
+    ADC_CONVERSION_SPEED conversion_speed;
 
     // sampling speed
-    volatile ADC_SAMPLING_SPEED sampling_speed;
+    ADC_SAMPLING_SPEED sampling_speed;
 
     // translate pin number to SC1A nomenclature
     const uint8_t* const channel2sc1a;
