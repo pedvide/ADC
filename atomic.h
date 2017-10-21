@@ -67,20 +67,46 @@ namespace atomic
     //#define ADC_SETBIT_ATOMIC(reg, bit) (*(uint32_t *)(((uint32_t)&(reg) - 0xF8000000) | 0x48000000) = 1 << (bit)) // OR
     //#define ADC_CLRBIT_ATOMIC(reg, bit) (*(uint32_t *)(((uint32_t)&(reg) - 0xF8000000) | 0x44000000) = ~(1 << (bit))) // XOR
 
-    __attribute__((always_inline)) inline void setBit(volatile uint32_t* reg, uint8_t bit) {
+    template<typename T>
+    __attribute__((always_inline)) inline void setBit(volatile T& reg, uint8_t bit) {
         //temp = *(uint32_t *)((uint32_t)(reg) | (1<<26) | (bit<<21)); // LAS
-        *(volatile uint32_t*)((uint32_t)(reg) | (1<<27)) = 1<<bit; // OR
+        *(volatile T*)((uint32_t)(&reg) | (1<<27)) = 1<<bit; // OR
     }
-    __attribute__((always_inline)) inline void clearBit(volatile uint32_t* reg, uint8_t bit) {
+    template<typename T>
+    __attribute__((always_inline)) inline void setBitFlag(volatile T& reg, uint32_t flag) {
+        //temp = *(uint32_t *)((uint32_t)(reg) | (1<<26) | (bit<<21)); // LAS
+        *(volatile T*)((uint32_t)(&reg) | (1<<27)) = 1<<(31-__builtin_clzl(flag)); // OR
+    }
+
+    template<typename T>
+    __attribute__((always_inline)) inline void clearBit(volatile T& reg, uint8_t bit) {
         //temp = *(uint32_t *)((uint32_t)(reg) | (3<<27) | (bit<<21)); // LAC
-        *(volatile uint32_t*)((uint32_t)(reg) | (1<<26)) = ~(1<<bit); // AND
+        *(volatile T*)((uint32_t)(&reg) | (1<<26)) = ~(1<<bit); // AND
     }
-    __attribute__((always_inline)) inline void changeBit(volatile uint32_t* reg, uint8_t bit, bool state) {
+    template<typename T>
+    __attribute__((always_inline)) inline void clearBitFlag(volatile T& reg, uint32_t flag) {
+        //temp = *(uint32_t *)((uint32_t)(reg) | (3<<27) | (bit<<21)); // LAC
+        *(volatile T*)((uint32_t)(&reg) | (1<<26)) = ~(1<<(31-__builtin_clzl(flag))); // AND
+    }
+
+    template<typename T>
+    __attribute__((always_inline)) inline void changeBit(volatile T& reg, uint8_t bit, bool state) {
         //temp = *(uint32_t *)((uint32_t)(reg) | ((3-2*!!state)<<27) | (bit<<21)); // LAS/LAC
         state ? setBit(reg, bit) : clearBit(reg, bit);
     }
-    __attribute__((always_inline)) inline volatile bool getBit(volatile uint32_t* reg, uint8_t bit) {
-        return (volatile bool)*(uint32_t *)((uint32_t)(reg) | (1<<28) | (bit<<23) ); // UBFX
+    template<typename T>
+    __attribute__((always_inline)) inline void changeBitFlag(volatile T& reg, uint32_t flag, bool state) {
+        //temp = *(uint32_t *)((uint32_t)(reg) | ((3-2*!!state)<<27) | (bit<<21)); // LAS/LAC
+        state ? setBitFlag(reg, flag) : clearBitFlag(reg, flag);
+    }
+
+    template<typename T>
+    __attribute__((always_inline)) inline volatile bool getBit(volatile T& reg, uint8_t bit) {
+        return (volatile bool)*(volatile T *)((uint32_t)(&reg) | (1<<28) | (bit<<23) ); // UBFX
+    }
+    template<typename T>
+    __attribute__((always_inline)) inline volatile bool getBitFlag(volatile T& reg, uint32_t flag) {
+        return (volatile bool)*(volatile T *)((uint32_t)(&reg) | (1<<28) | ((31-__builtin_clzl(flag))<<23) ); // UBFX
     }
 
     #endif
