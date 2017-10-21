@@ -762,8 +762,8 @@ public:
     /** It calls analogRead(uint8_t pin) internally, with the correct value for the pin for all boards.
     *   Possible values:
     *   TEMP_SENSOR,  Temperature sensor.
-    *   VREF_OUT,  1.2 V reference.
-    *   BANDGAP, BANDGAP.
+    *   VREF_OUT,  1.2 V reference (switch on first using VREF.h).
+    *   BANDGAP, BANDGAP (switch on first using VREF.h).
     *   VREFH, High VREF.
     *   VREFL, Low VREF.
     *   \param pin ADC_INTERNAL_SOURCE to read.
