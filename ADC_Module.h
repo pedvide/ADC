@@ -907,7 +907,7 @@ public:
 
 
     //! This flag indicates that some kind of error took place
-    /** Use the defines at the beggining of this file to find out what caused the fail.
+    /** Use the defines at the beginning of this file to find out what caused the fail.
     */
     volatile uint16_t fail_flag;
 
