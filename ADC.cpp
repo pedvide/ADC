@@ -223,7 +223,7 @@ void ADC::setReference(ADC_REFERENCE type, int8_t adc_num) {
         #if ADC_NUM_ADCS>=2 // Teensy 3.1
         adc1->setReference(type);
         #else
-        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR::WRONG_ADC;
         #endif
         return;
     }
@@ -248,7 +248,7 @@ void ADC::setResolution(uint8_t bits, int8_t adc_num) {
         #if ADC_NUM_ADCS>=2 // Teensy 3.1
         adc1->setResolution(bits);
         #else
-        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR::WRONG_ADC;
         #endif
         return;
     }
@@ -262,7 +262,7 @@ uint8_t ADC::getResolution(int8_t adc_num) {
         #if ADC_NUM_ADCS>=2 // Teensy 3.1
         return adc1->getResolution();
         #else
-        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR::WRONG_ADC;
         #endif
         return 0;
     }
@@ -276,7 +276,7 @@ uint32_t ADC::getMaxValue(int8_t adc_num) {
         #if ADC_NUM_ADCS>=2 // Teensy 3.1
         return adc1->getMaxValue();
         #else
-        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR::WRONG_ADC;
         #endif
         return 1;
     }
@@ -295,7 +295,7 @@ void ADC::setConversionSpeed(ADC_CONVERSION_SPEED speed, int8_t adc_num) {
         #if ADC_NUM_ADCS>=2 // Teensy 3.1
         adc1->setConversionSpeed(speed);
         #else
-        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR::WRONG_ADC;
         #endif
         return;
     }
@@ -320,7 +320,7 @@ void ADC::setSamplingSpeed(ADC_SAMPLING_SPEED speed, int8_t adc_num) {
         #if ADC_NUM_ADCS>=2 // Teensy 3.1
         adc1->setSamplingSpeed(speed);
         #else
-        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR::WRONG_ADC;
         #endif
         return;
     }
@@ -339,7 +339,7 @@ void ADC::setAveraging(uint8_t num, int8_t adc_num) {
         #if ADC_NUM_ADCS>=2 // Teensy 3.1
         adc1->setAveraging(num);
         #else
-        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR::WRONG_ADC;
         #endif
         return;
     }
@@ -357,7 +357,7 @@ void ADC::enableInterrupts(int8_t adc_num) {
         #if ADC_NUM_ADCS>=2 // Teensy 3.1
         adc1->enableInterrupts();
         #else
-        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR::WRONG_ADC;
         #endif
         return;
     }
@@ -371,7 +371,7 @@ void ADC::disableInterrupts(int8_t adc_num) {
         #if ADC_NUM_ADCS>=2 // Teensy 3.1
         adc1->disableInterrupts();
         #else
-        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR::WRONG_ADC;
         #endif
         return;
     }
@@ -389,7 +389,7 @@ void ADC::enableDMA(int8_t adc_num) {
         #if ADC_NUM_ADCS>=2 // Teensy 3.1
         adc1->enableDMA();
         #else
-        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR::WRONG_ADC;
         #endif
         return;
     }
@@ -403,7 +403,7 @@ void ADC::disableDMA(int8_t adc_num) {
         #if ADC_NUM_ADCS>=2 // Teensy 3.1
         adc1->disableDMA();
         #else
-        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR::WRONG_ADC;
         #endif
         return;
     }
@@ -423,7 +423,7 @@ void ADC::enableCompare(int16_t compValue, bool greaterThan, int8_t adc_num) {
         #if ADC_NUM_ADCS>=2 // Teensy 3.1
         adc1->enableCompare(compValue, greaterThan);
         #else
-        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR::WRONG_ADC;
         #endif
         return;
     }
@@ -443,7 +443,7 @@ void ADC::enableCompareRange(int16_t lowerLimit, int16_t upperLimit, bool inside
         #if ADC_NUM_ADCS>=2 // Teensy 3.1
         adc1->enableCompareRange(lowerLimit, upperLimit, insideRange, inclusive);
         #else
-        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR::WRONG_ADC;
         #endif
         return;
     }
@@ -457,7 +457,7 @@ void ADC::disableCompare(int8_t adc_num) {
         #if ADC_NUM_ADCS>=2 // Teensy 3.1
         adc1->disableCompare();
         #else
-        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR::WRONG_ADC;
         #endif
         return;
     }
@@ -477,7 +477,7 @@ void ADC::enablePGA(uint8_t gain, int8_t adc_num) {
         #if ADC_NUM_ADCS>=2 // Teensy 3.1
         adc1->enablePGA(gain);
         #else
-        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR::WRONG_ADC;
         #endif
         return;
     }
@@ -493,7 +493,7 @@ uint8_t ADC::getPGA(int8_t adc_num) {
         #if ADC_NUM_ADCS>=2 // Teensy 3.1
         return adc1->getPGA();
         #else
-        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR::WRONG_ADC;
         return 1;
         #endif
     }
@@ -506,7 +506,7 @@ void ADC::disablePGA(int8_t adc_num) {
         #if ADC_NUM_ADCS>=2 // Teensy 3.1
         adc1->disablePGA();
         #else
-        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR::WRONG_ADC;
         #endif
         return;
     }
@@ -520,7 +520,7 @@ bool ADC::isConverting(int8_t adc_num) {
         #if ADC_NUM_ADCS>=2 // Teensy 3.1
         return adc1->isConverting();
         #else
-        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR::WRONG_ADC;
         #endif
         return false;
     }
@@ -538,7 +538,7 @@ bool ADC::isComplete(int8_t adc_num) {
         #if ADC_NUM_ADCS>=2 // Teensy 3.1
         return adc1->isComplete();
         #else
-        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR::WRONG_ADC;
         #endif
         return false;
     }
@@ -551,7 +551,7 @@ bool ADC::isDifferential(int8_t adc_num) {
         #if ADC_NUM_ADCS>=2 // Teensy 3.1
         return adc1->isDifferential();
         #else
-        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR::WRONG_ADC;
         #endif
         return false;
     }
@@ -564,7 +564,7 @@ bool ADC::isContinuous(int8_t adc_num) {
         #if ADC_NUM_ADCS>=2 // Teensy 3.1
         return adc1->isContinuous();
         #else
-        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR::WRONG_ADC;
         #endif
         return false;
     }
@@ -584,7 +584,7 @@ int ADC::analogRead(uint8_t pin, int8_t adc_num) {
     /* Teensy 3.0, LC
     */
     if( adc_num==1 ) { // If asked to use ADC1, return error
-        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR::WRONG_ADC;
         return ADC_ERROR_VALUE;
     }
     return adc0->analogRead(pin); // use ADC0
@@ -607,8 +607,8 @@ int ADC::analogRead(uint8_t pin, int8_t adc_num) {
         } else if(adc1Pin) { // ADC1
             return adc1->analogRead(pin);
         } else { // pin not valid in any ADC
-            adc0->fail_flag |= ADC_ERROR_WRONG_PIN;
-            adc1->fail_flag |= ADC_ERROR_WRONG_PIN;
+            adc0->fail_flag |= ADC_ERROR::WRONG_PIN;
+            adc1->fail_flag |= ADC_ERROR::WRONG_PIN;
             return ADC_ERROR_VALUE;   // all others are invalid
         }
     }
@@ -618,7 +618,7 @@ int ADC::analogRead(uint8_t pin, int8_t adc_num) {
     else if( adc_num==1 ){ // user wants ADC 1
         return adc1->analogRead(pin);
     }
-    adc0->fail_flag |= ADC_ERROR_OTHER;
+    adc0->fail_flag |= ADC_ERROR::OTHER;
     return ADC_ERROR_VALUE;
     #endif
 }
@@ -639,7 +639,7 @@ int ADC::analogReadDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num) {
     /* Teensy 3.0, LC
     */
     if( adc_num==1 ) { // If asked to use ADC1, return error
-        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR::WRONG_ADC;
         return ADC_ERROR_VALUE;
     }
     return adc0->analogReadDifferential(pinP, pinN); // use ADC0
@@ -662,8 +662,8 @@ int ADC::analogReadDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num) {
         } else if(adc1Pin) { // ADC1
             return adc1->analogReadDifferential(pinP, pinN);
         } else { // pins not valid in any ADC
-            adc0->fail_flag |= ADC_ERROR_WRONG_PIN;
-            adc1->fail_flag |= ADC_ERROR_WRONG_PIN;
+            adc0->fail_flag |= ADC_ERROR::WRONG_PIN;
+            adc1->fail_flag |= ADC_ERROR::WRONG_PIN;
             return ADC_ERROR_VALUE;   // all others are invalid
         }
     }
@@ -673,7 +673,7 @@ int ADC::analogReadDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num) {
     else if( adc_num==1 ){ // user wants ADC 1
         return adc1->analogReadDifferential(pinP, pinN);
     }
-    adc0->fail_flag |= ADC_ERROR_OTHER;
+    adc0->fail_flag |= ADC_ERROR::OTHER;
     return ADC_ERROR_VALUE;
     #endif
 }
@@ -690,7 +690,7 @@ bool ADC::startSingleRead(uint8_t pin, int8_t adc_num) {
     /* Teensy 3.0, LC
     */
     if( adc_num==1 ) { // If asked to use ADC1, return error
-        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR::WRONG_ADC;
         return false;
     }
     return adc0->startSingleRead(pin); // use ADC0
@@ -714,8 +714,8 @@ bool ADC::startSingleRead(uint8_t pin, int8_t adc_num) {
         } else if(adc1Pin) { // ADC1
             return adc1->startSingleRead(pin);
         } else { // pin not valid in any ADC
-            adc0->fail_flag |= ADC_ERROR_WRONG_PIN;
-            adc1->fail_flag |= ADC_ERROR_WRONG_PIN;
+            adc0->fail_flag |= ADC_ERROR::WRONG_PIN;
+            adc1->fail_flag |= ADC_ERROR::WRONG_PIN;
             return false;   // all others are invalid
         }
     }
@@ -725,7 +725,7 @@ bool ADC::startSingleRead(uint8_t pin, int8_t adc_num) {
     else if( adc_num==1 ){ // user wants ADC 1
         return adc1->startSingleRead(pin);
     }
-    adc0->fail_flag |= ADC_ERROR_OTHER;
+    adc0->fail_flag |= ADC_ERROR::OTHER;
     return false;
     #endif
 }
@@ -743,7 +743,7 @@ bool ADC::startSingleDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num) {
     /* Teensy 3.0, LC
     */
     if( adc_num==1 ) { // If asked to use ADC1, return error
-        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR::WRONG_ADC;
         return false;
     }
     return adc0->startSingleDifferential(pinP, pinN); // use ADC0
@@ -766,8 +766,8 @@ bool ADC::startSingleDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num) {
         } else if(adc1Pin) { // ADC1
             return adc1->startSingleDifferential(pinP, pinN);
         } else { // pins not valid in any ADC
-            adc0->fail_flag |= ADC_ERROR_WRONG_PIN;
-            adc1->fail_flag |= ADC_ERROR_WRONG_PIN;
+            adc0->fail_flag |= ADC_ERROR::WRONG_PIN;
+            adc1->fail_flag |= ADC_ERROR::WRONG_PIN;
             return false;   // all others are invalid
         }
     }
@@ -777,7 +777,7 @@ bool ADC::startSingleDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num) {
     else if( adc_num==1 ){ // user wants ADC 1
         return adc1->startSingleDifferential(pinP, pinN);
     }
-    adc0->fail_flag |= ADC_ERROR_OTHER;
+    adc0->fail_flag |= ADC_ERROR::OTHER;
     return false;
     #endif
 }
@@ -791,7 +791,7 @@ int ADC::readSingle(int8_t adc_num) {
         #if ADC_NUM_ADCS>=2 // Teensy 3.1
         return adc1->readSingle();
         #else
-        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR::WRONG_ADC;
         return ADC_ERROR_VALUE;
         #endif
     }
@@ -808,7 +808,7 @@ bool ADC::startContinuous(uint8_t pin, int8_t adc_num) {
     /* Teensy 3.0, LC
     */
     if( adc_num==1 ) { // If asked to use ADC1, return error
-        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR::WRONG_ADC;
         return false;
     }
     return adc0->startContinuous(pin); // use ADC0
@@ -831,8 +831,8 @@ bool ADC::startContinuous(uint8_t pin, int8_t adc_num) {
         } else if(adc1Pin) { // ADC1
             return adc1->startContinuous(pin);
         } else { // pin not valid in any ADC
-            adc0->fail_flag |= ADC_ERROR_WRONG_PIN;
-            adc1->fail_flag |= ADC_ERROR_WRONG_PIN;
+            adc0->fail_flag |= ADC_ERROR::WRONG_PIN;
+            adc1->fail_flag |= ADC_ERROR::WRONG_PIN;
             return false;   // all others are invalid
         }
     }
@@ -842,7 +842,7 @@ bool ADC::startContinuous(uint8_t pin, int8_t adc_num) {
     else if( adc_num==1 ){ // user wants ADC 1
         return adc1->startContinuous(pin);
     }
-    adc0->fail_flag |= ADC_ERROR_OTHER;
+    adc0->fail_flag |= ADC_ERROR::OTHER;
     return false;
     #endif
 }
@@ -858,7 +858,7 @@ bool ADC::startContinuousDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num
     /* Teensy 3.0, LC
     */
     if( adc_num==1 ) { // If asked to use ADC1, return error
-        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR::WRONG_ADC;
         return false;
     }
     return adc0->startContinuousDifferential(pinP, pinN); // use ADC0
@@ -881,8 +881,8 @@ bool ADC::startContinuousDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num
         } else if(adc1Pin) { // ADC1
             return adc1->startContinuousDifferential(pinP, pinN);
         } else { // pins not valid in any ADC
-            adc0->fail_flag |= ADC_ERROR_WRONG_PIN;
-            adc1->fail_flag |= ADC_ERROR_WRONG_PIN;
+            adc0->fail_flag |= ADC_ERROR::WRONG_PIN;
+            adc1->fail_flag |= ADC_ERROR::WRONG_PIN;
             return false;   // all others are invalid
         }
     }
@@ -892,7 +892,7 @@ bool ADC::startContinuousDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num
     else if( adc_num==1 ){ // user wants ADC 1
         return adc1->startContinuousDifferential(pinP, pinN);
     }
-    adc0->fail_flag |= ADC_ERROR_OTHER;
+    adc0->fail_flag |= ADC_ERROR::OTHER;
     return false;
     #endif
 }
@@ -908,7 +908,7 @@ int ADC::analogReadContinuous(int8_t adc_num) {
         #if ADC_NUM_ADCS>=2
         return adc1->analogReadContinuous();
         #else
-        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR::WRONG_ADC;
         #endif
         return false;
     }
@@ -921,7 +921,7 @@ void ADC::stopContinuous(int8_t adc_num) {
         #if ADC_NUM_ADCS>=2 // Teensy 3.1
         adc1->stopContinuous();
         #else
-        adc0->fail_flag |= ADC_ERROR_WRONG_ADC;
+        adc0->fail_flag |= ADC_ERROR::WRONG_ADC;
         #endif
         return;
     }
@@ -948,11 +948,11 @@ ADC::Sync_result ADC::analogSynchronizedRead(uint8_t pin0, uint8_t pin1) {
 
     // check pins
     if ( !adc0->checkPin(pin0) ) {
-        adc0->fail_flag |= ADC_ERROR_WRONG_PIN;
+        adc0->fail_flag |= ADC_ERROR::WRONG_PIN;
         return res;
     }
     if ( !adc1->checkPin(pin1) ) {
-        adc1->fail_flag |= ADC_ERROR_WRONG_PIN;
+        adc1->fail_flag |= ADC_ERROR::WRONG_PIN;
         return res;
     }
 
@@ -997,12 +997,12 @@ ADC::Sync_result ADC::analogSynchronizedRead(uint8_t pin0, uint8_t pin1) {
     if ( adc0->isComplete() ) { // conversion succeded
         res.result_adc0 = adc0->readSingle();
     } else { // comparison was false
-        adc0->fail_flag |= ADC_ERROR_COMPARISON;
+        adc0->fail_flag |= ADC_ERROR::COMPARISON;
     }
     if ( adc1->isComplete() ) { // conversion succeded
         res.result_adc1 = adc1->readSingle();
     } else { // comparison was false
-        adc1->fail_flag |= ADC_ERROR_COMPARISON;
+        adc1->fail_flag |= ADC_ERROR::COMPARISON;
     }
     __enable_irq();
 
@@ -1033,11 +1033,11 @@ ADC::Sync_result ADC::analogSynchronizedReadDifferential(uint8_t pin0P, uint8_t 
 
     // check pins
     if(!adc0->checkDifferentialPins(pin0P, pin0N)) {
-        adc0->fail_flag |= ADC_ERROR_WRONG_PIN;
+        adc0->fail_flag |= ADC_ERROR::WRONG_PIN;
         return res;   // all others are invalid
     }
     if(!adc1->checkDifferentialPins(pin1P, pin1N)) {
-        adc1->fail_flag |= ADC_ERROR_WRONG_PIN;
+        adc1->fail_flag |= ADC_ERROR::WRONG_PIN;
         return res;   // all others are invalid
     }
 
@@ -1085,7 +1085,7 @@ ADC::Sync_result ADC::analogSynchronizedReadDifferential(uint8_t pin0P, uint8_t 
             res.result_adc0 *= 2; // multiply by 2 as if it were really 16 bits, so that getMaxValue gives a correct value.
         }
     } else { // comparison was false
-        adc0->fail_flag |= ADC_ERROR_COMPARISON;
+        adc0->fail_flag |= ADC_ERROR::COMPARISON;
     }
     if (adc1->isComplete()) { // conversion succeded
         res.result_adc1 = adc1->readSingle();
@@ -1093,7 +1093,7 @@ ADC::Sync_result ADC::analogSynchronizedReadDifferential(uint8_t pin0P, uint8_t 
             res.result_adc1 *= 2; // multiply by 2 as if it were really 16 bits, so that getMaxValue gives a correct value.
         }
     } else { // comparison was false
-        adc1->fail_flag |= ADC_ERROR_COMPARISON;
+        adc1->fail_flag |= ADC_ERROR::COMPARISON;
     }
     __enable_irq();
 
@@ -1124,11 +1124,11 @@ bool ADC::startSynchronizedSingleRead(uint8_t pin0, uint8_t pin1) {
 
     // check pins
     if ( !adc0->checkPin(pin0) ) {
-        adc0->fail_flag |= ADC_ERROR_WRONG_PIN;
+        adc0->fail_flag |= ADC_ERROR::WRONG_PIN;
         return false;
     }
     if ( !adc1->checkPin(pin1) ) {
-        adc1->fail_flag |= ADC_ERROR_WRONG_PIN;
+        adc1->fail_flag |= ADC_ERROR::WRONG_PIN;
         return false;
     }
 
@@ -1175,11 +1175,11 @@ bool ADC::startSynchronizedSingleDifferential(uint8_t pin0P, uint8_t pin0N, uint
 
     // check pins
     if(!adc0->checkDifferentialPins(pin0P, pin0N)) {
-        adc0->fail_flag |= ADC_ERROR_WRONG_PIN;
+        adc0->fail_flag |= ADC_ERROR::WRONG_PIN;
         return false;   // all others are invalid
     }
     if(!adc1->checkDifferentialPins(pin1P, pin1N)) {
-        adc1->fail_flag |= ADC_ERROR_WRONG_PIN;
+        adc1->fail_flag |= ADC_ERROR::WRONG_PIN;
         return false;   // all others are invalid
     }
 
@@ -1238,11 +1238,11 @@ bool ADC::startSynchronizedContinuous(uint8_t pin0, uint8_t pin1) {
 
     // check pins
     if ( !adc0->checkPin(pin0) ) {
-        adc0->fail_flag |= ADC_ERROR_WRONG_PIN;
+        adc0->fail_flag |= ADC_ERROR::WRONG_PIN;
         return false;
     }
     if ( !adc1->checkPin(pin1) ) {
-        adc1->fail_flag |= ADC_ERROR_WRONG_PIN;
+        adc1->fail_flag |= ADC_ERROR::WRONG_PIN;
         return false;
     }
 
@@ -1270,11 +1270,11 @@ bool ADC::startSynchronizedContinuousDifferential(uint8_t pin0P, uint8_t pin0N, 
 
     // check pins
     if(!adc0->checkDifferentialPins(pin0P, pin0N)) {
-        adc0->fail_flag |= ADC_ERROR_WRONG_PIN;
+        adc0->fail_flag |= ADC_ERROR::WRONG_PIN;
         return false;   // all others are invalid
     }
     if(!adc1->checkDifferentialPins(pin1P, pin1N)) {
-        adc1->fail_flag |= ADC_ERROR_WRONG_PIN;
+        adc1->fail_flag |= ADC_ERROR::WRONG_PIN;
         return false;   // all others are invalid
     }
 

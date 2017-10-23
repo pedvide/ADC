@@ -414,18 +414,47 @@ enum class ADC_SAMPLING_SPEED : uint8_t {
 // Error flag masks.
 // Possible errors are: other, calibration, wrong pin, analogRead, analogDifferentialRead, continuous, continuousDifferential
 // To globalLy disable an error simply change (1<<x) to (0<<x), revert to enable the error again.
-#define ADC_ERROR_ALL               0x3FF
-#define ADC_ERROR_CLEAR             0x0
-#define ADC_ERROR_OTHER             (1<<0)
-#define ADC_ERROR_CALIB             (1<<1)
-#define ADC_ERROR_WRONG_PIN         (1<<2)
-#define ADC_ERROR_ANALOG_READ       (1<<3)
-#define ADC_ERROR_COMPARISON        (1<<4)
-#define ADC_ERROR_ANALOG_DIFF_READ  (1<<5)
-#define ADC_ERROR_CONT              (1<<6)
-#define ADC_ERROR_CONT_DIFF         (1<<7)
-#define ADC_ERROR_WRONG_ADC         (0<<8)
-#define ADC_ERROR_SYNCH             (1<<9)
+//#define ADC_ERROR_ALL               0x3FF
+//#define ADC_ERROR_CLEAR             0x0
+//#define ADC_ERROR_OTHER             (1<<0)
+//#define ADC_ERROR_CALIB             (1<<1)
+//#define ADC_ERROR_WRONG_PIN         (1<<2)
+//#define ADC_ERROR_ANALOG_READ       (1<<3)
+//#define ADC_ERROR_COMPARISON        (1<<4)
+//#define ADC_ERROR_ANALOG_DIFF_READ  (1<<5)
+//#define ADC_ERROR_CONT              (1<<6)
+//#define ADC_ERROR_CONT_DIFF         (1<<7)
+//#define ADC_ERROR_WRONG_ADC         (0<<8)
+//#define ADC_ERROR_SYNCH             (1<<9)
+/*! ADC errors */
+enum class ADC_ERROR : uint16_t {
+    OTHER               = 1<<0,
+    CALIB               = 1<<1,
+    WRONG_PIN           = 1<<2,
+    ANALOG_READ         = 1<<3,
+    COMPARISON          = 1<<4,
+    ANALOG_DIFF_READ    = 1<<5,
+    CONT                = 1<<6,
+    CONT_DIFF           = 1<<7,
+    WRONG_ADC           = 1<<8,
+    SYNCH               = 1<<9,
+
+    CLEAR               = 0,
+    ALL                 = 0x3FF,
+};
+inline constexpr ADC_ERROR operator|(ADC_ERROR lhs, ADC_ERROR rhs) {
+    return static_cast<ADC_ERROR> (static_cast<uint16_t>(lhs) | static_cast<uint16_t>(rhs));
+}
+inline constexpr ADC_ERROR operator&(ADC_ERROR lhs, ADC_ERROR rhs) {
+    return static_cast<ADC_ERROR> (static_cast<uint16_t>(lhs) & static_cast<uint16_t>(rhs));
+}
+inline constexpr ADC_ERROR operator|=(ADC_ERROR lhs, ADC_ERROR rhs) {
+    return lhs = static_cast<ADC_ERROR> (static_cast<uint16_t>(lhs) | static_cast<uint16_t>(rhs));
+}
+inline constexpr ADC_ERROR operator&=(ADC_ERROR lhs, ADC_ERROR rhs) {
+    return lhs = static_cast<ADC_ERROR> (static_cast<uint16_t>(lhs) & static_cast<uint16_t>(rhs));
+}
+
 
 // debug mode: blink the led light
 #define ADC_debug 0
@@ -909,42 +938,42 @@ public:
     //! This flag indicates that some kind of error took place
     /** Use the defines at the beginning of this file to find out what caused the fail.
     */
-    volatile uint16_t fail_flag;
+    volatile ADC_ERROR fail_flag;
 
     //! Prints the human-readable error, if any.
     void printError() {
-        if(fail_flag != ADC_ERROR_CLEAR) {
+        if(fail_flag != ADC_ERROR::CLEAR) {
             Serial.print("ADC"); Serial.print(ADC_num);
             Serial.print(" error: ");
             switch(fail_flag) {
-                case ADC_ERROR_OTHER:
+                case ADC_ERROR::OTHER:
                     Serial.print("Unknown");
                     break;
-                case ADC_ERROR_CALIB:
+                case ADC_ERROR::CALIB:
                     Serial.print("Calibration");
                     break;
-                case ADC_ERROR_WRONG_PIN:
+                case ADC_ERROR::WRONG_PIN:
                     Serial.print("Wrong pin");
                     break;
-                case ADC_ERROR_ANALOG_READ:
+                case ADC_ERROR::ANALOG_READ:
                     Serial.print("Analog read");
                     break;
-                case ADC_ERROR_COMPARISON:
+                case ADC_ERROR::COMPARISON:
                     Serial.print("Comparison");
                     break;
-                case ADC_ERROR_ANALOG_DIFF_READ:
+                case ADC_ERROR::ANALOG_DIFF_READ:
                     Serial.print("Analog differential read");
                     break;
-                case ADC_ERROR_CONT:
+                case ADC_ERROR::CONT:
                     Serial.print("Continuous read");
                     break;
-                case ADC_ERROR_CONT_DIFF:
+                case ADC_ERROR::CONT_DIFF:
                     Serial.print("Continuous differential read");
                     break;
-                case ADC_ERROR_WRONG_ADC:
+                case ADC_ERROR::WRONG_ADC:
                     Serial.print("Wrong ADC");
                     break;
-                case ADC_ERROR_SYNCH:
+                case ADC_ERROR::SYNCH:
                     Serial.print("Synchronous");
                     break;
             }
@@ -954,7 +983,7 @@ public:
 
     //! Resets all errors from the ADC, if any.
     void resetError() {
-        fail_flag = ADC_ERROR_CLEAR;
+        fail_flag = ADC_ERROR::CLEAR;
     }
 
 

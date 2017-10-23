@@ -124,7 +124,7 @@ void ADC_Module::analog_init() {
 
     calibrating = 0;
 
-    fail_flag = ADC_ERROR_CLEAR; // clear all errors
+    fail_flag = ADC_ERROR::CLEAR; // clear all errors
 
     num_measurements = 0;
 
@@ -177,7 +177,7 @@ void ADC_Module::wait_for_cal(void) {
     }
 
     if(atomic::getBitFlag(ADC_SC3, ADC_SC3_CALF)) { // calibration failed
-        fail_flag |= ADC_ERROR_CALIB; // the user should know and recalibrate manually
+        fail_flag |= ADC_ERROR::CALIB; // the user should know and recalibrate manually
     }
 
     __disable_irq();
@@ -450,7 +450,7 @@ void ADC_Module::setConversionSpeed(ADC_CONVERSION_SPEED speed) {
         ADC_CFG1_speed = ADC_CFG1_VERY_HIGH_SPEED;
 
     } else {
-        fail_flag |= ADC_ERROR_OTHER;
+        fail_flag |= ADC_ERROR::OTHER;
         return;
     }
 
@@ -865,7 +865,7 @@ int ADC_Module::analogRead(uint8_t pin) {
 
     // check whether the pin is correct
     if(!checkPin(pin)) {
-        fail_flag |= ADC_ERROR_WRONG_PIN;
+        fail_flag |= ADC_ERROR::WRONG_PIN;
         return ADC_ERROR_VALUE;
     }
 
@@ -908,7 +908,7 @@ int ADC_Module::analogRead(uint8_t pin) {
     if (isComplete()) { // conversion succeded
         result = (uint16_t)ADC_RA;
     } else { // comparison was false
-        fail_flag |= ADC_ERROR_COMPARISON;
+        fail_flag |= ADC_ERROR::COMPARISON;
         result = ADC_ERROR_VALUE;
     }
     __enable_irq();
@@ -936,7 +936,7 @@ int ADC_Module::analogRead(uint8_t pin) {
 int ADC_Module::analogReadDifferential(uint8_t pinP, uint8_t pinN) {
 
     if(!checkDifferentialPins(pinP, pinN)) {
-        fail_flag |= ADC_ERROR_WRONG_PIN;
+        fail_flag |= ADC_ERROR::WRONG_PIN;
         return ADC_ERROR_VALUE;   // all others are invalid
     }
 
@@ -981,7 +981,7 @@ int ADC_Module::analogReadDifferential(uint8_t pinP, uint8_t pinN) {
         }
     } else { // comparison was false
         result = ADC_ERROR_VALUE;
-        fail_flag |= ADC_ERROR_COMPARISON;
+        fail_flag |= ADC_ERROR::COMPARISON;
     }
     __enable_irq();
 
@@ -1021,7 +1021,7 @@ bool ADC_Module::startSingleRead(uint8_t pin) {
 
     // check whether the pin is correct
     if(!checkPin(pin)) {
-        fail_flag |= ADC_ERROR_WRONG_PIN;
+        fail_flag |= ADC_ERROR::WRONG_PIN;
         return false;
     }
 
@@ -1055,7 +1055,7 @@ bool ADC_Module::startSingleRead(uint8_t pin) {
 bool ADC_Module::startSingleDifferential(uint8_t pinP, uint8_t pinN) {
 
     if(!checkDifferentialPins(pinP, pinN)) {
-        fail_flag |= ADC_ERROR_WRONG_PIN;
+        fail_flag |= ADC_ERROR::WRONG_PIN;
         return false;   // all others are invalid
     }
 
@@ -1102,7 +1102,7 @@ bool ADC_Module::startContinuous(uint8_t pin) {
 
     // check whether the pin is correct
     if(!checkPin(pin)) {
-        fail_flag |= ADC_ERROR_WRONG_PIN;
+        fail_flag |= ADC_ERROR::WRONG_PIN;
         return false;
     }
 
@@ -1128,7 +1128,7 @@ bool ADC_Module::startContinuous(uint8_t pin) {
 bool ADC_Module::startContinuousDifferential(uint8_t pinP, uint8_t pinN) {
 
     if(!checkDifferentialPins(pinP, pinN)) {
-        fail_flag |= ADC_ERROR_WRONG_PIN;
+        fail_flag |= ADC_ERROR::WRONG_PIN;
         return false;   // all others are invalid
     }
 
