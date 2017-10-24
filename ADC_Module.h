@@ -411,36 +411,20 @@ enum class ADC_SAMPLING_SPEED : uint8_t {
 #define ADC_ERROR_DIFF_VALUE (-70000)
 #define ADC_ERROR_VALUE ADC_ERROR_DIFF_VALUE
 
-// Error flag masks.
-// Possible errors are: other, calibration, wrong pin, analogRead, analogDifferentialRead, continuous, continuousDifferential
-// To globalLy disable an error simply change (1<<x) to (0<<x), revert to enable the error again.
-//#define ADC_ERROR_ALL               0x3FF
-//#define ADC_ERROR_CLEAR             0x0
-//#define ADC_ERROR_OTHER             (1<<0)
-//#define ADC_ERROR_CALIB             (1<<1)
-//#define ADC_ERROR_WRONG_PIN         (1<<2)
-//#define ADC_ERROR_ANALOG_READ       (1<<3)
-//#define ADC_ERROR_COMPARISON        (1<<4)
-//#define ADC_ERROR_ANALOG_DIFF_READ  (1<<5)
-//#define ADC_ERROR_CONT              (1<<6)
-//#define ADC_ERROR_CONT_DIFF         (1<<7)
-//#define ADC_ERROR_WRONG_ADC         (0<<8)
-//#define ADC_ERROR_SYNCH             (1<<9)
 /*! ADC errors */
 enum class ADC_ERROR : uint16_t {
-    OTHER               = 1<<0,
-    CALIB               = 1<<1,
-    WRONG_PIN           = 1<<2,
-    ANALOG_READ         = 1<<3,
-    COMPARISON          = 1<<4,
-    ANALOG_DIFF_READ    = 1<<5,
-    CONT                = 1<<6,
-    CONT_DIFF           = 1<<7,
-    WRONG_ADC           = 1<<8,
-    SYNCH               = 1<<9,
+    OTHER               = 1<<0, /*!< Other error not considered below. */
+    CALIB               = 1<<1, /*!< Calibration error. */
+    WRONG_PIN           = 1<<2, /*!< A pin was selected that cannot be read by this ADC module. */
+    ANALOG_READ         = 1<<3, /*!< Error inside the analogRead method. */
+    ANALOG_DIFF_READ    = 1<<4, /*!< Error inside the analogReadDifferential method. */
+    CONT                = 1<<5, /*!< Continuous single-ended measurement error. */
+    CONT_DIFF           = 1<<6, /*!< Continuous differential measurement error. */
+    COMPARISON          = 1<<7, /*!< Error during the comparison. */
+    WRONG_ADC           = 1<<8, /*!< A non-existent ADC module was selected. */
+    SYNCH               = 1<<9, /*!< Error during a synchronized measurement. */
 
-    CLEAR               = 0,
-    ALL                 = 0x3FF,
+    CLEAR               = 0,    /*!< No error. */
 };
 inline constexpr ADC_ERROR operator|(ADC_ERROR lhs, ADC_ERROR rhs) {
     return static_cast<ADC_ERROR> (static_cast<uint16_t>(lhs) | static_cast<uint16_t>(rhs));
@@ -448,10 +432,10 @@ inline constexpr ADC_ERROR operator|(ADC_ERROR lhs, ADC_ERROR rhs) {
 inline constexpr ADC_ERROR operator&(ADC_ERROR lhs, ADC_ERROR rhs) {
     return static_cast<ADC_ERROR> (static_cast<uint16_t>(lhs) & static_cast<uint16_t>(rhs));
 }
-inline constexpr ADC_ERROR operator|=(ADC_ERROR lhs, ADC_ERROR rhs) {
+inline ADC_ERROR operator|=(volatile ADC_ERROR& lhs, ADC_ERROR rhs) {
     return lhs = static_cast<ADC_ERROR> (static_cast<uint16_t>(lhs) | static_cast<uint16_t>(rhs));
 }
-inline constexpr ADC_ERROR operator&=(ADC_ERROR lhs, ADC_ERROR rhs) {
+inline ADC_ERROR operator&=(volatile ADC_ERROR& lhs, ADC_ERROR rhs) {
     return lhs = static_cast<ADC_ERROR> (static_cast<uint16_t>(lhs) & static_cast<uint16_t>(rhs));
 }
 
@@ -946,9 +930,6 @@ public:
             Serial.print("ADC"); Serial.print(ADC_num);
             Serial.print(" error: ");
             switch(fail_flag) {
-                case ADC_ERROR::OTHER:
-                    Serial.print("Unknown");
-                    break;
                 case ADC_ERROR::CALIB:
                     Serial.print("Calibration");
                     break;
@@ -975,6 +956,11 @@ public:
                     break;
                 case ADC_ERROR::SYNCH:
                     Serial.print("Synchronous");
+                    break;
+                case ADC_ERROR::OTHER:
+                case ADC_ERROR::CLEAR: // silence warnings
+                default:
+                    Serial.print("Unknown");
                     break;
             }
             Serial.println(" error.");

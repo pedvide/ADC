@@ -75,10 +75,6 @@ void loop() {
             Serial.println(pin);
             readPin = pin;
         }
-        if(pin==-1) {
-            Serial.println("Reset error flags.");
-            adc->resetError();
-        }
     }
 
     value1 = adc->adc0->analogRead(readPin); // read a new value, will return ADC_ERROR_VALUE if the comparison is false.
@@ -99,6 +95,6 @@ void loop() {
 
     //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
 
-    delay(50);
+    delay(200);
 
 }
