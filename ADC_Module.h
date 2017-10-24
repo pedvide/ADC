@@ -259,13 +259,14 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
     #define ADC_CFG1_3_75MHZ      (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))
     #define ADC_CFG1_7_5MHZ       (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1))
     #define ADC_CFG1_15MHZ        (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1))
+    #define ADC_CFG1_30MHZ        (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(1))
 
     #define ADC_CFG1_VERY_LOW_SPEED ADC_CFG1_LOW_SPEED
     #define ADC_CFG1_LOW_SPEED (ADC_CFG1_3_75MHZ)
     #define ADC_CFG1_MED_SPEED (ADC_CFG1_7_5MHZ)
     #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_7_5MHZ)
     #define ADC_CFG1_HI_SPEED (ADC_CFG1_15MHZ)
-    #define ADC_CFG1_VERY_HIGH_SPEED ADC_CFG1_HI_SPEED
+    #define ADC_CFG1_VERY_HIGH_SPEED ADC_CFG1_30MHZ
 
 #elif F_BUS == 56000000 || F_BUS == 54000000 // frequency numbers are good for 56 MHz and slightly smaller for 54 MHz
     #define ADC_CFG1_3_5MHZ   (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))
