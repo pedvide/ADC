@@ -81,15 +81,21 @@ void loop() {
         }
     }
 
-    value1 = adc->adc0->analogRead(readPin); // read a new value, will return ADC_ERROR_VALUE if the comparison is false.
-    value2 = adc->adc1->analogRead(readPin);
+
+
 
     Serial.print("Pin: ");
     Serial.print(readPin);
     Serial.print(", ADC0 value: ");
+    value1 = adc->adc0->analogRead(readPin);
     Serial.print(value1*3.3/adc->getMaxValue(ADC_0), DEC);
+    #if ADC_NUM_ADCS>1
     Serial.print(", ADC1 value: ");
+    value2 = adc->adc1->analogRead(readPin);
     Serial.println(value2*3.3/adc->getMaxValue(ADC_1), DEC);
+    #else
+    Serial.println();
+    #endif
 
 
     // Print errors, if any.
