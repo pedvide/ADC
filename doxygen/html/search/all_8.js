@@ -6,6 +6,7 @@ var searchData=
   ['isdifferential',['isDifferential',['../class_a_d_c.html#a1bd89979194f6c9b0aa08463373aaa15',1,'ADC::isDifferential()'],['../class_a_d_c___module.html#a4f6124f3fee4cae59f011184525822a6',1,'ADC_Module::isDifferential()']]],
   ['isempty',['isEmpty',['../class_ring_buffer.html#a041d2e0a3ec68f91ea9847e220ed2501',1,'RingBuffer::isEmpty()'],['../class_ring_buffer_d_m_a.html#a0c10d34a151d2b9960e2ae58084e5baa',1,'RingBufferDMA::isEmpty()']]],
   ['isfull',['isFull',['../class_ring_buffer.html#a47f4fd274ccf142f55092ed851640201',1,'RingBuffer::isFull()'],['../class_ring_buffer_d_m_a.html#a52f974a38148e4baab0acbd2edb5c0e0',1,'RingBufferDMA::isFull()']]],
+  ['ison',['isOn',['../namespace_v_r_e_f.html#ab1becdab4311ae08f2eb56e2542e9eb1',1,'VREF']]],
   ['ispgaenabled',['isPGAEnabled',['../class_a_d_c___module.html#a281edd627d037bf66968ff5733b60e95',1,'ADC_Module']]],
   ['isstable',['isStable',['../namespace_v_r_e_f.html#a7a17a24c68ffc761a61750dd5c207336',1,'VREF']]]
 ];

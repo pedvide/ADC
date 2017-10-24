@@ -411,7 +411,10 @@ enum class ADC_SAMPLING_SPEED : uint8_t {
 #define ADC_ERROR_DIFF_VALUE (-70000)
 #define ADC_ERROR_VALUE ADC_ERROR_DIFF_VALUE
 
-/*! ADC errors */
+//! ADC errors.
+/*! Use adc->printError() to print the errors (if any) in a human-readable form.
+*   Use adc->resetError() to reset them.
+*/
 enum class ADC_ERROR : uint16_t {
     OTHER               = 1<<0, /*!< Other error not considered below. */
     CALIB               = 1<<1, /*!< Calibration error. */
@@ -426,15 +429,19 @@ enum class ADC_ERROR : uint16_t {
 
     CLEAR               = 0,    /*!< No error. */
 };
+//! OR operator for ADC_ERRORs.
 inline constexpr ADC_ERROR operator|(ADC_ERROR lhs, ADC_ERROR rhs) {
     return static_cast<ADC_ERROR> (static_cast<uint16_t>(lhs) | static_cast<uint16_t>(rhs));
 }
+//! AND operator for ADC_ERRORs.
 inline constexpr ADC_ERROR operator&(ADC_ERROR lhs, ADC_ERROR rhs) {
     return static_cast<ADC_ERROR> (static_cast<uint16_t>(lhs) & static_cast<uint16_t>(rhs));
 }
+//! |= operator for ADC_ERRORs, it changes the left hand side ADC_ERROR.
 inline ADC_ERROR operator|=(volatile ADC_ERROR& lhs, ADC_ERROR rhs) {
     return lhs = static_cast<ADC_ERROR> (static_cast<uint16_t>(lhs) | static_cast<uint16_t>(rhs));
 }
+//! &= operator for ADC_ERRORs, it changes the left hand side ADC_ERROR.
 inline ADC_ERROR operator&=(volatile ADC_ERROR& lhs, ADC_ERROR rhs) {
     return lhs = static_cast<ADC_ERROR> (static_cast<uint16_t>(lhs) & static_cast<uint16_t>(rhs));
 }

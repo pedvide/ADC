@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['_7eringbuffer',['~RingBuffer',['../class_ring_buffer.html#a2715b2e99ea24521ef7a586c2f33e1c9',1,'RingBuffer']]],
-  ['_7eringbufferdma',['~RingBufferDMA',['../class_ring_buffer_d_m_a.html#ae7b0ff5b6789ac462a657602dbedc7c4',1,'RingBufferDMA']]]
+  ['wait_5ffor_5fcal',['wait_for_cal',['../class_a_d_c___module.html#a4fb69b5b2d07c3fc8f5f0bbbf05dfa2a',1,'ADC_Module']]],
+  ['waituntilstable',['waitUntilStable',['../namespace_v_r_e_f.html#a108f7c1b5a2073bc092eafcae58575b0',1,'VREF']]],
+  ['write',['write',['../class_ring_buffer.html#aa14c47f5bbd73b5f8d2b83a86f01ccf2',1,'RingBuffer::write()'],['../class_ring_buffer_d_m_a.html#ac64de99b9ef9b4c1b1ae36444ce37699',1,'RingBufferDMA::write()']]]
 ];

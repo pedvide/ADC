@@ -108,12 +108,14 @@ $(document).ready(function(){initNavTree('_a_d_c___module_8h.html','');});
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#define-members">Macros</a> &#124;
-<a href="#enum-members">Enumerations</a>  </div>
+<a href="#enum-members">Enumerations</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">ADC_Module.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;Arduino.h&gt;</code><br />
+<code>#include &lt;atomic.h&gt;</code><br />
 </div>
 <p><a href="_a_d_c___module_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -145,27 +147,15 @@ Macros</h2></td></tr>
 <tr class="memitem:a0148590aea34a981c92905265070b024"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0148590aea34a981c92905265070b024"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_USE_PDB</b>&#160;&#160;&#160;(1)</td></tr>
 <tr class="separator:a0148590aea34a981c92905265070b024"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adf6ddce415cd42535ba4d43eee9751cf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adf6ddce415cd42535ba4d43eee9751cf"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_USE_INTERNAL</b>&#160;&#160;&#160;(1)</td></tr>
-<tr class="separator:adf6ddce415cd42535ba4d43eee9751cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37b1a6f3b25b13c5bae4add91d110140"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a37b1a6f3b25b13c5bae4add91d110140"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_USE_INTERNAL_VREF</b>&#160;&#160;&#160;(1)</td></tr>
+<tr class="separator:a37b1a6f3b25b13c5bae4add91d110140"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae4e97cfb226e91c33a7154fc3c03421f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae4e97cfb226e91c33a7154fc3c03421f"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_MAX_PIN</b>&#160;&#160;&#160;(43)</td></tr>
 <tr class="separator:ae4e97cfb226e91c33a7154fc3c03421f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad660fc04fd7a41b126a09c6800565ba8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad660fc04fd7a41b126a09c6800565ba8"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_DIFF_PAIRS</b>&#160;&#160;&#160;(2)</td></tr>
 <tr class="separator:ad660fc04fd7a41b126a09c6800565ba8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2afef33eecca71518bccc0a275a55e4c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2afef33eecca71518bccc0a275a55e4c"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_CFG1_ADICLK_MASK_1</b>&#160;&#160;&#160;(1&lt;&lt;1)</td></tr>
-<tr class="separator:a2afef33eecca71518bccc0a275a55e4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a55a401107321b77a6e50328b3f34c2b5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a55a401107321b77a6e50328b3f34c2b5"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_CFG1_ADICLK_MASK_0</b>&#160;&#160;&#160;(1&lt;&lt;0)</td></tr>
-<tr class="separator:a55a401107321b77a6e50328b3f34c2b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ce9da5a5af95caa7fcae5eb1db9e4bf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5ce9da5a5af95caa7fcae5eb1db9e4bf"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_CFG1_ADIV_MASK_1</b>&#160;&#160;&#160;(1&lt;&lt;6)</td></tr>
-<tr class="separator:a5ce9da5a5af95caa7fcae5eb1db9e4bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5310c0ed3388c027b49e3799bd97f3cd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5310c0ed3388c027b49e3799bd97f3cd"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_CFG1_ADIV_MASK_0</b>&#160;&#160;&#160;(1&lt;&lt;5)</td></tr>
-<tr class="separator:a5310c0ed3388c027b49e3799bd97f3cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac1636c047cf3a2250b63203ffe6b2422"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac1636c047cf3a2250b63203ffe6b2422"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_SC1A_CHANNELS</b>&#160;&#160;&#160;(0x1F)</td></tr>
 <tr class="separator:ac1636c047cf3a2250b63203ffe6b2422"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -187,135 +177,42 @@ Macros</h2></td></tr>
 <tr class="memitem:a810b46bdaa73057d834142229111adc5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a810b46bdaa73057d834142229111adc5"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_ERROR_VALUE</b>&#160;&#160;&#160;ADC_ERROR_DIFF_VALUE</td></tr>
 <tr class="separator:a810b46bdaa73057d834142229111adc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66e0a0d715bb9236c4fa54e986e19baf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a66e0a0d715bb9236c4fa54e986e19baf"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_ERROR_ALL</b>&#160;&#160;&#160;0x3FF</td></tr>
-<tr class="separator:a66e0a0d715bb9236c4fa54e986e19baf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a958d040f3985722f05c130aef0efdbc0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a958d040f3985722f05c130aef0efdbc0"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_ERROR_CLEAR</b>&#160;&#160;&#160;0x0</td></tr>
-<tr class="separator:a958d040f3985722f05c130aef0efdbc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a46b36a9bd609e88bf9fd309b42b7475a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a46b36a9bd609e88bf9fd309b42b7475a"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_ERROR_OTHER</b>&#160;&#160;&#160;(1&lt;&lt;0)</td></tr>
-<tr class="separator:a46b36a9bd609e88bf9fd309b42b7475a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa1ce76ea02029a6c933e69c66caa2295"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa1ce76ea02029a6c933e69c66caa2295"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_ERROR_CALIB</b>&#160;&#160;&#160;(1&lt;&lt;1)</td></tr>
-<tr class="separator:aa1ce76ea02029a6c933e69c66caa2295"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe94abe8f828b3420701d1b65ddeff11"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abe94abe8f828b3420701d1b65ddeff11"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_ERROR_WRONG_PIN</b>&#160;&#160;&#160;(1&lt;&lt;2)</td></tr>
-<tr class="separator:abe94abe8f828b3420701d1b65ddeff11"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afce25e27ef8b04a1ea5d82844be5a1ab"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afce25e27ef8b04a1ea5d82844be5a1ab"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_ERROR_ANALOG_READ</b>&#160;&#160;&#160;(1&lt;&lt;3)</td></tr>
-<tr class="separator:afce25e27ef8b04a1ea5d82844be5a1ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a85ae713eff294b29394c00d9a1af8aa1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a85ae713eff294b29394c00d9a1af8aa1"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_ERROR_COMPARISON</b>&#160;&#160;&#160;(1&lt;&lt;4)</td></tr>
-<tr class="separator:a85ae713eff294b29394c00d9a1af8aa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a90e5bad6d5d6bc8475f2daf73c3616f1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a90e5bad6d5d6bc8475f2daf73c3616f1"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_ERROR_ANALOG_DIFF_READ</b>&#160;&#160;&#160;(1&lt;&lt;5)</td></tr>
-<tr class="separator:a90e5bad6d5d6bc8475f2daf73c3616f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a55a30ae3e90829e40719c9e1c5e47308"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a55a30ae3e90829e40719c9e1c5e47308"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_ERROR_CONT</b>&#160;&#160;&#160;(1&lt;&lt;6)</td></tr>
-<tr class="separator:a55a30ae3e90829e40719c9e1c5e47308"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8e1259a804e1fd3a89426d835ab5b81f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8e1259a804e1fd3a89426d835ab5b81f"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_ERROR_CONT_DIFF</b>&#160;&#160;&#160;(1&lt;&lt;7)</td></tr>
-<tr class="separator:a8e1259a804e1fd3a89426d835ab5b81f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2f616602104b15d5b9f4314145d3503f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2f616602104b15d5b9f4314145d3503f"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_ERROR_WRONG_ADC</b>&#160;&#160;&#160;(0&lt;&lt;8)</td></tr>
-<tr class="separator:a2f616602104b15d5b9f4314145d3503f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad7d1a9910fcd061ca5bce2260468a931"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad7d1a9910fcd061ca5bce2260468a931"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_ERROR_SYNCH</b>&#160;&#160;&#160;(1&lt;&lt;9)</td></tr>
-<tr class="separator:ad7d1a9910fcd061ca5bce2260468a931"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaaf2912bdda454e3fcb88156f1ce20d8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaaf2912bdda454e3fcb88156f1ce20d8"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_debug</b>&#160;&#160;&#160;0</td></tr>
 <tr class="separator:aaaf2912bdda454e3fcb88156f1ce20d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e030077e1ddf79385662168e467194a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6e030077e1ddf79385662168e467194a"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_SC1A_COCO_BIT</b>&#160;&#160;&#160;(7)</td></tr>
-<tr class="separator:a6e030077e1ddf79385662168e467194a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab23f734a19ad7f55422545456dbefd07"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab23f734a19ad7f55422545456dbefd07"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_SC1A_AIEN_BIT</b>&#160;&#160;&#160;(6)</td></tr>
-<tr class="separator:ab23f734a19ad7f55422545456dbefd07"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeadbd7afb5a6ac6511259bd52708feaf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeadbd7afb5a6ac6511259bd52708feaf"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_SC1_DIFF_BIT</b>&#160;&#160;&#160;(5)</td></tr>
-<tr class="separator:aeadbd7afb5a6ac6511259bd52708feaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3c3669ed0a55bcdbf2c1baa1bd9420b5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3c3669ed0a55bcdbf2c1baa1bd9420b5"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_CFG1_ADLPC_BIT</b>&#160;&#160;&#160;(7)</td></tr>
-<tr class="separator:a3c3669ed0a55bcdbf2c1baa1bd9420b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a55912bf8272b9a971e86b73eb817800a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a55912bf8272b9a971e86b73eb817800a"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_CFG1_ADIV1_BIT</b>&#160;&#160;&#160;(6)</td></tr>
-<tr class="separator:a55912bf8272b9a971e86b73eb817800a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5927ad0dbe65c48669a64de4c2e53e0c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5927ad0dbe65c48669a64de4c2e53e0c"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_CFG1_ADIV0_BIT</b>&#160;&#160;&#160;(5)</td></tr>
-<tr class="separator:a5927ad0dbe65c48669a64de4c2e53e0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a80f92562fcafeb925cdbd9371776db52"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a80f92562fcafeb925cdbd9371776db52"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_CFG1_ADLSMP_BIT</b>&#160;&#160;&#160;(4)</td></tr>
-<tr class="separator:a80f92562fcafeb925cdbd9371776db52"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4d026cc76d76711f51cc8b8b4a796d0b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4d026cc76d76711f51cc8b8b4a796d0b"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_CFG1_MODE1_BIT</b>&#160;&#160;&#160;(3)</td></tr>
-<tr class="separator:a4d026cc76d76711f51cc8b8b4a796d0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5083f0a0be6803f7b29f9e723fa1d6bc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5083f0a0be6803f7b29f9e723fa1d6bc"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_CFG1_MODE0_BIT</b>&#160;&#160;&#160;(2)</td></tr>
-<tr class="separator:a5083f0a0be6803f7b29f9e723fa1d6bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b19ea36069935024c33c43bfdff8479"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3b19ea36069935024c33c43bfdff8479"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_CFG1_ADICLK1_BIT</b>&#160;&#160;&#160;(1)</td></tr>
-<tr class="separator:a3b19ea36069935024c33c43bfdff8479"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc2f3776d7ce182e56449506bc62562d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abc2f3776d7ce182e56449506bc62562d"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_CFG1_ADICLK0_BIT</b>&#160;&#160;&#160;(0)</td></tr>
-<tr class="separator:abc2f3776d7ce182e56449506bc62562d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade30592c98d766326948ba8765734f3e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ade30592c98d766326948ba8765734f3e"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_CFG2_MUXSEL_BIT</b>&#160;&#160;&#160;(4)</td></tr>
-<tr class="separator:ade30592c98d766326948ba8765734f3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af0cd21e16daf6fd8511a41a964e18ca8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af0cd21e16daf6fd8511a41a964e18ca8"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_CFG2_ADACKEN_BIT</b>&#160;&#160;&#160;(3)</td></tr>
-<tr class="separator:af0cd21e16daf6fd8511a41a964e18ca8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a65d6eb4eabb2782183fbabb98c7e9382"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a65d6eb4eabb2782183fbabb98c7e9382"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_CFG2_ADHSC_BIT</b>&#160;&#160;&#160;(2)</td></tr>
-<tr class="separator:a65d6eb4eabb2782183fbabb98c7e9382"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af6d064f1317240f99f4f27c81a7f0e88"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af6d064f1317240f99f4f27c81a7f0e88"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_CFG2_ADLSTS1_BIT</b>&#160;&#160;&#160;(1)</td></tr>
-<tr class="separator:af6d064f1317240f99f4f27c81a7f0e88"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4d329984b4b4f8be58a74de99c2ce0fe"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4d329984b4b4f8be58a74de99c2ce0fe"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_CFG2_ADLSTS0_BIT</b>&#160;&#160;&#160;(0)</td></tr>
-<tr class="separator:a4d329984b4b4f8be58a74de99c2ce0fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8f458be234ecc3e5613632a9ec500338"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8f458be234ecc3e5613632a9ec500338"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_SC2_ADACT_BIT</b>&#160;&#160;&#160;(7)</td></tr>
-<tr class="separator:a8f458be234ecc3e5613632a9ec500338"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a508606318659ce1ed6fe86d3aa1e98c5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a508606318659ce1ed6fe86d3aa1e98c5"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_SC2_ADTRG_BIT</b>&#160;&#160;&#160;(6)</td></tr>
-<tr class="separator:a508606318659ce1ed6fe86d3aa1e98c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7804897e8504247c31bce6f5b4456774"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7804897e8504247c31bce6f5b4456774"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_SC2_ACFE_BIT</b>&#160;&#160;&#160;(5)</td></tr>
-<tr class="separator:a7804897e8504247c31bce6f5b4456774"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6baa8243c88a529df89c253c06e58041"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6baa8243c88a529df89c253c06e58041"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_SC2_ACFGT_BIT</b>&#160;&#160;&#160;(4)</td></tr>
-<tr class="separator:a6baa8243c88a529df89c253c06e58041"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a461ad36bcc020f6f07a2eb4b2b072170"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a461ad36bcc020f6f07a2eb4b2b072170"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_SC2_ACREN_BIT</b>&#160;&#160;&#160;(3)</td></tr>
-<tr class="separator:a461ad36bcc020f6f07a2eb4b2b072170"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac78f28f8bb61bc97fd39560474ff9889"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac78f28f8bb61bc97fd39560474ff9889"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_SC2_DMAEN_BIT</b>&#160;&#160;&#160;(2)</td></tr>
-<tr class="separator:ac78f28f8bb61bc97fd39560474ff9889"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af30620d0009c002c2682ada90a3c49ab"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af30620d0009c002c2682ada90a3c49ab"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_SC2_REFSEL0_BIT</b>&#160;&#160;&#160;(0)</td></tr>
-<tr class="separator:af30620d0009c002c2682ada90a3c49ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2711b06bf6c89889845568b4402e94b7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2711b06bf6c89889845568b4402e94b7"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_SC3_CAL_BIT</b>&#160;&#160;&#160;(7)</td></tr>
-<tr class="separator:a2711b06bf6c89889845568b4402e94b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7d58f91bc4ff717713fc9be41c3872bc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7d58f91bc4ff717713fc9be41c3872bc"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_SC3_CALF_BIT</b>&#160;&#160;&#160;(6)</td></tr>
-<tr class="separator:a7d58f91bc4ff717713fc9be41c3872bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18a006394590e99f9b81187c9c11b853"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a18a006394590e99f9b81187c9c11b853"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_SC3_ADCO_BIT</b>&#160;&#160;&#160;(3)</td></tr>
-<tr class="separator:a18a006394590e99f9b81187c9c11b853"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af0c7959ad7deb8656b2b988eacfd9636"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af0c7959ad7deb8656b2b988eacfd9636"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_SC3_AVGE_BIT</b>&#160;&#160;&#160;(2)</td></tr>
-<tr class="separator:af0c7959ad7deb8656b2b988eacfd9636"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a64686009e9f46bc20c8da0be11c7c460"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a64686009e9f46bc20c8da0be11c7c460"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_SC3_AVGS1_BIT</b>&#160;&#160;&#160;(1)</td></tr>
-<tr class="separator:a64686009e9f46bc20c8da0be11c7c460"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b48175299a3b065a85d3e22422ff873"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9b48175299a3b065a85d3e22422ff873"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_SC3_AVGS0_BIT</b>&#160;&#160;&#160;(0)</td></tr>
-<tr class="separator:a9b48175299a3b065a85d3e22422ff873"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa5994cfb550c6cb8cdbdfbf3c1c20ee0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa5994cfb550c6cb8cdbdfbf3c1c20ee0"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_PGA_PGAEN_BIT</b>&#160;&#160;&#160;(23)</td></tr>
-<tr class="separator:aa5994cfb550c6cb8cdbdfbf3c1c20ee0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ce9da5a5af95caa7fcae5eb1db9e4bf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5ce9da5a5af95caa7fcae5eb1db9e4bf"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_CFG1_ADIV_MASK_1</b>&#160;&#160;&#160;(1&lt;&lt;6)</td></tr>
+<tr class="separator:a5ce9da5a5af95caa7fcae5eb1db9e4bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5310c0ed3388c027b49e3799bd97f3cd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5310c0ed3388c027b49e3799bd97f3cd"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_CFG1_ADIV_MASK_0</b>&#160;&#160;&#160;(1&lt;&lt;5)</td></tr>
+<tr class="separator:a5310c0ed3388c027b49e3799bd97f3cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e9c85185df247793d3187419cff0de9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1e9c85185df247793d3187419cff0de9"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_CFG1_MODE_MASK_1</b>&#160;&#160;&#160;(1&lt;&lt;3)</td></tr>
+<tr class="separator:a1e9c85185df247793d3187419cff0de9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad24828f2419941361b161bbaf89d2712"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad24828f2419941361b161bbaf89d2712"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_CFG1_MODE_MASK_0</b>&#160;&#160;&#160;(1&lt;&lt;2)</td></tr>
+<tr class="separator:ad24828f2419941361b161bbaf89d2712"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2afef33eecca71518bccc0a275a55e4c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2afef33eecca71518bccc0a275a55e4c"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_CFG1_ADICLK_MASK_1</b>&#160;&#160;&#160;(1&lt;&lt;1)</td></tr>
+<tr class="separator:a2afef33eecca71518bccc0a275a55e4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55a401107321b77a6e50328b3f34c2b5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a55a401107321b77a6e50328b3f34c2b5"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_CFG1_ADICLK_MASK_0</b>&#160;&#160;&#160;(1&lt;&lt;0)</td></tr>
+<tr class="separator:a55a401107321b77a6e50328b3f34c2b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81fa41acf9ab32a8d4dc25e94424ec04"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a81fa41acf9ab32a8d4dc25e94424ec04"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_CFG2_ADLSTS_MASK_1</b>&#160;&#160;&#160;(1&lt;&lt;1)</td></tr>
+<tr class="separator:a81fa41acf9ab32a8d4dc25e94424ec04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a110423226c92c186b8b30e5f83feea58"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a110423226c92c186b8b30e5f83feea58"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_CFG2_ADLSTS_MASK_0</b>&#160;&#160;&#160;(1&lt;&lt;0)</td></tr>
+<tr class="separator:a110423226c92c186b8b30e5f83feea58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b4e545387be5535f4721055c8608a40"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6b4e545387be5535f4721055c8608a40"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_SC2_REFSEL_MASK_0</b>&#160;&#160;&#160;(1&lt;&lt;0)</td></tr>
+<tr class="separator:a6b4e545387be5535f4721055c8608a40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68968a20b8ba41d56985868b40bd402e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a68968a20b8ba41d56985868b40bd402e"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_SC3_AVGS_MASK_1</b>&#160;&#160;&#160;(1&lt;&lt;1)</td></tr>
+<tr class="separator:a68968a20b8ba41d56985868b40bd402e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a058040903c5f9ae1fc1b682ff1e4eb0c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a058040903c5f9ae1fc1b682ff1e4eb0c"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_SC3_AVGS_MASK_0</b>&#160;&#160;&#160;(1&lt;&lt;0)</td></tr>
+<tr class="separator:a058040903c5f9ae1fc1b682ff1e4eb0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d536adfe8ba6ec6db6635dc2ad52b3d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_PDB_CONFIG</b></td></tr>
 <tr class="separator:a8d536adfe8ba6ec6db6635dc2ad52b3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa07f9d86a851e4ae05f549954e69f3e1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa07f9d86a851e4ae05f549954e69f3e1"></a>
@@ -324,9 +221,6 @@ Macros</h2></td></tr>
 <tr class="memitem:a3c4fa498bfc3e43a4e9c600c18036653"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3c4fa498bfc3e43a4e9c600c18036653"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>PDB_CHnC1_EN_1</b>&#160;&#160;&#160;0x01</td></tr>
 <tr class="separator:a3c4fa498bfc3e43a4e9c600c18036653"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a91f00f634ce576ac42b0a3bbae855638"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a91f00f634ce576ac42b0a3bbae855638"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ADC_BITBAND_ADDR</b>(reg,  bit)&#160;&#160;&#160;(((uint32_t)(reg) - 0x40000000) * 32 + (bit) * 4 + 0x42000000)</td></tr>
-<tr class="separator:a91f00f634ce576ac42b0a3bbae855638"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -377,6 +271,43 @@ Enumerations</h2></td></tr>
 <br />
  }</td></tr>
 <tr class="separator:a3fc99f48d35189e64d2628def313a15d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e69c3b8cfd3360af320ac0bcf5b12ee"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#a6e69c3b8cfd3360af320ac0bcf5b12ee">ADC_ERROR</a> : uint16_t { <br />
+&#160;&#160;<a class="el" href="_a_d_c___module_8h.html#a6e69c3b8cfd3360af320ac0bcf5b12eea03570470bad94692ce93e32700d2e1cb">ADC_ERROR::OTHER</a> = 1&lt;&lt;0, 
+<a class="el" href="_a_d_c___module_8h.html#a6e69c3b8cfd3360af320ac0bcf5b12eeae1f7d44eff22f533115c24a249c57269">ADC_ERROR::CALIB</a> = 1&lt;&lt;1, 
+<a class="el" href="_a_d_c___module_8h.html#a6e69c3b8cfd3360af320ac0bcf5b12eeab578c19f4fab8e2bfeddc85fa17b5acf">ADC_ERROR::WRONG_PIN</a> = 1&lt;&lt;2, 
+<a class="el" href="_a_d_c___module_8h.html#a6e69c3b8cfd3360af320ac0bcf5b12eea563cea047bb978769e53c9a565f9a31b">ADC_ERROR::ANALOG_READ</a> = 1&lt;&lt;3, 
+<br />
+&#160;&#160;<a class="el" href="_a_d_c___module_8h.html#a6e69c3b8cfd3360af320ac0bcf5b12eead46625d92e7d639cc2cfcce4451a11a1">ADC_ERROR::ANALOG_DIFF_READ</a> = 1&lt;&lt;4, 
+<a class="el" href="_a_d_c___module_8h.html#a6e69c3b8cfd3360af320ac0bcf5b12eea53f6b3ace3aa40916de167636293ac80">ADC_ERROR::CONT</a> = 1&lt;&lt;5, 
+<a class="el" href="_a_d_c___module_8h.html#a6e69c3b8cfd3360af320ac0bcf5b12eeac16bcb11fac967e648e4d534e2c84683">ADC_ERROR::CONT_DIFF</a> = 1&lt;&lt;6, 
+<a class="el" href="_a_d_c___module_8h.html#a6e69c3b8cfd3360af320ac0bcf5b12eea4fd4da223d344be375847dcacc013d7f">ADC_ERROR::COMPARISON</a> = 1&lt;&lt;7, 
+<br />
+&#160;&#160;<a class="el" href="_a_d_c___module_8h.html#a6e69c3b8cfd3360af320ac0bcf5b12eea52df2c8ae830ed21e0c2fc269087b3ec">ADC_ERROR::WRONG_ADC</a> = 1&lt;&lt;8, 
+<a class="el" href="_a_d_c___module_8h.html#a6e69c3b8cfd3360af320ac0bcf5b12eeaff3c543e04a7a5d3dac5185b45d12d09">ADC_ERROR::SYNCH</a> = 1&lt;&lt;9, 
+<a class="el" href="_a_d_c___module_8h.html#a6e69c3b8cfd3360af320ac0bcf5b12eea813461e0c58e7ad59a2fd83ca2237fec">ADC_ERROR::CLEAR</a> = 0
+<br />
+ }<tr class="memdesc:a6e69c3b8cfd3360af320ac0bcf5b12ee"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_a_d_c.html">ADC</a> errors.  <a href="_a_d_c___module_8h.html#a6e69c3b8cfd3360af320ac0bcf5b12ee">More...</a><br /></td></tr>
+</td></tr>
+<tr class="separator:a6e69c3b8cfd3360af320ac0bcf5b12ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:ab91aa44b3b2757250c0865ddfb4c7dd0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab91aa44b3b2757250c0865ddfb4c7dd0"></a>
+constexpr <a class="el" href="_a_d_c___module_8h.html#a6e69c3b8cfd3360af320ac0bcf5b12ee">ADC_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#ab91aa44b3b2757250c0865ddfb4c7dd0">operator|</a> (<a class="el" href="_a_d_c___module_8h.html#a6e69c3b8cfd3360af320ac0bcf5b12ee">ADC_ERROR</a> lhs, <a class="el" href="_a_d_c___module_8h.html#a6e69c3b8cfd3360af320ac0bcf5b12ee">ADC_ERROR</a> rhs)</td></tr>
+<tr class="memdesc:ab91aa44b3b2757250c0865ddfb4c7dd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">OR operator for ADC_ERRORs. <br /></td></tr>
+<tr class="separator:ab91aa44b3b2757250c0865ddfb4c7dd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49fa9c050291ca93c3bb15aba5e62c8d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a49fa9c050291ca93c3bb15aba5e62c8d"></a>
+constexpr <a class="el" href="_a_d_c___module_8h.html#a6e69c3b8cfd3360af320ac0bcf5b12ee">ADC_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#a49fa9c050291ca93c3bb15aba5e62c8d">operator&amp;</a> (<a class="el" href="_a_d_c___module_8h.html#a6e69c3b8cfd3360af320ac0bcf5b12ee">ADC_ERROR</a> lhs, <a class="el" href="_a_d_c___module_8h.html#a6e69c3b8cfd3360af320ac0bcf5b12ee">ADC_ERROR</a> rhs)</td></tr>
+<tr class="memdesc:a49fa9c050291ca93c3bb15aba5e62c8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">AND operator for ADC_ERRORs. <br /></td></tr>
+<tr class="separator:a49fa9c050291ca93c3bb15aba5e62c8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a704ca1c3c046727cc0dd0af7c7f04689"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a704ca1c3c046727cc0dd0af7c7f04689"></a>
+<a class="el" href="_a_d_c___module_8h.html#a6e69c3b8cfd3360af320ac0bcf5b12ee">ADC_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#a704ca1c3c046727cc0dd0af7c7f04689">operator|=</a> (volatile <a class="el" href="_a_d_c___module_8h.html#a6e69c3b8cfd3360af320ac0bcf5b12ee">ADC_ERROR</a> &amp;lhs, <a class="el" href="_a_d_c___module_8h.html#a6e69c3b8cfd3360af320ac0bcf5b12ee">ADC_ERROR</a> rhs)</td></tr>
+<tr class="memdesc:a704ca1c3c046727cc0dd0af7c7f04689"><td class="mdescLeft">&#160;</td><td class="mdescRight">|= operator for ADC_ERRORs, it changes the left hand side ADC_ERROR. <br /></td></tr>
+<tr class="separator:a704ca1c3c046727cc0dd0af7c7f04689"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adabc91640ebafe93fba1ba7200256e34"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adabc91640ebafe93fba1ba7200256e34"></a>
+<a class="el" href="_a_d_c___module_8h.html#a6e69c3b8cfd3360af320ac0bcf5b12ee">ADC_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_d_c___module_8h.html#adabc91640ebafe93fba1ba7200256e34">operator&amp;=</a> (volatile <a class="el" href="_a_d_c___module_8h.html#a6e69c3b8cfd3360af320ac0bcf5b12ee">ADC_ERROR</a> &amp;lhs, <a class="el" href="_a_d_c___module_8h.html#a6e69c3b8cfd3360af320ac0bcf5b12ee">ADC_ERROR</a> rhs)</td></tr>
+<tr class="memdesc:adabc91640ebafe93fba1ba7200256e34"><td class="mdescLeft">&#160;</td><td class="mdescRight">&amp;= operator for ADC_ERRORs, it changes the left hand side ADC_ERROR. <br /></td></tr>
+<tr class="separator:adabc91640ebafe93fba1ba7200256e34"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a class="anchor" id="a8d536adfe8ba6ec6db6635dc2ad52b3d"></a>
@@ -445,6 +376,64 @@ Enumerations</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a6e69c3b8cfd3360af320ac0bcf5b12ee"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="_a_d_c___module_8h.html#a6e69c3b8cfd3360af320ac0bcf5b12ee">ADC_ERROR</a> : uint16_t</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="class_a_d_c.html">ADC</a> errors. </p>
+<p>Use adc-&gt;printError() to print the errors (if any) in a human-readable form. Use adc-&gt;resetError() to reset them. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="a6e69c3b8cfd3360af320ac0bcf5b12eea03570470bad94692ce93e32700d2e1cb"></a>OTHER&#160;</td><td class="fielddoc">
+<p>Other error not considered below. </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a6e69c3b8cfd3360af320ac0bcf5b12eeae1f7d44eff22f533115c24a249c57269"></a>CALIB&#160;</td><td class="fielddoc">
+<p>Calibration error. </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a6e69c3b8cfd3360af320ac0bcf5b12eeab578c19f4fab8e2bfeddc85fa17b5acf"></a>WRONG_PIN&#160;</td><td class="fielddoc">
+<p>A pin was selected that cannot be read by this <a class="el" href="class_a_d_c.html">ADC</a> module. </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a6e69c3b8cfd3360af320ac0bcf5b12eea563cea047bb978769e53c9a565f9a31b"></a>ANALOG_READ&#160;</td><td class="fielddoc">
+<p>Error inside the analogRead method. </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a6e69c3b8cfd3360af320ac0bcf5b12eead46625d92e7d639cc2cfcce4451a11a1"></a>ANALOG_DIFF_READ&#160;</td><td class="fielddoc">
+<p>Error inside the analogReadDifferential method. </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a6e69c3b8cfd3360af320ac0bcf5b12eea53f6b3ace3aa40916de167636293ac80"></a>CONT&#160;</td><td class="fielddoc">
+<p>Continuous single-ended measurement error. </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a6e69c3b8cfd3360af320ac0bcf5b12eeac16bcb11fac967e648e4d534e2c84683"></a>CONT_DIFF&#160;</td><td class="fielddoc">
+<p>Continuous differential measurement error. </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a6e69c3b8cfd3360af320ac0bcf5b12eea4fd4da223d344be375847dcacc013d7f"></a>COMPARISON&#160;</td><td class="fielddoc">
+<p>Error during the comparison. </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a6e69c3b8cfd3360af320ac0bcf5b12eea52df2c8ae830ed21e0c2fc269087b3ec"></a>WRONG_ADC&#160;</td><td class="fielddoc">
+<p>A non-existent <a class="el" href="class_a_d_c.html">ADC</a> module was selected. </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a6e69c3b8cfd3360af320ac0bcf5b12eeaff3c543e04a7a5d3dac5185b45d12d09"></a>SYNCH&#160;</td><td class="fielddoc">
+<p>Error during a synchronized measurement. </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a6e69c3b8cfd3360af320ac0bcf5b12eea813461e0c58e7ad59a2fd83ca2237fec"></a>CLEAR&#160;</td><td class="fielddoc">
+<p>No error. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
 <a class="anchor" id="ac8d2892dc23aba5d30e7013804d3429b"></a>
 <div class="memitem">
 <div class="memproto">
@@ -474,10 +463,10 @@ Enumerations</h2></td></tr>
 <p>BANDGAP </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="ac8d2892dc23aba5d30e7013804d3429ba1f5248caa2d2138480493dd069530462"></a>VREFH&#160;</td><td class="fielddoc">
-<p>High <a class="el" href="namespace_v_r_e_f.html" title="namespace VREF: Controls the Teensy internal voltage reference module (VREFV1) ">VREF</a> </p>
+<p>High <a class="el" href="namespace_v_r_e_f.html" title="Controls the Teensy internal voltage reference module (VREFV1) ">VREF</a> </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="ac8d2892dc23aba5d30e7013804d3429bab546f9ad5f80e932f2fd1038bbaddaa8"></a>VREFL&#160;</td><td class="fielddoc">
-<p>Low <a class="el" href="namespace_v_r_e_f.html" title="namespace VREF: Controls the Teensy internal voltage reference module (VREFV1) ">VREF</a>. </p>
+<p>Low <a class="el" href="namespace_v_r_e_f.html" title="Controls the Teensy internal voltage reference module (VREFV1) ">VREF</a>. </p>
 </td></tr>
 </table>
 
@@ -509,7 +498,7 @@ Enumerations</h2></td></tr>
 <p>1.2 volts </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a1edb7e48507f5c04ef3db68b5d5b01c9a5f3cc7cfab06012c0aa6a4b8a5a77161"></a>REF_EXT&#160;</td><td class="fielddoc">
-<p>External <a class="el" href="namespace_v_r_e_f.html" title="namespace VREF: Controls the Teensy internal voltage reference module (VREFV1) ">VREF</a> </p>
+<p>External <a class="el" href="namespace_v_r_e_f.html" title="Controls the Teensy internal voltage reference module (VREFV1) ">VREF</a> </p>
 </td></tr>
 </table>
 
@@ -559,7 +548,7 @@ Enumerations</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="_a_d_c___module_8h.html">ADC_Module.h</a></li>
-    <li class="footer">Generated on Sun Oct 15 2017 13:43:05 for ADC by
+    <li class="footer">Generated on Tue Oct 24 2017 23:31:19 for ADC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>
   </ul>

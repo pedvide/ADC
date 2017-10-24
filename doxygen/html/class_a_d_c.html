@@ -266,11 +266,11 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a0d5b4dd16bbb03082daeeaadafec2474"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0d5b4dd16bbb03082daeeaadafec2474"></a>
-<a class="el" href="class_a_d_c___module.html">ADC_Module</a> *const&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a0d5b4dd16bbb03082daeeaadafec2474">adc0</a></td></tr>
+<a class="el" href="class_a_d_c___module.html">ADC_Module</a> *const&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a0d5b4dd16bbb03082daeeaadafec2474">adc0</a> = &amp;adc0_obj</td></tr>
 <tr class="memdesc:a0d5b4dd16bbb03082daeeaadafec2474"><td class="mdescLeft">&#160;</td><td class="mdescRight">Object to control the ADC0. <br /></td></tr>
 <tr class="separator:a0d5b4dd16bbb03082daeeaadafec2474"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f6c4642e9e5400220452feeb6be13b8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8f6c4642e9e5400220452feeb6be13b8"></a>
-<a class="el" href="class_a_d_c___module.html">ADC_Module</a> *const&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a8f6c4642e9e5400220452feeb6be13b8">adc1</a></td></tr>
+<a class="el" href="class_a_d_c___module.html">ADC_Module</a> *const&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c.html#a8f6c4642e9e5400220452feeb6be13b8">adc1</a> = &amp;adc1_obj</td></tr>
 <tr class="memdesc:a8f6c4642e9e5400220452feeb6be13b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Object to control the ADC1. <br /></td></tr>
 <tr class="separator:a8f6c4642e9e5400220452feeb6be13b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a03e1c7f64c02dec1976810a0a4967cf2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a03e1c7f64c02dec1976810a0a4967cf2"></a>
@@ -387,7 +387,7 @@ Static Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns the analog value of the special internal source, such as the temperature sensor. </p>
-<p>It calls analogRead(uint8_t pin) internally, with the correct value for the pin for all boards. Possible values: TEMP_SENSOR, Temperature sensor. VREF_OUT, 1.2 V reference. BANDGAP, BANDGAP. VREFH, High <a class="el" href="namespace_v_r_e_f.html" title="namespace VREF: Controls the Teensy internal voltage reference module (VREFV1) ">VREF</a>. VREFL, Low <a class="el" href="namespace_v_r_e_f.html" title="namespace VREF: Controls the Teensy internal voltage reference module (VREFV1) ">VREF</a>. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>It calls analogRead(uint8_t pin) internally, with the correct value for the pin for all boards. Possible values: TEMP_SENSOR, Temperature sensor. VREF_OUT, 1.2 V reference (switch on first using <a class="el" href="_v_r_e_f_8h_source.html">VREF.h</a>). BANDGAP, BANDGAP (switch on first using <a class="el" href="_v_r_e_f_8h_source.html">VREF.h</a>). VREFH, High <a class="el" href="namespace_v_r_e_f.html" title="Controls the Teensy internal voltage reference module (VREFV1) ">VREF</a>. VREFL, Low <a class="el" href="namespace_v_r_e_f.html" title="Controls the Teensy internal voltage reference module (VREFV1) ">VREF</a>. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">pin</td><td>ADC_INTERNAL_SOURCE to read. </td></tr>
     <tr><td class="paramname">adc_num</td><td>ADC_X <a class="el" href="class_a_d_c.html">ADC</a> module </td></tr>
@@ -1879,7 +1879,7 @@ Static Public Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_a_d_c.html">ADC</a></li>
-    <li class="footer">Generated on Sun Oct 15 2017 13:43:05 for ADC by
+    <li class="footer">Generated on Tue Oct 24 2017 23:31:19 for ADC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>
   </ul>
