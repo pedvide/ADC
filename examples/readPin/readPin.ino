@@ -75,13 +75,7 @@ void loop() {
             Serial.println(pin);
             readPin = pin;
         }
-        if(pin==-1) {
-            Serial.println("Reset error flags.");
-            adc->resetError();
-        }
     }
-
-
 
 
     Serial.print("Pin: ");
@@ -91,6 +85,7 @@ void loop() {
     Serial.print(value1*3.3/adc->getMaxValue(ADC_0), DEC);
     #if ADC_NUM_ADCS>1
     Serial.print(", ADC1 value: ");
+    value2 = adc->adc1->analogRead(readPin);
     value2 = adc->adc1->analogRead(readPin);
     Serial.println(value2*3.3/adc->getMaxValue(ADC_1), DEC);
     #else
@@ -105,6 +100,6 @@ void loop() {
 
     //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
 
-    delay(50);
+    delay(200);
 
 }
