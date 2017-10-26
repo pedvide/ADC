@@ -232,16 +232,19 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
 // ADC_CFG1_ADICLK: 0=bus, 1=bus/2, 2=(alternative clk) altclk, 3=(async. clk) adack
 // See below for an explanation of VERY_LOW_SPEED, LOW_SPEED, etc.
 
-
-#define ADC_MIN_FREQ         (1000000)
+#define ADC_MHz (1000000) // not so many zeros
+// Min freq for 8-12 bit mode is 1 MHz
+#define ADC_MIN_FREQ         (1*ADC_MHz)
 // Max freq for 8-12 bit mode is 18 MHz and 24 MHz for Teensy 3.6
 #if defined(ADC_TEENSY_3_6)
-    #define ADC_MAX_FREQ    (24000000)
+    #define ADC_MAX_FREQ    (24*ADC_MHz)
 #else
-    #define ADC_MAX_FREQ    (18000000)
+    #define ADC_MAX_FREQ    (18*ADC_MHz)
 #endif
-#define ADC_MIN_FREQ_16BITS  (2000000)
-#define ADC_MAX_FREQ_16BITS (12000000)
+// Min freq for 16 bit mode is 2 MHz
+#define ADC_MIN_FREQ_16BITS  (2*ADC_MHz)
+// Max freq for 16 bit mode is 12 MHz
+#define ADC_MAX_FREQ_16BITS (12*ADC_MHz)
 
 // We can divide F_BUS by 1, 2, 4, 8, or 16:
 /*
