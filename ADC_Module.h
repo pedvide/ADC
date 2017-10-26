@@ -231,6 +231,8 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
 // calibration works best when averages are 32 and speed is less than 4 MHz
 // ADC_CFG1_ADICLK: 0=bus, 1=bus/2, 2=(alternative clk) altclk, 3=(async. clk) adack
 // See below for an explanation of VERY_LOW_SPEED, LOW_SPEED, etc.
+
+
 #define ADC_MIN_FREQ         (1000000)
 // Max freq for 8-12 bit mode is 18 MHz and 24 MHz for Teensy 3.6
 #if defined(ADC_TEENSY_3_6)
@@ -319,137 +321,6 @@ Divide by   ADC_CFG1_ADIV   ADC_CFG1_ADICLK TOTAL
     #define ADC_CFG1_VERY_HIGH_SPEED (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))
 #endif
 
-
-
-#if F_BUS == 120000000
-    #define ADC_CFG1_7_5MHZ        (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))
-    #define ADC_CFG1_15MHZ         (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1))
-    #define ADC_CFG1_30MHZ         (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1))
-    #define ADC_CFG1_60MHZ         (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(1)) // too fast
-
-    #define ADC_CFG1_VERY_LOW_SPEED ADC_CFG1_LOW_SPEED
-    #define ADC_CFG1_LOW_SPEED (ADC_CFG1_7_5MHZ)
-    #define ADC_CFG1_MED_SPEED (ADC_CFG1_7_5MHZ)
-    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_7_5MHZ)
-    #define ADC_CFG1_HI_SPEED (ADC_CFG1_15MHZ)
-    #define ADC_CFG1_VERY_HIGH_SPEED (ADC_CFG1_15MHZ)
-#elif F_BUS == 108000000
-    #define ADC_CFG1_6_75MHZ        (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))
-    #define ADC_CFG1_13_5MHZ        (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1))
-    #define ADC_CFG1_27MHZ          (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1))
-    #define ADC_CFG1_54MHZ          (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(1)) // too fast
-
-    #define ADC_CFG1_VERY_LOW_SPEED ADC_CFG1_LOW_SPEED
-    #define ADC_CFG1_LOW_SPEED (ADC_CFG1_6_75MHZ)
-    #define ADC_CFG1_MED_SPEED (ADC_CFG1_6_75MHZ)
-    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_6_75MHZ)
-    #define ADC_CFG1_HI_SPEED (ADC_CFG1_13_5MHZ)
-    #define ADC_CFG1_VERY_HIGH_SPEED (ADC_CFG1_27MHZ)
-#elif F_BUS == 60000000
-    #define ADC_CFG1_3_75MHZ      (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))
-    #define ADC_CFG1_7_5MHZ       (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1))
-    #define ADC_CFG1_15MHZ        (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1))
-    #define ADC_CFG1_30MHZ        (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(1))
-
-    #define ADC_CFG1_VERY_LOW_SPEED ADC_CFG1_LOW_SPEED
-    #define ADC_CFG1_LOW_SPEED (ADC_CFG1_3_75MHZ)
-    #define ADC_CFG1_MED_SPEED (ADC_CFG1_7_5MHZ)
-    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_7_5MHZ)
-    #define ADC_CFG1_HI_SPEED (ADC_CFG1_15MHZ)
-    #define ADC_CFG1_VERY_HIGH_SPEED ADC_CFG1_30MHZ
-
-#elif F_BUS == 56000000 || F_BUS == 54000000 // frequency numbers are good for 56 MHz and slightly smaller for 54 MHz
-    #define ADC_CFG1_3_5MHZ   (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))
-    #define ADC_CFG1_7MHZ     (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1))
-    #define ADC_CFG1_14MHZ    (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1))
-    #define ADC_CFG1_28MHZ    (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(1))  // too fast
-
-    #define ADC_CFG1_VERY_LOW_SPEED ADC_CFG1_LOW_SPEED
-    #define ADC_CFG1_LOW_SPEED (ADC_CFG1_3_5MHZ)
-    #define ADC_CFG1_MED_SPEED (ADC_CFG1_7MHZ)
-    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_7MHZ)
-    #define ADC_CFG1_HI_SPEED (ADC_CFG1_14MHZ)
-    #define ADC_CFG1_VERY_HIGH_SPEED (ADC_CFG1_28MHZ)
-
-#elif F_BUS == 48000000
-    #define ADC_CFG1_3MHZ   (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1)) // Clock divide select: 3=div8 + Input clock: 1=bus/2
-    #define ADC_CFG1_6MHZ   (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1)) // Clock divide select: 2=div4 + Input clock: 1=bus/2
-    #define ADC_CFG1_12MHZ  (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1)) // Clock divide select: 1=div2 Input clock: 1=bus/2
-    #define ADC_CFG1_24MHZ  (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(1)) // this is way too fast, so accuracy is not guaranteed, except for T3.6
-
-    #define ADC_CFG1_VERY_LOW_SPEED ADC_CFG1_LOW_SPEED
-    #define ADC_CFG1_LOW_SPEED (ADC_CFG1_3MHZ)
-    #define ADC_CFG1_MED_SPEED (ADC_CFG1_6MHZ)
-    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_12MHZ)
-    #define ADC_CFG1_HI_SPEED (ADC_CFG1_12MHZ)
-    #define ADC_CFG1_VERY_HIGH_SPEED (ADC_CFG1_24MHZ)
-
-#elif F_BUS == 40000000
-    #define ADC_CFG1_2_5MHZ   (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))
-    #define ADC_CFG1_5MHZ     (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1))
-    #define ADC_CFG1_10MHZ    (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1))
-    #define ADC_CFG1_20MHZ    (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(1)) // too fast, except for T3.6
-
-    #define ADC_CFG1_VERY_LOW_SPEED ADC_CFG1_LOW_SPEED
-    #define ADC_CFG1_LOW_SPEED (ADC_CFG1_2_5MHZ)
-    #define ADC_CFG1_MED_SPEED (ADC_CFG1_5MHZ)
-    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_10MHZ)
-    #define ADC_CFG1_HI_SPEED (ADC_CFG1_10MHZ)
-    #define ADC_CFG1_VERY_HIGH_SPEED (ADC_CFG1_20MHZ)
-
-#elif F_BUS == 36000000
-    #define ADC_CFG1_2_25MHZ      (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))
-    #define ADC_CFG1_4_5MHZ       (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1))
-    #define ADC_CFG1_9MHZ         (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(1))
-    #define ADC_CFG1_18MHZ        (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(1))
-
-    #define ADC_CFG1_VERY_LOW_SPEED (ADC_CFG1_2_25MHZ)
-    #define ADC_CFG1_LOW_SPEED (ADC_CFG1_4_5MHZ)
-    #define ADC_CFG1_MED_SPEED (ADC_CFG1_9MHZ)
-    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_9MHZ)
-    #define ADC_CFG1_HI_SPEED (ADC_CFG1_18MHZ)
-    #define ADC_CFG1_VERY_HIGH_SPEED ADC_CFG1_HI_SPEED
-
-#elif F_BUS == 24000000
-    #define ADC_CFG1_1_5MHZ   (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1)) // Clock divide select: 3=div8 + Input clock: 1=bus/2
-    #define ADC_CFG1_3MHZ     (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(0)) // Clock divide select: 3=div8 + Input clock: 0=bus
-    #define ADC_CFG1_6MHZ     (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(0)) // Clock divide select: 2=div4 + Input clock: 0=bus
-    #define ADC_CFG1_12MHZ    (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(0)) // Clock divide select: 1=div2 + Input clock: 0=bus
-    #define ADC_CFG1_24MHZ    (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(0)) // too fast, except for T3.5
-
-    #define ADC_CFG1_VERY_LOW_SPEED (ADC_CFG1_1_5MHZ)
-    #define ADC_CFG1_LOW_SPEED (ADC_CFG1_3MHZ)
-    #define ADC_CFG1_MED_SPEED (ADC_CFG1_6MHZ)
-    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_12MHZ)
-    #define ADC_CFG1_HI_SPEED (ADC_CFG1_12MHZ)
-    #define ADC_CFG1_VERY_HIGH_SPEED (ADC_CFG1_24MHZ)
-
-#elif F_BUS == 4000000
-    #define ADC_CFG1_1MHZ   (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(0))
-    #define ADC_CFG1_2MHZ   (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(0))
-    #define ADC_CFG1_4MHZ   (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(0))
-
-    #define ADC_CFG1_VERY_LOW_SPEED (ADC_CFG1_1MHZ)
-    #define ADC_CFG1_LOW_SPEED (ADC_CFG1_2MHZ)
-    #define ADC_CFG1_MED_SPEED (ADC_CFG1_4MHZ)
-    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_4MHZ)
-    #define ADC_CFG1_HI_SPEED (ADC_CFG1_4MHZ)
-    #define ADC_CFG1_VERY_HIGH_SPEED ADC_CFG1_HI_SPEED
-
-#elif F_BUS == 2000000
-    #define ADC_CFG1_1MHZ   (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(0))
-    #define ADC_CFG1_2MHZ   (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(0))
-
-    #define ADC_CFG1_VERY_LOW_SPEED (ADC_CFG1_1MHZ)
-    #define ADC_CFG1_LOW_SPEED (ADC_CFG1_2MHZ)
-    #define ADC_CFG1_MED_SPEED (ADC_CFG1_2MHZ)
-    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_2MHZ)
-    #define ADC_CFG1_HI_SPEED (ADC_CFG1_2MHZ)
-    #define ADC_CFG1_VERY_HIGH_SPEED ADC_CFG1_HI_SPEED
-
-#else
-#error "F_BUS must be 108, 60, 56, 54, 48, 40, 36, 24, 4 or 2 MHz"
-#endif
 
 
 // Settings for the power/speed of conversions/sampling
