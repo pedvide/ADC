@@ -388,40 +388,94 @@ enum class ADC_SAMPLING_SPEED : uint8_t {
 #define ADC_ERROR_DIFF_VALUE (-70000)
 #define ADC_ERROR_VALUE ADC_ERROR_DIFF_VALUE
 
-//! ADC errors.
-/*! Use adc->printError() to print the errors (if any) in a human-readable form.
-*   Use adc->resetError() to reset them.
-*/
-enum class ADC_ERROR : uint16_t {
-    OTHER               = 1<<0, /*!< Other error not considered below. */
-    CALIB               = 1<<1, /*!< Calibration error. */
-    WRONG_PIN           = 1<<2, /*!< A pin was selected that cannot be read by this ADC module. */
-    ANALOG_READ         = 1<<3, /*!< Error inside the analogRead method. */
-    ANALOG_DIFF_READ    = 1<<4, /*!< Error inside the analogReadDifferential method. */
-    CONT                = 1<<5, /*!< Continuous single-ended measurement error. */
-    CONT_DIFF           = 1<<6, /*!< Continuous differential measurement error. */
-    COMPARISON          = 1<<7, /*!< Error during the comparison. */
-    WRONG_ADC           = 1<<8, /*!< A non-existent ADC module was selected. */
-    SYNCH               = 1<<9, /*!< Error during a synchronized measurement. */
+//! Handle ADC errors
+namespace ADC_Error {
 
-    CLEAR               = 0,    /*!< No error. */
-};
-//! OR operator for ADC_ERRORs.
-inline constexpr ADC_ERROR operator|(ADC_ERROR lhs, ADC_ERROR rhs) {
-    return static_cast<ADC_ERROR> (static_cast<uint16_t>(lhs) | static_cast<uint16_t>(rhs));
+    //! ADC errors.
+    /*! Use adc->printError() to print the errors (if any) in a human-readable form.
+    *   Use adc->resetError() to reset them.
+    */
+    enum class ADC_ERROR : uint16_t {
+        OTHER               = 1<<0, /*!< Other error not considered below. */
+        CALIB               = 1<<1, /*!< Calibration error. */
+        WRONG_PIN           = 1<<2, /*!< A pin was selected that cannot be read by this ADC module. */
+        ANALOG_READ         = 1<<3, /*!< Error inside the analogRead method. */
+        ANALOG_DIFF_READ    = 1<<4, /*!< Error inside the analogReadDifferential method. */
+        CONT                = 1<<5, /*!< Continuous single-ended measurement error. */
+        CONT_DIFF           = 1<<6, /*!< Continuous differential measurement error. */
+        COMPARISON          = 1<<7, /*!< Error during the comparison. */
+        WRONG_ADC           = 1<<8, /*!< A non-existent ADC module was selected. */
+        SYNCH               = 1<<9, /*!< Error during a synchronized measurement. */
+
+        CLEAR               = 0,    /*!< No error. */
+    };
+    //! OR operator for ADC_ERRORs.
+    inline constexpr ADC_ERROR operator|(ADC_ERROR lhs, ADC_ERROR rhs) {
+        return static_cast<ADC_ERROR> (static_cast<uint16_t>(lhs) | static_cast<uint16_t>(rhs));
+    }
+    //! AND operator for ADC_ERRORs.
+    inline constexpr ADC_ERROR operator&(ADC_ERROR lhs, ADC_ERROR rhs) {
+        return static_cast<ADC_ERROR> (static_cast<uint16_t>(lhs) & static_cast<uint16_t>(rhs));
+    }
+    //! |= operator for ADC_ERRORs, it changes the left hand side ADC_ERROR.
+    inline ADC_ERROR operator|=(volatile ADC_ERROR& lhs, ADC_ERROR rhs) {
+        return lhs = static_cast<ADC_ERROR> (static_cast<uint16_t>(lhs) | static_cast<uint16_t>(rhs));
+    }
+    //! &= operator for ADC_ERRORs, it changes the left hand side ADC_ERROR.
+    inline ADC_ERROR operator&=(volatile ADC_ERROR& lhs, ADC_ERROR rhs) {
+        return lhs = static_cast<ADC_ERROR> (static_cast<uint16_t>(lhs) & static_cast<uint16_t>(rhs));
+    }
+
+    //! Prints the human-readable error, if any.
+    inline void printError(ADC_ERROR fail_flag, uint8_t ADC_num = 0) {
+        if(fail_flag != ADC_ERROR::CLEAR) {
+            Serial.print("ADC"); Serial.print(ADC_num);
+            Serial.print(" error: ");
+            switch(fail_flag) {
+                case ADC_ERROR::CALIB:
+                    Serial.print("Calibration");
+                    break;
+                case ADC_ERROR::WRONG_PIN:
+                    Serial.print("Wrong pin");
+                    break;
+                case ADC_ERROR::ANALOG_READ:
+                    Serial.print("Analog read");
+                    break;
+                case ADC_ERROR::COMPARISON:
+                    Serial.print("Comparison");
+                    break;
+                case ADC_ERROR::ANALOG_DIFF_READ:
+                    Serial.print("Analog differential read");
+                    break;
+                case ADC_ERROR::CONT:
+                    Serial.print("Continuous read");
+                    break;
+                case ADC_ERROR::CONT_DIFF:
+                    Serial.print("Continuous differential read");
+                    break;
+                case ADC_ERROR::WRONG_ADC:
+                    Serial.print("Wrong ADC");
+                    break;
+                case ADC_ERROR::SYNCH:
+                    Serial.print("Synchronous");
+                    break;
+                case ADC_ERROR::OTHER:
+                case ADC_ERROR::CLEAR: // silence warnings
+                default:
+                    Serial.print("Unknown");
+                    break;
+            }
+            Serial.println(" error.");
+        }
+    }
+
+    //! Resets all errors from the ADC, if any.
+    inline void resetError(volatile ADC_ERROR& fail_flag) {
+        fail_flag = ADC_ERROR::CLEAR;
+    }
+
 }
-//! AND operator for ADC_ERRORs.
-inline constexpr ADC_ERROR operator&(ADC_ERROR lhs, ADC_ERROR rhs) {
-    return static_cast<ADC_ERROR> (static_cast<uint16_t>(lhs) & static_cast<uint16_t>(rhs));
-}
-//! |= operator for ADC_ERRORs, it changes the left hand side ADC_ERROR.
-inline ADC_ERROR operator|=(volatile ADC_ERROR& lhs, ADC_ERROR rhs) {
-    return lhs = static_cast<ADC_ERROR> (static_cast<uint16_t>(lhs) | static_cast<uint16_t>(rhs));
-}
-//! &= operator for ADC_ERRORs, it changes the left hand side ADC_ERROR.
-inline ADC_ERROR operator&=(volatile ADC_ERROR& lhs, ADC_ERROR rhs) {
-    return lhs = static_cast<ADC_ERROR> (static_cast<uint16_t>(lhs) & static_cast<uint16_t>(rhs));
-}
+using ADC_Error::ADC_ERROR;
 
 
 // debug mode: blink the led light
@@ -910,50 +964,12 @@ public:
 
     //! Prints the human-readable error, if any.
     void printError() {
-        if(fail_flag != ADC_ERROR::CLEAR) {
-            Serial.print("ADC"); Serial.print(ADC_num);
-            Serial.print(" error: ");
-            switch(fail_flag) {
-                case ADC_ERROR::CALIB:
-                    Serial.print("Calibration");
-                    break;
-                case ADC_ERROR::WRONG_PIN:
-                    Serial.print("Wrong pin");
-                    break;
-                case ADC_ERROR::ANALOG_READ:
-                    Serial.print("Analog read");
-                    break;
-                case ADC_ERROR::COMPARISON:
-                    Serial.print("Comparison");
-                    break;
-                case ADC_ERROR::ANALOG_DIFF_READ:
-                    Serial.print("Analog differential read");
-                    break;
-                case ADC_ERROR::CONT:
-                    Serial.print("Continuous read");
-                    break;
-                case ADC_ERROR::CONT_DIFF:
-                    Serial.print("Continuous differential read");
-                    break;
-                case ADC_ERROR::WRONG_ADC:
-                    Serial.print("Wrong ADC");
-                    break;
-                case ADC_ERROR::SYNCH:
-                    Serial.print("Synchronous");
-                    break;
-                case ADC_ERROR::OTHER:
-                case ADC_ERROR::CLEAR: // silence warnings
-                default:
-                    Serial.print("Unknown");
-                    break;
-            }
-            Serial.println(" error.");
-        }
+        ADC_Error::printError(fail_flag, ADC_num);
     }
 
     //! Resets all errors from the ADC, if any.
     void resetError() {
-        fail_flag = ADC_ERROR::CLEAR;
+        ADC_Error::resetError(fail_flag);
     }
 
 
