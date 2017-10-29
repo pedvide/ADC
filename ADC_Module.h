@@ -232,7 +232,7 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
 // ADC_CFG1_ADICLK: 0=bus, 1=bus/2, 2=(alternative clk) altclk, 3=(async. clk) adack
 // See below for an explanation of VERY_LOW_SPEED, LOW_SPEED, etc.
 
-#define ADC_MHz (1000000) // not so many zeros
+#define ADC_MHz                (1000000) // not so many zeros
 // Min freq for 8-12 bit mode is 1 MHz
 #define ADC_MIN_FREQ         (1*ADC_MHz)
 // Max freq for 8-12 bit mode is 18 MHz and 24 MHz for Teensy 3.6
@@ -248,80 +248,92 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
 
 // We can divide F_BUS by 1, 2, 4, 8, or 16:
 /*
-Divide by   ADC_CFG1_ADIV   ADC_CFG1_ADICLK TOTAL
-1           0               0               0
-2           1               0               1
-4           2               0               2
-8           3               0               3
-16          3               1               4
+Divide by   ADC_CFG1_ADIV   ADC_CFG1_ADICLK TOTAL   VALUE
+1           0               0               0       0x00
+2           1               0               1       0x20
+4           2               0               2       0x40
+8           3               0               3       0x60
+16          3               1               4       0x61
 (Other combinations are possible)
-
 */
+
+// Redefine from kinetis.h to remove (uint32_t) casts that the preprocessor doesn't understand
+// so we can do arithmetic with them when defining ADC_CFG1_MED_SPEED
+#define ADC_LIB_CFG1_ADIV(n)		(((n) & 3) << 5)
+#define ADC_LIB_CFG1_ADICLK(n)		(((n) & 3) << 0)
 
 // ADC_CFG1_VERY_LOW_SPEED is the lowest freq >= 1 MHz
 #if F_BUS/16 >= ADC_MIN_FREQ
-    #define ADC_CFG1_VERY_LOW_SPEED (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))
+    #define ADC_CFG1_VERY_LOW_SPEED (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(1))
 #elif F_BUS/8 >= ADC_MIN_FREQ
-    #define ADC_CFG1_VERY_LOW_SPEED (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(0))
+    #define ADC_CFG1_VERY_LOW_SPEED (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(0))
 #elif F_BUS/4 >= ADC_MIN_FREQ
-    #define ADC_CFG1_VERY_LOW_SPEED (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(0))
+    #define ADC_CFG1_VERY_LOW_SPEED (ADC_LIB_CFG1_ADIV(2) + ADC_LIB_CFG1_ADICLK(0))
 #elif F_BUS/2 >= ADC_MIN_FREQ
-    #define ADC_CFG1_VERY_LOW_SPEED (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(0))
+    #define ADC_CFG1_VERY_LOW_SPEED (ADC_LIB_CFG1_ADIV(1) + ADC_LIB_CFG1_ADICLK(0))
 #else
-    #define ADC_CFG1_VERY_LOW_SPEED (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(0))
+    #define ADC_CFG1_VERY_LOW_SPEED (ADC_LIB_CFG1_ADIV(0) + ADC_LIB_CFG1_ADICLK(0))
 #endif
 
 // ADC_CFG1_LOW_SPEED is the lowest freq >= 2 MHz
 #if F_BUS/16 >= ADC_MIN_FREQ_16BITS
-    #define ADC_CFG1_LOW_SPEED (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))
+    #define ADC_CFG1_LOW_SPEED (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(1))
 #elif F_BUS/8 >= ADC_MIN_FREQ_16BITS
-    #define ADC_CFG1_LOW_SPEED (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(0))
+    #define ADC_CFG1_LOW_SPEED (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(0))
 #elif F_BUS/4 >= ADC_MIN_FREQ_16BITS
-    #define ADC_CFG1_LOW_SPEED (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(0))
+    #define ADC_CFG1_LOW_SPEED (ADC_LIB_CFG1_ADIV(2) + ADC_LIB_CFG1_ADICLK(0))
 #elif F_BUS/2 >= ADC_MIN_FREQ_16BITS
-    #define ADC_CFG1_LOW_SPEED (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(0))
+    #define ADC_CFG1_LOW_SPEED (ADC_LIB_CFG1_ADIV(1) + ADC_LIB_CFG1_ADICLK(0))
 #else
-    #define ADC_CFG1_LOW_SPEED (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(0))
+    #define ADC_CFG1_LOW_SPEED (ADC_LIB_CFG1_ADIV(0) + ADC_LIB_CFG1_ADICLK(0))
 #endif
 
 // ADC_CFG1_HI_SPEED_16_BITS is the highest freq <= 12 MHz
 #if F_BUS <= ADC_MAX_FREQ_16BITS
-    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(0))
+    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_LIB_CFG1_ADIV(0) + ADC_LIB_CFG1_ADICLK(0))
 #elif F_BUS/2 <= ADC_MAX_FREQ_16BITS
-    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(0))
+    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_LIB_CFG1_ADIV(1) + ADC_LIB_CFG1_ADICLK(0))
 #elif F_BUS/4 <= ADC_MAX_FREQ_16BITS
-    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(0))
+    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_LIB_CFG1_ADIV(2) + ADC_LIB_CFG1_ADICLK(0))
 #elif F_BUS/8 <= ADC_MAX_FREQ_16BITS
-    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(0))
+    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(0))
 #else
-    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))
+    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(1))
+#endif
+
+// For ADC_CFG1_MED_SPEED the idea is to check if there's an unused setting between
+// ADC_CFG1_LOW_SPEED and ADC_CFG1_HI_SPEED_16_BITS
+#if (ADC_CFG1_LOW_SPEED - ADC_CFG1_HI_SPEED_16_BITS > 0x20) // higher values are slower speeds
+    #define ADC_CFG1_MED_SPEED  ((ADC_CFG1_HI_SPEED_16_BITS) + 0x20) // at least one divisor in between
+#else
+    #define ADC_CFG1_MED_SPEED  (ADC_CFG1_HI_SPEED_16_BITS)
 #endif
 
 // ADC_CFG1_HI_SPEED is the highest freq <= 18 MHz (24 for Teensy 3.6)
 #if F_BUS <= ADC_MAX_FREQ
-    #define ADC_CFG1_HI_SPEED (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(0))
+    #define ADC_CFG1_HI_SPEED (ADC_LIB_CFG1_ADIV(0) + ADC_LIB_CFG1_ADICLK(0))
 #elif F_BUS/2 <= ADC_MAX_FREQ
-    #define ADC_CFG1_HI_SPEED (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(0))
+    #define ADC_CFG1_HI_SPEED (ADC_LIB_CFG1_ADIV(1) + ADC_LIB_CFG1_ADICLK(0))
 #elif F_BUS/4 <= ADC_MAX_FREQ
-    #define ADC_CFG1_HI_SPEED (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(0))
+    #define ADC_CFG1_HI_SPEED (ADC_LIB_CFG1_ADIV(2) + ADC_LIB_CFG1_ADICLK(0))
 #elif F_BUS/8 <= ADC_MAX_FREQ
-    #define ADC_CFG1_HI_SPEED (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(0))
+    #define ADC_CFG1_HI_SPEED (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(0))
 #else
-    #define ADC_CFG1_HI_SPEED (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))
+    #define ADC_CFG1_HI_SPEED (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(1))
 #endif
 
 // ADC_CFG1_VERY_HIGH_SPEED >= ADC_CFG1_HI_SPEED and may be out of specs, but not more than ADC_VERY_HIGH_SPEED_FACTOR*ADC_MAX_FREQ
-#define ADC_VERY_HIGH_SPEED_FACTOR = 2.0
+#define ADC_VERY_HIGH_SPEED_FACTOR  (2)
 #if F_BUS <= ADC_VERY_HIGH_SPEED_FACTOR*ADC_MAX_FREQ
-    #define ADC_CFG1_VERY_HIGH_SPEED (ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(0))
+    #define ADC_CFG1_VERY_HIGH_SPEED (ADC_LIB_CFG1_ADIV(0) + ADC_LIB_CFG1_ADICLK(0))
 #elif F_BUS/2 <= ADC_VERY_HIGH_SPEED_FACTOR*ADC_MAX_FREQ
-    #define ADC_CFG1_VERY_HIGH_SPEED (ADC_CFG1_ADIV(1) + ADC_CFG1_ADICLK(0))
+    #define ADC_CFG1_VERY_HIGH_SPEED (ADC_LIB_CFG1_ADIV(1) + ADC_LIB_CFG1_ADICLK(0))
 #elif F_BUS/4 <= ADC_VERY_HIGH_SPEED_FACTOR*ADC_MAX_FREQ
-    #define ADC_CFG1_VERY_HIGH_SPEED (ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(0))
+    #define ADC_CFG1_VERY_HIGH_SPEED (ADC_LIB_CFG1_ADIV(2) + ADC_LIB_CFG1_ADICLK(0))
 #elif F_BUS/8 <= ADC_VERY_HIGH_SPEED_FACTOR*ADC_MAX_FREQ
-    #define ADC_CFG1_VERY_HIGH_SPEED (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(0))
+    #define ADC_CFG1_VERY_HIGH_SPEED (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(0))
 #else
-    #define ADC_CFG1_VERY_HIGH_SPEED (ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1))
+    #define ADC_CFG1_VERY_HIGH_SPEED (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(1))
 #endif
 
 
