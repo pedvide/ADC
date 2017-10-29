@@ -470,7 +470,7 @@ namespace ADC_Error {
     }
 
     //! Resets all errors from the ADC, if any.
-    inline void resetError(ADC_ERROR fail_flag) {
+    inline void resetError(volatile ADC_ERROR& fail_flag) {
         fail_flag = ADC_ERROR::CLEAR;
     }
 
