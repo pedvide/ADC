@@ -49,6 +49,111 @@ uint8_t adc_pins_dig[] = {A0,A1,A2,A3,A4,A5,A6,A7,A8, A9, A12,A13,A14,A15,A16,A1
 uint8_t adc_pins_diff[] = {A10, A11};
 #endif // defined
 
+
+int value = 0;
+
+// test the analog pins that also have a digital function
+bool test_pullup_down(bool pullup) {
+    uint8_t mode = pullup ? INPUT_PULLUP : INPUT_PULLDOWN;
+
+    const int max_val = adc->getMaxValue(ADC_NUM::ADC_0);
+
+    bool pass_test = true;
+
+    for (int i=0;i<DIG_PINS;i++) {
+        pinMode(adc_pins_dig[i], mode);
+        value = adc->analogRead(adc_pins_dig[i]);
+        bool fail_condition = pullup ? (value < 0.95*max_val) : (value > 0.05*max_val);
+        if (fail_condition) {
+            Serial.print("A"); Serial.print(i); Serial.print(": ");
+            Serial.print("FAILED "); Serial.print(pullup ? "INPUT_PULLUP" : "INPUT_PULLDOWN");
+            Serial.print("("); Serial.print(value); Serial.print(")");
+            Serial.println(". ");
+            pass_test = false;
+        }
+    }
+
+    return pass_test;
+}
+
+const uint8_t pin_cmp = A0;
+
+bool test_compare() {
+    bool pass_test = true;
+
+    // measurement will be ready if value < 1.0V
+    adc->enableCompare(1.0/3.3*adc->getMaxValue(ADC_NUM::ADC_0), 0, ADC_NUM::ADC_0);
+
+    pinMode(pin_cmp, INPUT_PULLUP); // set to max
+    // this should fail
+    value = adc->analogRead(pin_cmp, ADC_NUM::ADC_0);
+    if (adc->adc0->fail_flag != ADC_ERROR::COMPARISON) {
+        Serial.println("Comparison didn't fail.");
+        adc->adc0->printError();
+        pass_test = false;
+    }
+    adc->adc0->resetError();
+
+    pinMode(pin_cmp, INPUT_PULLDOWN); // set to min
+    // this should be ok
+    value = adc->analogRead(pin_cmp, ADC_NUM::ADC_0);
+    if(adc->adc0->fail_flag != ADC_ERROR::CLEAR) {
+        Serial.println("Some other error happened when comparison should have succeeded.");
+        adc->adc0->printError();
+        pass_test = false;
+    }
+    adc->adc0->resetError();
+
+    return pass_test;
+}
+
+bool test_compare_range() {
+    bool pass_test = true;
+
+    // ready if value lies out of [1.0,2.0] V
+    adc->enableCompareRange(1.0*adc->getMaxValue(ADC_NUM::ADC_0)/3.3, 2.0*adc->getMaxValue(ADC_NUM::ADC_0)/3.3, 0, 1, ADC_NUM::ADC_0);
+
+
+    pinMode(pin_cmp, INPUT_PULLUP); // set to max
+    // this should be ok
+    value = adc->analogRead(pin_cmp, ADC_NUM::ADC_0);
+    if(adc->adc0->fail_flag != ADC_ERROR::CLEAR) {
+        Serial.println("Some other error happened when comparison should have succeeded.");
+        adc->adc0->printError();
+        pass_test = false;
+    }
+
+    pinMode(pin_cmp, INPUT_PULLDOWN); // set to min
+    adc->adc0->resetError();
+    // this should be ok
+    value = adc->analogRead(pin_cmp, ADC_NUM::ADC_0);
+    if(adc->adc0->fail_flag != ADC_ERROR::CLEAR) {
+        Serial.println("Some other error happened when comparison should have succeeded.");
+        adc->adc0->printError();
+        pass_test = false;
+    }
+    adc->adc0->resetError();
+
+
+    return pass_test;
+}
+
+
+bool test_averages() {
+    elapsedMicros timeElapsed;
+    bool pass_test = true;
+
+    const uint8_t averages[] = {1, 2, 4, 8, 16, 32};
+    for(int i=0; i<6; i++) {
+        adc->setAveraging(averages[i]);
+        timeElapsed = 0;
+        adc->analogRead(A0, ADC_NUM::ADC_0);
+        Serial.println((uint32_t)timeElapsed);
+    }
+
+    return pass_test;
+}
+
 void setup() {
 
     pinMode(LED_BUILTIN, OUTPUT);
@@ -75,10 +180,6 @@ void setup() {
     // it can be any of the ADC_MED_SPEED enum: VERY_LOW_SPEED, LOW_SPEED, MED_SPEED, HIGH_SPEED or VERY_HIGH_SPEED
     adc->setSamplingSpeed(ADC_SAMPLING_SPEED::VERY_LOW_SPEED); // change the sampling speed
 
-    // always call the compare functions after changing the resolution!
-    //adc->enableCompare(1.0/3.3*adc->getMaxValue(ADC_NUM::ADC_0), 0, ADC_NUM::ADC_0); // measurement will be ready if value < 1.0V
-    //adc->enableCompareRange(1.0*adc->getMaxValue(ADC_NUM::ADC_0)/3.3, 2.0*adc->getMaxValue(ADC_NUM::ADC_0)/3.3, 0, 1, ADC_NUM::ADC_0); // ready if value lies out of [1.0,2.0] V
-
     // If you enable interrupts, notice that the isr will read the result, so that isComplete() will return false (most of the time)
     //adc->enableInterrupts(ADC_NUM::ADC_0);
 
@@ -92,48 +193,38 @@ void setup() {
 
     //adc->setReference(ADC_REFERENCE::REF_1V2, ADC_NUM::ADC_1);
 
-    // always call the compare functions after changing the resolution!
-    //adc->enableCompare(1.0/3.3*adc->getMaxValue(ADC_NUM::ADC_1), 0, ADC_NUM::ADC_1); // measurement will be ready if value < 1.0V
-    //adc->enableCompareRange(1.0*adc->getMaxValue(ADC_NUM::ADC_1)/3.3, 2.0*adc->getMaxValue(ADC_NUM::ADC_1)/3.3, 0, 1, ADC_NUM::ADC_1); // ready if value lies out of [1.0,2.0] V
-
 
     // If you enable interrupts, note that the isr will read the result, so that isComplete() will return false (most of the time)
     //adc->enableInterrupts(ADC_NUM::ADC_1);
 
     #endif
 
-    delay(500);
+    delay(2000);
+
+    ////// START TESTS /////////////
+
+    bool pullup_test = test_pullup_down(true);
+    Serial.print("PULLUP TEST "); Serial.println(pullup_test ? "PASS" : "FAIL");
+    bool pulldown_test = test_pullup_down(false);
+    Serial.print("PULLDOWN TEST "); Serial.println(pulldown_test ? "PASS" : "FAIL");
+    bool compare_test = test_compare();
+    Serial.print("COMPARE TEST "); Serial.println(compare_test ? "PASS" : "FAIL");
+    bool compare_range_test = test_compare_range();
+    Serial.print("COMPARE RANGE TEST "); Serial.println(compare_range_test ? "PASS" : "FAIL");
+
+    test_averages();
 }
 
-int value = 0;
-int pin=0;
 
-void test_pull(bool pullup) {
-    uint8_t mode = pullup ? INPUT_PULLUP : INPUT_PULLDOWN;
-
-    for (int i=0;i<DIG_PINS;i++) {
-        pinMode(adc_pins[i], mode);
-        value = adc->analogRead(adc_pins_dig[i]);
-        if (value < 3.2) {
-            Serial.print("A"); Serial.print(i); Serial.print(": ");
-            Serial.print("FAILED "); Serial.print(pullup ? "INPUT_PULLUP" : "INPUT_PULLDOWN"); Serial.println(". ");
-        }
-    }
-}
 
 
 void loop() {
-
-    test_pull(true);
-    test_pull(false);
-
-
     // Print errors, if any.
     adc->printError();
     adc->resetError();
 
 
-    //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
+    digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
 
     delay(500);
 
