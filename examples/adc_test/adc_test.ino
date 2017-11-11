@@ -142,13 +142,46 @@ bool test_compare_range() {
 bool test_averages() {
     elapsedMicros timeElapsed;
     bool pass_test = true;
+    const uint32_t num_samples = 100;
+    const uint8_t averages[] = {4, 8, 16, 32};
+    float avg_times[4];
 
-    const uint8_t averages[] = {1, 2, 4, 8, 16, 32};
-    for(int i=0; i<6; i++) {
+    adc->setAveraging(1);
+    timeElapsed = 0;
+    for(uint32_t i=0; i<num_samples; i++) {
+        adc->analogRead(A0, ADC_NUM::ADC_0);
+    }
+    float one_avg_time = timeElapsed/num_samples;
+
+
+    for(uint8_t i=0; i<4; i++) {
         adc->setAveraging(averages[i]);
         timeElapsed = 0;
-        adc->analogRead(A0, ADC_NUM::ADC_0);
-        Serial.println((uint32_t)timeElapsed);
+        for(uint32_t j=0; j<num_samples; j++) {
+            adc->analogRead(A0, ADC_NUM::ADC_0);
+        }
+        float time = (float)timeElapsed/num_samples;
+        avg_times[i] = time;
+//        Serial.print(averages[i]); Serial.print(": "); Serial.print(time);
+//        Serial.print(", "); Serial.println(time/one_avg_time);
+    }
+
+    // the 4 averages is not 4 times as long as the 1 average because
+    // the first sample always takes longer, therefore the 4 avgs take about 3.5 times the first.
+    // 8 avgs take twice as long as 4 and so on.
+    if((avg_times[0] < 3*one_avg_time) || (avg_times[0] > 4*one_avg_time)) {
+        pass_test = false;
+        Serial.print("4 averages should take about 4 times longer than one, but it took ");
+        Serial.print(avg_times[0]/one_avg_time); Serial.println(" times longer");
+    }
+    // check that the times are between 90% and 110% their theoretical value.
+    for(uint8_t i=1; i<4; i++) {
+        if((avg_times[i] < pow(2, i)*0.9*avg_times[0]) || (avg_times[i] > pow(2, i)*1.1*avg_times[0])) {
+            pass_test = false;
+            Serial.print(averages[i]); Serial.print(" averages should take about "); Serial.print(pow(2, i));
+            Serial.print(" times longer than 4, but it took ");
+            Serial.print(avg_times[i]/avg_times[0]); Serial.println(" times longer.");
+        }
     }
 
     return pass_test;
@@ -176,9 +209,9 @@ void setup() {
     // see the documentation for more information
     // additionally the conversion speed can also be ADACK_2_4, ADACK_4_0, ADACK_5_2 and ADACK_6_2,
     // where the numbers are the frequency of the ADC clock in MHz and are independent on the bus speed.
-    adc->setConversionSpeed(ADC_CONVERSION_SPEED::VERY_LOW_SPEED); // change the conversion speed
+    adc->setConversionSpeed(ADC_CONVERSION_SPEED::LOW_SPEED); // change the conversion speed
     // it can be any of the ADC_MED_SPEED enum: VERY_LOW_SPEED, LOW_SPEED, MED_SPEED, HIGH_SPEED or VERY_HIGH_SPEED
-    adc->setSamplingSpeed(ADC_SAMPLING_SPEED::VERY_LOW_SPEED); // change the sampling speed
+    adc->setSamplingSpeed(ADC_SAMPLING_SPEED::LOW_SPEED); // change the sampling speed
 
     // If you enable interrupts, notice that the isr will read the result, so that isComplete() will return false (most of the time)
     //adc->enableInterrupts(ADC_NUM::ADC_0);
@@ -188,8 +221,8 @@ void setup() {
     #if ADC_NUM_ADCS>1
     adc->setAveraging(16, ADC_NUM::ADC_1); // set number of averages
     adc->setResolution(16, ADC_NUM::ADC_1); // set bits of resolution
-    adc->setConversionSpeed(ADC_CONVERSION_SPEED::VERY_LOW_SPEED, ADC_NUM::ADC_1); // change the conversion speed
-    adc->setSamplingSpeed(ADC_SAMPLING_SPEED::VERY_LOW_SPEED, ADC_NUM::ADC_1); // change the sampling speed
+    adc->setConversionSpeed(ADC_CONVERSION_SPEED::LOW_SPEED, ADC_NUM::ADC_1); // change the conversion speed
+    adc->setSamplingSpeed(ADC_SAMPLING_SPEED::LOW_SPEED, ADC_NUM::ADC_1); // change the sampling speed
 
     //adc->setReference(ADC_REFERENCE::REF_1V2, ADC_NUM::ADC_1);
 
@@ -211,8 +244,8 @@ void setup() {
     Serial.print("COMPARE TEST "); Serial.println(compare_test ? "PASS" : "FAIL");
     bool compare_range_test = test_compare_range();
     Serial.print("COMPARE RANGE TEST "); Serial.println(compare_range_test ? "PASS" : "FAIL");
-
-    test_averages();
+    bool averages_test = test_averages();
+    Serial.print("AVERAGES TEST "); Serial.println(averages_test ? "PASS" : "FAIL");
 }
 
 
