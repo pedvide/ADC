@@ -899,14 +899,6 @@ public:
     //// Only works for Teensy 3.0 and 3.1, not LC (it doesn't have PDB)
     #if ADC_USE_PDB
 
-    //                  software trigger    enable PDB     PDB interrupt
-    #define ADC_PDB_CONFIG (PDB_SC_TRGSEL(15) | PDB_SC_PDBEN | PDB_SC_PDBIE \
-        | PDB_SC_CONT |  PDB_SC_LDMOD(0))
-    //    continuous mode load immediately
-
-    #define PDB_CHnC1_TOS_1 0x0100
-    #define PDB_CHnC1_EN_1 0x01
-
     //! Start PDB triggering the ADC at the frequency
     /** Call startSingleRead or startSingleDifferential on the pin that you want to measure before calling this function.
     *   See the example adc_pdb.ino.

@@ -1182,7 +1182,6 @@ void ADC_Module::stopContinuous() {
 
 // frequency in Hz
 void ADC_Module::startPDB(uint32_t freq) {
-
     if (!(SIM_SCGC6 & SIM_SCGC6_PDB)) { // setup PDB
         SIM_SCGC6 |= SIM_SCGC6_PDB; // enable pdb clock
     }
@@ -1267,6 +1266,12 @@ void ADC_Module::startPDB(uint32_t freq) {
 
     setHardwareTrigger(); // trigger ADC with hardware
 
+    //                                   software trigger    enable PDB     PDB interrupt  continuous mode load immediately
+    constexpr uint32_t ADC_PDB_CONFIG = (PDB_SC_TRGSEL(15) | PDB_SC_PDBEN | PDB_SC_PDBIE | PDB_SC_CONT |   PDB_SC_LDMOD(0))
+
+    constexpr uint32_t PDB_CHnC1_TOS_1 = 0x0100
+    constexpr uint32_t PDB_CHnC1_EN_1 = 0x01
+
     PDB0_IDLY = 1; // the pdb interrupt happens when IDLY is equal to CNT+1
 
     PDB0_MOD = (uint16_t)(mod-1);
@@ -1294,11 +1299,11 @@ void ADC_Module::stopPDB() {
 
 //! Return the PDB's frequency
 uint32_t ADC_Module::getPDBFrequency() {
-    uint32_t mod = (uint32_t)PDB0_MOD;
-    uint8_t prescaler = (PDB0_SC&0x7000)>>12;
-    uint8_t mult = (PDB0_SC&0xC)>>2;
+    const uint32_t mod = (uint32_t)PDB0_MOD;
+    const uint8_t prescaler = (PDB0_SC&0x7000)>>12;
+    const uint8_t mult = (PDB0_SC&0xC)>>2;
 
-    uint32_t freq = uint32_t((mod + 1)<<(prescaler)) * uint32_t((mult==0) ? 1 : 10<<(mult-1));
+    const uint32_t freq = uint32_t((mod + 1)<<(prescaler)) * uint32_t((mult==0) ? 1 : 10<<(mult-1));
     return F_BUS/freq;
 }
 
