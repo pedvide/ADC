@@ -1267,10 +1267,10 @@ void ADC_Module::startPDB(uint32_t freq) {
     setHardwareTrigger(); // trigger ADC with hardware
 
     //                                   software trigger    enable PDB     PDB interrupt  continuous mode load immediately
-    constexpr uint32_t ADC_PDB_CONFIG = (PDB_SC_TRGSEL(15) | PDB_SC_PDBEN | PDB_SC_PDBIE | PDB_SC_CONT |   PDB_SC_LDMOD(0))
+    constexpr uint32_t ADC_PDB_CONFIG = PDB_SC_TRGSEL(15) | PDB_SC_PDBEN | PDB_SC_PDBIE | PDB_SC_CONT |   PDB_SC_LDMOD(0);
 
-    constexpr uint32_t PDB_CHnC1_TOS_1 = 0x0100
-    constexpr uint32_t PDB_CHnC1_EN_1 = 0x01
+    constexpr uint32_t PDB_CHnC1_TOS_1 = 0x0100;
+    constexpr uint32_t PDB_CHnC1_EN_1 = 0x01;
 
     PDB0_IDLY = 1; // the pdb interrupt happens when IDLY is equal to CNT+1
 
