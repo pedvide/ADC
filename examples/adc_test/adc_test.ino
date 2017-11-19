@@ -56,7 +56,7 @@ int value = 0;
 bool test_pullup_down(bool pullup) {
     uint8_t mode = pullup ? INPUT_PULLUP : INPUT_PULLDOWN;
 
-    const int max_val = adc->getMaxValue(ADC_NUM::ADC_0);
+    const int max_val = adc->getMaxValue(ADC_0);
 
     bool pass_test = true;
 
@@ -82,11 +82,11 @@ bool test_compare() {
     bool pass_test = true;
 
     // measurement will be ready if value < 1.0V
-    adc->enableCompare(1.0/3.3*adc->getMaxValue(ADC_NUM::ADC_0), 0, ADC_NUM::ADC_0);
+    adc->enableCompare(1.0/3.3*adc->getMaxValue(ADC_0), 0, ADC_0);
 
     pinMode(pin_cmp, INPUT_PULLUP); // set to max
     // this should fail
-    value = adc->analogRead(pin_cmp, ADC_NUM::ADC_0);
+    value = adc->analogRead(pin_cmp, ADC_0);
     if (adc->adc0->fail_flag != ADC_ERROR::COMPARISON) {
         Serial.println("Comparison didn't fail.");
         adc->adc0->printError();
@@ -96,7 +96,7 @@ bool test_compare() {
 
     pinMode(pin_cmp, INPUT_PULLDOWN); // set to min
     // this should be ok
-    value = adc->analogRead(pin_cmp, ADC_NUM::ADC_0);
+    value = adc->analogRead(pin_cmp, ADC_0);
     if(adc->adc0->fail_flag != ADC_ERROR::CLEAR) {
         Serial.println("Some other error happened when comparison should have succeeded.");
         adc->adc0->printError();
@@ -111,12 +111,12 @@ bool test_compare_range() {
     bool pass_test = true;
 
     // ready if value lies out of [1.0,2.0] V
-    adc->enableCompareRange(1.0*adc->getMaxValue(ADC_NUM::ADC_0)/3.3, 2.0*adc->getMaxValue(ADC_NUM::ADC_0)/3.3, 0, 1, ADC_NUM::ADC_0);
+    adc->enableCompareRange(1.0*adc->getMaxValue(ADC_0)/3.3, 2.0*adc->getMaxValue(ADC_0)/3.3, 0, 1, ADC_0);
 
 
     pinMode(pin_cmp, INPUT_PULLUP); // set to max
     // this should be ok
-    value = adc->analogRead(pin_cmp, ADC_NUM::ADC_0);
+    value = adc->analogRead(pin_cmp, ADC_0);
     if(adc->adc0->fail_flag != ADC_ERROR::CLEAR) {
         Serial.println("Some other error happened when comparison should have succeeded.");
         adc->adc0->printError();
@@ -126,7 +126,7 @@ bool test_compare_range() {
     pinMode(pin_cmp, INPUT_PULLDOWN); // set to min
     adc->adc0->resetError();
     // this should be ok
-    value = adc->analogRead(pin_cmp, ADC_NUM::ADC_0);
+    value = adc->analogRead(pin_cmp, ADC_0);
     if(adc->adc0->fail_flag != ADC_ERROR::CLEAR) {
         Serial.println("Some other error happened when comparison should have succeeded.");
         adc->adc0->printError();
@@ -149,7 +149,7 @@ bool test_averages() {
     adc->setAveraging(1);
     timeElapsed = 0;
     for(uint32_t i=0; i<num_samples; i++) {
-        adc->analogRead(A0, ADC_NUM::ADC_0);
+        adc->analogRead(A0, ADC_0);
     }
     float one_avg_time = timeElapsed/num_samples;
 
@@ -158,7 +158,7 @@ bool test_averages() {
         adc->setAveraging(averages[i]);
         timeElapsed = 0;
         for(uint32_t j=0; j<num_samples; j++) {
-            adc->analogRead(A0, ADC_NUM::ADC_0);
+            adc->analogRead(A0, ADC_0);
         }
         float time = (float)timeElapsed/num_samples;
         avg_times[i] = time;
@@ -200,7 +200,7 @@ void setup() {
 
     ///// ADC0 ////
     // reference can be ADC_REFERENCE::REF_3V3, ADC_REFERENCE::REF_1V2 (not for Teensy LC) or ADC_REFERENCE::REF_EXT.
-    //adc->setReference(ADC_REFERENCE::REF_1V2, ADC_NUM::ADC_0); // change all 3.3 to 1.2 if you change the reference to 1V2
+    //adc->setReference(ADC_REFERENCE::REF_1V2, ADC_0); // change all 3.3 to 1.2 if you change the reference to 1V2
 
     adc->setAveraging(16); // set number of averages
     adc->setResolution(16); // set bits of resolution
@@ -214,21 +214,21 @@ void setup() {
     adc->setSamplingSpeed(ADC_SAMPLING_SPEED::LOW_SPEED); // change the sampling speed
 
     // If you enable interrupts, notice that the isr will read the result, so that isComplete() will return false (most of the time)
-    //adc->enableInterrupts(ADC_NUM::ADC_0);
+    //adc->enableInterrupts(ADC_0);
 
 
     ////// ADC1 /////
     #if ADC_NUM_ADCS>1
-    adc->setAveraging(16, ADC_NUM::ADC_1); // set number of averages
-    adc->setResolution(16, ADC_NUM::ADC_1); // set bits of resolution
-    adc->setConversionSpeed(ADC_CONVERSION_SPEED::LOW_SPEED, ADC_NUM::ADC_1); // change the conversion speed
-    adc->setSamplingSpeed(ADC_SAMPLING_SPEED::LOW_SPEED, ADC_NUM::ADC_1); // change the sampling speed
+    adc->setAveraging(16, ADC_1); // set number of averages
+    adc->setResolution(16, ADC_1); // set bits of resolution
+    adc->setConversionSpeed(ADC_CONVERSION_SPEED::LOW_SPEED, ADC_1); // change the conversion speed
+    adc->setSamplingSpeed(ADC_SAMPLING_SPEED::LOW_SPEED, ADC_1); // change the sampling speed
 
-    //adc->setReference(ADC_REFERENCE::REF_1V2, ADC_NUM::ADC_1);
+    //adc->setReference(ADC_REFERENCE::REF_1V2, ADC_1);
 
 
     // If you enable interrupts, note that the isr will read the result, so that isComplete() will return false (most of the time)
-    //adc->enableInterrupts(ADC_NUM::ADC_1);
+    //adc->enableInterrupts(ADC_1);
 
     #endif
 
