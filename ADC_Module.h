@@ -481,25 +481,6 @@ using ADC_Error::ADC_ERROR;
 // debug mode: blink the led light
 #define ADC_debug 0
 
-// Define masks for settings that need more than one bit
-#define ADC_CFG1_ADIV_MASK_1 (1<<6)
-#define ADC_CFG1_ADIV_MASK_0 (1<<5)
-
-#define ADC_CFG1_MODE_MASK_1 (1<<3)
-#define ADC_CFG1_MODE_MASK_0 (1<<2)
-
-#define ADC_CFG1_ADICLK_MASK_1 (1<<1)
-#define ADC_CFG1_ADICLK_MASK_0 (1<<0)
-
-#define ADC_CFG2_ADLSTS_MASK_1 (1<<1)
-#define ADC_CFG2_ADLSTS_MASK_0 (1<<0)
-
-#define ADC_SC2_REFSEL_MASK_0 (1<<0)
-
-#define ADC_SC3_AVGS_MASK_1 (1<<1)
-#define ADC_SC3_AVGS_MASK_0 (1<<0)
-
-
 
 /** Class ADC_Module: Implements all functions of the Teensy 3.x, LC analog to digital converter
 *
