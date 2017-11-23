@@ -28,11 +28,15 @@ namespace atomic
         bitband_address(reg, bit) = 1;
     }
     template<typename T>
-    __attribute__((always_inline)) inline void setBitFlag(volatile T& reg, uint32_t flag) {
+    __attribute__((always_inline)) inline void setBitFlag(volatile T& reg, T flag) {
         // 31-__builtin_clzl(flag) = gets bit number in flag
         // __builtin_clzl works for long ints, which are guaranteed by standard to be at least 32 bit wide.
         // there's no difference in the asm emitted.
         bitband_address(reg, 31-__builtin_clzl(flag)) = 1;
+        if(__builtin_popcount(flag) > 1) {
+            // __builtin_ctzl returns the number of trailing 0-bits in x, starting at the least significant bit position
+            bitband_address(reg, __builtin_ctzl(flag)) = 1;
+        }
     }
 
     template<typename T>
@@ -40,8 +44,11 @@ namespace atomic
         bitband_address(reg, bit) = 0;
     }
     template<typename T>
-    __attribute__((always_inline)) inline void clearBitFlag(volatile T& reg, uint32_t flag) {
+    __attribute__((always_inline)) inline void clearBitFlag(volatile T& reg, T flag) {
         bitband_address(reg, 31-__builtin_clzl(flag)) = 0;
+        if(__builtin_popcount(flag) > 1) {
+            bitband_address(reg, __builtin_ctzl(flag)) = 0;
+        }
     }
 
     template<typename T>
@@ -49,8 +56,11 @@ namespace atomic
         bitband_address(reg, bit) = state;
     }
     template<typename T>
-    __attribute__((always_inline)) inline void changeBitFlag(volatile T& reg, uint32_t flag, bool state) {
-        bitband_address(reg, 31-__builtin_clzl(flag)) = state;
+    __attribute__((always_inline)) inline void changeBitFlag(volatile T& reg, uint32_t flag, T state) {
+        bitband_address(reg, __builtin_ctzl(flag)) = (state >> __builtin_ctzl(flag))&0x1;
+        if(__builtin_popcount(flag) > 1) {
+            bitband_address(reg, 31-__builtin_clzl(flag)) = (state >> (31-__builtin_clzl(flag)))&0x1;
+        }
     }
 
     template<typename T>
@@ -58,14 +68,14 @@ namespace atomic
         return (volatile bool)bitband_address(reg, bit);
     }
     template<typename T>
-    __attribute__((always_inline)) inline volatile bool getBitFlag(volatile T& reg, uint32_t flag) {
+    __attribute__((always_inline)) inline volatile bool getBitFlag(volatile T& reg, T flag) {
         return (volatile bool)bitband_address(reg, 31-__builtin_clzl(flag));
     }
 
+
+
     #elif defined(KINETISL) // Teensy LC
     // bit manipulation engine
-    //#define ADC_SETBIT_ATOMIC(reg, bit) (*(uint32_t *)(((uint32_t)&(reg) - 0xF8000000) | 0x48000000) = 1 << (bit)) // OR
-    //#define ADC_CLRBIT_ATOMIC(reg, bit) (*(uint32_t *)(((uint32_t)&(reg) - 0xF8000000) | 0x44000000) = ~(1 << (bit))) // XOR
 
     template<typename T>
     __attribute__((always_inline)) inline void setBit(volatile T& reg, uint8_t bit) {
@@ -74,8 +84,7 @@ namespace atomic
     }
     template<typename T>
     __attribute__((always_inline)) inline void setBitFlag(volatile T& reg, uint32_t flag) {
-        //temp = *(uint32_t *)((uint32_t)(reg) | (1<<26) | (bit<<21)); // LAS
-        *(volatile T*)((uint32_t)(&reg) | (1<<27)) = flag; // OR
+        *(volatile T*)((uint32_t)&reg | (1<<27)) = flag; // OR
     }
 
     template<typename T>
@@ -95,9 +104,13 @@ namespace atomic
         state ? setBit(reg, bit) : clearBit(reg, bit);
     }
     template<typename T>
-    __attribute__((always_inline)) inline void changeBitFlag(volatile T& reg, uint32_t flag, bool state) {
-        //temp = *(uint32_t *)((uint32_t)(reg) | ((3-2*!!state)<<27) | (bit<<21)); // LAS/LAC
-        state ? setBitFlag(reg, flag) : clearBitFlag(reg, flag);
+    __attribute__((always_inline)) inline void changeBitFlag(volatile T& reg, T flag, T state_flag) {
+        changeBit(reg, __builtin_ctzl(flag), (state_flag >> __builtin_ctzl(flag))&0x1);
+        if(__builtin_popcount(flag) > 1) {
+            changeBit(reg, __builtin_clzl(flag), (state_flag >> __builtin_clzl(flag))&0x1);
+        }
+        // BFI, bitfield width set to 2 at (2-1)<<19
+        //*(volatile T*)((uint32_t)(&reg) | (1<<28) | (__builtin_ctzl(flag)<<23) | (1<<19)) = state_flag;
     }
 
     template<typename T>
@@ -105,7 +118,7 @@ namespace atomic
         return (volatile bool)*(volatile T *)((uint32_t)(&reg) | (1<<28) | (bit<<23) ); // UBFX
     }
     template<typename T>
-    __attribute__((always_inline)) inline volatile bool getBitFlag(volatile T& reg, uint32_t flag) {
+    __attribute__((always_inline)) inline volatile bool getBitFlag(volatile T& reg, T flag) {
         return (volatile bool)*(volatile T *)((uint32_t)(&reg) | (1<<28) | ((31-__builtin_clzl(flag))<<23) ); // UBFX
     }
 
