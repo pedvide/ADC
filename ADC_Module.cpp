@@ -475,23 +475,23 @@ void ADC_Module::setSamplingSpeed(ADC_SAMPLING_SPEED speed) {
 
     switch(speed) {
     case ADC_SAMPLING_SPEED::VERY_LOW_SPEED:
-        atomic::setBitFlag(ADC_CFG1(), ADC_CFG1_ADLSMP); // long sampling time enable
-        atomic::clearBitFlag(ADC_CFG2(), ADC_CFG2_ADLSTS(3)); // maximum sampling time (+24 ADCK)
+        atomic::setBitFlag(ADC_CFG1, ADC_CFG1_ADLSMP); // long sampling time enable
+        atomic::clearBitFlag(ADC_CFG2, ADC_CFG2_ADLSTS(3)); // maximum sampling time (+24 ADCK)
         break;
     case ADC_SAMPLING_SPEED::LOW_SPEED:
-        atomic::setBitFlag(ADC_CFG1(), ADC_CFG1_ADLSMP); // long sampling time enable
-        atomic::changeBitFlag(ADC_CFG2(), ADC_CFG2_ADLSTS(3), ADC_CFG2_ADLSTS(1)); // high sampling time (+16 ADCK)
+        atomic::setBitFlag(ADC_CFG1, ADC_CFG1_ADLSMP); // long sampling time enable
+        atomic::changeBitFlag(ADC_CFG2, ADC_CFG2_ADLSTS(3), ADC_CFG2_ADLSTS(1)); // high sampling time (+16 ADCK)
         break;
     case ADC_SAMPLING_SPEED::MED_SPEED:
-        atomic::setBitFlag(ADC_CFG1(), ADC_CFG1_ADLSMP); // long sampling time enable
-        atomic::changeBitFlag(ADC_CFG2(), ADC_CFG2_ADLSTS(3), ADC_CFG2_ADLSTS(2)); // medium sampling time (+10 ADCK)
+        atomic::setBitFlag(ADC_CFG1, ADC_CFG1_ADLSMP); // long sampling time enable
+        atomic::changeBitFlag(ADC_CFG2, ADC_CFG2_ADLSTS(3), ADC_CFG2_ADLSTS(2)); // medium sampling time (+10 ADCK)
         break;
     case ADC_SAMPLING_SPEED::HIGH_SPEED:
-        atomic::setBitFlag(ADC_CFG1(), ADC_CFG1_ADLSMP); // long sampling time enable
-        atomic::setBitFlag(ADC_CFG2(), ADC_CFG2_ADLSTS(3)); // low sampling time (+6 ADCK)
+        atomic::setBitFlag(ADC_CFG1, ADC_CFG1_ADLSMP); // long sampling time enable
+        atomic::setBitFlag(ADC_CFG2, ADC_CFG2_ADLSTS(3)); // low sampling time (+6 ADCK)
         break;
     case ADC_SAMPLING_SPEED::VERY_HIGH_SPEED:
-        atomic::clearBitFlag(ADC_CFG1(), ADC_CFG1_ADLSMP); // shortest sampling time
+        atomic::clearBitFlag(ADC_CFG1, ADC_CFG1_ADLSMP); // shortest sampling time
         break;
     }
     sampling_speed =  speed;
