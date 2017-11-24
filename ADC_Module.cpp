@@ -471,53 +471,30 @@ void ADC_Module::setConversionSpeed(ADC_CONVERSION_SPEED speed) {
 * VERY_HIGH_SPEED is the highest possible sampling speed (0 ADCK added).
 */
 void ADC_Module::setSamplingSpeed(ADC_SAMPLING_SPEED speed) {
-
-    if(speed==sampling_speed) { // no change
-        return;
-    }
-
     if (calibrating) wait_for_cal();
 
-    // Select between the settings
-    if(speed == ADC_SAMPLING_SPEED::VERY_LOW_SPEED) {
-        // ADC_CFG1_adlsmp = 1; // long sampling time enable
-        // ADC_CFG2_adlsts1 = 0; // maximum sampling time (+24 ADCK)
-        // ADC_CFG2_adlsts0 = 0;
-        atomic::setBitFlag(ADC_CFG1, ADC_CFG1_ADLSMP);
-        atomic::clearBitFlag(ADC_CFG2, ADC_CFG2_ADLSTS(3));
-
-    } else if(speed == ADC_SAMPLING_SPEED::LOW_SPEED) {
-        // ADC_CFG1_adlsmp = 1; // long sampling time enable
-        // ADC_CFG2_adlsts1 = 0;// high sampling time (+16 ADCK)
-        // ADC_CFG2_adlsts0 = 1;
-        atomic::setBitFlag(ADC_CFG1, ADC_CFG1_ADLSMP);
-        atomic::changeBitFlag(ADC_CFG2, ADC_CFG2_ADLSTS(3), ADC_CFG2_ADLSTS(1));
-
-    } else if(speed == ADC_SAMPLING_SPEED::MED_SPEED) {
-        // ADC_CFG1_adlsmp = 1; // long sampling time enable
-        // ADC_CFG2_adlsts1 = 1;// medium sampling time (+10 ADCK)
-        // ADC_CFG2_adlsts0 = 0;
-        atomic::setBitFlag(ADC_CFG1, ADC_CFG1_ADLSMP);
-        atomic::changeBitFlag(ADC_CFG2, ADC_CFG2_ADLSTS(3), ADC_CFG2_ADLSTS(2));
-
-    } else if( speed == ADC_SAMPLING_SPEED::HIGH_SPEED ) {
-        // ADC_CFG1_adlsmp = 1; // long sampling time enable
-        // ADC_CFG2_adlsts1 = 1;// low sampling time (+6 ADCK)
-        // ADC_CFG2_adlsts0 = 1;
-        atomic::setBitFlag(ADC_CFG1, ADC_CFG1_ADLSMP);
-        atomic::setBitFlag(ADC_CFG2, ADC_CFG2_ADLSTS(3));
-
-    } else if(speed == ADC_SAMPLING_SPEED::VERY_HIGH_SPEED) {
-        // ADC_CFG1_adlsmp = 0; // shortest sampling time
-        atomic::clearBitFlag(ADC_CFG1, ADC_CFG1_ADLSMP);
-
-    } else { // incorrect speeds have no effect.
-        return;
-    }
-
+    switch(speed) {
+    case ADC_SAMPLING_SPEED::VERY_LOW_SPEED:
+        atomic::setBitFlag(ADC_CFG1(), ADC_CFG1_ADLSMP); // long sampling time enable
+        atomic::clearBitFlag(ADC_CFG2(), ADC_CFG2_ADLSTS(3)); // maximum sampling time (+24 ADCK)
+        break;
+    case ADC_SAMPLING_SPEED::LOW_SPEED:
+        atomic::setBitFlag(ADC_CFG1(), ADC_CFG1_ADLSMP); // long sampling time enable
+        atomic::changeBitFlag(ADC_CFG2(), ADC_CFG2_ADLSTS(3), ADC_CFG2_ADLSTS(1)); // high sampling time (+16 ADCK)
+        break;
+    case ADC_SAMPLING_SPEED::MED_SPEED:
+        atomic::setBitFlag(ADC_CFG1(), ADC_CFG1_ADLSMP); // long sampling time enable
+        atomic::changeBitFlag(ADC_CFG2(), ADC_CFG2_ADLSTS(3), ADC_CFG2_ADLSTS(2)); // medium sampling time (+10 ADCK)
+        break;
+    case ADC_SAMPLING_SPEED::HIGH_SPEED:
+        atomic::setBitFlag(ADC_CFG1(), ADC_CFG1_ADLSMP); // long sampling time enable
+        atomic::setBitFlag(ADC_CFG2(), ADC_CFG2_ADLSTS(3)); // low sampling time (+6 ADCK)
+        break;
+    case ADC_SAMPLING_SPEED::VERY_HIGH_SPEED:
+        atomic::clearBitFlag(ADC_CFG1(), ADC_CFG1_ADLSMP); // shortest sampling time
+        break;
     }
     sampling_speed =  speed;
-
 }
 
 
