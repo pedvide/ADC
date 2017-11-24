@@ -1262,7 +1262,7 @@ void ADC_Module::startPDB(uint32_t freq) {
 
     PDB0_CHnC1 = PDB_CHnC1_TOS_1 | PDB_CHnC1_EN_1; // enable pretrigger 0 (SC1A)
 
-    NVIC_ENABLE_IRQ(IRQ_PDB);
+    //NVIC_ENABLE_IRQ(IRQ_PDB);
 
 }
 
@@ -1274,7 +1274,7 @@ void ADC_Module::stopPDB() {
     PDB0_SC = 0;
     setSoftwareTrigger();
 
-    NVIC_DISABLE_IRQ(IRQ_PDB);
+    //NVIC_DISABLE_IRQ(IRQ_PDB);
 }
 
 //! Return the PDB's frequency
