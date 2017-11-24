@@ -62,6 +62,10 @@ bool test_pullup_down(bool pullup) {
 
     for (int i=0;i<DIG_PINS;i++) {
         pinMode(adc_pins_dig[i], mode);
+<<<<<<< HEAD
+=======
+        delay(50); // settle time
+>>>>>>> 98cde6a... improve adc_test, it works for all boards
         value = adc->analogRead(adc_pins_dig[i]);
         bool fail_condition = pullup ? (value < 0.95*max_val) : (value > 0.05*max_val);
         if (fail_condition) {
@@ -152,6 +156,7 @@ bool test_averages() {
         adc->analogRead(A0, ADC_0);
     }
     float one_avg_time = timeElapsed/num_samples;
+    //Serial.print("1: "); Serial.println(one_avg_time);
 
 
     for(uint8_t i=0; i<4; i++) {
@@ -162,25 +167,25 @@ bool test_averages() {
         }
         float time = (float)timeElapsed/num_samples;
         avg_times[i] = time;
-//        Serial.print(averages[i]); Serial.print(": "); Serial.print(time);
-//        Serial.print(", "); Serial.println(time/one_avg_time);
+        //Serial.print(averages[i]); Serial.print(": "); Serial.print(time);
+        //Serial.print(", "); Serial.println(time/one_avg_time);
     }
 
     // the 4 averages is not 4 times as long as the 1 average because
     // the first sample always takes longer, therefore the 4 avgs take about 3.5 times the first.
     // 8 avgs take twice as long as 4 and so on.
-    if((avg_times[0] < 3*one_avg_time) || (avg_times[0] > 4*one_avg_time)) {
+    // this is even worse for Teensy LC, where 4 avgs take about 2.6 more than none.
+    if((avg_times[0] < 2*one_avg_time) || (avg_times[0] > 4*one_avg_time)) {
         pass_test = false;
         Serial.print("4 averages should take about 4 times longer than one, but it took ");
         Serial.print(avg_times[0]/one_avg_time); Serial.println(" times longer");
     }
     // check that the times are between 90% and 110% their theoretical value.
     for(uint8_t i=1; i<4; i++) {
-        if((avg_times[i] < pow(2, i)*0.9*avg_times[0]) || (avg_times[i] > pow(2, i)*1.1*avg_times[0])) {
+        if((avg_times[i] < 2*0.9*avg_times[i-1]) || (avg_times[i] > 2*1.1*avg_times[i-1])) {
             pass_test = false;
-            Serial.print(averages[i]); Serial.print(" averages should take about "); Serial.print(pow(2, i));
-            Serial.print(" times longer than 4, but it took ");
-            Serial.print(avg_times[i]/avg_times[0]); Serial.println(" times longer.");
+            Serial.print(averages[i]); Serial.print(" averages should take about twice as long as "); Serial.print(pow(2, i-1), 0);
+            Serial.print(", but it took "); Serial.print(avg_times[i]/avg_times[i-1]); Serial.println(" times longer.");
         }
     }
 
@@ -190,10 +195,6 @@ bool test_averages() {
 void setup() {
 
     pinMode(LED_BUILTIN, OUTPUT);
-
-    for (int i=0;i<PINS;i++) {
-        pinMode(adc_pins[i], INPUT);
-    }
 
     Serial.begin(9600);
 
@@ -230,6 +231,11 @@ void setup() {
     // If you enable interrupts, note that the isr will read the result, so that isComplete() will return false (most of the time)
     //adc->enableInterrupts(ADC_1);
 
+    #endif
+
+    adc->adc0->recalibrate();
+    #if ADC_NUM_ADCS>1
+    adc->adc1->recalibrate();
     #endif
 
     delay(2000);
