@@ -515,6 +515,7 @@ void ADC_Module::setSamplingSpeed(ADC_SAMPLING_SPEED speed) {
         return;
     }
 
+    }
     sampling_speed =  speed;
 
 }
