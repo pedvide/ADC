@@ -62,10 +62,7 @@ bool test_pullup_down(bool pullup) {
 
     for (int i=0;i<DIG_PINS;i++) {
         pinMode(adc_pins_dig[i], mode);
-<<<<<<< HEAD
-=======
         delay(50); // settle time
->>>>>>> 98cde6a... improve adc_test, it works for all boards
         value = adc->analogRead(adc_pins_dig[i]);
         bool fail_condition = pullup ? (value < 0.95*max_val) : (value > 0.05*max_val);
         if (fail_condition) {
