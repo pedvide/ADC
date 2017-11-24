@@ -56,7 +56,7 @@ namespace atomic
         bitband_address(reg, bit) = state;
     }
     template<typename T>
-    __attribute__((always_inline)) inline void changeBitFlag(volatile T& reg, uint32_t flag, T state) {
+    __attribute__((always_inline)) inline void changeBitFlag(volatile T& reg, T flag, T state) {
         bitband_address(reg, __builtin_ctzl(flag)) = (state >> __builtin_ctzl(flag))&0x1;
         if(__builtin_popcount(flag) > 1) {
             bitband_address(reg, 31-__builtin_clzl(flag)) = (state >> (31-__builtin_clzl(flag)))&0x1;
@@ -104,13 +104,10 @@ namespace atomic
         state ? setBit(reg, bit) : clearBit(reg, bit);
     }
     template<typename T>
-    __attribute__((always_inline)) inline void changeBitFlag(volatile T& reg, T flag, T state_flag) {
-        changeBit(reg, __builtin_ctzl(flag), (state_flag >> __builtin_ctzl(flag))&0x1);
-        if(__builtin_popcount(flag) > 1) {
-            changeBit(reg, __builtin_clzl(flag), (state_flag >> __builtin_clzl(flag))&0x1);
-        }
-        // BFI, bitfield width set to 2 at (2-1)<<19
-        //*(volatile T*)((uint32_t)(&reg) | (1<<28) | (__builtin_ctzl(flag)<<23) | (1<<19)) = state_flag;
+    __attribute__((always_inline)) inline void changeBitFlag(volatile T& reg, T flag, T state) {
+        // BFI, bitfield width set to __builtin_popcount(flag)
+        // least significant bit set to __builtin_ctzl(flag)
+        *(volatile T*)((uint32_t)(&reg) | (1<<28) | (__builtin_ctzl(flag)<<23) | ((__builtin_popcount(flag)-1)<<19)) = state;
     }
 
     template<typename T>
