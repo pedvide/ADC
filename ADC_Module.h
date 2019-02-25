@@ -104,6 +104,19 @@
         #define ADC_USE_PDB (1)
 #endif
 
+// Use LPTMR?
+#if defined(ADC_TEENSY_3_1) // Teensy 3.1
+        #define ADC_USE_LPTMR (1)
+#elif defined(ADC_TEENSY_3_0) // Teensy 3.0
+        #define ADC_USE_LPTMR (1)
+#elif defined(ADC_TEENSY_LC) // Teensy LC
+        #define ADC_USE_LPTMR (0)
+#elif defined(ADC_TEENSY_3_5) // Teensy 3.5
+        #define ADC_USE_LPTMR (1)
+#elif defined(ADC_TEENSY_3_6) // Teensy 3.6
+        #define ADC_USE_LPTMR (1)
+#endif
+
 // Has internal reference?
 #if defined(ADC_TEENSY_3_1) // Teensy 3.1
         #define ADC_USE_INTERNAL_VREF (1)
@@ -885,13 +898,49 @@ public:
     *   See the example adc_pdb.ino.
     *   \param freq is the frequency of the ADC conversion, it can't be lower that 1 Hz
     */
-    void startPDB(uint32_t freq);
+    bool startPDB(uint32_t freq, bool enablePDBisr);
+    bool startPDB(uint32_t freq){ return startPDB(freq, false); }
 
     //! Stop the PDB
-    void stopPDB();
+    bool stopPDB(bool enablePDBisr);
+    bool stopPDB() { return stopPDB(false); }
 
     //! Return the PDB's frequency
     uint32_t getPDBFrequency();
+
+   #endif
+
+    //////////// LPTMR ////////////////
+    //// Only works for Teensy 3.0 and 3.1, not LC (it doesn't have LPTMR)
+    #if ADC_USE_LPTMR
+
+    //! Start external pin 13 LPTMR triggering the ADC
+    /** Call startSingleRead or startSingleDifferential on the pin that you want to measure after calling this function.
+    *   See the example adc_lptmr.ino.
+    */
+    void startExtTrigLPTMR(bool enableLPTMRisr);
+    void startExtTrigLPTMR() { startExtTrigLPTMR(false); }
+
+    //! Stop the LPTMR
+    void stopExtTrigLPTMR(bool enableLPTMRisr);
+    void stopExtTrigLPTMR() { stopExtTrigLPTMR(false); }
+
+    #endif
+
+    //////////// PDB Ext Trigg ////////////////
+    //// Only works for Teensy 3.0 and 3.1, not LC (it doesn't have LPTMR)
+    #if ADC_USE_PDB
+
+    //! Start external pin 11 PDB triggering the ADC
+    /** Call startSingleRead or startSingleDifferential on the pin that you want to measure after calling this function.
+    *   See the example adc_ext_pdb.ino.
+    */
+    void startExtTrigPDB(bool enablePDBisr);
+    void startExtTrigPDB() { startExtTrigPDB(false); }
+
+    //! Stop the LPTMR
+    void stopExtTrigPDB(bool enablePDBisr);
+    void stopExtTrigPDB() { stopExtTrigPDB(false); }
 
     #endif
 
@@ -1026,6 +1075,7 @@ private:
     reg ADC_OFS;
     reg ADC_PG;
     reg ADC_MG;
+
     reg ADC_CLPD;
     reg ADC_CLPS;
     reg ADC_CLP4;
@@ -1041,9 +1091,9 @@ private:
     reg ADC_CLM1;
     reg ADC_CLM0;
 
-    reg PDB0_CHnC1; // PDB channel 0 or 1
+    reg PDB0_CHnC1;             // PDB channel 0 or 1
 
-    const uint8_t IRQ_ADC; // IRQ number will be IRQ_ADC0 or IRQ_ADC1
+    const uint8_t IRQ_ADC;      // IRQ number will be IRQ_ADC0 or IRQ_ADC1
 
 
 protected:

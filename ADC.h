@@ -169,6 +169,19 @@ class ADC
         void setAveraging(uint8_t num, int8_t adc_num = -1);
 
 
+        //! Enable Hardwaretrigger
+        /** 
+         *  This enables analog to digital conversion by PDB or LBTR triggering
+        */
+        void setHardwareTrigger(int8_t adc_num = -1);
+
+        //! Enable SoftwareTrigger
+        /**
+        *   Enables analog to digital conversion by writing to SCA1 register
+        */
+        void setSoftwareTrigger(int8_t adc_num = -1);
+
+
         //! Enable interrupts
         /** An IRQ_ADCx Interrupt will be raised when the conversion is completed
         *  (including hardware averages and if the comparison (if any) is true).

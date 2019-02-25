@@ -348,6 +348,39 @@ void ADC::setAveraging(uint8_t num, int8_t adc_num) {
 }
 
 
+// Set Hardware Trigger
+/*
+*/
+void ADC::setHardwareTrigger(int8_t adc_num) {
+    if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
+        #if ADC_NUM_ADCS>=2 // Teensy 3.1
+        adc1->setHardwareTrigger();
+        #else
+        adc0->fail_flag |= ADC_ERROR::WRONG_ADC;
+        #endif
+        return;
+    }
+    adc0->setHardwareTrigger(); // adc_num isn't changed or has selected ADC0
+    return;
+}
+
+// Set Software Trigger
+/*
+*/
+void ADC::setSoftwareTrigger(int8_t adc_num) {
+    if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
+        #if ADC_NUM_ADCS>=2 // Teensy 3.1
+        adc1->setSoftwareTrigger();
+        #else
+        adc0->fail_flag |= ADC_ERROR::WRONG_ADC;
+        #endif
+        return;
+    }
+    adc0->setSoftwareTrigger(); // adc_num isn't changed or has selected ADC0
+    return;
+}
+
+
 // Enable interrupts
 /* An IRQ_ADC0 Interrupt will be raised when the conversion is completed
 *  (including hardware averages and if the comparison (if any) is true).
