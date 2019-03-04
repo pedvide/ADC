@@ -83,7 +83,7 @@ void loop() {
     delay(1000);
     t = sinceStart_micros; cnta = adcticks; cntp = pdbticks;
     // Stop ADC
-    adc->adc0->stopExtTrigLPTMR(true);
+    adc->adc0->stopExtTrigPDB(true);
     expected = t*1.e-6*Fadc;
     delta = (cnta-expected )*1000000.0/t;
     Serial.printf(" ADC %d", cnta); 
