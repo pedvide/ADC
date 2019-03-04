@@ -87,9 +87,9 @@ void loop() {
   for (long Fadc = 200000; Fadc < 2000000; Fadc = Fadc+5000) {
     Serial.printf("Freq: %d", Fadc); 
     adc0_busy = true;
-    adc->adc0->startExtTrigPDB(true);              // enable external LPTMR trigger and its interrupt
+    adc->adc0->startExtTrigPDB(true);                // enable external LPTMR trigger and its interrupt
     adc->adc0->startSingleRead(PIN_ADC);             // call this to setup everything before the lptmr starts, differential is also possible
-    adc->enableInterrupts(ADC_0);
+    adc->enableInterrupts(ADC_0);                    // not needed
     adc->enableDMA(ADC_0);                           // set ADC_SC2_DMAEN
     dma0.enable();                                   //
     // Set External clock for ADC
@@ -101,6 +101,7 @@ void loop() {
     adcticks = 0;
     pdbticks = 0;
     while (adc0_busy) {    
+      // Wait until dma buffer is full and dma initiates interrupt
       // Serial.printf("%d %d\n", adcticks, lptmrticks); 
     }
     t = sinceStart_micros;
@@ -109,7 +110,7 @@ void loop() {
     // Stop ADC
     dma0.disable();
     adc->disableDMA(ADC_0);
-    adc->adc0->stopExtTrigLPTMR(true);
+    adc->adc0->stopExtTrigPDB(true);
     expected = t*1.e-6*Fadc;
     delta = Fadc - (BUFFERSIZE / (t*1.e-6));
     Serial.printf(" ADC %d", cnta); 
