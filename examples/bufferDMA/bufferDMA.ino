@@ -13,6 +13,8 @@ const int bufferLen = 16; // length of the buffer
 
 void setup()
 {
+    pinMode(readPin, INPUT); 
+    
     // ADC settings
     ADC *adc = new ADC();
     adc->setSamplingSpeed(ADC_SAMPLING_SPEED::VERY_HIGH_SPEED);
