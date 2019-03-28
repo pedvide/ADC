@@ -1,5 +1,5 @@
 /**
- * This example how to use DMA to transfor ADC results into a buffer.
+ * This example shows how to use DMA to transfor ADC results into a buffer.
  * While one half of the buffer is being filled up by DMA transfers, the
  *  other half can be safely accessed and processed.
 */
@@ -14,7 +14,7 @@ const int bufferLen = 16; // length of the buffer
 void setup()
 {
     pinMode(readPin, INPUT); 
-    
+
     // ADC settings
     ADC *adc = new ADC();
     adc->setSamplingSpeed(ADC_SAMPLING_SPEED::VERY_HIGH_SPEED);
