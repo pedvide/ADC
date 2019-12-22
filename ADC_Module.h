@@ -427,40 +427,44 @@ namespace ADC_Error {
     }
 
     //! Prints the human-readable error, if any.
-    inline void printError(ADC_ERROR fail_flag, uint8_t ADC_num = 0) {
+    inline const char* getError(ADC_ERROR fail_flag) {
         if(fail_flag != ADC_ERROR::CLEAR) {
-            Serial.print(" error: ");
             switch(fail_flag) {
                 case ADC_ERROR::CALIB:
+                    return (const char*)"Calibration";
                     break;
                 case ADC_ERROR::WRONG_PIN:
+                    return (const char*)"Wrong pin";
                     break;
                 case ADC_ERROR::ANALOG_READ:
+                    return (const char*)"Analog read";
                     break;
                 case ADC_ERROR::COMPARISON:
+                    return (const char*)"Comparison";
                     break;
                 case ADC_ERROR::ANALOG_DIFF_READ:
+                    return (const char*)"Analog differential read";
                     break;
                 case ADC_ERROR::CONT:
+                    return (const char*)"Continuous read";
                     break;
                 case ADC_ERROR::CONT_DIFF:
+                    return (const char*)"Continuous differential read";
                     break;
                 case ADC_ERROR::WRONG_ADC:
-                    Serial.print("Wrong ADC");
                     return (const char*)"Wrong ADC";
                     break;
                 case ADC_ERROR::SYNCH:
-                    Serial.print("Synchronous");
                     return (const char*)"Synchronous";
                     break;
                 case ADC_ERROR::OTHER:
                 case ADC_ERROR::CLEAR: // silence warnings
                 default:
-                    Serial.print("Unknown");
+                    return (const char*)"Unknown";
                     break;
             }
-            Serial.println(" error.");
         }
+        return (const char*)"";
     }
     
 
@@ -949,9 +953,9 @@ public:
     */
     volatile ADC_ERROR fail_flag;
 
-    //! Prints the human-readable error, if any.
-    void printError() {
-        ADC_Error::printError(fail_flag, ADC_num);
+    //! Returns the human-readable error, if any.
+    const char* getError() {
+        return ADC_Error::getError(fail_flag);
     }
 
     //! Resets all errors from the ADC, if any.
