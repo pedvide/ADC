@@ -1,7 +1,7 @@
 {
   "name": "Teensy_ADC",
   "keywords": "adc, analog, input",
-  "description": "Teensy LC, 3.x ADC implementation library",
+  "description": "Teensy LC, 3.x, 4 ADC implementation library",
   "repository":
   {
     "type": "git",

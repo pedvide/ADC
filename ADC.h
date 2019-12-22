@@ -1,6 +1,6 @@
-/* Teensy 3.x, LC ADC library
+/* Teensy 4, 3.x, LC ADC library
  * https://github.com/pedvide/ADC
- * Copyright (c) 2017 Pedro Villanueva
+ * Copyright (c) 2019 Pedro Villanueva
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -48,7 +48,7 @@
 extern "C" {
 #endif
 
-/** Class ADC: Controls the Teensy 3.x ADC
+/** Class ADC: Controls the Teensy 3.x, 4 ADC
 *
 */
 class ADC
