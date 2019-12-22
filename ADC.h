@@ -532,11 +532,9 @@ class ADC
 
 
         //////////// ERROR PRINTING /////
-        //! Prints the human-readable error from all ADC, if any.
-        void printError() {
-            for(int i=0; i< ADC_NUM_ADCS; i++) {
-                adc[i]->printError();
-            }
+        //! returns the human-readable error from all ADC, if any.
+        const char* getError() {
+            return adc[0]->getError();
         }
 
         //! Resets all errors from all ADCs, if any.

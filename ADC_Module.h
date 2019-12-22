@@ -392,7 +392,7 @@ enum class ADC_SAMPLING_SPEED : uint8_t {
 namespace ADC_Error {
 
     //! ADC errors.
-    /*! Use adc->printError() to print the errors (if any) in a human-readable form.
+    /*! Use adc->getError() to print the errors (if any) in a human-readable form.
     *   Use adc->resetError() to reset them.
     */
     enum class ADC_ERROR : uint16_t {
@@ -429,35 +429,29 @@ namespace ADC_Error {
     //! Prints the human-readable error, if any.
     inline void printError(ADC_ERROR fail_flag, uint8_t ADC_num = 0) {
         if(fail_flag != ADC_ERROR::CLEAR) {
-            Serial.print("ADC"); Serial.print(ADC_num);
             Serial.print(" error: ");
             switch(fail_flag) {
                 case ADC_ERROR::CALIB:
-                    Serial.print("Calibration");
                     break;
                 case ADC_ERROR::WRONG_PIN:
-                    Serial.print("Wrong pin");
                     break;
                 case ADC_ERROR::ANALOG_READ:
-                    Serial.print("Analog read");
                     break;
                 case ADC_ERROR::COMPARISON:
-                    Serial.print("Comparison");
                     break;
                 case ADC_ERROR::ANALOG_DIFF_READ:
-                    Serial.print("Analog differential read");
                     break;
                 case ADC_ERROR::CONT:
-                    Serial.print("Continuous read");
                     break;
                 case ADC_ERROR::CONT_DIFF:
-                    Serial.print("Continuous differential read");
                     break;
                 case ADC_ERROR::WRONG_ADC:
                     Serial.print("Wrong ADC");
+                    return (const char*)"Wrong ADC";
                     break;
                 case ADC_ERROR::SYNCH:
                     Serial.print("Synchronous");
+                    return (const char*)"Synchronous";
                     break;
                 case ADC_ERROR::OTHER:
                 case ADC_ERROR::CLEAR: // silence warnings
@@ -468,6 +462,7 @@ namespace ADC_Error {
             Serial.println(" error.");
         }
     }
+    
 
     //! Resets all errors from the ADC, if any.
     inline void resetError(volatile ADC_ERROR& fail_flag) {

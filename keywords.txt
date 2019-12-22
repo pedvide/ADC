@@ -85,4 +85,4 @@ isEmpty									KEYWORD2
 write									KEYWORD2
 read									KEYWORD2
 start									KEYWORD2
-printError								KEYWORD2
+getError								KEYWORD2

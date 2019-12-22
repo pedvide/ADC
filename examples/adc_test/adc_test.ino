@@ -90,7 +90,7 @@ bool test_compare() {
     value = adc->analogRead(pin_cmp, ADC_0);
     if (adc->adc0->fail_flag != ADC_ERROR::COMPARISON) {
         Serial.println("Comparison didn't fail.");
-        adc->adc0->printError();
+        Serial.println(adc->adc0->getError());
         pass_test = false;
     }
     adc->adc0->resetError();
@@ -100,7 +100,7 @@ bool test_compare() {
     value = adc->analogRead(pin_cmp, ADC_0);
     if(adc->adc0->fail_flag != ADC_ERROR::CLEAR) {
         Serial.println("Some other error happened when comparison should have succeeded.");
-        adc->adc0->printError();
+        Serial.println(adc->adc0->getError());
         pass_test = false;
     }
     adc->adc0->resetError();
@@ -120,7 +120,7 @@ bool test_compare_range() {
     value = adc->analogRead(pin_cmp, ADC_0);
     if(adc->adc0->fail_flag != ADC_ERROR::CLEAR) {
         Serial.println("Some other error happened when comparison should have succeeded.");
-        adc->adc0->printError();
+        Serial.println(adc->adc0->getError());
         pass_test = false;
     }
 
@@ -130,7 +130,7 @@ bool test_compare_range() {
     value = adc->analogRead(pin_cmp, ADC_0);
     if(adc->adc0->fail_flag != ADC_ERROR::CLEAR) {
         Serial.println("Some other error happened when comparison should have succeeded.");
-        adc->adc0->printError();
+        Serial.println(adc->adc0->getError());
         pass_test = false;
     }
     adc->adc0->resetError();
@@ -256,7 +256,14 @@ void setup() {
 
 void loop() {
     // Print errors, if any.
-    adc->printError();
+    if(adc->adc0->fail_flag != ADC_ERROR::CLEAR) {
+      Serial.print("ADC0: "); Serial.println(adc->adc0->getError());
+    }
+    #if ADC_NUM_ADCS > 1
+    if(adc->adc1->fail_flag != ADC_ERROR::CLEAR) {
+      Serial.print("ADC1: "); Serial.println(adc->adc1->getError());
+    }
+    #endif
     adc->resetError();
 
 

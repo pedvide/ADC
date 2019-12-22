@@ -112,7 +112,14 @@ void loop() {
     #endif
 
     // Print errors, if any.
-    adc->printError();
+    if(adc->adc0->fail_flag != ADC_ERROR::CLEAR) {
+      Serial.print("ADC0: "); Serial.println(adc->adc0->getError());
+    }
+    #if ADC_NUM_ADCS > 1
+    if(adc->adc1->fail_flag != ADC_ERROR::CLEAR) {
+      Serial.print("ADC1: "); Serial.println(adc->adc1->getError());
+    }
+    #endif
 
     digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
 
