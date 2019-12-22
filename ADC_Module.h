@@ -46,6 +46,8 @@
 #define ADC_TEENSY_3_5
 #elif defined(__MK66FX1M0__) // Teensy 3.6
 #define ADC_TEENSY_3_6
+#elif defined(__IMXRT1062__) // Teensy 4.0
+#define ADC_TEENSY_4
 #else
 #error "Board not supported!"
 #endif
@@ -63,6 +65,8 @@
         #define ADC_NUM_ADCS (2)
 #elif defined(ADC_TEENSY_3_6) // Teensy 3.6
         #define ADC_NUM_ADCS (2)
+#elif defined(ADC_TEENSY_4) // Teensy 3.6
+        #define ADC_NUM_ADCS (2)
 #endif
 
 // Use DMA?
@@ -75,6 +79,8 @@
 #elif defined(ADC_TEENSY_3_5) // Teensy 3.5
         #define ADC_USE_DMA (1)
 #elif defined(ADC_TEENSY_3_6) // Teensy 3.6
+        #define ADC_USE_DMA (1)
+#elif defined(ADC_TEENSY_4) // Teensy 4.0
         #define ADC_USE_DMA (1)
 #endif
 
@@ -89,6 +95,8 @@
         #define ADC_USE_PGA (0)
 #elif defined(ADC_TEENSY_3_6) // Teensy 3.6
         #define ADC_USE_PGA (0)
+#elif defined(ADC_TEENSY_4) // Teensy 4
+        #define ADC_USE_PGA (0)
 #endif
 
 // Use PDB?
@@ -102,6 +110,8 @@
         #define ADC_USE_PDB (1)
 #elif defined(ADC_TEENSY_3_6) // Teensy 3.6
         #define ADC_USE_PDB (1)
+#elif defined(ADC_TEENSY_4) // Teensy 4
+        #define ADC_USE_PDB (0)
 #endif
 
 // Has internal reference?
@@ -115,6 +125,8 @@
         #define ADC_USE_INTERNAL_VREF (1)
 #elif defined(ADC_TEENSY_3_6) // Teensy 3.6
         #define ADC_USE_INTERNAL_VREF (1)
+#elif defined(ADC_TEENSY_4) // Teensy 4
+        #define ADC_USE_INTERNAL_VREF (1)
 #endif
 
 
@@ -127,10 +139,10 @@ enum class ADC_REF_SOURCE : uint8_t {REF_DEFAULT = 0, REF_ALT = 1, REF_NONE = 2}
 /*! \file */
 /*! Reference for the ADC */
 enum class ADC_REFERENCE : uint8_t {
-    REF_3V3 = ADC_REF_SOURCE::REF_DEFAULT, /*!< 3.3 volts */
-    REF_1V2 = ADC_REF_SOURCE::REF_ALT, /*!< 1.2 volts */
-    REF_EXT = ADC_REF_SOURCE::REF_DEFAULT, /*!< External VREF */
-    NONE = ADC_REF_SOURCE::REF_NONE // internal, do not use
+    REF_3V3 = (uint8_t)ADC_REF_SOURCE::REF_DEFAULT, /*!< 3.3 volts */
+    REF_1V2 = (uint8_t)ADC_REF_SOURCE::REF_ALT, /*!< 1.2 volts */
+    REF_EXT = (uint8_t)ADC_REF_SOURCE::REF_DEFAULT, /*!< External VREF */
+    NONE = (uint8_t)ADC_REF_SOURCE::REF_NONE // internal, do not use
 };
 #elif defined(ADC_TEENSY_LC)
 // alt is the internal ref, 3.3 V
@@ -138,9 +150,17 @@ enum class ADC_REFERENCE : uint8_t {
 /*! \file */
 /*! Reference for the ADC */
 enum class ADC_REFERENCE : uint8_t {
-    REF_3V3 = ADC_REF_SOURCE::REF_ALT, /*!< 3.3 volts */
-    REF_EXT = ADC_REF_SOURCE::REF_DEFAULT, /*!< External VREF */
-    NONE = ADC_REF_SOURCE::REF_NONE // internal, do not use
+    REF_3V3 = (uint8_t)ADC_REF_SOURCE::REF_ALT, /*!< 3.3 volts */
+    REF_EXT = (uint8_t)ADC_REF_SOURCE::REF_DEFAULT, /*!< External VREF */
+    NONE = (uint8_t)ADC_REF_SOURCE::REF_NONE // internal, do not use
+};
+#elif defined(ADC_TEENSY_4)
+// default is the external, that is connected to the 3.3V supply.
+/*! \file */
+/*! Reference for the ADC */
+enum class ADC_REFERENCE : uint8_t {
+    REF_3V3 = (uint8_t)ADC_REF_SOURCE::REF_DEFAULT, /*!< 3.3 volts */
+    NONE = (uint8_t)ADC_REF_SOURCE::REF_NONE // internal, do not use
 };
 #endif
 
@@ -155,10 +175,12 @@ enum class ADC_REFERENCE : uint8_t {
         #define ADC_MAX_PIN (69)
 #elif defined(ADC_TEENSY_3_6) // Teensy 3.6
         #define ADC_MAX_PIN (67)
+#elif defined(ADC_TEENSY_4) // Teensy 4
+        #define ADC_MAX_PIN (27)
 #endif
 
 
-// number of differential pairs PER ADC!!
+// number of differential pairs PER ADC!
 #if defined(ADC_TEENSY_3_1) // Teensy 3.1
         #define ADC_DIFF_PAIRS (2) // normal and with PGA
 #elif defined(ADC_TEENSY_3_0) // Teensy 3.0
@@ -169,6 +191,8 @@ enum class ADC_REFERENCE : uint8_t {
         #define ADC_DIFF_PAIRS (1)
 #elif defined(ADC_TEENSY_3_6) // Teensy 3.6
         #define ADC_DIFF_PAIRS (1)
+#elif defined(ADC_TEENSY_4) // Teensy 4
+        #define ADC_DIFF_PAIRS (0)
 #endif
 
 
@@ -203,6 +227,11 @@ enum class ADC_REFERENCE : uint8_t {
         BANDGAP = 25, /*!< BANDGAP */ // Enable the Bandgap with PMC_REGSC |= PMC_REGSC_BGBE; (see VREF::start in VREF.h)
         VREFH = 26, /*!< High VREF */
         VREFL = 27, /*!< Low VREF. */
+    };
+#elif defined(ADC_TEENSY_4)
+    /*! Other ADC sources to measure, such as the temperature sensor.
+    */
+    enum class ADC_INTERNAL_SOURCE : uint8_t{
     };
 #endif
 
