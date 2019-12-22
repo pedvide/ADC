@@ -127,10 +127,10 @@ enum class ADC_REF_SOURCE : uint8_t {REF_DEFAULT = 0, REF_ALT = 1, REF_NONE = 2}
 /*! \file */
 /*! Reference for the ADC */
 enum class ADC_REFERENCE : uint8_t {
-    REF_3V3 = ADC_REF_SOURCE::REF_DEFAULT, /*!< 3.3 volts */
-    REF_1V2 = ADC_REF_SOURCE::REF_ALT, /*!< 1.2 volts */
-    REF_EXT = ADC_REF_SOURCE::REF_DEFAULT, /*!< External VREF */
-    NONE = ADC_REF_SOURCE::REF_NONE // internal, do not use
+    REF_3V3 = (uint8_t)ADC_REF_SOURCE::REF_DEFAULT, /*!< 3.3 volts */
+    REF_1V2 = (uint8_t)ADC_REF_SOURCE::REF_ALT, /*!< 1.2 volts */
+    REF_EXT = (uint8_t)ADC_REF_SOURCE::REF_DEFAULT, /*!< External VREF */
+    NONE = (uint8_t)ADC_REF_SOURCE::REF_NONE // internal, do not use
 };
 #elif defined(ADC_TEENSY_LC)
 // alt is the internal ref, 3.3 V
@@ -138,9 +138,9 @@ enum class ADC_REFERENCE : uint8_t {
 /*! \file */
 /*! Reference for the ADC */
 enum class ADC_REFERENCE : uint8_t {
-    REF_3V3 = ADC_REF_SOURCE::REF_ALT, /*!< 3.3 volts */
-    REF_EXT = ADC_REF_SOURCE::REF_DEFAULT, /*!< External VREF */
-    NONE = ADC_REF_SOURCE::REF_NONE // internal, do not use
+    REF_3V3 = (uint8_t)ADC_REF_SOURCE::REF_ALT, /*!< 3.3 volts */
+    REF_EXT = (uint8_t)ADC_REF_SOURCE::REF_DEFAULT, /*!< External VREF */
+    NONE = (uint8_t)ADC_REF_SOURCE::REF_NONE // internal, do not use
 };
 #endif
 
