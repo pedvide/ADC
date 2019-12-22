@@ -379,7 +379,7 @@ void ADC::disableInterrupts(int8_t adc_num) {
     return;
 }
 
-
+#if ADC_USE_DMA
 // Enable DMA request
 /* An ADC DMA request will be raised when the conversion is completed
 *  (including hardware averages and if the comparison (if any) is true).
@@ -410,6 +410,7 @@ void ADC::disableDMA(int8_t adc_num) {
     adc0->disableDMA();
     return;
 }
+#endif
 
 
 // Enable the compare function to a single value
@@ -466,6 +467,7 @@ void ADC::disableCompare(int8_t adc_num) {
 }
 
 
+#if ADC_USE_PGA
 // Enable and set PGA
 /* Enables the PGA and sets the gain
 *   Use only for signals lower than 1.2 V
@@ -513,6 +515,7 @@ void ADC::disablePGA(int8_t adc_num) {
     adc0->disablePGA();
     return;
 }
+#endif
 
 //! Is the ADC converting at the moment?
 bool ADC::isConverting(int8_t adc_num) {
@@ -545,6 +548,7 @@ bool ADC::isComplete(int8_t adc_num) {
     return adc0->isComplete();;
 }
 
+#if ADC_DIFF_PAIRS > 0
 //! Is the ADC in differential mode?
 bool ADC::isDifferential(int8_t adc_num) {
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
@@ -557,6 +561,7 @@ bool ADC::isDifferential(int8_t adc_num) {
     }
     return adc0->isDifferential();
 }
+#endif
 
 //! Is the ADC in continuous mode?
 bool ADC::isContinuous(int8_t adc_num) {
@@ -623,6 +628,7 @@ int ADC::analogRead(uint8_t pin, int8_t adc_num) {
     #endif
 }
 
+#if ADC_DIFF_PAIRS > 0
 /* Reads the differential analog value of two pins (pinP - pinN).
 * It waits until the value is read and then returns the result.
 * If a comparison has been set up and fails, it will return ADC_ERROR_VALUE.
@@ -677,6 +683,7 @@ int ADC::analogReadDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num) {
     return ADC_ERROR_VALUE;
     #endif
 }
+#endif
 
 
 // Starts an analog measurement on the pin and enables interrupts.
@@ -730,6 +737,7 @@ bool ADC::startSingleRead(uint8_t pin, int8_t adc_num) {
     #endif
 }
 
+#if ADC_DIFF_PAIRS > 0
 // Start a differential conversion between two pins (pinP - pinN) and enables interrupts.
 /* It returns inmediately, get value with readSingle().
 *   \param pinP must be A10 or A12.
@@ -781,6 +789,7 @@ bool ADC::startSingleDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num) {
     return false;
     #endif
 }
+#endif
 
 // Reads the analog value of a single conversion.
 /* Set the conversion with with startSingleRead(pin) or startSingleDifferential(pinP, pinN).
@@ -847,6 +856,7 @@ bool ADC::startContinuous(uint8_t pin, int8_t adc_num) {
     #endif
 }
 
+#if ADC_DIFF_PAIRS > 0
 // Starts continuous conversion between the pins (pinP-pinN).
 /* It returns as soon as the ADC is set, use analogReadContinuous() to read the value.
 * \param pinP must be A10 or A12.
@@ -896,6 +906,7 @@ bool ADC::startContinuousDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num
     return false;
     #endif
 }
+#endif
 
 //! Reads the analog value of a continuous conversion.
 /** Set the continuous conversion with with analogStartContinuous(pin) or startContinuousDifferential(pinP, pinN).
@@ -1022,6 +1033,7 @@ ADC::Sync_result ADC::analogSynchronizedRead(uint8_t pin0, uint8_t pin1) {
     return res;
 }
 
+#if ADC_DIFF_PAIRS > 0
 /*Returns the diff analog values of both sets of pins, measured at the same time by the two ADC modules.
 * It waits until the value is read and then returns the result as a struct Sync_result,
 * use Sync_result.result_adc0 and Sync_result.result_adc1.
@@ -1112,6 +1124,7 @@ ADC::Sync_result ADC::analogSynchronizedReadDifferential(uint8_t pin0P, uint8_t 
 
     return res;
 }
+#endif
 
 /////////////// SYNCHRONIZED NON-BLOCKING METHODS //////////////
 
@@ -1164,6 +1177,7 @@ bool ADC::startSynchronizedSingleRead(uint8_t pin0, uint8_t pin1) {
 
 }
 
+#if ADC_DIFF_PAIRS > 0
 // Start a differential conversion between two pins (pin0P - pin0N) and (pin1P - pin1N)
 /* It returns inmediately, get value with readSynchronizedSingle().
 *   \param pinP must be A10 or A12.
@@ -1213,6 +1227,7 @@ bool ADC::startSynchronizedSingleDifferential(uint8_t pin0P, uint8_t pin0N, uint
 
     return true;
 }
+#endif
 
 // Reads the analog value of a single conversion.
 /*
@@ -1262,6 +1277,7 @@ bool ADC::startSynchronizedContinuous(uint8_t pin0, uint8_t pin1) {
     return true;
 }
 
+#if ADC_DIFF_PAIRS > 0
 //! Starts a continuous differential conversion in both ADCs simultaneously
 /** Use readSynchronizedContinuous to get the values
 *
@@ -1294,6 +1310,7 @@ bool ADC::startSynchronizedContinuousDifferential(uint8_t pin0P, uint8_t pin0N, 
 
     return true;
 }
+#endif
 
 //! Returns the values of both ADCs.
 ADC::Sync_result ADC::readSynchronizedContinuous() {

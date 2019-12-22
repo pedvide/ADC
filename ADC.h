@@ -183,6 +183,7 @@ class ADC
         void disableInterrupts(int8_t adc_num = -1);
 
 
+        #if ADC_USE_DMA 
         //! Enable DMA request
         /** An ADC DMA request will be raised when the conversion is completed
         *  (including hardware averages and if the comparison (if any) is true).
@@ -195,6 +196,7 @@ class ADC
         *   \param adc_num ADC number to change.
         */
         void disableDMA(int8_t adc_num = -1);
+        #endif
 
 
         //! Enable the compare function to a single value
@@ -229,6 +231,7 @@ class ADC
         void disableCompare(int8_t adc_num = -1);
 
 
+        #if ADC_USE_PGA
         //! Enable and set PGA
         /** Enables the PGA and sets the gain
         *   Use only for signals lower than 1.2 V and only in differential mode
@@ -249,6 +252,7 @@ class ADC
         *   \param adc_num ADC number to query
         */
         void disablePGA(int8_t adc_num = -1);
+        #endif
 
 
 
@@ -269,12 +273,14 @@ class ADC
         */
         bool isComplete(int8_t adc_num = -1);
 
+        #if ADC_DIFF_PAIRS > 0
         //! Is the ADC in differential mode?
         /**
         *   \param adc_num ADC number to query
         *   \return true or false
         */
         bool isDifferential(int8_t adc_num = -1);
+        #endif
 
         //! Is the ADC in continuous mode?
         /**
@@ -315,6 +321,7 @@ class ADC
             return analogRead(static_cast<uint8_t>(pin), adc_num);
         }
 
+        #if ADC_DIFF_PAIRS > 0
         //! Reads the differential analog value of two pins (pinP - pinN).
         /** It waits until the value is read and then returns the result.
         * This function is interrupt safe, so it will restore the adc to the state it was before being called
@@ -327,6 +334,7 @@ class ADC
         *   If a comparison has been set up and fails, it will return ADC_ERROR_VALUE.
         */
         int analogReadDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num = -1);
+        #endif
 
 
         /////////////// NON-BLOCKING CONVERSION METHODS //////////////
@@ -340,6 +348,7 @@ class ADC
         */
         bool startSingleRead(uint8_t pin, int8_t adc_num = -1);
 
+        #if ADC_DIFF_PAIRS > 0
         //! Start a differential conversion between two pins (pinP - pinN) and enables interrupts.
         /** It returns immediately, get value with readSingle().
         *   If this function interrupts a measurement, it stores the settings in adc_config
@@ -349,6 +358,7 @@ class ADC
         *   \return true if the pins are valid, false otherwise.
         */
         bool startSingleDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num = -1);
+        #endif
 
         //! Reads the analog value of a single conversion.
         /** Set the conversion with with startSingleRead(pin) or startSingleDifferential(pinP, pinN).
@@ -369,6 +379,7 @@ class ADC
         */
         bool startContinuous(uint8_t pin, int8_t adc_num = -1);
 
+        #if ADC_DIFF_PAIRS > 0
         //! Starts continuous conversion between the pins (pinP-pinN).
         /** It returns as soon as the ADC is set, use analogReadContinuous() to read the value.
         *   \param pinP must be A10 or A12.
@@ -377,6 +388,7 @@ class ADC
         *   \return true if the pins are valid, false otherwise.
         */
         bool startContinuousDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num = -1);
+        #endif
 
         //! Reads the analog value of a continuous conversion.
         /** Set the continuous conversion with with analogStartContinuous(pin) or startContinuousDifferential(pinP, pinN).
@@ -427,6 +439,7 @@ class ADC
         */
         Sync_result analogSyncRead(uint8_t pin0, uint8_t pin1) __attribute__((always_inline)) {return analogSynchronizedRead(pin0, pin1);}
 
+        #if ADC_DIFF_PAIRS > 0
         //! Returns the differential analog values of both sets of pins, measured at the same time by the two ADC modules.
         /** It waits until the values are read and then returns the result as a struct Sync_result,
         *   use Sync_result.result_adc0 and Sync_result.result_adc1.
@@ -451,6 +464,7 @@ class ADC
         Sync_result analogSyncReadDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N) __attribute__((always_inline)) {
             return analogSynchronizedReadDifferential(pin0P, pin0N, pin1P, pin1N);
         }
+        #endif
 
         /////////////// SYNCHRONIZED NON-BLOCKING METHODS //////////////
 
@@ -463,6 +477,7 @@ class ADC
         */
         bool startSynchronizedSingleRead(uint8_t pin0, uint8_t pin1);
 
+        #if ADC_DIFF_PAIRS > 0
         //! Start a differential conversion between two pins (pin0P - pin0N) and (pin1P - pin1N)
         /** It returns immediately, get value with readSynchronizedSingle().
         *   If this function interrupts a measurement, it stores the settings in adc_config
@@ -473,6 +488,7 @@ class ADC
         *   \return true if the pins are valid, false otherwise.
         */
         bool startSynchronizedSingleDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N);
+        #endif
 
         //! Reads the analog value of a single conversion.
         /**
@@ -491,6 +507,7 @@ class ADC
         */
         bool startSynchronizedContinuous(uint8_t pin0, uint8_t pin1);
 
+        #if ADC_DIFF_PAIRS > 0
         //! Starts a continuous differential conversion in both ADCs simultaneously
         /** Use readSynchronizedContinuous to get the values
         *   \param pin0P positive pin in ADC0
@@ -500,6 +517,7 @@ class ADC
         *   \return true if the pins are valid, false otherwise.
         */
         bool startSynchronizedContinuousDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N);
+        #endif
 
         //! Returns the values of both ADCs.
         /**
@@ -545,11 +563,13 @@ class ADC
         #endif
 
 
+        #if ADC_DIFF_PAIRS > 0
         //! Translate differential pin number to SC1A nomenclature
         static const ADC_Module::ADC_NLIST diff_table_ADC0[ADC_DIFF_PAIRS];
         #if ADC_NUM_ADCS>1
         //! Translate differential pin number to SC1A nomenclature
         static const ADC_Module::ADC_NLIST diff_table_ADC1[ADC_DIFF_PAIRS];
+        #endif
         #endif
 
 

@@ -489,6 +489,7 @@ class ADC_Module {
 
 public:
 
+    #if ADC_DIFF_PAIRS > 0
     //! Dictionary with the differential pins as keys and the SC1A number as values
     /** Internal, do not use.
     */
@@ -496,6 +497,7 @@ public:
         //! Pin and corresponding SC1A value.
         uint8_t pin, sc1a;
     };
+    #endif
 
     //! Constructor
     /** Pass the ADC number and the Channel number to SC1A number arrays.
@@ -608,6 +610,7 @@ public:
     void disableInterrupts();
 
 
+    #if ADC_USE_DMA 
     //! Enable DMA request
     /** An ADC DMA request will be raised when the conversion is completed
     *  (including hardware averages and if the comparison (if any) is true).
@@ -616,6 +619,7 @@ public:
 
     //! Disable ADC DMA request
     void disableDMA();
+    #endif
 
 
     //! Enable the compare function to a single value
@@ -645,6 +649,7 @@ public:
     void disableCompare();
 
 
+    #if ADC_USE_PGA
     //! Enable and set PGA
     /** Enables the PGA and sets the gain
     *   Use only for signals lower than 1.2 V and only in differential mode
@@ -660,6 +665,7 @@ public:
 
     //! Disable PGA
     void disablePGA();
+    #endif
 
 
     //! Set continuous conversion mode
@@ -675,10 +681,12 @@ public:
     void singleEndedMode() __attribute__((always_inline)) {
         atomic::clearBitFlag(ADC_SC1A, ADC_SC1_DIFF);
     }
+    #if ADC_DIFF_PAIRS > 0
     //! Set differential conversion mode
     void differentialMode() __attribute__((always_inline)) {
         atomic::setBitFlag(ADC_SC1A, ADC_SC1_DIFF);
     }
+    #endif
 
     //! Use software to trigger the ADC, this is the most common setting
     void setSoftwareTrigger() __attribute__((always_inline)) {
@@ -715,6 +723,7 @@ public:
         //return ((ADC_SC1A) & ADC_SC1_COCO) >> 7;
     }
 
+    #if ADC_DIFF_PAIRS > 0
     //! Is the ADC in differential mode?
     /**
     *   \return true or false
@@ -723,6 +732,7 @@ public:
         //return ((ADC_SC1A) & ADC_SC1_DIFF) >> 5;
         return atomic::getBitFlag(ADC_SC1A, ADC_SC1_DIFF);
     }
+    #endif
 
     //! Is the ADC in continuous mode?
     /**
@@ -734,6 +744,7 @@ public:
         //return ((ADC_SC3) & ADC_SC3_ADCO) >> 3;
     }
 
+    #if ADC_USE_PGA 
     //! Is the PGA function enabled?
     /**
     *   \return true or false
@@ -741,6 +752,7 @@ public:
     volatile bool isPGAEnabled() __attribute__((always_inline)) {
         return atomic::getBitFlag(ADC_PGA, ADC_PGA_PGAEN);
     }
+    #endif
 
 
     //////////////// INFORMATION ABOUT VALID PINS //////////////////
@@ -770,6 +782,7 @@ public:
     */
     void startReadFast(uint8_t pin); // helper method
 
+    #if ADC_DIFF_PAIRS > 0
     //! Starts a differential conversion on the pair of pins
     /** It sets the mux correctly, doesn't do any of the checks on the pin and
     *   doesn't change the continuous conversion bit.
@@ -777,6 +790,7 @@ public:
     *   \param pinN negative pin to read.
     */
     void startDifferentialFast(uint8_t pinP, uint8_t pinN);
+    #endif
 
 
     //////////////// BLOCKING CONVERSION METHODS //////////////////
@@ -806,6 +820,7 @@ public:
     }
 
 
+    #if ADC_DIFF_PAIRS > 0
     //! Reads the differential analog value of two pins (pinP - pinN).
     /** It waits until the value is read and then returns the result.
     *   If a comparison has been set up and fails, it will return ADC_ERROR_DIFF_VALUE.
@@ -815,6 +830,7 @@ public:
     *   This function is interrupt safe, so it will restore the adc to the state it was before being called
     */
     int analogReadDifferential(uint8_t pinP, uint8_t pinN);
+    #endif
 
 
     /////////////// NON-BLOCKING CONVERSION METHODS //////////////
@@ -827,6 +843,7 @@ public:
     */
     bool startSingleRead(uint8_t pin);
 
+    #if ADC_DIFF_PAIRS > 0
     //! Start a differential conversion between two pins (pinP - pinN) and enables interrupts.
     /** It returns immediately, get value with readSingle().
     *   If this function interrupts a measurement, it stores the settings in adc_config
@@ -835,6 +852,7 @@ public:
     *   \return true if the pins are valid, false otherwise.
     */
     bool startSingleDifferential(uint8_t pinP, uint8_t pinN);
+    #endif
 
     //! Reads the analog value of a single conversion.
     /** Set the conversion with with startSingleRead(pin) or startSingleDifferential(pinP, pinN).
@@ -854,6 +872,7 @@ public:
     */
     bool startContinuous(uint8_t pin);
 
+    #if ADC_DIFF_PAIRS > 0
     //! Starts continuous conversion between the pins (pinP-pinN).
     /** It returns as soon as the ADC is set, use analogReadContinuous() to read the value.
     * \param pinP must be A10 or A12.
@@ -861,6 +880,7 @@ public:
     * \return true if the pins are valid, false otherwise.
     */
     bool startContinuousDifferential(uint8_t pinP, uint8_t pinN);
+    #endif
 
     //! Reads the analog value of a continuous conversion.
     /** Set the continuous conversion with with analogStartContinuous(pin) or startContinuousDifferential(pinP, pinN).
@@ -892,7 +912,6 @@ public:
 
     //! Return the PDB's frequency
     uint32_t getPDBFrequency();
-
     #endif
 
 
@@ -971,8 +990,10 @@ private:
     // reference can be internal or external
     ADC_REF_SOURCE analog_reference_internal;
 
+    #if ADC_USE_PGA 
     // value of the pga
     uint8_t pga_value;
+    #endif
 
     // conversion speed
     ADC_CONVERSION_SPEED conversion_speed;
@@ -983,9 +1004,9 @@ private:
     // translate pin number to SC1A nomenclature
     const uint8_t* const channel2sc1a;
 
+    #if ADC_DIFF_PAIRS > 0
     // same for differential pins
     const ADC_NLIST* const diff_table;
-
 
     //! Get the SC1A value of the differential pair for this pin
     uint8_t getDifferentialPair(uint8_t pin) {
@@ -996,6 +1017,7 @@ private:
         }
         return ADC_SC1A_PIN_INVALID;
     }
+    #endif
 
 
     //! Initialize ADC

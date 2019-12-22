@@ -117,7 +117,9 @@ void ADC_Module::analog_init() {
     analog_max_val = 0;
     analog_num_average = 0;
     analog_reference_internal = ADC_REF_SOURCE::REF_NONE;
+    #if ADC_USE_PGA 
     pga_value = 1;
+    #endif
 
     conversion_speed = ADC_CONVERSION_SPEED::VERY_HIGH_SPEED; // set to something different from line 139 so it gets changed there
     sampling_speed =  ADC_SAMPLING_SPEED::VERY_HIGH_SPEED;
@@ -561,6 +563,7 @@ void ADC_Module::disableInterrupts() {
 }
 
 
+#if ADC_USE_DMA
 /* Enable DMA request: An ADC DMA request will be raised when the conversion is completed
 *  (including hardware averages and if the comparison (if any) is true).
 */
@@ -580,6 +583,7 @@ void ADC_Module::disableDMA() {
     // ADC_SC2_dma = 0;
     atomic::clearBitFlag(ADC_SC2, ADC_SC2_DMAEN);
 }
+#endif
 
 
 /* Enable the compare function: A conversion will be completed only when the ADC value
@@ -650,14 +654,13 @@ void ADC_Module::disableCompare() {
     atomic::clearBitFlag(ADC_SC2, ADC_SC2_ACFE);
 }
 
+#if ADC_USE_PGA 
 /* Enables the PGA and sets the gain
 *   Use only for signals lower than 1.2 V
 *   \param gain can be 1, 2, 4, 8, 16 32 or 64
 *
 */
 void ADC_Module::enablePGA(uint8_t gain) {
-#if ADC_USE_PGA
-
     if (calibrating) wait_for_cal();
 
     uint8_t setting;
@@ -679,7 +682,6 @@ void ADC_Module::enablePGA(uint8_t gain) {
 
     ADC_PGA = ADC_PGA_PGAEN | ADC_PGA_PGAG(setting);
     pga_value=1<<setting;
-#endif
 }
 
 /* Returns the PGA level
@@ -691,12 +693,11 @@ uint8_t ADC_Module::getPGA() {
 
 //! Disable PGA
 void ADC_Module::disablePGA() {
-#if ADC_USE_PGA
     // ADC_PGA_pgaen = 0;
     atomic::clearBitFlag(ADC_PGA, ADC_PGA_PGAEN);
-#endif
     pga_value = 1;
 }
+#endif
 
 
 //////////////// INFORMATION ABOUT VALID PINS //////////////////
@@ -719,6 +720,7 @@ bool ADC_Module::checkPin(uint8_t pin) {
     return true;
 }
 
+#if ADC_DIFF_PAIRS > 0
 // check whether the pins are a valid analog differential pins (including PGA if enabled)
 bool ADC_Module::checkDifferentialPins(uint8_t pinP, uint8_t pinN) {
     if(pinP>ADC_MAX_PIN) {
@@ -749,6 +751,7 @@ bool ADC_Module::checkDifferentialPins(uint8_t pinP, uint8_t pinN) {
 
     return true;
 }
+#endif
 
 
 //////////////// HELPER METHODS FOR CONVERSION /////////////////
@@ -774,6 +777,7 @@ void ADC_Module::startReadFast(uint8_t pin) {
 
 }
 
+#if ADC_DIFF_PAIRS > 0
 // Starts a differential conversion on the pair of pins
 // Doesn't do any of the checks on the pins
 // It doesn't change the continuous conversion bit
@@ -794,7 +798,7 @@ void ADC_Module::startDifferentialFast(uint8_t pinP, uint8_t pinN) {
     __enable_irq();
 
 }
-
+#endif
 
 
 //////////////// BLOCKING CONVERSION METHODS //////////////////
@@ -885,7 +889,7 @@ int ADC_Module::analogRead(uint8_t pin) {
 } // analogRead
 
 
-
+#if ADC_DIFF_PAIRS > 0
 /* Reads the differential analog value of two pins (pinP - pinN)
 * It waits until the value is read and then returns the result
 * If a comparison has been set up and fails, it will return ADC_ERROR_DIFF_VALUE
@@ -954,7 +958,7 @@ int ADC_Module::analogReadDifferential(uint8_t pinP, uint8_t pinN) {
     return result;
 
 } // analogReadDifferential
-
+#endif
 
 
 /////////////// NON-BLOCKING CONVERSION METHODS //////////////
@@ -1005,6 +1009,7 @@ bool ADC_Module::startSingleRead(uint8_t pin) {
 }
 
 
+#if ADC_DIFF_PAIRS > 0
 /* Start a differential conversion between two pins (pinP - pinN).
 * It returns inmediately, get value with readSingle().
 * Incorrect pins will return false.
@@ -1039,7 +1044,7 @@ bool ADC_Module::startSingleDifferential(uint8_t pinP, uint8_t pinN) {
 
     return true;
 }
-
+#endif
 
 
 ///////////// CONTINUOUS CONVERSION METHODS ////////////
@@ -1079,6 +1084,7 @@ bool ADC_Module::startContinuous(uint8_t pin) {
 }
 
 
+#if ADC_DIFF_PAIRS > 0
 /* Starts continuous and differential conversion between the pins (pinP-pinN)
  * It returns as soon as the ADC is set, use analogReadContinuous() to read the value
  * Set the resolution, number of averages and voltage reference using the appropriate functions BEFORE calling this function
@@ -1115,6 +1121,7 @@ bool ADC_Module::startContinuousDifferential(uint8_t pinP, uint8_t pinN) {
 
     return true;
 }
+#endif
 
 
 /* Stops continuous conversion
