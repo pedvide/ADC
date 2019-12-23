@@ -49,12 +49,12 @@ uint8_t adc_pins_dig[] = {A0,A1,A2,A3,A4,A5,A6,A7,A8, A9, A12,A13,A14,A15,A16,A1
 uint8_t adc_pins_diff[] = {A10, A11};
 
 #elif defined(ADC_TEENSY_4)  // Teensy 3.6
-#define PINS 25
-#define DIG_PINS 21
+#define PINS 14
+#define DIG_PINS 10
 #define PINS_DIFF 0
 uint8_t adc_pins[] = {A0,A1,A2,A3,A4,A5,A6,A7,A8, A9, A10,
                       A11,A12,A13};
-uint8_t adc_pins_dig[] = {A0,A1,A2,A3,A4,A5,A6,A7,A8, A9, A12,A13};
+uint8_t adc_pins_dig[] = {A0,A1,A2,A3,A4,A5,A6,A7,A8, A9};
 uint8_t adc_pins_diff[] = {};
 #endif // defined
 
