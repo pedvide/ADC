@@ -64,6 +64,7 @@ public:
     *   \param ADC_number Number of the ADC module, from 0.
     *   \param a_channel2sc1a contains an index that pairs each pin to its SC1A number (used to start a conversion on that pin)
     *   \param a_diff_table is similar to a_channel2sc1a, but for differential pins.
+    *   \param  a_adc_regs pointer to start of the ADC registers
     */
     ADC_Module(uint8_t ADC_number, const uint8_t* const a_channel2sc1a, 
                const ADC_NLIST* const a_diff_table, ADC_REGS_t &a_adc_regs);

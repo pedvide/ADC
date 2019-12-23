@@ -41,7 +41,6 @@
 *   Point the registers to the correct ADC module
 *   Copy the correct channel2sc1a
 *   Call init
-*   The very long initializer list could be shorter using some kind of struct?
 */
 ADC_Module::ADC_Module(uint8_t ADC_number, const uint8_t* const a_channel2sc1a, 
                        const ADC_NLIST* const a_diff_table, ADC_REGS_t &a_adc_regs) :
