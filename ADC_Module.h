@@ -231,16 +231,28 @@ public:
 
     //! Set continuous conversion mode
     void continuousMode() __attribute__((always_inline)) {
+        #ifdef ADC_TEENSY_4
+        
+        #else
         atomic::setBitFlag(adc_regs.SC3, ADC_SC3_ADCO);
+        #endif
     }
     //! Set single-shot conversion mode
     void singleMode() __attribute__((always_inline)) {
+        #ifdef ADC_TEENSY_4
+        
+        #else
         atomic::clearBitFlag(adc_regs.SC3, ADC_SC3_ADCO);
+        #endif
     }
 
     //! Set single-ended conversion mode
     void singleEndedMode() __attribute__((always_inline)) {
+        #ifdef ADC_TEENSY_4
+        
+        #else
         atomic::clearBitFlag(adc_regs.SC1A, ADC_SC1_DIFF);
+        #endif
     }
     #if ADC_DIFF_PAIRS > 0
     //! Set differential conversion mode
@@ -251,12 +263,20 @@ public:
 
     //! Use software to trigger the ADC, this is the most common setting
     void setSoftwareTrigger() __attribute__((always_inline)) {
+        #ifdef ADC_TEENSY_4
+        
+        #else
         atomic::clearBitFlag(adc_regs.SC2, ADC_SC2_ADTRG);
+        #endif
     }
 
     //! Use hardware to trigger the ADC
     void setHardwareTrigger() __attribute__((always_inline)) {
+        #ifdef ADC_TEENSY_4
+        
+        #else
         atomic::setBitFlag(adc_regs.SC2, ADC_SC2_ADTRG);
+        #endif
     }
 
 
@@ -267,9 +287,13 @@ public:
     *   \return true or false
     */
     volatile bool isConverting() __attribute__((always_inline)) {
+        #ifdef ADC_TEENSY_4
+        
+        #else
         //return (ADC_SC2_adact);
         return atomic::getBitFlag(adc_regs.SC2, ADC_SC2_ADACT);
         //return ((adc_regs.SC2) & ADC_SC2_ADACT) >> 7;
+        #endif
     }
 
     //! Is an ADC conversion ready?
@@ -279,9 +303,13 @@ public:
     *  so it only makes sense to call it before analogReadContinuous() or readSingle()
     */
     volatile bool isComplete() __attribute__((always_inline)) {
+        #ifdef ADC_TEENSY_4
+        
+        #else
         //return (ADC_SC1A_coco);
         return atomic::getBitFlag(adc_regs.SC1A, ADC_SC1_COCO);
         //return ((adc_regs.SC1A) & ADC_SC1_COCO) >> 7;
+        #endif
     }
 
     #if ADC_DIFF_PAIRS > 0
@@ -300,9 +328,13 @@ public:
     *   \return true or false
     */
     volatile bool isContinuous() __attribute__((always_inline)) {
+        #ifdef ADC_TEENSY_4
+        
+        #else
         //return (ADC_SC3_adco);
         return atomic::getBitFlag(adc_regs.SC3, ADC_SC3_ADCO);
         //return ((adc_regs.SC3) & ADC_SC3_ADCO) >> 3;
+        #endif
     }
 
     #if ADC_USE_PGA 
@@ -450,7 +482,11 @@ public:
     *   otherwise values larger than 3.3/2 V are interpreted as negative!
     */
     int analogReadContinuous() __attribute__((always_inline)) {
+        #ifdef ADC_TEENSY_4
+        
+        #else
         return (int16_t)(int32_t)adc_regs.RA;
+        #endif
     }
 
     //! Stops continuous conversion
@@ -599,7 +635,9 @@ private:
     // registers that control the adc module
     ADC_REGS_t &adc_regs;
 
+    #if ADC_USE_PDB
     reg PDB0_CHnC1; // PDB channel 0 or 1
+    #endif
 
     const uint8_t IRQ_ADC; // IRQ number will be IRQ_ADC0 or IRQ_ADC1
 

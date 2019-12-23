@@ -88,6 +88,11 @@ const uint8_t ADC::channel2sc1aADC0[]= { // new version, gives directly the sc1a
     31, 31, 31, 31, 31, 31, 31, 31, 31, // 53-61
     31, 31, 3+ADC_SC1A_PIN_DIFF, 31+ADC_SC1A_PIN_DIFF, 23, 31 // 62-67 64: A10, 65: A11 (NOT CONNECTED), 66: A21, 67: A22(ADC1)
 };
+#elif defined(ADC_TEENSY_4)
+const uint8_t ADC::channel2sc1aADC0[]= { // new version, gives directly the sc1a number. 0x1F=31 deactivates the ADC.
+    5, 14, 8, 9, 13, 12, 6, 7, 15, 4, 3, 31, 31, 31, // 0-13, we treat them as A0-A13
+    5, 14, 8, 9, 13, 12, 6, 7, 15, 4, // 14-23 (A0-A9)
+};
 #endif // defined
 
 ///////// ADC1
@@ -122,6 +127,11 @@ const uint8_t ADC::channel2sc1aADC1[]= { // new version, gives directly the sc1a
     31, 31, 31, 31, 31, 31, 31, 31, 31, // 53-61
     31, 31, 0+ADC_SC1A_PIN_DIFF, 19+ADC_SC1A_PIN_DIFF, 31, 23 // 61-67 64: A10, 65: A11, 66: A21(ADC0), 67: A22
 };
+#elif defined(ADC_TEENSY_4)
+const uint8_t ADC::channel2sc1aADC1[]= { // new version, gives directly the sc1a number. 0x1F=31 deactivates the ADC.
+    31, 31, 8, 9, 31, 31, 31, 31, 31, 31, 31, 19, 14, 15, // 0-13, we treat them as A0-A13
+    31, 31, 8, 9, 31, 31, 31, 31, 31, 31, // 14-23 (A0-A9)
+};
 #endif
 
 #if defined(ADC_TEENSY_3_1) // Teensy 3.1
@@ -145,6 +155,13 @@ const uint8_t ADC::channel2sc1aADC1[]= { // new version, gives directly the sc1a
     };
     const ADC_Module::ADC_NLIST ADC::diff_table_ADC1[]= {
         {A10, 0}
+    };
+#elif defined(ADC_TEENSY_4)
+    const ADC_Module::ADC_NLIST ADC::diff_table_ADC0[]= {
+        {0, 0}
+    };
+    const ADC_Module::ADC_NLIST ADC::diff_table_ADC1[]= {
+        {0, 0}
     };
 #endif
 
@@ -206,9 +223,12 @@ ADC::ADC() : // awkward initialization  so there are no -Wreorder warnings
     //digitalWriteFast(LED_BUILTIN, HIGH);
 
     // make sure the clocks to the ADC are on
+    #if defined(ADC_TEENSY_4)
+    #else
     SIM_SCGC6 |= SIM_SCGC6_ADC0;
     #if ADC_NUM_ADCS>1
     SIM_SCGC3 |= SIM_SCGC3_ADC1;
+    #endif
     #endif
 
 }
