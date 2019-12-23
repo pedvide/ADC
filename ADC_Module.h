@@ -49,7 +49,7 @@ class ADC_Module {
 
 public:
 
-    //#if ADC_DIFF_PAIRS > 0
+    #if ADC_DIFF_PAIRS > 0
     //! Dictionary with the differential pins as keys and the SC1A number as values
     /** Internal, do not use.
     */
@@ -57,17 +57,21 @@ public:
         //! Pin and corresponding SC1A value.
         uint8_t pin, sc1a;
     };
-    //#endif
+    #endif
 
     //! Constructor
     /** Pass the ADC number and the Channel number to SC1A number arrays.
     *   \param ADC_number Number of the ADC module, from 0.
     *   \param a_channel2sc1a contains an index that pairs each pin to its SC1A number (used to start a conversion on that pin)
     *   \param a_diff_table is similar to a_channel2sc1a, but for differential pins.
-    *   \param  a_adc_regs pointer to start of the ADC registers
+    *   \param a_adc_regs pointer to start of the ADC registers
     */
-    ADC_Module(uint8_t ADC_number, const uint8_t* const a_channel2sc1a, 
-               const ADC_NLIST* const a_diff_table, ADC_REGS_t &a_adc_regs);
+    ADC_Module(uint8_t ADC_number, 
+               const uint8_t* const a_channel2sc1a, 
+               #if ADC_DIFF_PAIRS > 0
+               const ADC_NLIST* const a_diff_table,
+               #endif
+               ADC_REGS_t &a_adc_regs);
 
 
     //! Starts the calibration sequence, waits until it's done and writes the results
@@ -612,9 +616,9 @@ private:
 
     
     // same for differential pins
+    #if ADC_DIFF_PAIRS > 0
     const ADC_NLIST* const diff_table;
 
-    #if ADC_DIFF_PAIRS > 0
     //! Get the SC1A value of the differential pair for this pin
     uint8_t getDifferentialPair(uint8_t pin) {
         for(uint8_t i=0; i<ADC_DIFF_PAIRS; i++) {

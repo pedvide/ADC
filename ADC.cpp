@@ -157,10 +157,6 @@ const uint8_t ADC::channel2sc1aADC1[]= { // new version, gives directly the sc1a
         {A10, 0}
     };
 #elif defined(ADC_TEENSY_4)
-    const ADC_Module::ADC_NLIST ADC::diff_table_ADC0[]= {
-    };
-    const ADC_Module::ADC_NLIST ADC::diff_table_ADC1[]= {
-    };
 #endif
 
 
@@ -211,9 +207,16 @@ const uint8_t ADC::sc1a2channelADC1[]= { // new version, gives directly the pin 
 
 // Constructor
 ADC::ADC() : // awkward initialization  so there are no -Wreorder warnings
+    #if ADC_DIFF_PAIRS > 0
     adc0_obj(0, channel2sc1aADC0, diff_table_ADC0, ADC0_START)
     #if ADC_NUM_ADCS>1
     , adc1_obj(1, channel2sc1aADC1, diff_table_ADC1, ADC1_START)
+    #endif
+    #else
+    adc0_obj(0, channel2sc1aADC0, ADC0_START)
+    #if ADC_NUM_ADCS>1
+    , adc1_obj(1, channel2sc1aADC1, ADC1_START)
+    #endif
     #endif
     {
     //ctor

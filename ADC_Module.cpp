@@ -42,11 +42,17 @@
 *   Copy the correct channel2sc1a
 *   Call init
 */
-ADC_Module::ADC_Module(uint8_t ADC_number, const uint8_t* const a_channel2sc1a, 
-                       const ADC_NLIST* const a_diff_table, ADC_REGS_t &a_adc_regs) :
+ADC_Module::ADC_Module(uint8_t ADC_number, 
+                       const uint8_t* const a_channel2sc1a, 
+                       #if ADC_DIFF_PAIRS > 0
+                       const ADC_NLIST* const a_diff_table,
+                       #endif
+                       ADC_REGS_t &a_adc_regs) :
         ADC_num(ADC_number)
         , channel2sc1a(a_channel2sc1a)
+        #if ADC_DIFF_PAIRS > 0
         , diff_table(a_diff_table)
+        #endif
         , adc_regs(a_adc_regs)
         #if ADC_USE_PDB
         , PDB0_CHnC1(ADC_num? PDB0_CH1C1 : PDB0_CH0C1)
