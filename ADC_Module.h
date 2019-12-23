@@ -522,7 +522,11 @@ public:
     //! Store the config of the adc
     struct ADC_Config {
         //! ADC registers
+        #ifdef ADC_TEENSY_4
+        uint32_t savedHC0, savedCFG, savedGC, savedGS;
+        #else
         uint32_t savedSC1A, savedSC2, savedSC3, savedCFG1, savedCFG2;
+        #endif
     } adc_config;
 
     //! Was the adc in use before a call?
@@ -531,7 +535,10 @@ public:
     //! Save config of the ADC to the ADC_Config struct
     void saveConfig(ADC_Config* config) {
         #ifdef ADC_TEENSY_4
-        
+        config->savedHC0 = adc_regs.HC0;
+        config->savedCFG = adc_regs.CFG;
+        config->savedGC = adc_regs.GC;
+        config->savedGS = adc_regs.GS;        
         #else
         config->savedSC1A = adc_regs.SC1A;
         config->savedCFG1 = adc_regs.CFG1;
@@ -544,7 +551,10 @@ public:
     //! Load config to the ADC
     void loadConfig(const ADC_Config* config) {
         #ifdef ADC_TEENSY_4
-        
+        adc_regs.HC0 = config->savedHC0;
+        adc_regs.CFG = config->savedCFG;
+        adc_regs.GC = config->savedGC;
+        adc_regs.GS = config->savedGS;         
         #else
         adc_regs.CFG1 = config->savedCFG1;
         adc_regs.CFG2 = config->savedCFG2;
