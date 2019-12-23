@@ -10,6 +10,8 @@ namespace atomic
     /* Clear bit in address (make it zero), set bit (make it one), or return the value of that bit
     *   We can change this functions depending on the board.
     *   Teensy 3.x use bitband while Teensy LC has a more advanced bit manipulation engine.
+    *   Teensy 4 also has bitband capabilities, but are not yet implemented, instead registers are 
+    *   set and cleared manually. TODO: fix this.
     */
     #if defined(KINETISK) // Teensy 3.x
     //! Bitband address
@@ -70,6 +72,36 @@ namespace atomic
     template<typename T>
     __attribute__((always_inline)) inline volatile bool getBitFlag(volatile T& reg, T flag) {
         return (volatile bool)bitband_address(reg, 31-__builtin_clzl(flag));
+    }
+
+
+    #elif defined(__IMXRT1062__) // Teensy 4
+    template<typename T>
+    __attribute__((always_inline)) inline void setBitFlag(volatile T& reg, T flag) {
+        __disable_irq();
+        reg |= flag;
+        __enable_irq();
+    }
+
+    template<typename T>
+    __attribute__((always_inline)) inline void clearBitFlag(volatile T& reg, T flag) {
+        __disable_irq();
+        reg &= ~flag;
+        __enable_irq();
+    }
+
+    template<typename T>
+    __attribute__((always_inline)) inline void changeBitFlag(volatile T& reg, T flag, T state) {
+        if state { 
+            setBitFlag(reg, flag)
+        } else {
+            clearBitFlag(reg, flag)
+        }
+    }
+
+    template<typename T>
+    __attribute__((always_inline)) inline volatile bool getBitFlag(volatile T& reg, T flag) {
+        return (reg & flag) >> 31-__builtin_clzl(flag)
     }
 
 
