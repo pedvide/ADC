@@ -629,6 +629,19 @@ private:
     //! Initialize ADC
     void analog_init();
 
+    //! Switch on clock to ADC
+    void startClock() {
+        #if defined(ADC_TEENSY_4)
+        #else
+        if (ADC_num == 0) {
+            SIM_SCGC6 |= SIM_SCGC6_ADC0;
+        } else {
+            SIM_SCGC3 |= SIM_SCGC3_ADC1;
+        }
+        
+        #endif
+    }
+
     // registers point to the correct ADC module
     typedef volatile uint32_t& reg;
 

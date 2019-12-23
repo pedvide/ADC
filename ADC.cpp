@@ -219,16 +219,6 @@ ADC::ADC() : // awkward initialization  so there are no -Wreorder warnings
     //ctor
 
     //digitalWriteFast(LED_BUILTIN, HIGH);
-
-    // make sure the clocks to the ADC are on
-    #if defined(ADC_TEENSY_4)
-    #else
-    SIM_SCGC6 |= SIM_SCGC6_ADC0;
-    #if ADC_NUM_ADCS>1
-    SIM_SCGC3 |= SIM_SCGC3_ADC1;
-    #endif
-    #endif
-
 }
 
 

@@ -69,6 +69,7 @@ ADC_Module::ADC_Module(uint8_t ADC_number, const uint8_t* const a_channel2sc1a,
 }
 
 /* Initialize stuff:
+*  - Switch on clock
 *  - Clear all fail flags
 *  - Internal reference (default: external vcc)
 *  - Mux between a and b channels (b channels)
@@ -79,6 +80,8 @@ ADC_Module::ADC_Module(uint8_t ADC_number, const uint8_t* const a_channel2sc1a,
 *     - Averaging (set to 4)
 */
 void ADC_Module::analog_init() {
+
+    startClock();
 
     // default settings:
     /*
