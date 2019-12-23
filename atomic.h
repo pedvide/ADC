@@ -101,7 +101,7 @@ namespace atomic
 
     template<typename T>
     __attribute__((always_inline)) inline volatile bool getBitFlag(volatile T& reg, T flag) {
-        return ((reg) & flag) >> 31-__builtin_clzl(flag);
+        return (volatile bool)((reg) & flag) >> (31-__builtin_clzl(flag));
     }
 
 
