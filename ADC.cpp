@@ -1297,17 +1297,12 @@ bool ADC::startSynchronizedContinuousDifferential(uint8_t pin0P, uint8_t pin0N, 
         return false;   // all others are invalid
     }
 
-    adc0->startContinuousDifferential(pin0P, pin0N);
-    adc1->startContinuousDifferential(pin1P, pin1N);
-
-    // setup the conversions the usual way, but to make sure that they are
-    // as synchronized as possible we stop and restart them one after the other.
-    const uint32_t temp_ADC0_SC1A = ADC0_SC1A; ADC0_SC1A = 0x1F;
-    const uint32_t temp_ADC1_SC1A = ADC1_SC1A; ADC1_SC1A = 0x1F;
+    adc0->continuousMode();
+    adc1->continuousMode();
 
     __disable_irq();
-    ADC0_SC1A = temp_ADC0_SC1A;
-    ADC1_SC1A = temp_ADC1_SC1A;
+    adc0->startDifferentialFast(pin0P, pin0N);
+    adc1->startDifferentialFast(pin1P, pin1N);
     __enable_irq();
 
 
