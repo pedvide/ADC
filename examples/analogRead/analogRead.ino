@@ -97,18 +97,24 @@ void loop() {
     #endif
 
     // Differential reads
+    #if ADC_USE_PGA
+    double V_per_bit = 3.3/adc->getPGA()/adc->getMaxValue();
+    #else
+    double V_per_bit = 3.3/adc->getMaxValue();
+    #endif
 
     value = adc->adc0->analogReadDifferential(A10, A11); // read a new value, will return ADC_ERROR_VALUE if the comparison is false.
 
     Serial.print(" Value A10-A11: ");
     // Divide by the maximum possible value and the PGA level
-    Serial.println(value*3.3/adc->getPGA()/adc->getMaxValue(), DEC);
+    
+    Serial.println(value*V_per_bit, DEC);
 
     #if ADC_NUM_ADCS>1 && ADC_DIFF_PAIRS > 1
     value2 = adc->analogReadDifferential(A12, A13, ADC_1);
 
     Serial.print(" Value A12-A13: ");
-    Serial.println(value2*3.3/adc->getPGA(ADC_1)/adc->getMaxValue(ADC_1), DEC);
+    Serial.println(value2*V_per_bit, DEC);
     #endif
 
     // Print errors, if any.
@@ -130,4 +136,3 @@ void loop() {
 void adc0_isr() {
         adc->adc0->readSingle();
 }
-
