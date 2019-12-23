@@ -561,14 +561,14 @@ class ADC
         #endif
 
 
-        #if ADC_DIFF_PAIRS > 0
+        //#if ADC_DIFF_PAIRS > 0
         //! Translate differential pin number to SC1A nomenclature
         static const ADC_Module::ADC_NLIST diff_table_ADC0[ADC_DIFF_PAIRS];
         #if ADC_NUM_ADCS>1
         //! Translate differential pin number to SC1A nomenclature
         static const ADC_Module::ADC_NLIST diff_table_ADC1[ADC_DIFF_PAIRS];
         #endif
-        #endif
+        //#endif
 
 
 };

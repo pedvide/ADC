@@ -49,7 +49,7 @@ class ADC_Module {
 
 public:
 
-    #if ADC_DIFF_PAIRS > 0
+    //#if ADC_DIFF_PAIRS > 0
     //! Dictionary with the differential pins as keys and the SC1A number as values
     /** Internal, do not use.
     */
@@ -57,7 +57,7 @@ public:
         //! Pin and corresponding SC1A value.
         uint8_t pin, sc1a;
     };
-    #endif
+    //#endif
 
     //! Constructor
     /** Pass the ADC number and the Channel number to SC1A number arrays.
@@ -564,10 +564,11 @@ private:
     // translate pin number to SC1A nomenclature
     const uint8_t* const channel2sc1a;
 
-    #if ADC_DIFF_PAIRS > 0
+    
     // same for differential pins
     const ADC_NLIST* const diff_table;
 
+    #if ADC_DIFF_PAIRS > 0
     //! Get the SC1A value of the differential pair for this pin
     uint8_t getDifferentialPair(uint8_t pin) {
         for(uint8_t i=0; i<ADC_DIFF_PAIRS; i++) {
