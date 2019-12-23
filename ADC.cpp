@@ -158,10 +158,8 @@ const uint8_t ADC::channel2sc1aADC1[]= { // new version, gives directly the sc1a
     };
 #elif defined(ADC_TEENSY_4)
     const ADC_Module::ADC_NLIST ADC::diff_table_ADC0[]= {
-        {0, 0}
     };
     const ADC_Module::ADC_NLIST ADC::diff_table_ADC1[]= {
-        {0, 0}
     };
 #endif
 
