@@ -226,6 +226,68 @@ enum class ADC_REFERENCE : uint8_t {
 #endif
 
 
+#if defined(ADC_TEENSY_4)
+typedef struct {
+    volatile uint32_t HC0;
+    volatile uint32_t HC1;
+    volatile uint32_t HC2;
+    volatile uint32_t HC3;
+    volatile uint32_t HC4;
+    volatile uint32_t HC5;
+    volatile uint32_t HC6;
+    volatile uint32_t HC7;
+    volatile uint32_t HS; 
+    volatile uint32_t R0; 
+    volatile uint32_t R1; 
+    volatile uint32_t R2; 
+    volatile uint32_t R3; 
+    volatile uint32_t R4; 
+    volatile uint32_t R5; 
+    volatile uint32_t R6; 
+    volatile uint32_t R7; 
+    volatile uint32_t CFG;
+    volatile uint32_t GC; 
+    volatile uint32_t GS; 
+    volatile uint32_t CV; 
+    volatile uint32_t OFS;
+    volatile uint32_t CAL;
+} ADC_REGS_t;
+#define ADC0_START (*(ADC_REGS_t *)0x400C4000)
+#define ADC1_START (*(ADC_REGS_t *)0x400C8000)
+#else
+typedef struct {
+    volatile uint32_t SC1A;
+    volatile uint32_t SC1B;
+    volatile uint32_t CFG1;
+    volatile uint32_t CFG2;
+    volatile uint32_t RA;
+    volatile uint32_t RB;
+    volatile uint32_t CV1;
+    volatile uint32_t CV2;
+    volatile uint32_t SC2;
+    volatile uint32_t SC3;
+    volatile uint32_t PGA;
+    volatile uint32_t OFS;
+    volatile uint32_t PG;
+    volatile uint32_t MG;
+    volatile uint32_t CLPD;
+    volatile uint32_t CLPS;
+    volatile uint32_t CLP4;
+    volatile uint32_t CLP3;
+    volatile uint32_t CLP2;
+    volatile uint32_t CLP1;
+    volatile uint32_t CLP0;
+    volatile uint32_t CLMD;
+    volatile uint32_t CLMS;
+    volatile uint32_t CLM4;
+    volatile uint32_t CLM3;
+    volatile uint32_t CLM2;
+    volatile uint32_t CLM1;
+    volatile uint32_t CLM0;
+} ADC_REGS_t;
+#define ADC0_START (*(ADC_REGS_t *)0x4003B000)
+#define ADC1_START (*(ADC_REGS_t *)0x400BB000)
+#endif
 
 
 /* MK20DX256 Datasheet:

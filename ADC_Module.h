@@ -65,7 +65,8 @@ public:
     *   \param a_channel2sc1a contains an index that pairs each pin to its SC1A number (used to start a conversion on that pin)
     *   \param a_diff_table is similar to a_channel2sc1a, but for differential pins.
     */
-    ADC_Module(uint8_t ADC_number, const uint8_t* const a_channel2sc1a, const ADC_NLIST* const a_diff_table);
+    ADC_Module(uint8_t ADC_number, const uint8_t* const a_channel2sc1a, 
+               const ADC_NLIST* const a_diff_table, ADC_REGS_t &a_adc_regs);
 
 
     //! Starts the calibration sequence, waits until it's done and writes the results
@@ -230,32 +231,32 @@ public:
 
     //! Set continuous conversion mode
     void continuousMode() __attribute__((always_inline)) {
-        atomic::setBitFlag(ADC_SC3, ADC_SC3_ADCO);
+        atomic::setBitFlag(adc_regs.SC3, ADC_SC3_ADCO);
     }
     //! Set single-shot conversion mode
     void singleMode() __attribute__((always_inline)) {
-        atomic::clearBitFlag(ADC_SC3, ADC_SC3_ADCO);
+        atomic::clearBitFlag(adc_regs.SC3, ADC_SC3_ADCO);
     }
 
     //! Set single-ended conversion mode
     void singleEndedMode() __attribute__((always_inline)) {
-        atomic::clearBitFlag(ADC_SC1A, ADC_SC1_DIFF);
+        atomic::clearBitFlag(adc_regs.SC1A, ADC_SC1_DIFF);
     }
     #if ADC_DIFF_PAIRS > 0
     //! Set differential conversion mode
     void differentialMode() __attribute__((always_inline)) {
-        atomic::setBitFlag(ADC_SC1A, ADC_SC1_DIFF);
+        atomic::setBitFlag(adc_regs.SC1A, ADC_SC1_DIFF);
     }
     #endif
 
     //! Use software to trigger the ADC, this is the most common setting
     void setSoftwareTrigger() __attribute__((always_inline)) {
-        atomic::clearBitFlag(ADC_SC2, ADC_SC2_ADTRG);
+        atomic::clearBitFlag(adc_regs.SC2, ADC_SC2_ADTRG);
     }
 
     //! Use hardware to trigger the ADC
     void setHardwareTrigger() __attribute__((always_inline)) {
-        atomic::setBitFlag(ADC_SC2, ADC_SC2_ADTRG);
+        atomic::setBitFlag(adc_regs.SC2, ADC_SC2_ADTRG);
     }
 
 
@@ -267,8 +268,8 @@ public:
     */
     volatile bool isConverting() __attribute__((always_inline)) {
         //return (ADC_SC2_adact);
-        return atomic::getBitFlag(ADC_SC2, ADC_SC2_ADACT);
-        //return ((ADC_SC2) & ADC_SC2_ADACT) >> 7;
+        return atomic::getBitFlag(adc_regs.SC2, ADC_SC2_ADACT);
+        //return ((adc_regs.SC2) & ADC_SC2_ADACT) >> 7;
     }
 
     //! Is an ADC conversion ready?
@@ -279,8 +280,8 @@ public:
     */
     volatile bool isComplete() __attribute__((always_inline)) {
         //return (ADC_SC1A_coco);
-        return atomic::getBitFlag(ADC_SC1A, ADC_SC1_COCO);
-        //return ((ADC_SC1A) & ADC_SC1_COCO) >> 7;
+        return atomic::getBitFlag(adc_regs.SC1A, ADC_SC1_COCO);
+        //return ((adc_regs.SC1A) & ADC_SC1_COCO) >> 7;
     }
 
     #if ADC_DIFF_PAIRS > 0
@@ -289,8 +290,8 @@ public:
     *   \return true or false
     */
     volatile bool isDifferential() __attribute__((always_inline)) {
-        //return ((ADC_SC1A) & ADC_SC1_DIFF) >> 5;
-        return atomic::getBitFlag(ADC_SC1A, ADC_SC1_DIFF);
+        //return ((adc_regs.SC1A) & ADC_SC1_DIFF) >> 5;
+        return atomic::getBitFlag(adc_regs.SC1A, ADC_SC1_DIFF);
     }
     #endif
 
@@ -300,8 +301,8 @@ public:
     */
     volatile bool isContinuous() __attribute__((always_inline)) {
         //return (ADC_SC3_adco);
-        return atomic::getBitFlag(ADC_SC3, ADC_SC3_ADCO);
-        //return ((ADC_SC3) & ADC_SC3_ADCO) >> 3;
+        return atomic::getBitFlag(adc_regs.SC3, ADC_SC3_ADCO);
+        //return ((adc_regs.SC3) & ADC_SC3_ADCO) >> 3;
     }
 
     #if ADC_USE_PGA 
@@ -310,7 +311,7 @@ public:
     *   \return true or false
     */
     volatile bool isPGAEnabled() __attribute__((always_inline)) {
-        return atomic::getBitFlag(ADC_PGA, ADC_PGA_PGAEN);
+        return atomic::getBitFlag(adc_regs.PGA, ADC_PGA_PGAEN);
     }
     #endif
 
@@ -449,7 +450,7 @@ public:
     *   otherwise values larger than 3.3/2 V are interpreted as negative!
     */
     int analogReadContinuous() __attribute__((always_inline)) {
-        return (int16_t)(int32_t)ADC_RA;
+        return (int16_t)(int32_t)adc_regs.RA;
     }
 
     //! Stops continuous conversion
@@ -488,20 +489,28 @@ public:
 
     //! Save config of the ADC to the ADC_Config struct
     void saveConfig(ADC_Config* config) {
-        config->savedSC1A = ADC_SC1A;
-        config->savedCFG1 = ADC_CFG1;
-        config->savedCFG2 = ADC_CFG2;
-        config->savedSC2 = ADC_SC2;
-        config->savedSC3 = ADC_SC3;
+        #ifdef ADC_TEENSY_4
+        
+        #else
+        config->savedSC1A = adc_regs.SC1A;
+        config->savedCFG1 = adc_regs.CFG1;
+        config->savedCFG2 = adc_regs.CFG2;
+        config->savedSC2 = adc_regs.SC2;
+        config->savedSC3 = adc_regs.SC3;
+        #endif
     }
 
     //! Load config to the ADC
     void loadConfig(const ADC_Config* config) {
-        ADC_CFG1 = config->savedCFG1;
-        ADC_CFG2 = config->savedCFG2;
-        ADC_SC2 = config->savedSC2;
-        ADC_SC3 = config->savedSC3;
-        ADC_SC1A = config->savedSC1A; // restore last
+        #ifdef ADC_TEENSY_4
+        
+        #else
+        adc_regs.CFG1 = config->savedCFG1;
+        adc_regs.CFG2 = config->savedCFG2;
+        adc_regs.SC2 = config->savedSC2;
+        adc_regs.SC3 = config->savedSC3;
+        adc_regs.SC1A = config->savedSC1A; // restore last
+        #endif
     }
 
 
@@ -588,41 +597,7 @@ private:
     typedef volatile uint32_t& reg;
 
     // registers that control the adc module
-    reg ADC_SC1A;
-    reg ADC_SC1B;
-
-    reg ADC_CFG1;
-
-    reg ADC_CFG2;
-
-    reg ADC_RA;
-    reg ADC_RB;
-
-    reg ADC_CV1;
-    reg ADC_CV2;
-
-    reg ADC_SC2;
-    reg ADC_SC3;
-
-    reg ADC_PGA;
-
-    reg ADC_OFS;
-    reg ADC_PG;
-    reg ADC_MG;
-    reg ADC_CLPD;
-    reg ADC_CLPS;
-    reg ADC_CLP4;
-    reg ADC_CLP3;
-    reg ADC_CLP2;
-    reg ADC_CLP1;
-    reg ADC_CLP0;
-    reg ADC_CLMD;
-    reg ADC_CLMS;
-    reg ADC_CLM4;
-    reg ADC_CLM3;
-    reg ADC_CLM2;
-    reg ADC_CLM1;
-    reg ADC_CLM0;
+    ADC_REGS_t &adc_regs;
 
     reg PDB0_CHnC1; // PDB channel 0 or 1
 
