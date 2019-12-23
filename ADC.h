@@ -533,6 +533,7 @@ class ADC
 
         //////////// ERROR PRINTING /////
         //! returns the human-readable error from all ADC, if any.
+        // TODO: Get errors from both ADCs
         const char* getError() {
             return adc[0]->getError();
         }
