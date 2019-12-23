@@ -92,16 +92,16 @@ namespace atomic
 
     template<typename T>
     __attribute__((always_inline)) inline void changeBitFlag(volatile T& reg, T flag, T state) {
-        if state { 
-            setBitFlag(reg, flag)
+        if (state) { 
+            setBitFlag(reg, flag);
         } else {
-            clearBitFlag(reg, flag)
+            clearBitFlag(reg, flag);
         }
     }
 
     template<typename T>
     __attribute__((always_inline)) inline volatile bool getBitFlag(volatile T& reg, T flag) {
-        return (reg & flag) >> 31-__builtin_clzl(flag)
+        return ((reg) & flag) >> 31-__builtin_clzl(flag);
     }
 
 
