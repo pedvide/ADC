@@ -90,8 +90,9 @@ const uint8_t ADC::channel2sc1aADC0[]= { // new version, gives directly the sc1a
 };
 #elif defined(ADC_TEENSY_4)
 const uint8_t ADC::channel2sc1aADC0[]= { // new version, gives directly the sc1a number. 0x1F=31 deactivates the ADC.
-    5, 14, 8, 9, 13, 12, 6, 7, 15, 4, 3, 31, 31, 31, // 0-13, we treat them as A0-A13
-    5, 14, 8, 9, 13, 12, 6, 7, 15, 4, // 14-23 (A0-A9)
+    7, 8, 12, 11, 6, 5, 15, 0, 13, 14, 1, 2, 31, 31, // 0-13, we treat them as A0-A13
+    7, 8, 12, 11, 6, 5, 15, 0, 13, 14, // 14-23 (A0-A9)
+    1, 2, 31, 31 // A10, A11, A12, A13
 };
 #endif // defined
 
@@ -129,8 +130,9 @@ const uint8_t ADC::channel2sc1aADC1[]= { // new version, gives directly the sc1a
 };
 #elif defined(ADC_TEENSY_4)
 const uint8_t ADC::channel2sc1aADC1[]= { // new version, gives directly the sc1a number. 0x1F=31 deactivates the ADC.
-    31, 31, 8, 9, 31, 31, 31, 31, 31, 31, 31, 19, 14, 15, // 0-13, we treat them as A0-A13
-    31, 31, 8, 9, 31, 31, 31, 31, 31, 31, // 14-23 (A0-A9)
+    7, 8, 12, 11, 6, 5, 15, 0, 13, 14, 31, 31, 3, 4, // 0-13, we treat them as A0-A13
+    7, 8, 12, 11, 6, 5, 15, 0, 13, 14, // 14-23 (A0-A9)
+    31, 31, 3, 4 // A10, A11, A12, A13
 };
 #endif
 
