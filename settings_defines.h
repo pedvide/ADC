@@ -116,7 +116,7 @@
 #elif defined(ADC_TEENSY_3_6) // Teensy 3.6
         #define ADC_USE_INTERNAL_VREF (1)
 #elif defined(ADC_TEENSY_4) // Teensy 4
-        #define ADC_USE_INTERNAL_VREF (1)
+        #define ADC_USE_INTERNAL_VREF (0)
 #endif
 
 

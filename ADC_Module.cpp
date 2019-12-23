@@ -30,10 +30,11 @@
 
 
 #include "ADC_Module.h"
-//#include "ADC.h"
 
 // include the internal reference
+#if ADC_USE_INTERNAL_VREF
 #include <VREF.h>
+#endif
 
 
 /* Constructor
