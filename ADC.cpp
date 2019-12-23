@@ -1261,17 +1261,12 @@ bool ADC::startSynchronizedContinuous(uint8_t pin0, uint8_t pin1) {
         return false;
     }
 
-    adc0->startContinuous(pin0);
-    adc1->startContinuous(pin1);
-
-    // setup the conversions the usual way, but to make sure that they are
-    // as synchronized as possible we stop and restart them one after the other.
-    const uint32_t temp_ADC0_SC1A = ADC0_SC1A; ADC0_SC1A = 0x1F;
-    const uint32_t temp_ADC1_SC1A = ADC1_SC1A; ADC1_SC1A = 0x1F;
+    adc0->continuousMode();
+    adc1->continuousMode();
 
     __disable_irq(); // both measurements should have a maximum delay of an instruction time
-    ADC0_SC1A = temp_ADC0_SC1A;
-    ADC1_SC1A = temp_ADC1_SC1A;
+    adc0->startReadFast(pin0);
+    adc1->startReadFast(pin1);
     __enable_irq();
 
     return true;
