@@ -647,13 +647,17 @@ private:
     //! Switch on clock to ADC
     void startClock() {
         #if defined(ADC_TEENSY_4)
+        if (ADC_num == 0) {
+            CCM_CCGR1 |= CCM_CCGR1_ADC1(CCM_CCGR_ON);
+        } else {
+            CCM_CCGR1 |= CCM_CCGR1_ADC2(CCM_CCGR_ON);
+        }
         #else
         if (ADC_num == 0) {
             SIM_SCGC6 |= SIM_SCGC6_ADC0;
         } else {
             SIM_SCGC3 |= SIM_SCGC3_ADC1;
         }
-        
         #endif
     }
 
