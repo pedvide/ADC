@@ -222,6 +222,7 @@ enum class ADC_REFERENCE : uint8_t {
     /*! Other ADC sources to measure, such as the temperature sensor.
     */
     enum class ADC_INTERNAL_SOURCE : uint8_t{
+        VREFSH = 25, /*!< internal channel, for ADC self-test, hard connected to VRH internally */
     };
 #endif
 
