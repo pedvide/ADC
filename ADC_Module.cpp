@@ -402,9 +402,23 @@ void ADC_Module::setConversionSpeed(ADC_CONVERSION_SPEED speed) {
 
     if (calibrating) wait_for_cal();
 
-    // internal asynchronous clock settings: fADK = 2.4, 4.0, 5.2 or 6.2 MHz
+    // internal asynchronous clock settings: fADK = 10 OR 20 MHz
     #ifdef ADC_TEENSY_4
-        
+    if( (speed == ADC_CONVERSION_SPEED::ADACK_10) ||
+        (speed == ADC_CONVERSION_SPEED::ADACK_20)) {
+        atomic::setBitFlag(adc_regs.GC, ADC_GC_ADACKEN); // enable ADACK (takes max 5us to be ready)
+        atomic::setBitFlag(adc_regs.CFG, ADC_CFG_ADICLK(3)); // select ADACK as clock source
+        atomic::clearBitFlag(adc_regs.CFG, ADC_CFG_ADIV(3)); // select no dividers
+
+        if(speed == ADC_CONVERSION_SPEED::ADACK_10) {
+            atomic::clearBitFlag(adc_regs.CFG, ADC_CFG_ADHSC);
+        } else if(speed == ADC_CONVERSION_SPEED::ADACK_20) {
+            atomic::setBitFlag(adc_regs.CFG, ADC_CFG_ADHSC);
+        }
+
+        conversion_speed = speed;
+        return;
+        }
     #else
     // internal asynchronous clock settings: fADK = 2.4, 4.0, 5.2 or 6.2 MHz
     if( (speed == ADC_CONVERSION_SPEED::ADACK_2_4) ||

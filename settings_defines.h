@@ -437,10 +437,15 @@ enum class ADC_CONVERSION_SPEED : uint8_t {
                             except for Teensy 3.6 (NOT 3.5), for which the maximum is 24 MHz. */
     VERY_HIGH_SPEED, /*!< may be out of specs */
 
+#if defined(ADC_TEENSY_4)
+    ADACK_10, /*!< 10 MHz asynchronous ADC clock (independent of the global clocks F_CPU or F_BUS) */
+    ADACK_20  /*!< 20 MHz asynchronous ADC clock (independent of the global clocks F_CPU or F_BUS) */
+#else
     ADACK_2_4, /*!< 2.4 MHz asynchronous ADC clock (independent of the global clocks F_CPU or F_BUS) */
     ADACK_4_0, /*!< 4.0 MHz asynchronous ADC clock (independent of the global clocks F_CPU or F_BUS) */
     ADACK_5_2, /*!< 5.2 MHz asynchronous ADC clock (independent of the global clocks F_CPU or F_BUS) */
     ADACK_6_2 /*!< 6.2 MHz asynchronous ADC clock (independent of the global clocks F_CPU or F_BUS) */
+#endif
 };
 /*! ADC sampling speed.
 *   It selects how many ADCK clock cycles to add.
