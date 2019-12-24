@@ -107,7 +107,7 @@ void ADC_Module::analog_init() {
     pga_value = 1;
     #endif
 
-    conversion_speed = ADC_CONVERSION_SPEED::VERY_HIGH_SPEED; // set to something different from line 139 so it gets changed there
+    conversion_speed = ADC_CONVERSION_SPEED::HIGH_SPEED; // set to something different from line 139 so it gets changed there
     sampling_speed =  ADC_SAMPLING_SPEED::VERY_HIGH_SPEED;
 
     calibrating = 0;
@@ -459,88 +459,72 @@ void ADC_Module::setConversionSpeed(ADC_CONVERSION_SPEED speed) {
 
     uint32_t ADC_CFG1_speed; // store the clock and divisor
 
+    #ifdef ADC_TEENSY_4
+    switch(speed) {
+        case ADC_CONVERSION_SPEED::LOW_SPEED:
+            atomic::clearBitFlag(adc_regs.CFG, ADC_CFG_ADHSC);
+            atomic::setBitFlag(adc_regs.CFG, ADC_CFG_ADLPC);
+            ADC_CFG1_speed = ADC_CFG1_LOW_SPEED;
+            break;
+        case ADC_CONVERSION_SPEED::MED_SPEED:
+            atomic::clearBitFlag(adc_regs.CFG, ADC_CFG_ADHSC);
+            atomic::clearBitFlag(adc_regs.CFG, ADC_CFG_ADLPC);
+            ADC_CFG1_speed = ADC_CFG1_MED_SPEED;
+            break;
+        case ADC_CONVERSION_SPEED::HIGH_SPEED:
+            atomic::setBitFlag(adc_regs.CFG, ADC_CFG_ADHSC);
+            atomic::clearBitFlag(adc_regs.CFG, ADC_CFG_ADLPC);
+            ADC_CFG1_speed = ADC_CFG1_HI_SPEED;
+            break;
+    }
+    #else
     if(speed == ADC_CONVERSION_SPEED::VERY_LOW_SPEED) {
-        #ifdef ADC_TEENSY_4
-        atomic::clearBitFlag(adc_regs.CFG, ADC_CFG_ADHSC);
-        atomic::setBitFlag(adc_regs.CFG, ADC_CFG_ADLPC);
-        #else
         // *ADC_CFG2_adhsc = 0; // no high-speed config
         // *ADC_CFG1_adlpc  = 1; // use low power conf.
         atomic::clearBitFlag(adc_regs.CFG2, ADC_CFG2_ADHSC);
         atomic::setBitFlag(adc_regs.CFG1, ADC_CFG1_ADLPC);
-        #endif
-
         ADC_CFG1_speed = ADC_CFG1_VERY_LOW_SPEED;
 
     } else if(speed == ADC_CONVERSION_SPEED::LOW_SPEED) {
-        #ifdef ADC_TEENSY_4
-        atomic::clearBitFlag(adc_regs.CFG, ADC_CFG_ADHSC);
-        atomic::setBitFlag(adc_regs.CFG, ADC_CFG_ADLPC);
-        #else
         // *ADC_CFG2_adhsc = 0; // no high-speed config
         // *ADC_CFG1_adlpc  = 1; // use low power conf.
         atomic::clearBitFlag(adc_regs.CFG2, ADC_CFG2_ADHSC);
         atomic::setBitFlag(adc_regs.CFG1, ADC_CFG1_ADLPC);
-        #endif
-
         ADC_CFG1_speed = ADC_CFG1_LOW_SPEED;
 
     } else if(speed == ADC_CONVERSION_SPEED::MED_SPEED) {
-        #ifdef ADC_TEENSY_4
-        atomic::clearBitFlag(adc_regs.CFG, ADC_CFG_ADHSC);
-        atomic::clearBitFlag(adc_regs.CFG, ADC_CFG_ADLPC);
-        #else
         // *ADC_CFG2_adhsc = 0; // no high-speed config
         // *ADC_CFG1_adlpc  = 0; // no low power conf.
         atomic::clearBitFlag(adc_regs.CFG2, ADC_CFG2_ADHSC);
         atomic::clearBitFlag(adc_regs.CFG1, ADC_CFG1_ADLPC);
-        #endif
-
         ADC_CFG1_speed = ADC_CFG1_MED_SPEED;
 
     } else if(speed == ADC_CONVERSION_SPEED::HIGH_SPEED_16BITS) {
-        #ifdef ADC_TEENSY_4
-        atomic::setBitFlag(adc_regs.CFG, ADC_CFG_ADHSC);
-        atomic::clearBitFlag(adc_regs.CFG, ADC_CFG_ADLPC);
-        #else
         // *ADC_CFG2_adhsc = 1; // high-speed config: add 2 ADCK
         // *ADC_CFG1_adlpc  = 0; // no low power conf.
         atomic::setBitFlag(adc_regs.CFG2, ADC_CFG2_ADHSC);
         atomic::clearBitFlag(adc_regs.CFG1, ADC_CFG1_ADLPC);
-        #endif
-
         ADC_CFG1_speed = ADC_CFG1_HI_SPEED_16_BITS;
 
     } else if(speed == ADC_CONVERSION_SPEED::HIGH_SPEED) {
-        #ifdef ADC_TEENSY_4
-        atomic::setBitFlag(adc_regs.CFG, ADC_CFG_ADHSC);
-        atomic::clearBitFlag(adc_regs.CFG, ADC_CFG_ADLPC);
-        #else
         // *ADC_CFG2_adhsc = 1; // high-speed config: add 2 ADCK
         // *ADC_CFG1_adlpc  = 0; // no low power conf.
         atomic::setBitFlag(adc_regs.CFG2, ADC_CFG2_ADHSC);
         atomic::clearBitFlag(adc_regs.CFG1, ADC_CFG1_ADLPC);
-        #endif
-
         ADC_CFG1_speed = ADC_CFG1_HI_SPEED;
 
     } else if(speed == ADC_CONVERSION_SPEED::VERY_HIGH_SPEED) { // this speed is most likely out of specs, so accuracy can be bad
-        #ifdef ADC_TEENSY_4
-        atomic::setBitFlag(adc_regs.CFG, ADC_CFG_ADHSC);
-        atomic::clearBitFlag(adc_regs.CFG, ADC_CFG_ADLPC);
-        #else
         // *ADC_CFG2_adhsc = 1; // high-speed config: add 2 ADCK
         // *ADC_CFG1_adlpc  = 0; // no low power conf.
         atomic::setBitFlag(adc_regs.CFG2, ADC_CFG2_ADHSC);
         atomic::clearBitFlag(adc_regs.CFG1, ADC_CFG1_ADLPC);
-        #endif
-
         ADC_CFG1_speed = ADC_CFG1_VERY_HIGH_SPEED;
 
     } else {
         fail_flag |= ADC_ERROR::OTHER;
         return;
     }
+    #endif
 
     // clock source is bus or bus/2
     #ifdef ADC_TEENSY_4

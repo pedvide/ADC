@@ -443,6 +443,16 @@ Divide by   ADC_CFG1_ADIV   ADC_CFG1_ADICLK TOTAL   VALUE
 *   Note: the F_ADCK speed is not equal to the conversion speed; any measurement takes several F_ADCK cycles to complete including the sampling and conversion steps.
 */
 enum class ADC_CONVERSION_SPEED : uint8_t {
+#if defined(ADC_TEENSY_4)
+    VERY_LOW_SPEED, /* Same as LOW_SPEED, here for compatibility*/
+    LOW_SPEED = VERY_LOW_SPEED, /*!< is guaranteed to be the lowest possible speed within specs for all resolutions. */
+    MED_SPEED, /*!< is always >= LOW_SPEED and <= HIGH_SPEED. */
+    HIGH_SPEED, /*!< is guaranteed to be the highest possible speed within specs for resolutions */
+    VERY_HIGH_SPEED = HIGH_SPEED, /* Same as HIGH_SPEED, here for compatibility*/
+
+    ADACK_10, /*!< 10 MHz asynchronous ADC clock (independent of the global clocks F_CPU or F_BUS) */
+    ADACK_20  /*!< 20 MHz asynchronous ADC clock (independent of the global clocks F_CPU or F_BUS) */
+#else
     VERY_LOW_SPEED, /*!< is guaranteed to be the lowest possible speed within specs for resolutions less than 16 bits. */
     LOW_SPEED, /*!< is guaranteed to be the lowest possible speed within specs for all resolutions. */
     MED_SPEED, /*!< is always >= LOW_SPEED and <= HIGH_SPEED. */
@@ -450,10 +460,6 @@ enum class ADC_CONVERSION_SPEED : uint8_t {
     HIGH_SPEED, /*!< is guaranteed to be the highest possible speed within specs for resolutions less than 16 bits. */
     VERY_HIGH_SPEED, /*!< may be out of specs */
 
-#if defined(ADC_TEENSY_4)
-    ADACK_10, /*!< 10 MHz asynchronous ADC clock (independent of the global clocks F_CPU or F_BUS) */
-    ADACK_20  /*!< 20 MHz asynchronous ADC clock (independent of the global clocks F_CPU or F_BUS) */
-#else
     ADACK_2_4, /*!< 2.4 MHz asynchronous ADC clock (independent of the global clocks F_CPU or F_BUS) */
     ADACK_4_0, /*!< 4.0 MHz asynchronous ADC clock (independent of the global clocks F_CPU or F_BUS) */
     ADACK_5_2, /*!< 5.2 MHz asynchronous ADC clock (independent of the global clocks F_CPU or F_BUS) */
