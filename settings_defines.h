@@ -464,11 +464,22 @@ enum class ADC_CONVERSION_SPEED : uint8_t {
 *   It selects how many ADCK clock cycles to add.
 */
 enum class ADC_SAMPLING_SPEED : uint8_t {
+    #if defined(ADC_TEENSY_4)
+    VERY_LOW_SPEED, /*!< is the lowest possible sampling speed (+22 ADCK, 24 in total). */
+    LOW_SPEED, /*!< adds +18 ADCK, 20 in total. */
+    LOW_MED_SPEED, /*!< adds +14, 16 in total. */
+    MED_SPEED, /*!< adds +10, 12 in total. */
+    MED_HIGH_SPEED, /*!< adds +6 ADCK, 8 in total. */
+    HIGH_SPEED, /*!< adds +4 ADCK, 6 in total. */
+    HIGH_VERY_HIGH_SPEED, /*!< +2 ADCK, 4 in total */
+    VERY_HIGH_SPEED, /*!< is the highest possible sampling speed (0 ADCK added, 2 in total). */
+    #else
     VERY_LOW_SPEED, /*!< is the lowest possible sampling speed (+24 ADCK). */
     LOW_SPEED, /*!< adds +16 ADCK. */
     MED_SPEED, /*!< adds +10 ADCK. */
     HIGH_SPEED, /*!< adds +6 ADCK. */
     VERY_HIGH_SPEED, /*!< is the highest possible sampling speed (0 ADCK added). */
+    #endif
 };
 
 
