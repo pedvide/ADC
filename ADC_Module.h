@@ -237,7 +237,7 @@ public:
     //! Set continuous conversion mode
     void continuousMode() __attribute__((always_inline)) {
         #ifdef ADC_TEENSY_4
-        
+        atomic::setBitFlag(adc_regs.GC, ADC_GC_ADCO);
         #else
         atomic::setBitFlag(adc_regs.SC3, ADC_SC3_ADCO);
         #endif
@@ -245,7 +245,7 @@ public:
     //! Set single-shot conversion mode
     void singleMode() __attribute__((always_inline)) {
         #ifdef ADC_TEENSY_4
-        
+        atomic::clearBitFlag(adc_regs.GC, ADC_GC_ADCO);
         #else
         atomic::clearBitFlag(adc_regs.SC3, ADC_SC3_ADCO);
         #endif
@@ -254,7 +254,7 @@ public:
     //! Set single-ended conversion mode
     void singleEndedMode() __attribute__((always_inline)) {
         #ifdef ADC_TEENSY_4
-        
+        // Teensy 4 is always single-ended
         #else
         atomic::clearBitFlag(adc_regs.SC1A, ADC_SC1_DIFF);
         #endif
@@ -269,7 +269,7 @@ public:
     //! Use software to trigger the ADC, this is the most common setting
     void setSoftwareTrigger() __attribute__((always_inline)) {
         #ifdef ADC_TEENSY_4
-        
+        atomic::clearBitFlag(adc_regs.CFG, ADC_CFG_ADTRG);
         #else
         atomic::clearBitFlag(adc_regs.SC2, ADC_SC2_ADTRG);
         #endif
@@ -278,7 +278,7 @@ public:
     //! Use hardware to trigger the ADC
     void setHardwareTrigger() __attribute__((always_inline)) {
         #ifdef ADC_TEENSY_4
-        
+        atomic::setBitFlag(adc_regs.CFG, ADC_CFG_ADTRG);
         #else
         atomic::setBitFlag(adc_regs.SC2, ADC_SC2_ADTRG);
         #endif
@@ -293,7 +293,7 @@ public:
     */
     volatile bool isConverting() __attribute__((always_inline)) {
         #ifdef ADC_TEENSY_4
-        
+        return atomic::getBitFlag(adc_regs.GS, ADC_GS_ADACT);
         #else
         //return (ADC_SC2_adact);
         return atomic::getBitFlag(adc_regs.SC2, ADC_SC2_ADACT);
@@ -309,7 +309,7 @@ public:
     */
     volatile bool isComplete() __attribute__((always_inline)) {
         #ifdef ADC_TEENSY_4
-        
+        return atomic::getBitFlag(adc_regs.HS, ADC_HS_COCO0);
         #else
         //return (ADC_SC1A_coco);
         return atomic::getBitFlag(adc_regs.SC1A, ADC_SC1_COCO);
@@ -334,7 +334,7 @@ public:
     */
     volatile bool isContinuous() __attribute__((always_inline)) {
         #ifdef ADC_TEENSY_4
-        
+        return atomic::getBitFlag(adc_regs.GC, ADC_GC_ADCO);
         #else
         //return (ADC_SC3_adco);
         return atomic::getBitFlag(adc_regs.SC3, ADC_SC3_ADCO);
@@ -488,7 +488,7 @@ public:
     */
     int analogReadContinuous() __attribute__((always_inline)) {
         #ifdef ADC_TEENSY_4
-        
+        return (int16_t)(int32_t)adc_regs.R0;
         #else
         return (int16_t)(int32_t)adc_regs.RA;
         #endif
