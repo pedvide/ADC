@@ -336,7 +336,7 @@ void ADC_Module::setResolution(uint8_t bits) {
         analog_max_val = 255; // diff mode 9 bits has 1 bit for sign, so max value is the same as single 8 bits
     } else if ( (config == 10 )|| (config == 11) ) {
         #ifdef ADC_TEENSY_4
-        atomic::clearBitFlag(adc_regs.CFG, ADC_CFG_MODE(2));
+        atomic::changeBitFlag(adc_regs.CFG, ADC_CFG_MODE(3), ADC_CFG_MODE(1));
         #else
         // *ADC_CFG1_mode1 = 1;
         // *ADC_CFG1_mode0 = 0;
@@ -345,7 +345,7 @@ void ADC_Module::setResolution(uint8_t bits) {
         analog_max_val = 1023;
     } else if ( (config == 12 )|| (config == 13) ) {
         #ifdef ADC_TEENSY_4
-        atomic::clearBitFlag(adc_regs.CFG, ADC_CFG_MODE(1));
+        atomic::changeBitFlag(adc_regs.CFG, ADC_CFG_MODE(3), ADC_CFG_MODE(2));
         #else
         // *ADC_CFG1_mode1 = 0;
         // *ADC_CFG1_mode0 = 1;
