@@ -1350,7 +1350,7 @@ void ADC_Module::stopContinuous() {
     #endif
 
     // decrease the counter of measurements (unless it's 0)
-    if(!num_measurements) {
+    if(num_measurements > 0) {
         num_measurements--;
     }
 
