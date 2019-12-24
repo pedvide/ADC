@@ -317,18 +317,31 @@ cycles. ADHSC should be used when the ADCLK exceeds the limit for ADHSC = 0.
 // See below for an explanation of VERY_LOW_SPEED, LOW_SPEED, etc.
 
 #define ADC_MHz                (1000000) // not so many zeros
-// Min freq for 8-12 bit mode is 1 MHz
-#define ADC_MIN_FREQ         (1*ADC_MHz)
-// Max freq for 8-12 bit mode is 18 MHz and 24 MHz for Teensy 3.6
+// Min freq for 8-12 bit mode is 1 MHz, 4 MHz for Teensy 4
+#if defined(ADC_TEENSY_4)
+    #define ADC_MIN_FREQ         (4*ADC_MHz)
+#else
+    #define ADC_MIN_FREQ         (1*ADC_MHz)
+#endif
+// Max freq for 8-12 bit mode is 18 MHz, 24 MHz for Teensy 3.6, and 40 for Teensy 4
 #if defined(ADC_TEENSY_3_6)
     #define ADC_MAX_FREQ    (24*ADC_MHz)
+#elif defined(ADC_TEENSY_4)
+    #define ADC_MAX_FREQ    (40*ADC_MHz)
 #else
     #define ADC_MAX_FREQ    (18*ADC_MHz)
 #endif
-// Min freq for 16 bit mode is 2 MHz
-#define ADC_MIN_FREQ_16BITS  (2*ADC_MHz)
-// Max freq for 16 bit mode is 12 MHz
-#define ADC_MAX_FREQ_16BITS (12*ADC_MHz)
+
+// Min and max for 16 bits. For Teensy 4 is the same as before (no 16 bit mode)
+#if defined(ADC_TEENSY_4)
+    #define ADC_MIN_FREQ_16BITS  ADC_MIN_FREQ
+    #define ADC_MAX_FREQ_16BITS ADC_MAX_FREQ
+#else
+    // Min freq for 16 bit mode is 2 MHz
+    #define ADC_MIN_FREQ_16BITS  (2*ADC_MHz)
+    // Max freq for 16 bit mode is 12 MHz
+    #define ADC_MAX_FREQ_16BITS (12*ADC_MHz)
+#endif
 
 // We can divide F_BUS by 1, 2, 4, 8, or 16:
 /*
@@ -346,7 +359,7 @@ Divide by   ADC_CFG1_ADIV   ADC_CFG1_ADICLK TOTAL   VALUE
 #define ADC_LIB_CFG1_ADIV(n)		(((n) & 3) << 5)
 #define ADC_LIB_CFG1_ADICLK(n)		(((n) & 3) << 0)
 
-// ADC_CFG1_VERY_LOW_SPEED is the lowest freq >= 1 MHz
+// ADC_CFG1_VERY_LOW_SPEED is the lowest freq
 #if F_BUS/16 >= ADC_MIN_FREQ
     #define ADC_CFG1_VERY_LOW_SPEED (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(1))
 #elif F_BUS/8 >= ADC_MIN_FREQ
@@ -359,7 +372,7 @@ Divide by   ADC_CFG1_ADIV   ADC_CFG1_ADICLK TOTAL   VALUE
     #define ADC_CFG1_VERY_LOW_SPEED (ADC_LIB_CFG1_ADIV(0) + ADC_LIB_CFG1_ADICLK(0))
 #endif
 
-// ADC_CFG1_LOW_SPEED is the lowest freq >= 2 MHz
+// ADC_CFG1_LOW_SPEED is the lowest freq for 16 bits
 #if F_BUS/16 >= ADC_MIN_FREQ_16BITS
     #define ADC_CFG1_LOW_SPEED (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(1))
 #elif F_BUS/8 >= ADC_MIN_FREQ_16BITS
@@ -372,7 +385,7 @@ Divide by   ADC_CFG1_ADIV   ADC_CFG1_ADICLK TOTAL   VALUE
     #define ADC_CFG1_LOW_SPEED (ADC_LIB_CFG1_ADIV(0) + ADC_LIB_CFG1_ADICLK(0))
 #endif
 
-// ADC_CFG1_HI_SPEED_16_BITS is the highest freq <= 12 MHz
+// ADC_CFG1_HI_SPEED_16_BITS is the highest freq for 16 bits
 #if F_BUS <= ADC_MAX_FREQ_16BITS
     #define ADC_CFG1_HI_SPEED_16_BITS (ADC_LIB_CFG1_ADIV(0) + ADC_LIB_CFG1_ADICLK(0))
 #elif F_BUS/2 <= ADC_MAX_FREQ_16BITS
@@ -393,7 +406,7 @@ Divide by   ADC_CFG1_ADIV   ADC_CFG1_ADICLK TOTAL   VALUE
     #define ADC_CFG1_MED_SPEED  (ADC_CFG1_HI_SPEED_16_BITS)
 #endif
 
-// ADC_CFG1_HI_SPEED is the highest freq <= 18 MHz (24 for Teensy 3.6)
+// ADC_CFG1_HI_SPEED is the highest freq for under 16 bits
 #if F_BUS <= ADC_MAX_FREQ
     #define ADC_CFG1_HI_SPEED (ADC_LIB_CFG1_ADIV(0) + ADC_LIB_CFG1_ADICLK(0))
 #elif F_BUS/2 <= ADC_MAX_FREQ
@@ -429,12 +442,11 @@ Divide by   ADC_CFG1_ADIV   ADC_CFG1_ADICLK TOTAL   VALUE
 *   Note: the F_ADCK speed is not equal to the conversion speed; any measurement takes several F_ADCK cycles to complete including the sampling and conversion steps.
 */
 enum class ADC_CONVERSION_SPEED : uint8_t {
-    VERY_LOW_SPEED, /*!< is guaranteed to be the lowest possible speed within specs for resolutions less than 16 bits (higher than 1 MHz). */
-    LOW_SPEED, /*!< is guaranteed to be the lowest possible speed within specs for all resolutions (higher than 2 MHz). */
+    VERY_LOW_SPEED, /*!< is guaranteed to be the lowest possible speed within specs for resolutions less than 16 bits. */
+    LOW_SPEED, /*!< is guaranteed to be the lowest possible speed within specs for all resolutions. */
     MED_SPEED, /*!< is always >= LOW_SPEED and <= HIGH_SPEED. */
-    HIGH_SPEED_16BITS, /*!< is guaranteed to be the highest possible speed within specs for all resolutions (lower than or equal to 12 MHz). */
-    HIGH_SPEED, /*!< is guaranteed to be the highest possible speed within specs for resolutions less than 16 bits (lower than or equal to 18 MHz),
-                            except for Teensy 3.6 (NOT 3.5), for which the maximum is 24 MHz. */
+    HIGH_SPEED_16BITS, /*!< is guaranteed to be the highest possible speed within specs for all resolutions. */
+    HIGH_SPEED, /*!< is guaranteed to be the highest possible speed within specs for resolutions less than 16 bits. */
     VERY_HIGH_SPEED, /*!< may be out of specs */
 
 #if defined(ADC_TEENSY_4)
