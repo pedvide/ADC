@@ -1,6 +1,20 @@
 #ifndef ATOMIC_H
 #define ATOMIC_H
 
+/*  int __builtin_ctz (unsigned int x):
+    Returns the number of trailing 0-bits in x, 
+    starting at the least significant bit position. 
+    If x is 0, the result is undefined. 
+*/
+/* int __builtin_clz (unsigned int x)
+   Returns the number of leading 0-bits in x, 
+   starting at the most significant bit position. 
+   If x is 0, the result is undefined. 
+*/
+/* int __builtin_popcount (unsigned int x)
+    Returns the number of 1-bits in x. 
+*/
+
 // kinetis.h has the following types for addresses: uint32_t, uint16_t, uint8_t, int32_t, int16_t
 
 //! Atomic set, clear, change, or get bit in a register
@@ -8,6 +22,7 @@ namespace atomic
 {
     /////// Atomic bit set/clear
     /* Clear bit in address (make it zero), set bit (make it one), or return the value of that bit
+    *   changeBitFlag can change up to 2 bits in a flag at the same time
     *   We can change this functions depending on the board.
     *   Teensy 3.x use bitband while Teensy LC has a more advanced bit manipulation engine.
     *   Teensy 4 also has bitband capabilities, but are not yet implemented, instead registers are 
@@ -92,11 +107,29 @@ namespace atomic
 
     template<typename T>
     __attribute__((always_inline)) inline void changeBitFlag(volatile T& reg, T flag, T state) {
-        if (state) { 
-            setBitFlag(reg, flag);
-        } else {
-            clearBitFlag(reg, flag);
+        // flag can be 1 or 2 bits wide
+        // state can have one or two bits set
+        if(__builtin_popcount(flag) == 1) { // 1 bit
+            if (state) { 
+                setBitFlag(reg, flag);
+            } else {
+                clearBitFlag(reg, flag);
+            }        
+        } else { // 2 bits
+            // lsb first
+            if ((state >> __builtin_ctzl(flag))&0x1) { // lsb of state is 1
+                setBitFlag(reg, (uint32_t)(1 << __builtin_ctzl(flag)));
+            } else { // lsb is 0
+                clearBitFlag(reg, (uint32_t)(1 << __builtin_ctzl(flag)));
+            }
+            // msb
+            if ((state >> (31-__builtin_clzl(flag)))&0x1) { // msb of state is 1
+                setBitFlag(reg, (uint32_t)(1 << (31-__builtin_clzl(flag))));
+            } else { // msb is 0
+                clearBitFlag(reg, (uint32_t)(1 << (31-__builtin_clzl(flag))));
+            }
         }
+        
     }
 
     template<typename T>
