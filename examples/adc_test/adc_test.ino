@@ -48,7 +48,7 @@ uint8_t adc_pins[] = {A0,A1,A2,A3,A4,A5,A6,A7,A8, A9, A10,
 uint8_t adc_pins_dig[] = {A0,A1,A2,A3,A4,A5,A6,A7,A8, A9, A12,A13,A14,A15,A16,A17,A18,A19,A20,A23,A24};
 uint8_t adc_pins_diff[] = {A10, A11};
 
-#elif defined(ADC_TEENSY_4)  // Teensy 3.6
+#elif defined(ADC_TEENSY_4)  // Teensy 4
 #define PINS 14
 #define DIG_PINS 10
 #define PINS_DIFF 0
@@ -152,29 +152,33 @@ bool test_compare_range() {
 bool test_averages() {
     elapsedMicros timeElapsed;
     bool pass_test = true;
-    const uint32_t num_samples = 100;
+    const uint32_t num_samples = 10000;
     const uint8_t averages[] = {4, 8, 16, 32};
     float avg_times[4];
+    volatile int value = 0;
 
     adc->setAveraging(1);
     timeElapsed = 0;
     for(uint32_t i=0; i<num_samples; i++) {
-        adc->analogRead(A0, ADC_0);
+        value += adc->analogRead(A0, ADC_0);
     }
-    float one_avg_time = timeElapsed/num_samples;
-    //Serial.print("1: "); Serial.println(one_avg_time);
+    float one_avg_time = (float)timeElapsed/num_samples;
+//    Serial.print("1: "); Serial.println(one_avg_time);
+//    Serial.print("value: "); Serial.println(value/num_samples);
 
 
     for(uint8_t i=0; i<4; i++) {
         adc->setAveraging(averages[i]);
         timeElapsed = 0;
+        value = 0;
         for(uint32_t j=0; j<num_samples; j++) {
-            adc->analogRead(A0, ADC_0);
+            value += adc->analogRead(A0, ADC_0);
         }
         float time = (float)timeElapsed/num_samples;
         avg_times[i] = time;
-        //Serial.print(averages[i]); Serial.print(": "); Serial.print(time);
-        //Serial.print(", "); Serial.println(time/one_avg_time);
+//        Serial.print(averages[i]); Serial.print(": "); Serial.print(time);
+//        Serial.print(", "); Serial.println(time/one_avg_time);
+//        Serial.print("value: "); Serial.println(value/num_samples);
     }
 
     // the 4 averages is not 4 times as long as the 1 average because
@@ -190,7 +194,7 @@ bool test_averages() {
     for(uint8_t i=1; i<4; i++) {
         if((avg_times[i] < 2*0.9*avg_times[i-1]) || (avg_times[i] > 2*1.1*avg_times[i-1])) {
             pass_test = false;
-            Serial.print(averages[i]); Serial.print(" averages should take about twice as long as "); Serial.print(pow(2, i-1), 0);
+            Serial.print(averages[i]); Serial.print(" averages should take about twice as long as "); Serial.print(averages[i-1]);
             Serial.print(", but it took "); Serial.print(avg_times[i]/avg_times[i-1]); Serial.println(" times longer.");
         }
     }
@@ -258,9 +262,10 @@ void setup() {
     Serial.print("COMPARE RANGE TEST "); Serial.println(compare_range_test ? "PASS" : "FAIL");
     bool averages_test = test_averages();
     Serial.print("AVERAGES TEST "); Serial.println(averages_test ? "PASS" : "FAIL");
+    if (pullup_test & pulldown_test & compare_test & compare_range_test & averages_test) {
+      Serial.println("ALL TEST PASSED.");
+    }
 }
-
-
 
 
 void loop() {
