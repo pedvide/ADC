@@ -267,7 +267,6 @@ typedef struct {
     volatile uint32_t CV2;
     volatile uint32_t SC2;
     volatile uint32_t SC3;
-    volatile uint32_t PGA;
     volatile uint32_t OFS;
     volatile uint32_t PG;
     volatile uint32_t MG;
@@ -278,6 +277,7 @@ typedef struct {
     volatile uint32_t CLP2;
     volatile uint32_t CLP1;
     volatile uint32_t CLP0;
+    volatile uint32_t PGA;
     volatile uint32_t CLMD;
     volatile uint32_t CLMS;
     volatile uint32_t CLM4;
