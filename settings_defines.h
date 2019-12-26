@@ -357,43 +357,49 @@ Divide by   ADC_CFG1_ADIV   ADC_CFG1_ADICLK TOTAL   VALUE
 
 // Redefine from kinetis.h to remove (uint32_t) casts that the preprocessor doesn't understand
 // so we can do arithmetic with them when defining ADC_CFG1_MED_SPEED
-#define ADC_LIB_CFG1_ADIV(n)		(((n) & 3) << 5)
-#define ADC_LIB_CFG1_ADICLK(n)		(((n) & 3) << 0)
+#define ADC_LIB_CFG1_ADIV(n)		(((n) & 0x03) << 5)
+#define ADC_LIB_CFG1_ADICLK(n)		(((n) & 0x03) << 0)
+
+#if defined(ADC_TEENSY_4)
+    #define ADC_F_BUS (150*ADC_MHz)
+#else
+    #define ADC_F_BUS F_BUS
+#endif
 
 // ADC_CFG1_VERY_LOW_SPEED is the lowest freq
-#if F_BUS/16 >= ADC_MIN_FREQ
+#if ADC_F_BUS/16 >= ADC_MIN_FREQ
     #define ADC_CFG1_VERY_LOW_SPEED (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(1))
-#elif F_BUS/8 >= ADC_MIN_FREQ
+#elif ADC_F_BUS/8 >= ADC_MIN_FREQ
     #define ADC_CFG1_VERY_LOW_SPEED (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(0))
-#elif F_BUS/4 >= ADC_MIN_FREQ
+#elif ADC_F_BUS/4 >= ADC_MIN_FREQ
     #define ADC_CFG1_VERY_LOW_SPEED (ADC_LIB_CFG1_ADIV(2) + ADC_LIB_CFG1_ADICLK(0))
-#elif F_BUS/2 >= ADC_MIN_FREQ
+#elif ADC_F_BUS/2 >= ADC_MIN_FREQ
     #define ADC_CFG1_VERY_LOW_SPEED (ADC_LIB_CFG1_ADIV(1) + ADC_LIB_CFG1_ADICLK(0))
 #else
     #define ADC_CFG1_VERY_LOW_SPEED (ADC_LIB_CFG1_ADIV(0) + ADC_LIB_CFG1_ADICLK(0))
 #endif
 
 // ADC_CFG1_LOW_SPEED is the lowest freq for 16 bits
-#if F_BUS/16 >= ADC_MIN_FREQ_16BITS
+#if ADC_F_BUS/16 >= ADC_MIN_FREQ_16BITS
     #define ADC_CFG1_LOW_SPEED (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(1))
-#elif F_BUS/8 >= ADC_MIN_FREQ_16BITS
+#elif ADC_F_BUS/8 >= ADC_MIN_FREQ_16BITS
     #define ADC_CFG1_LOW_SPEED (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(0))
-#elif F_BUS/4 >= ADC_MIN_FREQ_16BITS
+#elif ADC_F_BUS/4 >= ADC_MIN_FREQ_16BITS
     #define ADC_CFG1_LOW_SPEED (ADC_LIB_CFG1_ADIV(2) + ADC_LIB_CFG1_ADICLK(0))
-#elif F_BUS/2 >= ADC_MIN_FREQ_16BITS
+#elif ADC_F_BUS/2 >= ADC_MIN_FREQ_16BITS
     #define ADC_CFG1_LOW_SPEED (ADC_LIB_CFG1_ADIV(1) + ADC_LIB_CFG1_ADICLK(0))
 #else
     #define ADC_CFG1_LOW_SPEED (ADC_LIB_CFG1_ADIV(0) + ADC_LIB_CFG1_ADICLK(0))
 #endif
 
 // ADC_CFG1_HI_SPEED_16_BITS is the highest freq for 16 bits
-#if F_BUS <= ADC_MAX_FREQ_16BITS
+#if ADC_F_BUS <= ADC_MAX_FREQ_16BITS
     #define ADC_CFG1_HI_SPEED_16_BITS (ADC_LIB_CFG1_ADIV(0) + ADC_LIB_CFG1_ADICLK(0))
-#elif F_BUS/2 <= ADC_MAX_FREQ_16BITS
+#elif ADC_F_BUS/2 <= ADC_MAX_FREQ_16BITS
     #define ADC_CFG1_HI_SPEED_16_BITS (ADC_LIB_CFG1_ADIV(1) + ADC_LIB_CFG1_ADICLK(0))
-#elif F_BUS/4 <= ADC_MAX_FREQ_16BITS
+#elif ADC_F_BUS/4 <= ADC_MAX_FREQ_16BITS
     #define ADC_CFG1_HI_SPEED_16_BITS (ADC_LIB_CFG1_ADIV(2) + ADC_LIB_CFG1_ADICLK(0))
-#elif F_BUS/8 <= ADC_MAX_FREQ_16BITS
+#elif ADC_F_BUS/8 <= ADC_MAX_FREQ_16BITS
     #define ADC_CFG1_HI_SPEED_16_BITS (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(0))
 #else
     #define ADC_CFG1_HI_SPEED_16_BITS (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(1))
@@ -408,13 +414,13 @@ Divide by   ADC_CFG1_ADIV   ADC_CFG1_ADICLK TOTAL   VALUE
 #endif
 
 // ADC_CFG1_HI_SPEED is the highest freq for under 16 bits
-#if F_BUS <= ADC_MAX_FREQ
+#if ADC_F_BUS <= ADC_MAX_FREQ
     #define ADC_CFG1_HI_SPEED (ADC_LIB_CFG1_ADIV(0) + ADC_LIB_CFG1_ADICLK(0))
-#elif F_BUS/2 <= ADC_MAX_FREQ
+#elif ADC_F_BUS/2 <= ADC_MAX_FREQ
     #define ADC_CFG1_HI_SPEED (ADC_LIB_CFG1_ADIV(1) + ADC_LIB_CFG1_ADICLK(0))
-#elif F_BUS/4 <= ADC_MAX_FREQ
+#elif ADC_F_BUS/4 <= ADC_MAX_FREQ
     #define ADC_CFG1_HI_SPEED (ADC_LIB_CFG1_ADIV(2) + ADC_LIB_CFG1_ADICLK(0))
-#elif F_BUS/8 <= ADC_MAX_FREQ
+#elif ADC_F_BUS/8 <= ADC_MAX_FREQ
     #define ADC_CFG1_HI_SPEED (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(0))
 #else
     #define ADC_CFG1_HI_SPEED (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(1))
@@ -422,13 +428,13 @@ Divide by   ADC_CFG1_ADIV   ADC_CFG1_ADICLK TOTAL   VALUE
 
 // ADC_CFG1_VERY_HIGH_SPEED >= ADC_CFG1_HI_SPEED and may be out of specs, but not more than ADC_VERY_HIGH_SPEED_FACTOR*ADC_MAX_FREQ
 #define ADC_VERY_HIGH_SPEED_FACTOR  (2)
-#if F_BUS <= ADC_VERY_HIGH_SPEED_FACTOR*ADC_MAX_FREQ
+#if ADC_F_BUS <= ADC_VERY_HIGH_SPEED_FACTOR*ADC_MAX_FREQ
     #define ADC_CFG1_VERY_HIGH_SPEED (ADC_LIB_CFG1_ADIV(0) + ADC_LIB_CFG1_ADICLK(0))
-#elif F_BUS/2 <= ADC_VERY_HIGH_SPEED_FACTOR*ADC_MAX_FREQ
+#elif ADC_F_BUS/2 <= ADC_VERY_HIGH_SPEED_FACTOR*ADC_MAX_FREQ
     #define ADC_CFG1_VERY_HIGH_SPEED (ADC_LIB_CFG1_ADIV(1) + ADC_LIB_CFG1_ADICLK(0))
-#elif F_BUS/4 <= ADC_VERY_HIGH_SPEED_FACTOR*ADC_MAX_FREQ
+#elif ADC_F_BUS/4 <= ADC_VERY_HIGH_SPEED_FACTOR*ADC_MAX_FREQ
     #define ADC_CFG1_VERY_HIGH_SPEED (ADC_LIB_CFG1_ADIV(2) + ADC_LIB_CFG1_ADICLK(0))
-#elif F_BUS/8 <= ADC_VERY_HIGH_SPEED_FACTOR*ADC_MAX_FREQ
+#elif ADC_F_BUS/8 <= ADC_VERY_HIGH_SPEED_FACTOR*ADC_MAX_FREQ
     #define ADC_CFG1_VERY_HIGH_SPEED (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(0))
 #else
     #define ADC_CFG1_VERY_HIGH_SPEED (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(1))
@@ -438,7 +444,7 @@ Divide by   ADC_CFG1_ADIV   ADC_CFG1_ADICLK TOTAL   VALUE
 
 // Settings for the power/speed of conversions/sampling
 /*! ADC conversion speed.
-*   Common set of options to select the ADC clock speed F_ADCK, which depends on F_BUS, except for the ADACK_X_Y options that are independent.
+*   Common set of options to select the ADC clock speed F_ADCK, which depends on ADC_F_BUS, except for the ADACK_X_Y options that are independent.
 *   This selection affects the sampling speed too.
 *   Note: the F_ADCK speed is not equal to the conversion speed; any measurement takes several F_ADCK cycles to complete including the sampling and conversion steps.
 */

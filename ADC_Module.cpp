@@ -1353,12 +1353,12 @@ void ADC_Module::startPDB(uint32_t freq) {
         SIM_SCGC6 |= SIM_SCGC6_PDB; // enable pdb clock
     }
 
-    if(freq>F_BUS) return; // too high
+    if(freq>ADC_F_BUS) return; // too high
     if(freq<1) return; // too low
 
     // mod will have to be a 16 bit value
     // we detect if it's higher than 0xFFFF and scale it back accordingly.
-    uint32_t mod = (F_BUS / freq);
+    uint32_t mod = (ADC_F_BUS / freq);
 
     uint8_t prescaler = 0; // from 0 to 7: factor of 1, 2, 4, 8, 16, 32, 64 or 128
     uint8_t mult = 0; // from 0 to 3, factor of 1, 10, 20 or 40
@@ -1471,7 +1471,7 @@ uint32_t ADC_Module::getPDBFrequency() {
     const uint8_t mult = (PDB0_SC&0xC)>>2;
 
     const uint32_t freq = uint32_t((mod + 1)<<(prescaler)) * uint32_t((mult==0) ? 1 : 10<<(mult-1));
-    return F_BUS/freq;
+    return ADC_F_BUS/freq;
 }
 
 #endif
