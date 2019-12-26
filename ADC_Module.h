@@ -574,11 +574,6 @@ public:
     */
     volatile ADC_ERROR fail_flag;
 
-    //! Returns the human-readable error, if any.
-    const char* getError() {
-        return ADC_Error::getError(fail_flag);
-    }
-
     //! Resets all errors from the ADC, if any.
     void resetError() {
         ADC_Error::resetError(fail_flag);

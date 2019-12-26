@@ -23,6 +23,9 @@
  * SOFTWARE.
  */
 
+#ifndef ADC_SETTINGS_H
+#define ADC_SETTINGS_H
+
 #include <Arduino.h>
 
 // Easier names for the boards
@@ -517,8 +520,8 @@ enum class ADC_SAMPLING_SPEED : uint8_t {
 namespace ADC_Error {
 
     //! ADC errors.
-    /*! Use adc->getError() to print the errors (if any) in a human-readable form.
-    *   Use adc->resetError() to reset them.
+    /*! Use adc->adX->fail_flag to print the errors (if any) in a human-readable form.
+    *   Use adc->adX->resetError() to reset them.
     */
     enum class ADC_ERROR : uint16_t {
         OTHER               = 1<<0, /*!< Other error not considered below. */
@@ -551,46 +554,9 @@ namespace ADC_Error {
         return lhs = static_cast<ADC_ERROR> (static_cast<uint16_t>(lhs) & static_cast<uint16_t>(rhs));
     }
 
-    //! Prints the human-readable error, if any.
-    inline const char* getError(ADC_ERROR fail_flag) {
-        if(fail_flag != ADC_ERROR::CLEAR) {
-            switch(fail_flag) {
-                case ADC_ERROR::CALIB:
-                    return (const char*)"Calibration";
-                    break;
-                case ADC_ERROR::WRONG_PIN:
-                    return (const char*)"Wrong pin";
-                    break;
-                case ADC_ERROR::ANALOG_READ:
-                    return (const char*)"Analog read";
-                    break;
-                case ADC_ERROR::COMPARISON:
-                    return (const char*)"Comparison";
-                    break;
-                case ADC_ERROR::ANALOG_DIFF_READ:
-                    return (const char*)"Analog differential read";
-                    break;
-                case ADC_ERROR::CONT:
-                    return (const char*)"Continuous read";
-                    break;
-                case ADC_ERROR::CONT_DIFF:
-                    return (const char*)"Continuous differential read";
-                    break;
-                case ADC_ERROR::WRONG_ADC:
-                    return (const char*)"Wrong ADC";
-                    break;
-                case ADC_ERROR::SYNCH:
-                    return (const char*)"Synchronous";
-                    break;
-                case ADC_ERROR::OTHER:
-                case ADC_ERROR::CLEAR: // silence warnings
-                default:
-                    return (const char*)"Unknown";
-                    break;
-            }
-        }
-        return (const char*)"";
-    }
+    // Prints the human-readable error, if any.
+    // Moved to util.h.
+    // inline const char* getError(ADC_ERROR fail_flag)
     
 
     //! Resets all errors from the ADC, if any.
@@ -599,3 +565,5 @@ namespace ADC_Error {
     }
 
 }
+
+#endif // ADC_SETTINGS_H

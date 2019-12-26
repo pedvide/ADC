@@ -7,6 +7,7 @@
 */
 
 #include <ADC.h>
+#include <ADC_util.h>
 
 const int readPin = A9; // ADC0
 const int readPin2 = A3; // ADC1
@@ -130,11 +131,11 @@ void loop() {
 
     // Print errors, if any.
     if(adc->adc0->fail_flag != ADC_ERROR::CLEAR) {
-      Serial.print("ADC0: "); Serial.println(adc->adc0->getError());
+      Serial.print("ADC0: "); Serial.println(getStringADCError(adc->adc0->fail_flag));
     }
     #if ADC_NUM_ADCS > 1
     if(adc->adc1->fail_flag != ADC_ERROR::CLEAR) {
-      Serial.print("ADC1: "); Serial.println(adc->adc1->getError());
+      Serial.print("ADC1: "); Serial.println(getStringADCError(adc->adc1->fail_flag));
     }
     #endif
 

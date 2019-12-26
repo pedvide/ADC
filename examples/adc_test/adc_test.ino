@@ -2,6 +2,7 @@
 */
 
 #include <ADC.h>
+#include <ADC_util.h>
 
 ADC *adc = new ADC(); // adc object
 
@@ -134,7 +135,7 @@ bool test_compare(bool debug=false) {
     if (adc->adc0->fail_flag != ADC_ERROR::COMPARISON) {
       if (debug) {
         Serial.println("Comparison didn't fail.");
-        Serial.println(adc->adc0->getError());
+        Serial.println(getStringADCError(adc->adc0->fail_flag));
       }
         pass_test = false;
     }
@@ -147,7 +148,7 @@ bool test_compare(bool debug=false) {
     if(adc->adc0->fail_flag == ADC_ERROR::COMPARISON) {
       if (debug) {
         Serial.println("Comparison didn't succeed.");
-        Serial.println(adc->adc0->getError());
+        Serial.println(getStringADCError(adc->adc0->fail_flag));
         Serial.println(value);
       }
         pass_test = false;
@@ -172,7 +173,7 @@ bool test_compare_range(bool debug=false) {
     if(adc->adc0->fail_flag != ADC_ERROR::CLEAR) {
       if (debug) {
         Serial.println("Some other error happened when comparison should have succeeded.");
-        Serial.println(adc->adc0->getError());
+        Serial.println(getStringADCError(adc->adc0->fail_flag));
       }
         pass_test = false;
     }
@@ -184,7 +185,7 @@ bool test_compare_range(bool debug=false) {
     if(adc->adc0->fail_flag != ADC_ERROR::CLEAR) {
       if (debug) {
         Serial.println("Some other error happened when comparison should have succeeded.");
-        Serial.println(adc->adc0->getError());
+        Serial.println(getStringADCError(adc->adc0->fail_flag));
       }
         pass_test = false;
     }
@@ -252,129 +253,20 @@ bool test_averages(bool debug=false) {
     return pass_test;
 }
 
-const char* getConversionEnumStr(ADC_CONVERSION_SPEED conv_speed) {
-  switch(conv_speed) {
-    #if defined(ADC_TEENSY_4)  // Teensy 4
-    #else
-    case ADC_CONVERSION_SPEED::VERY_LOW_SPEED:
-      return "VERY_LOW_SPEED";
-    #endif
-    case ADC_CONVERSION_SPEED::LOW_SPEED:
-      return "LOW_SPEED";
-    case ADC_CONVERSION_SPEED::MED_SPEED:
-      return "MED_SPEED";
-    case ADC_CONVERSION_SPEED::HIGH_SPEED:
-      return "HIGH_SPEED";
-    #if defined(ADC_TEENSY_4)  // Teensy 4
-    #else
-    case ADC_CONVERSION_SPEED::VERY_HIGH_SPEED:
-      return "VERY_HIGH_SPEED";
-    #endif
-    #if defined(ADC_TEENSY_4)  // Teensy 4
-    case ADC_CONVERSION_SPEED::ADACK_10:
-      return "ADACK_10";
-    case ADC_CONVERSION_SPEED::ADACK_20:
-      return "ADACK_20";
-    #else
-    case ADC_CONVERSION_SPEED::HIGH_SPEED_16BITS:
-      return "HIGH_SPEED_16BITS";
-    case ADC_CONVERSION_SPEED::ADACK_2_4:
-      return "ADACK_2_4";
-    case ADC_CONVERSION_SPEED::ADACK_4_0:
-      return "ADACK_4_0";
-    case ADC_CONVERSION_SPEED::ADACK_5_2:
-      return "ADACK_5_2";
-    case ADC_CONVERSION_SPEED::ADACK_6_2:
-      return "ADACK_6_2";
-    #endif
-  }
-  return "NONE"; 
-  }
-
-const char* getSamplingEnumStr(ADC_SAMPLING_SPEED samp_speed) {
-  switch(samp_speed) {
-    case ADC_SAMPLING_SPEED::VERY_LOW_SPEED:
-      return "VERY_LOW_SPEED";
-    case ADC_SAMPLING_SPEED::LOW_SPEED:
-      return "LOW_SPEED";
-    case ADC_SAMPLING_SPEED::MED_SPEED:
-      return "MED_SPEED";
-    case ADC_SAMPLING_SPEED::HIGH_SPEED:
-      return "HIGH_SPEED";
-    case ADC_SAMPLING_SPEED::VERY_HIGH_SPEED:
-      return "VERY_HIGH_SPEED";
-    #if defined(ADC_TEENSY_4)  // Teensy 4
-    case ADC_SAMPLING_SPEED::LOW_MED_SPEED:
-      return "LOW_MED_SPEED";
-    case ADC_SAMPLING_SPEED::MED_HIGH_SPEED:
-      return "MED_HIGH_SPEED";
-    case ADC_SAMPLING_SPEED::HIGH_VERY_HIGH_SPEED:
-      return "HIGH_VERY_HIGH_SPEED";
-    #endif
-  }
-  return "NONE"; 
-  }
 
 bool test_all_combinations(bool debug=false) {
-  const uint8_t avg_list[] = {1, 4, 8, 16, 32};
-  #if defined(ADC_TEENSY_4)  // Teensy 4
-  const uint8_t res_list[] = {8, 10, 12}; 
-  #else
-  const uint8_t res_list[] = {8, 10, 12, 16}; 
-  #endif
-  #if defined(ADC_TEENSY_4)  // Teensy 4
-  const ADC_CONVERSION_SPEED conv_speed_list[] = {
-      ADC_CONVERSION_SPEED::LOW_SPEED,
-      ADC_CONVERSION_SPEED::MED_SPEED,
-      ADC_CONVERSION_SPEED::HIGH_SPEED,
-      ADC_CONVERSION_SPEED::ADACK_10,
-      ADC_CONVERSION_SPEED::ADACK_20};
-  #else
-  const ADC_CONVERSION_SPEED conv_speed_list[] = {
-      ADC_CONVERSION_SPEED::VERY_LOW_SPEED,
-      ADC_CONVERSION_SPEED::LOW_SPEED,
-      ADC_CONVERSION_SPEED::MED_SPEED,
-      ADC_CONVERSION_SPEED::HIGH_SPEED,
-      ADC_CONVERSION_SPEED::HIGH_SPEED_16BITS,
-      ADC_CONVERSION_SPEED::VERY_HIGH_SPEED,
-      ADC_CONVERSION_SPEED::ADACK_2_4,
-      ADC_CONVERSION_SPEED::ADACK_4_0,
-      ADC_CONVERSION_SPEED::ADACK_5_2,
-      ADC_CONVERSION_SPEED::ADACK_6_2};
-    #endif
-    #if defined(ADC_TEENSY_4)  // Teensy 4
-    const ADC_SAMPLING_SPEED samp_speed_list[] = {
-        ADC_SAMPLING_SPEED::VERY_LOW_SPEED,
-        ADC_SAMPLING_SPEED::LOW_SPEED,
-        ADC_SAMPLING_SPEED::LOW_MED_SPEED,
-        ADC_SAMPLING_SPEED::MED_SPEED,
-        ADC_SAMPLING_SPEED::MED_HIGH_SPEED,
-        ADC_SAMPLING_SPEED::HIGH_SPEED,
-        //ADC_SAMPLING_SPEED::HIGH_VERY_HIGH_SPEED,
-        //ADC_SAMPLING_SPEED::VERY_HIGH_SPEED
-        };
-    #else
-    const ADC_SAMPLING_SPEED samp_speed_list[] = {
-        ADC_SAMPLING_SPEED::VERY_LOW_SPEED,
-        ADC_SAMPLING_SPEED::LOW_SPEED,
-        ADC_SAMPLING_SPEED::MED_SPEED,
-        ADC_SAMPLING_SPEED::HIGH_SPEED,
-        ADC_SAMPLING_SPEED::VERY_HIGH_SPEED
-        };
-    #endif
-
     bool pass_test = true;
 
-    for(auto average : avg_list) {
+    for(auto average : averages_list) {
       adc->setAveraging(average, ADC_0); // set number of averages
       adc->setAveraging(average, ADC_1); // set number of averages
-      for (auto resolution : res_list) {
+      for (auto resolution : resolutions_list) {
         adc->setResolution(resolution, ADC_0); // set bits of resolution
         adc->setResolution(resolution, ADC_1); // set bits of resolution
-        for (auto conv_speed : conv_speed_list) {
+        for (auto conv_speed : conversion_speed_list) {
             adc->setConversionSpeed(conv_speed, ADC_0); // change the conversion speed
             adc->setConversionSpeed(conv_speed, ADC_1); // change the conversion speed
-            for (auto samp_speed: samp_speed_list) {
+            for (auto samp_speed: sampling_speed_list) {
               adc->setSamplingSpeed(samp_speed, ADC_0); // change the sampling speed
               adc->setSamplingSpeed(samp_speed, ADC_1); // change the sampling speed
               
@@ -473,11 +365,11 @@ void setup() {
 void loop() {
     // Print errors, if any.
     if(adc->adc0->fail_flag != ADC_ERROR::CLEAR) {
-      Serial.print("ADC0: "); Serial.println(adc->adc0->getError());
+      Serial.print("ADC0: "); Serial.println(getStringADCError(adc->adc0->fail_flag));
     }
     #if ADC_NUM_ADCS > 1
     if(adc->adc1->fail_flag != ADC_ERROR::CLEAR) {
-      Serial.print("ADC1: "); Serial.println(adc->adc1->getError());
+      Serial.print("ADC1: "); Serial.println(getStringADCError(adc->adc1->fail_flag));
     }
     #endif
     adc->resetError();

@@ -531,13 +531,7 @@ class ADC
         #endif
 
 
-        //////////// ERROR PRINTING /////
-        //! returns the human-readable error from all ADC, if any.
-        // TODO: Get errors from both ADCs
-        const char* getError() {
-            return adc[0]->getError();
-        }
-
+        //////////// ERRORS /////
         //! Resets all errors from all ADCs, if any.
         void resetError() {
             for(int i=0; i< ADC_NUM_ADCS; i++) {
