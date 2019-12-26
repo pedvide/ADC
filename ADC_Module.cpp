@@ -187,10 +187,10 @@ void ADC_Module::wait_for_cal(void) {
     #endif
 
     // set calibrated values to registers
-    __disable_irq();
     #ifdef ADC_TEENSY_4
     // T4 does not require anything else for calibration
     #else
+    __disable_irq();
     uint16_t sum;
     if (calibrating) {
         sum = adc_regs.CLPS + adc_regs.CLP4 + adc_regs.CLP3 + adc_regs.CLP2 + adc_regs.CLP1 + adc_regs.CLP0;
@@ -203,9 +203,10 @@ void ADC_Module::wait_for_cal(void) {
 
         
     }
+    __enable_irq();
     #endif
     calibrating = 0;
-    __enable_irq();
+    
 
     // the first calibration uses 32 averages and lowest speed,
     // when this calibration is over, set the averages and speed to default.
@@ -400,7 +401,7 @@ void ADC_Module::setConversionSpeed(ADC_CONVERSION_SPEED speed) {
         return;
     }
 
-    if (calibrating) wait_for_cal();
+    //if (calibrating) wait_for_cal();
 
     // internal asynchronous clock settings: fADK = 10 or 20 MHz
     #ifdef ADC_TEENSY_4
@@ -417,6 +418,7 @@ void ADC_Module::setConversionSpeed(ADC_CONVERSION_SPEED speed) {
         }
 
         conversion_speed = speed;
+        calibrate();
         return;
         }
     #else
@@ -542,7 +544,7 @@ void ADC_Module::setConversionSpeed(ADC_CONVERSION_SPEED speed) {
     #endif
 
     conversion_speed = speed;
-
+    calibrate();
 }
 
 
