@@ -1,4 +1,6 @@
 /* Test suite for the ADC library
+*  Do not connect any pin of the board to anything while it's running
+*  It uses the internal pulldown and pullup resistors to expose the pins to VDD or GND.
 */
 
 #include <ADC.h>
