@@ -983,7 +983,7 @@ ADC::Sync_result ADC::analogSynchronizedRead(uint8_t pin0, uint8_t pin1) {
 
     // check if we are interrupting a measurement, store setting if so.
     // vars to save the current state of the ADC in case it's in use
-    ADC_Module::ADC_Config old_adc0_config = {0};
+    ADC_Module::ADC_Config old_adc0_config = {};
     uint8_t wasADC0InUse = adc0->isConverting(); // is the ADC running now?
     if(wasADC0InUse) { // this means we're interrupting a conversion
         // save the current conversion config, the adc isr will restore the adc
@@ -992,7 +992,7 @@ ADC::Sync_result ADC::analogSynchronizedRead(uint8_t pin0, uint8_t pin1) {
         adc0->saveConfig(&old_adc0_config);
         __enable_irq();
     }
-    ADC_Module::ADC_Config old_adc1_config = {0};
+    ADC_Module::ADC_Config old_adc1_config = {};
     uint8_t wasADC1InUse = adc1->isConverting(); // is the ADC running now?
     if(wasADC1InUse) { // this means we're interrupting a conversion
         // save the current conversion config, the adc isr will restore the adc
@@ -1071,7 +1071,7 @@ ADC::Sync_result ADC::analogSynchronizedReadDifferential(uint8_t pin0P, uint8_t 
 
     // check if we are interrupting a measurement, store setting if so.
     // vars to save the current state of the ADC in case it's in use
-    ADC_Module::ADC_Config old_adc0_config = {0};
+    ADC_Module::ADC_Config old_adc0_config = {};
     uint8_t wasADC0InUse = adc0->isConverting(); // is the ADC running now?
     if(wasADC0InUse) { // this means we're interrupting a conversion
         // save the current conversion config, the adc isr will restore the adc
@@ -1080,7 +1080,7 @@ ADC::Sync_result ADC::analogSynchronizedReadDifferential(uint8_t pin0P, uint8_t 
         adc0->saveConfig(&old_adc0_config);
         __enable_irq();
     }
-    ADC_Module::ADC_Config old_adc1_config = {0};
+    ADC_Module::ADC_Config old_adc1_config = {};
     uint8_t wasADC1InUse = adc1->isConverting(); // is the ADC running now?
     if(wasADC1InUse) { // this means we're interrupting a conversion
         // save the current conversion config, the adc isr will restore the adc

@@ -1042,7 +1042,7 @@ int ADC_Module::analogRead(uint8_t pin) {
 
     // check if we are interrupting a measurement, store setting if so.
     // vars to save the current state of the ADC in case it's in use
-    ADC_Config old_config = {0};
+    ADC_Config old_config = {};
     const uint8_t wasADCInUse = isConverting(); // is the ADC running now?
 
     if(wasADCInUse) { // this means we're interrupting a conversion
@@ -1112,7 +1112,7 @@ int ADC_Module::analogReadDifferential(uint8_t pinP, uint8_t pinN) {
     uint8_t res = getResolution();
 
     // vars to saved the current state of the ADC in case it's in use
-    ADC_Config old_config = {0};
+    ADC_Config old_config = {};
     uint8_t wasADCInUse = isConverting(); // is the ADC running now?
 
     if(wasADCInUse) { // this means we're interrupting a conversion
