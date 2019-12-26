@@ -107,6 +107,12 @@ void ADC_Module::analog_init() {
     pga_value = 1;
     #endif
 
+    #ifdef ADC_TEENSY_4
+    // overwrite old values if a new conversion ends
+    atomic::setBitFlag(adc_regs.CFG, ADC_CFG_OVWREN);
+    // this is the only option for Teensy 3.x and LC
+    #endif
+
     conversion_speed = ADC_CONVERSION_SPEED::HIGH_SPEED; // set to something different from line 139 so it gets changed there
     sampling_speed =  ADC_SAMPLING_SPEED::VERY_HIGH_SPEED;
 
