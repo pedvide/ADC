@@ -283,14 +283,23 @@ bool test_all_combinations(bool debug=false) {
               adc->adc1->wait_for_cal();
               #endif
 
-              bool test = test_pullup_down(pullup=true, false);
-              if (!test & debug) {
-                Serial.print("Average: "); Serial.print(average);
-                Serial.print(", Resolution: "); Serial.print(resolution);
-                Serial.print(", Conversion speed: "); Serial.print(getConversionEnumStr(conv_speed));
-                Serial.print(", Sampling speed: "); Serial.print(getSamplingEnumStr(samp_speed));  
-                Serial.println(". PULLDOWN FAILED.");
+              bool test = test_pullup_down(true, false); // pullups have lower impedance for T4
+              if (!test) {
+                if (debug) {
+                  Serial.print("Average: "); Serial.print(average);
+                  Serial.print(", Resolution: "); Serial.print(resolution);
+                  Serial.print(", Conversion speed: "); Serial.print(getConversionEnumStr(conv_speed));
+                  Serial.print(", Sampling speed: "); Serial.print(getSamplingEnumStr(samp_speed));  
+                  Serial.println(". PULLUP FAILED.");
+                }
+                // VERY_HIGH_SPEED are not guaranteed to work
+                if ((conv_speed != ADC_CONVERSION_SPEED::VERY_HIGH_SPEED) || (samp_speed != ADC_SAMPLING_SPEED::VERY_HIGH_SPEED)) {
+                  pass_test = false;
+                }
+                
               }
+              
+              digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
    
             }
         }
