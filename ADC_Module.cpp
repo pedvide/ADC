@@ -58,12 +58,13 @@ ADC_Module::ADC_Module(uint8_t ADC_number,
         , PDB0_CHnC1(ADC_num? PDB0_CH1C1 : PDB0_CH0C1)
         #endif
         #if defined(ADC_TEENSY_4)
-        , IRQ_ADC(ADC_num? IRQ_ADC2 : IRQ_ADC1)
+        , IRQ_ADC(ADC_num? IRQ_NUMBER_t::IRQ_ADC2 : IRQ_NUMBER_t::IRQ_ADC1)
         #elif ADC_NUM_ADCS==2
         // IRQ_ADC0 and IRQ_ADC1 aren't consecutive in Teensy 3.6
-        , IRQ_ADC(ADC_num? IRQ_ADC1 : IRQ_ADC0) // fix by SB, https://github.com/pedvide/ADC/issues/19
+        // fix by SB, https://github.com/pedvide/ADC/issues/19
+        , IRQ_ADC(ADC_num? IRQ_NUMBER_t::IRQ_ADC1 : IRQ_NUMBER_t::IRQ_ADC0) 
         #else
-        , IRQ_ADC(IRQ_ADC0)
+        , IRQ_ADC(IRQ_NUMBER_t::IRQ_ADC0)
         #endif
         {
 
@@ -106,6 +107,7 @@ void ADC_Module::analog_init() {
     #if ADC_USE_PGA 
     pga_value = 1;
     #endif
+    interrupts_enabled = false;
 
     #ifdef ADC_TEENSY_4
     // overwrite old values if a new conversion ends
@@ -694,16 +696,19 @@ void ADC_Module::setAveraging(uint8_t num) {
 /* Enable interrupts: An ADC Interrupt will be raised when the conversion is completed
 *  (including hardware averages and if the comparison (if any) is true).
 */
-void ADC_Module::enableInterrupts() {
+void ADC_Module::enableInterrupts(void (*isr)(void), uint8_t priority) {
     if (calibrating) wait_for_cal();
 
     // ADC_SC1A_aien = 1;
     #ifdef ADC_TEENSY_4
     atomic::setBitFlag(adc_regs.HC0, ADC_HC_AIEN);
+    interrupts_enabled = true;
     #else
     atomic::setBitFlag(adc_regs.SC1A, ADC_SC1_AIEN);
     #endif
 
+    attachInterruptVector(IRQ_ADC, isr);
+    NVIC_SET_PRIORITY(IRQ_ADC, priority);
     NVIC_ENABLE_IRQ(IRQ_ADC);
 }
 
@@ -714,6 +719,7 @@ void ADC_Module::disableInterrupts() {
     // ADC_SC1A_aien = 0;
     #ifdef ADC_TEENSY_4
     atomic::clearBitFlag(adc_regs.HC0, ADC_HC_AIEN);
+    interrupts_enabled = false;
     #else
     atomic::clearBitFlag(adc_regs.SC1A, ADC_SC1_AIEN);
     #endif
@@ -975,7 +981,7 @@ void ADC_Module::startReadFast(uint8_t pin) {
     // select pin for single-ended mode and start conversion, enable interrupts if requested
     __disable_irq();
     #ifdef ADC_TEENSY_4
-    adc_regs.HC0 = (sc1a_pin&ADC_SC1A_CHANNELS) + atomic::getBitFlag(adc_regs.HC0, ADC_HC_AIEN)*ADC_HC_AIEN;
+    adc_regs.HC0 = (sc1a_pin&ADC_SC1A_CHANNELS) + interrupts_enabled*ADC_HC_AIEN;
     #else
     adc_regs.SC1A = (sc1a_pin&ADC_SC1A_CHANNELS) + atomic::getBitFlag(adc_regs.SC1A, ADC_SC1_AIEN)*ADC_SC1_AIEN;
     #endif
@@ -1336,7 +1342,7 @@ void ADC_Module::stopContinuous() {
 
     // set channel select to all 1's (31) to stop it.
     #ifdef ADC_TEENSY_4
-    adc_regs.HC0 = ADC_SC1A_PIN_INVALID + atomic::getBitFlag(adc_regs.HC0, ADC_HC_AIEN)*ADC_HC_AIEN;
+    adc_regs.HC0 = ADC_SC1A_PIN_INVALID + interrupts_enabled*ADC_HC_AIEN;
     #else
     adc_regs.SC1A = ADC_SC1A_PIN_INVALID + atomic::getBitFlag(adc_regs.SC1A, ADC_SC1_AIEN)*ADC_SC1_AIEN;
     #endif

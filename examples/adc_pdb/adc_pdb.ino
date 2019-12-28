@@ -69,12 +69,12 @@ void loop() {
                 Serial.println(" Hz.");
                 adc->adc0->stopPDB();
                 adc->adc0->startSingleRead(readPin); // call this to setup everything before the pdb starts, differential is also possible
-                adc->enableInterrupts(ADC_0);
+                adc->enableInterrupts(adc0_isr, ADC_0);
                 adc->adc0->startPDB(freq); //frequency in Hz
                 #if ADC_NUM_ADCS>1
                 adc->adc1->stopPDB();
                 adc->adc1->startSingleRead(readPin2); // call this to setup everything before the pdb starts
-                adc->enableInterrupts(ADC_1);
+                adc->enableInterrupts(adc1_isr, ADC_1);
                 adc->adc1->startPDB(freq); //frequency in Hz
                 #endif
             }

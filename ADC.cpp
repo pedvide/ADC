@@ -364,17 +364,19 @@ void ADC::setAveraging(uint8_t num, int8_t adc_num) {
 // Enable interrupts
 /* An IRQ_ADC0 Interrupt will be raised when the conversion is completed
 *  (including hardware averages and if the comparison (if any) is true).
+* \param isr function (returns void and accepts no arguments) that will be executed after an interrupt.
+* \param priority Interrupt priority, highest is 0, lowest is 255.
 */
-void ADC::enableInterrupts(int8_t adc_num) {
+void ADC::enableInterrupts(void (*isr)(void), uint8_t priority, int8_t adc_num) {
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
         #if ADC_NUM_ADCS>=2 // Teensy 3.1
-        adc1->enableInterrupts();
+        adc1->enableInterrupts(isr, priority);
         #else
         adc0->fail_flag |= ADC_ERROR::WRONG_ADC;
         #endif
         return;
     }
-    adc0->enableInterrupts();
+    adc0->enableInterrupts(isr, priority);
     return;
 }
 

@@ -169,8 +169,10 @@ public:
     //! Enable interrupts
     /** An IRQ_ADCx Interrupt will be raised when the conversion is completed
     *  (including hardware averages and if the comparison (if any) is true).
+    * \param isr function (returns void and accepts no arguments) that will be executed after an interrupt.
+    * \param priority Interrupt priority, highest is 0, lowest is 255.
     */
-    void enableInterrupts();
+    void enableInterrupts(void (*isr)(void), uint8_t priority=255);
 
     //! Disable interrupts
     void disableInterrupts();
@@ -619,6 +621,9 @@ private:
     // translate pin number to SC1A nomenclature
     const uint8_t* const channel2sc1a;
 
+    // are interrupts on?
+    bool interrupts_enabled;
+
     
     // same for differential pins
     #if ADC_DIFF_PAIRS > 0
@@ -666,13 +671,11 @@ private:
     reg PDB0_CHnC1; // PDB channel 0 or 1
     #endif
 
-    const uint8_t IRQ_ADC; // IRQ number will be IRQ_ADC0 or IRQ_ADC1
-
+    const IRQ_NUMBER_t IRQ_ADC; // IRQ number
 
 protected:
 
 
 };
-
 
 #endif // ADC_MODULE_H

@@ -173,8 +173,10 @@ class ADC
         /** An IRQ_ADCx Interrupt will be raised when the conversion is completed
         *  (including hardware averages and if the comparison (if any) is true).
         *   \param adc_num ADC number to change.
+        *   \param isr function (returns void and accepts no arguments) that will be executed after an interrupt.
+        *   \param priority Interrupt priority, highest is 0, lowest is 255.
         */
-        void enableInterrupts(int8_t adc_num = -1);
+        void enableInterrupts(void (*isr)(void), uint8_t priority=255, int8_t adc_num = -1);
 
         //! Disable interrupts
         /**

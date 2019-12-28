@@ -52,7 +52,7 @@ void setup() {
     //adc->enableCompareRange(1.0*adc->getMaxValue(ADC_0)/3.3, 2.0*adc->getMaxValue(ADC_0)/3.3, 0, 1, ADC_0); // ready if value lies out of [1.0,2.0] V
 
     // If you enable interrupts, notice that the isr will read the result, so that isComplete() will return false (most of the time)
-    //adc->enableInterrupts(ADC_0);
+    adc->enableInterrupts(adc0_isr, ADC_0);
 
     adc->startContinuous(readPin, ADC_0);
     //adc->startContinuousDifferential(A10, A11, ADC_0);
@@ -73,7 +73,7 @@ void setup() {
 
 
     // If you enable interrupts, note that the isr will read the result, so that isComplete() will return false (most of the time)
-    //adc->enableInterrupts(ADC_1);
+    //adc->enableInterrupts(adc1_isr, ADC_1);
 
     adc->startContinuous(readPin2, ADC_1);
     //adc->startContinuousDifferential(A12, A13, ADC_1);
