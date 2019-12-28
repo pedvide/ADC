@@ -364,85 +364,99 @@ Divide by   ADC_CFG1_ADIV   ADC_CFG1_ADICLK TOTAL   VALUE
 #define ADC_LIB_CFG1_ADICLK(n)		(((n) & 0x03) << 0)
 
 #if defined(ADC_TEENSY_4)
-    #define ADC_F_BUS (150*ADC_MHz)
+    #define ADC_F_BUS F_BUS_ACTUAL // (150*ADC_MHz)
 #else
     #define ADC_F_BUS F_BUS
 #endif
 
 // ADC_CFG1_VERY_LOW_SPEED is the lowest freq
-#if ADC_F_BUS/16 >= ADC_MIN_FREQ
-    #define ADC_CFG1_VERY_LOW_SPEED (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(1))
-#elif ADC_F_BUS/8 >= ADC_MIN_FREQ
-    #define ADC_CFG1_VERY_LOW_SPEED (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(0))
-#elif ADC_F_BUS/4 >= ADC_MIN_FREQ
-    #define ADC_CFG1_VERY_LOW_SPEED (ADC_LIB_CFG1_ADIV(2) + ADC_LIB_CFG1_ADICLK(0))
-#elif ADC_F_BUS/2 >= ADC_MIN_FREQ
-    #define ADC_CFG1_VERY_LOW_SPEED (ADC_LIB_CFG1_ADIV(1) + ADC_LIB_CFG1_ADICLK(0))
-#else
-    #define ADC_CFG1_VERY_LOW_SPEED (ADC_LIB_CFG1_ADIV(0) + ADC_LIB_CFG1_ADICLK(0))
-#endif
+constexpr uint32_t get_CFG_VERY_LOW_SPEED(uint32_t f_adc_clock) {
+    if (f_adc_clock/16 >= ADC_MIN_FREQ) {
+        return (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(1));
+    } else if (f_adc_clock/8 >= ADC_MIN_FREQ){
+        return (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(0));
+    } else if (f_adc_clock/4 >= ADC_MIN_FREQ) {
+        return (ADC_LIB_CFG1_ADIV(2) + ADC_LIB_CFG1_ADICLK(0));
+    } else if (f_adc_clock/2 >= ADC_MIN_FREQ) {
+        return (ADC_LIB_CFG1_ADIV(1) + ADC_LIB_CFG1_ADICLK(0));
+    } else {
+        return (ADC_LIB_CFG1_ADIV(0) + ADC_LIB_CFG1_ADICLK(0));
+    }
+}
 
 // ADC_CFG1_LOW_SPEED is the lowest freq for 16 bits
-#if ADC_F_BUS/16 >= ADC_MIN_FREQ_16BITS
-    #define ADC_CFG1_LOW_SPEED (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(1))
-#elif ADC_F_BUS/8 >= ADC_MIN_FREQ_16BITS
-    #define ADC_CFG1_LOW_SPEED (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(0))
-#elif ADC_F_BUS/4 >= ADC_MIN_FREQ_16BITS
-    #define ADC_CFG1_LOW_SPEED (ADC_LIB_CFG1_ADIV(2) + ADC_LIB_CFG1_ADICLK(0))
-#elif ADC_F_BUS/2 >= ADC_MIN_FREQ_16BITS
-    #define ADC_CFG1_LOW_SPEED (ADC_LIB_CFG1_ADIV(1) + ADC_LIB_CFG1_ADICLK(0))
-#else
-    #define ADC_CFG1_LOW_SPEED (ADC_LIB_CFG1_ADIV(0) + ADC_LIB_CFG1_ADICLK(0))
-#endif
+constexpr uint32_t get_CFG_LOW_SPEED(uint32_t f_adc_clock) {
+    if (f_adc_clock/16 >= ADC_MIN_FREQ_16BITS) {
+        return (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(1));
+    } else if (f_adc_clock/8 >= ADC_MIN_FREQ_16BITS){
+        return (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(0));
+    } else if (f_adc_clock/4 >= ADC_MIN_FREQ_16BITS) {
+        return (ADC_LIB_CFG1_ADIV(2) + ADC_LIB_CFG1_ADICLK(0));
+    } else if (f_adc_clock/2 >= ADC_MIN_FREQ_16BITS) {
+        return (ADC_LIB_CFG1_ADIV(1) + ADC_LIB_CFG1_ADICLK(0));
+    } else {
+        return (ADC_LIB_CFG1_ADIV(0) + ADC_LIB_CFG1_ADICLK(0));
+    }
+}
 
 // ADC_CFG1_HI_SPEED_16_BITS is the highest freq for 16 bits
-#if ADC_F_BUS <= ADC_MAX_FREQ_16BITS
-    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_LIB_CFG1_ADIV(0) + ADC_LIB_CFG1_ADICLK(0))
-#elif ADC_F_BUS/2 <= ADC_MAX_FREQ_16BITS
-    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_LIB_CFG1_ADIV(1) + ADC_LIB_CFG1_ADICLK(0))
-#elif ADC_F_BUS/4 <= ADC_MAX_FREQ_16BITS
-    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_LIB_CFG1_ADIV(2) + ADC_LIB_CFG1_ADICLK(0))
-#elif ADC_F_BUS/8 <= ADC_MAX_FREQ_16BITS
-    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(0))
-#else
-    #define ADC_CFG1_HI_SPEED_16_BITS (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(1))
-#endif
+constexpr uint32_t get_CFG_HI_SPEED_16_BITS(uint32_t f_adc_clock) {
+    if (f_adc_clock <= ADC_MAX_FREQ_16BITS) {
+        return (ADC_LIB_CFG1_ADIV(0) + ADC_LIB_CFG1_ADICLK(0));
+    } else if (f_adc_clock/2 <= ADC_MAX_FREQ_16BITS){
+        return (ADC_LIB_CFG1_ADIV(1) + ADC_LIB_CFG1_ADICLK(0));
+    } else if (f_adc_clock/4 <= ADC_MAX_FREQ_16BITS) {
+        return (ADC_LIB_CFG1_ADIV(2) + ADC_LIB_CFG1_ADICLK(0));
+    } else if (f_adc_clock/8 <= ADC_MAX_FREQ_16BITS) {
+        return (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(0));
+    } else {
+        return (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(1));
+    }
+}
 
 // For ADC_CFG1_MED_SPEED the idea is to check if there's an unused setting between
 // ADC_CFG1_LOW_SPEED and ADC_CFG1_HI_SPEED_16_BITS
-#if (ADC_CFG1_LOW_SPEED - ADC_CFG1_HI_SPEED_16_BITS > 0x20) // higher values are slower speeds
-    #define ADC_CFG1_MED_SPEED  ((ADC_CFG1_HI_SPEED_16_BITS) + 0x20) // at least one divisor in between
-#else
-    #define ADC_CFG1_MED_SPEED  (ADC_CFG1_HI_SPEED_16_BITS)
-#endif
+constexpr uint32_t get_CFG_MEDIUM_SPEED(uint32_t f_adc_clock) {
+    uint32_t ADC_CFG1_LOW_SPEED = get_CFG_LOW_SPEED(f_adc_clock);
+    uint32_t ADC_CFG1_HI_SPEED_16_BITS = get_CFG_HI_SPEED_16_BITS(f_adc_clock);
+    if (ADC_CFG1_LOW_SPEED - ADC_CFG1_HI_SPEED_16_BITS > 0x20) {
+        return ADC_CFG1_HI_SPEED_16_BITS + 0x20;
+    } else {
+        return ADC_CFG1_HI_SPEED_16_BITS;
+    }
+
+}
 
 // ADC_CFG1_HI_SPEED is the highest freq for under 16 bits
-#if ADC_F_BUS <= ADC_MAX_FREQ
-    #define ADC_CFG1_HI_SPEED (ADC_LIB_CFG1_ADIV(0) + ADC_LIB_CFG1_ADICLK(0))
-#elif ADC_F_BUS/2 <= ADC_MAX_FREQ
-    #define ADC_CFG1_HI_SPEED (ADC_LIB_CFG1_ADIV(1) + ADC_LIB_CFG1_ADICLK(0))
-#elif ADC_F_BUS/4 <= ADC_MAX_FREQ
-    #define ADC_CFG1_HI_SPEED (ADC_LIB_CFG1_ADIV(2) + ADC_LIB_CFG1_ADICLK(0))
-#elif ADC_F_BUS/8 <= ADC_MAX_FREQ
-    #define ADC_CFG1_HI_SPEED (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(0))
-#else
-    #define ADC_CFG1_HI_SPEED (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(1))
-#endif
+constexpr uint32_t get_CFG_HIGH_SPEED(uint32_t f_adc_clock) {
+    if (f_adc_clock <= ADC_MAX_FREQ) {
+        return (ADC_LIB_CFG1_ADIV(0) + ADC_LIB_CFG1_ADICLK(0));
+    } else if (f_adc_clock/2 <= ADC_MAX_FREQ){
+        return (ADC_LIB_CFG1_ADIV(1) + ADC_LIB_CFG1_ADICLK(0));
+    } else if (f_adc_clock/4 <= ADC_MAX_FREQ) {
+        return (ADC_LIB_CFG1_ADIV(2) + ADC_LIB_CFG1_ADICLK(0));
+    } else if (f_adc_clock/8 <= ADC_MAX_FREQ) {
+        return (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(0));
+    } else {
+        return (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(1));
+    }
+}
 
 // ADC_CFG1_VERY_HIGH_SPEED >= ADC_CFG1_HI_SPEED and may be out of specs, but not more than ADC_VERY_HIGH_SPEED_FACTOR*ADC_MAX_FREQ
-#define ADC_VERY_HIGH_SPEED_FACTOR  (2)
-#if ADC_F_BUS <= ADC_VERY_HIGH_SPEED_FACTOR*ADC_MAX_FREQ
-    #define ADC_CFG1_VERY_HIGH_SPEED (ADC_LIB_CFG1_ADIV(0) + ADC_LIB_CFG1_ADICLK(0))
-#elif ADC_F_BUS/2 <= ADC_VERY_HIGH_SPEED_FACTOR*ADC_MAX_FREQ
-    #define ADC_CFG1_VERY_HIGH_SPEED (ADC_LIB_CFG1_ADIV(1) + ADC_LIB_CFG1_ADICLK(0))
-#elif ADC_F_BUS/4 <= ADC_VERY_HIGH_SPEED_FACTOR*ADC_MAX_FREQ
-    #define ADC_CFG1_VERY_HIGH_SPEED (ADC_LIB_CFG1_ADIV(2) + ADC_LIB_CFG1_ADICLK(0))
-#elif ADC_F_BUS/8 <= ADC_VERY_HIGH_SPEED_FACTOR*ADC_MAX_FREQ
-    #define ADC_CFG1_VERY_HIGH_SPEED (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(0))
-#else
-    #define ADC_CFG1_VERY_HIGH_SPEED (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(1))
-#endif
-
+constexpr uint32_t get_CFG_VERY_HIGH_SPEED(uint32_t f_adc_clock) {
+    const uint8_t speed_factor = 2;
+    if (f_adc_clock <= speed_factor*ADC_MAX_FREQ) {
+        return (ADC_LIB_CFG1_ADIV(0) + ADC_LIB_CFG1_ADICLK(0));
+    } else if (f_adc_clock/2 <= speed_factor*ADC_MAX_FREQ){
+        return (ADC_LIB_CFG1_ADIV(1) + ADC_LIB_CFG1_ADICLK(0));
+    } else if (f_adc_clock/4 <= speed_factor*ADC_MAX_FREQ) {
+        return (ADC_LIB_CFG1_ADIV(2) + ADC_LIB_CFG1_ADICLK(0));
+    } else if (f_adc_clock/8 <= speed_factor*ADC_MAX_FREQ) {
+        return (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(0));
+    } else {
+        return (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(1));
+    }
+}
 
 
 // Settings for the power/speed of conversions/sampling

@@ -411,148 +411,132 @@ void ADC_Module::setConversionSpeed(ADC_CONVERSION_SPEED speed) {
 
     //if (calibrating) wait_for_cal();
 
-    // internal asynchronous clock settings: fADK = 10 or 20 MHz
-    #ifdef ADC_TEENSY_4
-    if( (speed == ADC_CONVERSION_SPEED::ADACK_10) ||
-        (speed == ADC_CONVERSION_SPEED::ADACK_20)) {
+    bool is_adack = false;
+    uint32_t ADC_CFG1_speed = 0; // store the clock and divisor (set to 0 to avoid warnings)
+
+    switch(speed) {
+        // normal bus clock
+        #ifndef ADC_TEENSY_4
+        case ADC_CONVERSION_SPEED::VERY_LOW_SPEED:
+            atomic::clearBitFlag(adc_regs.CFG2, ADC_CFG2_ADHSC);
+            atomic::setBitFlag(adc_regs.CFG1, ADC_CFG1_ADLPC);
+            // ADC_CFG1_speed = ADC_CFG1_VERY_LOW_SPEED;
+            ADC_CFG1_speed = get_CFG_VERY_LOW_SPEED(ADC_F_BUS);
+            break;
+        #endif
+        case ADC_CONVERSION_SPEED::LOW_SPEED:
+            #ifdef ADC_TEENSY_4
+            atomic::clearBitFlag(adc_regs.CFG, ADC_CFG_ADHSC);
+            atomic::setBitFlag(adc_regs.CFG, ADC_CFG_ADLPC);
+            #else
+            atomic::clearBitFlag(adc_regs.CFG2, ADC_CFG2_ADHSC);
+            atomic::setBitFlag(adc_regs.CFG1, ADC_CFG1_ADLPC);
+            #endif
+            // ADC_CFG1_speed = ADC_CFG1_LOW_SPEED;
+            ADC_CFG1_speed = get_CFG_LOW_SPEED(ADC_F_BUS);
+            break;
+        case ADC_CONVERSION_SPEED::MED_SPEED:
+            #ifdef ADC_TEENSY_4
+            atomic::clearBitFlag(adc_regs.CFG, ADC_CFG_ADHSC);
+            atomic::clearBitFlag(adc_regs.CFG, ADC_CFG_ADLPC);
+            #else
+            atomic::clearBitFlag(adc_regs.CFG2, ADC_CFG2_ADHSC);
+            atomic::clearBitFlag(adc_regs.CFG1, ADC_CFG1_ADLPC);
+            #endif
+            ADC_CFG1_speed = get_CFG_MEDIUM_SPEED(ADC_F_BUS);
+            break;
+        #ifndef ADC_TEENSY_4
+        case ADC_CONVERSION_SPEED::HIGH_SPEED_16BITS:
+            atomic::setBitFlag(adc_regs.CFG2, ADC_CFG2_ADHSC);
+            atomic::clearBitFlag(adc_regs.CFG1, ADC_CFG1_ADLPC);
+            // ADC_CFG1_speed = ADC_CFG1_HI_SPEED_16_BITS;
+            ADC_CFG1_speed = get_CFG_HI_SPEED_16_BITS(ADC_F_BUS);
+            break;
+        #endif
+        case ADC_CONVERSION_SPEED::HIGH_SPEED:
+            #ifdef ADC_TEENSY_4
+            atomic::setBitFlag(adc_regs.CFG, ADC_CFG_ADHSC);
+            atomic::clearBitFlag(adc_regs.CFG, ADC_CFG_ADLPC);
+            #else
+            atomic::setBitFlag(adc_regs.CFG2, ADC_CFG2_ADHSC);
+            atomic::clearBitFlag(adc_regs.CFG1, ADC_CFG1_ADLPC);
+            #endif
+            ADC_CFG1_speed = get_CFG_HIGH_SPEED(ADC_F_BUS);
+            break;
+        #ifndef ADC_TEENSY_4
+        case ADC_CONVERSION_SPEED::VERY_HIGH_SPEED:
+            atomic::setBitFlag(adc_regs.CFG2, ADC_CFG2_ADHSC);
+            atomic::clearBitFlag(adc_regs.CFG1, ADC_CFG1_ADLPC);
+            // ADC_CFG1_speed = ADC_CFG1_VERY_HIGH_SPEED;
+            ADC_CFG1_speed = get_CFG_VERY_HIGH_SPEED(ADC_F_BUS);
+            break;
+        #endif
+
+        // adack - async clock source, independent of the bus clock
+        #ifdef ADC_TEENSY_4 // fADK = 10 or 20 MHz
+        case ADC_CONVERSION_SPEED::ADACK_10:
+            atomic::clearBitFlag(adc_regs.CFG, ADC_CFG_ADHSC);
+            is_adack = true;
+            break;
+        case ADC_CONVERSION_SPEED::ADACK_20:
+            atomic::setBitFlag(adc_regs.CFG, ADC_CFG_ADHSC);
+            is_adack = true;
+            break;
+        #else // fADK = 2.4, 4.0, 5.2 or 6.2 MHz
+        case ADC_CONVERSION_SPEED::ADACK_2_4:
+            atomic::clearBitFlag(adc_regs.CFG2, ADC_CFG2_ADHSC);
+            atomic::setBitFlag(adc_regs.CFG1, ADC_CFG1_ADLPC);
+            is_adack = true;
+            break;
+        case ADC_CONVERSION_SPEED::ADACK_4_0:
+            atomic::setBitFlag(adc_regs.CFG2, ADC_CFG2_ADHSC);
+            atomic::setBitFlag(adc_regs.CFG1, ADC_CFG1_ADLPC);
+            is_adack = true;
+            break;
+        case ADC_CONVERSION_SPEED::ADACK_5_2:
+            atomic::clearBitFlag(adc_regs.CFG2, ADC_CFG2_ADHSC);
+            atomic::clearBitFlag(adc_regs.CFG1, ADC_CFG1_ADLPC);
+            is_adack = true;
+            break;
+        case ADC_CONVERSION_SPEED::ADACK_6_2:
+            atomic::setBitFlag(adc_regs.CFG2, ADC_CFG2_ADHSC);
+            atomic::clearBitFlag(adc_regs.CFG1, ADC_CFG1_ADLPC);
+            is_adack = true;
+            break;
+        #endif
+
+        default:
+            fail_flag |= ADC_ERROR::OTHER;
+            return;
+    }
+
+    if (is_adack) {
+        // async clock source, independent of the bus clock
+        #ifdef ADC_TEENSY_4
         atomic::setBitFlag(adc_regs.GC, ADC_GC_ADACKEN); // enable ADACK (takes max 5us to be ready)
         atomic::setBitFlag(adc_regs.CFG, ADC_CFG_ADICLK(3)); // select ADACK as clock source
         atomic::clearBitFlag(adc_regs.CFG, ADC_CFG_ADIV(3)); // select no dividers
-
-        if(speed == ADC_CONVERSION_SPEED::ADACK_10) {
-            atomic::clearBitFlag(adc_regs.CFG, ADC_CFG_ADHSC);
-        } else if(speed == ADC_CONVERSION_SPEED::ADACK_20) {
-            atomic::setBitFlag(adc_regs.CFG, ADC_CFG_ADHSC);
-        }
-
-        conversion_speed = speed;
-        calibrate();
-        return;
-        }
-    #else
-    // internal asynchronous clock settings: fADK = 2.4, 4.0, 5.2 or 6.2 MHz
-    if( (speed == ADC_CONVERSION_SPEED::ADACK_2_4) ||
-        (speed == ADC_CONVERSION_SPEED::ADACK_4_0) ||
-        (speed == ADC_CONVERSION_SPEED::ADACK_5_2) ||
-        (speed == ADC_CONVERSION_SPEED::ADACK_6_2)) {
-        atomic::setBitFlag(adc_regs.CFG2, ADC_CFG2_ADACKEN); // enable ADACK (takes max 5us to be ready)
-        atomic::setBitFlag(adc_regs.CFG1, ADC_CFG1_ADICLK(3)); // select ADACK as clock source
-
-        atomic::clearBitFlag(adc_regs.CFG1, ADC_CFG1_ADIV(3)); // select no dividers
-
-        if(speed == ADC_CONVERSION_SPEED::ADACK_2_4) {
-            atomic::clearBitFlag(adc_regs.CFG2, ADC_CFG2_ADHSC);
-            atomic::setBitFlag(adc_regs.CFG1, ADC_CFG1_ADLPC);
-        } else if(speed == ADC_CONVERSION_SPEED::ADACK_4_0) {
-            atomic::setBitFlag(adc_regs.CFG2, ADC_CFG2_ADHSC);
-            atomic::setBitFlag(adc_regs.CFG1, ADC_CFG1_ADLPC);
-        } else if(speed == ADC_CONVERSION_SPEED::ADACK_5_2) {
-            atomic::clearBitFlag(adc_regs.CFG2, ADC_CFG2_ADHSC);
-            atomic::clearBitFlag(adc_regs.CFG1, ADC_CFG1_ADLPC);
-        } else if(speed == ADC_CONVERSION_SPEED::ADACK_6_2) {
-            atomic::setBitFlag(adc_regs.CFG2, ADC_CFG2_ADHSC);
-            atomic::clearBitFlag(adc_regs.CFG1, ADC_CFG1_ADLPC);
-        }
-        conversion_speed = speed;
-        return;
-    }
-    #endif
-
-
-    // normal bus clock used
-    #ifdef ADC_TEENSY_4
-    atomic::clearBitFlag(adc_regs.GC, ADC_GC_ADACKEN);
-    #else
-    // *ADC_CFG2_adacken = 0; // disable the internal asynchronous clock
-    atomic::clearBitFlag(adc_regs.CFG2, ADC_CFG2_ADACKEN);
-    #endif
-
-    uint32_t ADC_CFG1_speed; // store the clock and divisor
-
-    #ifdef ADC_TEENSY_4
-    switch(speed) {
-        case ADC_CONVERSION_SPEED::LOW_SPEED:
-            atomic::clearBitFlag(adc_regs.CFG, ADC_CFG_ADHSC);
-            atomic::setBitFlag(adc_regs.CFG, ADC_CFG_ADLPC);
-            ADC_CFG1_speed = ADC_CFG1_LOW_SPEED;
-            break;
-        case ADC_CONVERSION_SPEED::MED_SPEED:
-            atomic::clearBitFlag(adc_regs.CFG, ADC_CFG_ADHSC);
-            atomic::clearBitFlag(adc_regs.CFG, ADC_CFG_ADLPC);
-            ADC_CFG1_speed = ADC_CFG1_MED_SPEED;
-            break;
-        case ADC_CONVERSION_SPEED::HIGH_SPEED:
-            atomic::setBitFlag(adc_regs.CFG, ADC_CFG_ADHSC);
-            atomic::clearBitFlag(adc_regs.CFG, ADC_CFG_ADLPC);
-            ADC_CFG1_speed = ADC_CFG1_HI_SPEED;
-            break;
-    }
-    #else
-    if(speed == ADC_CONVERSION_SPEED::VERY_LOW_SPEED) {
-        // *ADC_CFG2_adhsc = 0; // no high-speed config
-        // *ADC_CFG1_adlpc  = 1; // use low power conf.
-        atomic::clearBitFlag(adc_regs.CFG2, ADC_CFG2_ADHSC);
-        atomic::setBitFlag(adc_regs.CFG1, ADC_CFG1_ADLPC);
-        ADC_CFG1_speed = ADC_CFG1_VERY_LOW_SPEED;
-
-    } else if(speed == ADC_CONVERSION_SPEED::LOW_SPEED) {
-        // *ADC_CFG2_adhsc = 0; // no high-speed config
-        // *ADC_CFG1_adlpc  = 1; // use low power conf.
-        atomic::clearBitFlag(adc_regs.CFG2, ADC_CFG2_ADHSC);
-        atomic::setBitFlag(adc_regs.CFG1, ADC_CFG1_ADLPC);
-        ADC_CFG1_speed = ADC_CFG1_LOW_SPEED;
-
-    } else if(speed == ADC_CONVERSION_SPEED::MED_SPEED) {
-        // *ADC_CFG2_adhsc = 0; // no high-speed config
-        // *ADC_CFG1_adlpc  = 0; // no low power conf.
-        atomic::clearBitFlag(adc_regs.CFG2, ADC_CFG2_ADHSC);
-        atomic::clearBitFlag(adc_regs.CFG1, ADC_CFG1_ADLPC);
-        ADC_CFG1_speed = ADC_CFG1_MED_SPEED;
-
-    } else if(speed == ADC_CONVERSION_SPEED::HIGH_SPEED_16BITS) {
-        // *ADC_CFG2_adhsc = 1; // high-speed config: add 2 ADCK
-        // *ADC_CFG1_adlpc  = 0; // no low power conf.
-        atomic::setBitFlag(adc_regs.CFG2, ADC_CFG2_ADHSC);
-        atomic::clearBitFlag(adc_regs.CFG1, ADC_CFG1_ADLPC);
-        ADC_CFG1_speed = ADC_CFG1_HI_SPEED_16_BITS;
-
-    } else if(speed == ADC_CONVERSION_SPEED::HIGH_SPEED) {
-        // *ADC_CFG2_adhsc = 1; // high-speed config: add 2 ADCK
-        // *ADC_CFG1_adlpc  = 0; // no low power conf.
-        atomic::setBitFlag(adc_regs.CFG2, ADC_CFG2_ADHSC);
-        atomic::clearBitFlag(adc_regs.CFG1, ADC_CFG1_ADLPC);
-        ADC_CFG1_speed = ADC_CFG1_HI_SPEED;
-
-    } else if(speed == ADC_CONVERSION_SPEED::VERY_HIGH_SPEED) { // this speed is most likely out of specs, so accuracy can be bad
-        // *ADC_CFG2_adhsc = 1; // high-speed config: add 2 ADCK
-        // *ADC_CFG1_adlpc  = 0; // no low power conf.
-        atomic::setBitFlag(adc_regs.CFG2, ADC_CFG2_ADHSC);
-        atomic::clearBitFlag(adc_regs.CFG1, ADC_CFG1_ADLPC);
-        ADC_CFG1_speed = ADC_CFG1_VERY_HIGH_SPEED;
-
+        #else
+        atomic::setBitFlag(adc_regs.CFG2, ADC_CFG2_ADACKEN); 
+        atomic::setBitFlag(adc_regs.CFG1, ADC_CFG1_ADICLK(3));
+        atomic::clearBitFlag(adc_regs.CFG1, ADC_CFG1_ADIV(3));
+        #endif        
     } else {
-        fail_flag |= ADC_ERROR::OTHER;
-        return;
+        // normal bus clock used - disable the internal asynchronous clock
+        // total speed can be: bus, bus/2, bus/4, bus/8 or bus/16.
+        #ifdef ADC_TEENSY_4
+        atomic::clearBitFlag(adc_regs.GC, ADC_GC_ADACKEN); // disable async
+        atomic::changeBitFlag(adc_regs.CFG, ADC_CFG_ADICLK(3), ADC_CFG1_speed & ADC_CFG_ADICLK(3)); // bus or bus/2
+        atomic::changeBitFlag(adc_regs.CFG, ADC_CFG_ADIV(3), ADC_CFG1_speed & ADC_CFG_ADIV(3)); // divisor for the clock source
+        #else
+        atomic::clearBitFlag(adc_regs.CFG2, ADC_CFG2_ADACKEN);
+        atomic::changeBitFlag(adc_regs.CFG1, ADC_CFG1_ADICLK(3), ADC_CFG1_speed & ADC_CFG1_ADICLK(3));
+        atomic::changeBitFlag(adc_regs.CFG1, ADC_CFG1_ADIV(3), ADC_CFG1_speed & ADC_CFG1_ADIV(3));
+        #endif
     }
-    #endif
-
-    // clock source is bus or bus/2
-    #ifdef ADC_TEENSY_4
-    atomic::changeBitFlag(adc_regs.CFG, ADC_CFG_ADICLK(3), ADC_CFG1_speed & ADC_CFG_ADICLK(3));
-    #else
-    atomic::changeBitFlag(adc_regs.CFG1, ADC_CFG1_ADICLK(3), ADC_CFG1_speed & ADC_CFG1_ADICLK(3));
-    #endif
-
-    // divisor for the clock source: 1, 2, 4 or 8.
-    // so total speed can be: bus, bus/2, bus/4, bus/8 or bus/16.
-    #ifdef ADC_TEENSY_4
-    atomic::changeBitFlag(adc_regs.CFG, ADC_CFG_ADIV(3), ADC_CFG1_speed & ADC_CFG_ADIV(3));
-    #else
-    atomic::changeBitFlag(adc_regs.CFG1, ADC_CFG1_ADIV(3), ADC_CFG1_speed & ADC_CFG1_ADIV(3));
-    #endif
 
     conversion_speed = speed;
-    calibrate();
+    calibrate();    
 }
 
 
