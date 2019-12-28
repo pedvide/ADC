@@ -31,8 +31,11 @@ void setup() {
     Serial.begin(9600);
     delay(100);
 
+    Serial.print("F_CPU: "); Serial.print(F_CPU/1e6);  Serial.println(" MHz."); 
+    Serial.print("ADC_F_BUS: "); Serial.print(ADC_F_BUS/1e6); Serial.println(" MHz."); 
+
     // Single-shot conversions. The fastest way to do conversions is with continuous mode (see below)
-    Serial.println("Single-shot conversion speeds."); 
+    Serial.println("Single-shot conversion speeds. Value should be 1."); 
     for(auto average : averages_list) {
       adc->setAveraging(average, ADC_0); // set number of averages
       for (auto resolution : resolutions_list) {
@@ -65,7 +68,7 @@ void setup() {
 
 
     // Continuous mode
-    Serial.println("Continuous mode conversion speeds."); 
+    Serial.println("Continuous mode conversion speeds. Value should be 1."); 
     adc->enableInterrupts(adc0_isr, ADC_0);
     for(auto average : averages_list) {
       adc->setAveraging(average, ADC_0); // set number of averages
