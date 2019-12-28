@@ -77,6 +77,12 @@ const uint32_t num_samples = 100;
 #endif
 
 // test the analog pins that also have a digital function
+// Teensy LC has 20-50 kOhm pullup, no idea about pulldown (do they exist?)
+// Teensy 3.0 has 22-50 kOhm pullup and pulldown
+// Teensy 3.1/3.2 has 20-50 kOhm pullup and pulldown
+// Teensy 3.5 has 20-50 kOhm pullup and pulldown
+// Teensy 3.6 has 20-50 kOhm pullup and pulldown
+// Teensy 4 has 100 kOhm pulldow, and 22 kOhm pullup, so pulldown will fail faster
 bool test_pullup_down(bool pullup, bool debug=false) {
     uint8_t mode = pullup ? INPUT_PULLUP : INPUT_PULLDOWN;
 
@@ -277,7 +283,7 @@ bool test_all_combinations(bool debug=false) {
               adc->adc1->wait_for_cal();
               #endif
 
-              bool test = test_pullup_down(false, false);
+              bool test = test_pullup_down(pullup=true, false);
               if (!test & debug) {
                 Serial.print("Average: "); Serial.print(average);
                 Serial.print(", Resolution: "); Serial.print(resolution);
