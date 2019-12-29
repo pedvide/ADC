@@ -30,7 +30,12 @@ RingBufferDMA::RingBufferDMA(volatile int16_t* elems, uint32_t len, uint8_t ADC_
         p_elems(elems)
         , b_size(len)
         , ADC_number(ADC_num)
+        #ifdef __IMXRT1062__
+        , ADC_RA(&ADC1_R0 + (uint32_t)0x20000*ADC_number)
+        #else
         , ADC_RA(&ADC0_RA + (uint32_t)0x20000*ADC_number)
+        #endif
+        
         {
 
     b_start = 0;
@@ -60,11 +65,19 @@ void RingBufferDMA::start(void (*call_dma_isr)(void)) {
 
     dmaChannel->interruptAtCompletion(); //interruptAtHalf or interruptAtCompletion
 
+    #ifdef __IMXRT1062__
+	uint8_t DMAMUX_SOURCE_ADC = DMAMUX_SOURCE_ADC1;
+    #else
+    uint8_t DMAMUX_SOURCE_ADC = DMAMUX_SOURCE_ADC0;
+    #endif
 
-	uint8_t DMAMUX_SOURCE_ADC = DMAMUX_SOURCE_ADC0;
 	#if ADC_NUM_ADCS>=2
     if(ADC_number==1){
-        DMAMUX_SOURCE_ADC = DMAMUX_SOURCE_ADC1;
+        #ifdef __IMXRT1062__
+        uint8_t DMAMUX_SOURCE_ADC = DMAMUX_SOURCE_ADC2;
+        #else
+        uint8_t DMAMUX_SOURCE_ADC = DMAMUX_SOURCE_ADC1;
+        #endif
     }
     #endif // ADC_NUM_ADCS
 

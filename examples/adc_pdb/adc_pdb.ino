@@ -1,9 +1,10 @@
 /* Example for triggering the ADC with PDB
-*   Valid for Teensy 3.0 and 3.1, not LC
+*   Valid for Teensy 3.0 and 3.1
 */
 
 
 #include <ADC.h>
+#include <ADC_util.h>
 
 const int readPin = A9; // ADC0
 const int readPin2 = A2; // ADC1
@@ -68,12 +69,12 @@ void loop() {
                 Serial.println(" Hz.");
                 adc->adc0->stopPDB();
                 adc->adc0->startSingleRead(readPin); // call this to setup everything before the pdb starts, differential is also possible
-                adc->enableInterrupts(ADC_0);
+                adc->enableInterrupts(adc0_isr, ADC_0);
                 adc->adc0->startPDB(freq); //frequency in Hz
                 #if ADC_NUM_ADCS>1
                 adc->adc1->stopPDB();
                 adc->adc1->startSingleRead(readPin2); // call this to setup everything before the pdb starts
-                adc->enableInterrupts(ADC_1);
+                adc->enableInterrupts(adc1_isr, ADC_1);
                 adc->adc1->startPDB(freq); //frequency in Hz
                 #endif
             }
@@ -87,11 +88,11 @@ void loop() {
 
     // Print errors, if any.
     if(adc->adc0->fail_flag != ADC_ERROR::CLEAR) {
-      Serial.print("ADC0: "); Serial.println(adc->adc0->getError());
+      Serial.print("ADC0: "); Serial.println(getStringADCError(adc->adc0->fail_flag));
     }
     #if ADC_NUM_ADCS > 1
     if(adc->adc1->fail_flag != ADC_ERROR::CLEAR) {
-      Serial.print("ADC1: "); Serial.println(adc->adc1->getError());
+      Serial.print("ADC1: "); Serial.println(getStringADCError(adc->adc1->fail_flag));
     }
     #endif
     adc->resetError();

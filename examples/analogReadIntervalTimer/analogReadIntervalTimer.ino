@@ -81,7 +81,7 @@ void setup() {
     //adc->enableCompareRange(1.0*adc->getMaxValue(ADC_0)/3.3, 2.0*adc->getMaxValue(ADC_0)/3.3, 0, 1, ADC_0); // ready if value lies out of [1.0,2.0] V
 
     // If you enable interrupts, notice that the isr will read the result, so that isComplete() will return false (most of the time)
-    //adc->enableInterrupts(ADC_0);
+    //adc->enableInterrupts(adc0_isr, ADC_0);
 
 
     Serial.println("Starting Timers");
@@ -106,7 +106,7 @@ void setup() {
     // if you change the periods, make sure you don't go into a loop, with the timers always interrupting each other
     startTimerValue1 = timer1.begin(timer1_callback, period1);
 
-    adc->enableInterrupts(ADC_0);
+    adc->enableInterrupts(adc0_isr, ADC_0);
 
     Serial.println("Timers started");
 

@@ -88,6 +88,12 @@ const uint8_t ADC::channel2sc1aADC0[]= { // new version, gives directly the sc1a
     31, 31, 31, 31, 31, 31, 31, 31, 31, // 53-61
     31, 31, 3+ADC_SC1A_PIN_DIFF, 31+ADC_SC1A_PIN_DIFF, 23, 31 // 62-67 64: A10, 65: A11 (NOT CONNECTED), 66: A21, 67: A22(ADC1)
 };
+#elif defined(ADC_TEENSY_4)
+const uint8_t ADC::channel2sc1aADC0[]= { // new version, gives directly the sc1a number. 0x1F=31 deactivates the ADC.
+    7, 8, 12, 11, 6, 5, 15, 0, 13, 14, 1, 2, 31, 31, // 0-13, we treat them as A0-A13
+    7, 8, 12, 11, 6, 5, 15, 0, 13, 14, // 14-23 (A0-A9)
+    1, 2, 31, 31 // A10, A11, A12, A13
+};
 #endif // defined
 
 ///////// ADC1
@@ -122,6 +128,12 @@ const uint8_t ADC::channel2sc1aADC1[]= { // new version, gives directly the sc1a
     31, 31, 31, 31, 31, 31, 31, 31, 31, // 53-61
     31, 31, 0+ADC_SC1A_PIN_DIFF, 19+ADC_SC1A_PIN_DIFF, 31, 23 // 61-67 64: A10, 65: A11, 66: A21(ADC0), 67: A22
 };
+#elif defined(ADC_TEENSY_4)
+const uint8_t ADC::channel2sc1aADC1[]= { // new version, gives directly the sc1a number. 0x1F=31 deactivates the ADC.
+    7, 8, 12, 11, 6, 5, 15, 0, 13, 14, 31, 31, 3, 4, // 0-13, we treat them as A0-A13
+    7, 8, 12, 11, 6, 5, 15, 0, 13, 14, // 14-23 (A0-A9)
+    31, 31, 3, 4 // A10, A11, A12, A13
+};
 #endif
 
 #if defined(ADC_TEENSY_3_1) // Teensy 3.1
@@ -146,6 +158,7 @@ const uint8_t ADC::channel2sc1aADC1[]= { // new version, gives directly the sc1a
     const ADC_Module::ADC_NLIST ADC::diff_table_ADC1[]= {
         {A10, 0}
     };
+#elif defined(ADC_TEENSY_4)
 #endif
 
 
@@ -196,21 +209,21 @@ const uint8_t ADC::sc1a2channelADC1[]= { // new version, gives directly the pin 
 
 // Constructor
 ADC::ADC() : // awkward initialization  so there are no -Wreorder warnings
-    adc0_obj(0, channel2sc1aADC0, diff_table_ADC0)
+    #if ADC_DIFF_PAIRS > 0
+    adc0_obj(0, channel2sc1aADC0, diff_table_ADC0, ADC0_START)
     #if ADC_NUM_ADCS>1
-    , adc1_obj(1, channel2sc1aADC1, diff_table_ADC1)
+    , adc1_obj(1, channel2sc1aADC1, diff_table_ADC1, ADC1_START)
+    #endif
+    #else
+    adc0_obj(0, channel2sc1aADC0, ADC0_START)
+    #if ADC_NUM_ADCS>1
+    , adc1_obj(1, channel2sc1aADC1, ADC1_START)
+    #endif
     #endif
     {
     //ctor
 
     //digitalWriteFast(LED_BUILTIN, HIGH);
-
-    // make sure the clocks to the ADC are on
-    SIM_SCGC6 |= SIM_SCGC6_ADC0;
-    #if ADC_NUM_ADCS>1
-    SIM_SCGC3 |= SIM_SCGC3_ADC1;
-    #endif
-
 }
 
 
@@ -351,17 +364,19 @@ void ADC::setAveraging(uint8_t num, int8_t adc_num) {
 // Enable interrupts
 /* An IRQ_ADC0 Interrupt will be raised when the conversion is completed
 *  (including hardware averages and if the comparison (if any) is true).
+* \param isr function (returns void and accepts no arguments) that will be executed after an interrupt.
+* \param priority Interrupt priority, highest is 0, lowest is 255.
 */
-void ADC::enableInterrupts(int8_t adc_num) {
+void ADC::enableInterrupts(void (*isr)(void), uint8_t priority, int8_t adc_num) {
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
         #if ADC_NUM_ADCS>=2 // Teensy 3.1
-        adc1->enableInterrupts();
+        adc1->enableInterrupts(isr, priority);
         #else
         adc0->fail_flag |= ADC_ERROR::WRONG_ADC;
         #endif
         return;
     }
-    adc0->enableInterrupts();
+    adc0->enableInterrupts(isr, priority);
     return;
 }
 
@@ -1261,17 +1276,12 @@ bool ADC::startSynchronizedContinuous(uint8_t pin0, uint8_t pin1) {
         return false;
     }
 
-    adc0->startContinuous(pin0);
-    adc1->startContinuous(pin1);
-
-    // setup the conversions the usual way, but to make sure that they are
-    // as synchronized as possible we stop and restart them one after the other.
-    const uint32_t temp_ADC0_SC1A = ADC0_SC1A; ADC0_SC1A = 0x1F;
-    const uint32_t temp_ADC1_SC1A = ADC1_SC1A; ADC1_SC1A = 0x1F;
+    adc0->continuousMode();
+    adc1->continuousMode();
 
     __disable_irq(); // both measurements should have a maximum delay of an instruction time
-    ADC0_SC1A = temp_ADC0_SC1A;
-    ADC1_SC1A = temp_ADC1_SC1A;
+    adc0->startReadFast(pin0);
+    adc1->startReadFast(pin1);
     __enable_irq();
 
     return true;
@@ -1294,17 +1304,12 @@ bool ADC::startSynchronizedContinuousDifferential(uint8_t pin0P, uint8_t pin0N, 
         return false;   // all others are invalid
     }
 
-    adc0->startContinuousDifferential(pin0P, pin0N);
-    adc1->startContinuousDifferential(pin1P, pin1N);
-
-    // setup the conversions the usual way, but to make sure that they are
-    // as synchronized as possible we stop and restart them one after the other.
-    const uint32_t temp_ADC0_SC1A = ADC0_SC1A; ADC0_SC1A = 0x1F;
-    const uint32_t temp_ADC1_SC1A = ADC1_SC1A; ADC1_SC1A = 0x1F;
+    adc0->continuousMode();
+    adc1->continuousMode();
 
     __disable_irq();
-    ADC0_SC1A = temp_ADC0_SC1A;
-    ADC1_SC1A = temp_ADC1_SC1A;
+    adc0->startDifferentialFast(pin0P, pin0N);
+    adc1->startDifferentialFast(pin1P, pin1N);
     __enable_irq();
 
 

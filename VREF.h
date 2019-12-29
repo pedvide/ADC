@@ -23,8 +23,8 @@
  * SOFTWARE.
  */
 
-#ifndef VREF_H
-#define VREF_H
+#ifndef ADC_VREF_H
+#define ADC_VREF_H
 
 #include <Arduino.h>
 
@@ -111,4 +111,4 @@ namespace VREF
 
 }
 
-#endif // VREF_H
+#endif // ADC_VREF_H

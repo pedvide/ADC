@@ -50,7 +50,7 @@ void setup() {
     adc->enableDMA(ADC_0);
 
     // ADC interrupt enabled isn't mandatory for DMA to work.
-    adc->enableInterrupts(ADC_0);
+    adc->enableInterrupts(adc0_isr, ADC_0);
 }
 
 char c=0;

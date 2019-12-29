@@ -4,6 +4,7 @@
 
 
 #include <ADC.h>
+#include <ADC_util.h>
 
 const int readPin = A9; // ADC0
 const int readPin2 = A2; // ADC1
@@ -47,7 +48,7 @@ void setup() {
     //adc->enableCompareRange(1.0*adc->getMaxValue(ADC_0)/3.3, 2.0*adc->getMaxValue(ADC_0)/3.3, 0, 1, ADC_0); // ready if value lies out of [1.0,2.0] V
 
     // If you enable interrupts, notice that the isr will read the result, so that isComplete() will return false (most of the time)
-    //adc->enableInterrupts(ADC_0);
+    //adc->enableInterrupts(adc0_isr, ADC_0);
 
 
     ////// ADC1 /////
@@ -65,7 +66,7 @@ void setup() {
 
 
     // If you enable interrupts, note that the isr will read the result, so that isComplete() will return false (most of the time)
-    //adc->enableInterrupts(ADC_1);
+    //adc->enableInterrupts(adc1_isr, ADC_1);
 
     #endif
 
@@ -97,27 +98,35 @@ void loop() {
     #endif
 
     // Differential reads
+    #if ADC_DIFF_PAIRS > 0
+    #if ADC_USE_PGA
+    double V_per_bit = 3.3/adc->getPGA()/adc->getMaxValue();
+    #else
+    double V_per_bit = 3.3/adc->getMaxValue();
+    #endif
 
     value = adc->adc0->analogReadDifferential(A10, A11); // read a new value, will return ADC_ERROR_VALUE if the comparison is false.
 
     Serial.print(" Value A10-A11: ");
     // Divide by the maximum possible value and the PGA level
-    Serial.println(value*3.3/adc->getPGA()/adc->getMaxValue(), DEC);
+    
+    Serial.println(value*V_per_bit, DEC);
 
-    #if ADC_NUM_ADCS>1 && ADC_DIFF_PAIRS > 1
+    #if ADC_NUM_ADCS>1
     value2 = adc->analogReadDifferential(A12, A13, ADC_1);
 
     Serial.print(" Value A12-A13: ");
-    Serial.println(value2*3.3/adc->getPGA(ADC_1)/adc->getMaxValue(ADC_1), DEC);
+    Serial.println(value2*V_per_bit, DEC);
+    #endif
     #endif
 
     // Print errors, if any.
     if(adc->adc0->fail_flag != ADC_ERROR::CLEAR) {
-      Serial.print("ADC0: "); Serial.println(adc->adc0->getError());
+      Serial.print("ADC0: "); Serial.println(getStringADCError(adc->adc0->fail_flag));
     }
     #if ADC_NUM_ADCS > 1
     if(adc->adc1->fail_flag != ADC_ERROR::CLEAR) {
-      Serial.print("ADC1: "); Serial.println(adc->adc1->getError());
+      Serial.print("ADC1: "); Serial.println(getStringADCError(adc->adc1->fail_flag));
     }
     #endif
 
@@ -130,4 +139,3 @@ void loop() {
 void adc0_isr() {
         adc->adc0->readSingle();
 }
-

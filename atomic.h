@@ -1,5 +1,44 @@
-#ifndef ATOMIC_H
-#define ATOMIC_H
+/* Teensy 4, 3.x, LC ADC library
+ * https://github.com/pedvide/ADC
+ * Copyright (c) 2019 Pedro Villanueva
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+ * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+#ifndef ADC_ATOMIC_H
+#define ADC_ATOMIC_H
+
+/*  int __builtin_ctz (unsigned int x):
+    Returns the number of trailing 0-bits in x, 
+    starting at the least significant bit position. 
+    If x is 0, the result is undefined. 
+*/
+/* int __builtin_clz (unsigned int x)
+   Returns the number of leading 0-bits in x, 
+   starting at the most significant bit position. 
+   If x is 0, the result is undefined. 
+*/
+/* int __builtin_popcount (unsigned int x)
+    Returns the number of 1-bits in x. 
+*/
 
 // kinetis.h has the following types for addresses: uint32_t, uint16_t, uint8_t, int32_t, int16_t
 
@@ -8,8 +47,11 @@ namespace atomic
 {
     /////// Atomic bit set/clear
     /* Clear bit in address (make it zero), set bit (make it one), or return the value of that bit
+    *   changeBitFlag can change up to 2 bits in a flag at the same time
     *   We can change this functions depending on the board.
     *   Teensy 3.x use bitband while Teensy LC has a more advanced bit manipulation engine.
+    *   Teensy 4 also has bitband capabilities, but are not yet implemented, instead registers are 
+    *   set and cleared manually. TODO: fix this.
     */
     #if defined(KINETISK) // Teensy 3.x
     //! Bitband address
@@ -73,6 +115,54 @@ namespace atomic
     }
 
 
+    #elif defined(__IMXRT1062__) // Teensy 4
+    template<typename T>
+    __attribute__((always_inline)) inline void setBitFlag(volatile T& reg, T flag) {
+        __disable_irq();
+        reg |= flag;
+        __enable_irq();
+    }
+
+    template<typename T>
+    __attribute__((always_inline)) inline void clearBitFlag(volatile T& reg, T flag) {
+        __disable_irq();
+        reg &= ~flag;
+        __enable_irq();
+    }
+
+    template<typename T>
+    __attribute__((always_inline)) inline void changeBitFlag(volatile T& reg, T flag, T state) {
+        // flag can be 1 or 2 bits wide
+        // state can have one or two bits set
+        if(__builtin_popcount(flag) == 1) { // 1 bit
+            if (state) { 
+                setBitFlag(reg, flag);
+            } else {
+                clearBitFlag(reg, flag);
+            }        
+        } else { // 2 bits
+            // lsb first
+            if ((state >> __builtin_ctzl(flag))&0x1) { // lsb of state is 1
+                setBitFlag(reg, (uint32_t)(1 << __builtin_ctzl(flag)));
+            } else { // lsb is 0
+                clearBitFlag(reg, (uint32_t)(1 << __builtin_ctzl(flag)));
+            }
+            // msb
+            if ((state >> (31-__builtin_clzl(flag)))&0x1) { // msb of state is 1
+                setBitFlag(reg, (uint32_t)(1 << (31-__builtin_clzl(flag))));
+            } else { // msb is 0
+                clearBitFlag(reg, (uint32_t)(1 << (31-__builtin_clzl(flag))));
+            }
+        }
+        
+    }
+
+    template<typename T>
+    __attribute__((always_inline)) inline volatile bool getBitFlag(volatile T& reg, T flag) {
+        return (volatile bool)((reg) & flag) >> (31-__builtin_clzl(flag));
+    }
+
+
 
     #elif defined(KINETISL) // Teensy LC
     // bit manipulation engine
@@ -123,4 +213,4 @@ namespace atomic
 
 }
 
-#endif // ATOMIC_H
+#endif // ADC_ATOMIC_H
