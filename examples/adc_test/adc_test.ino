@@ -107,6 +107,7 @@ bool test_pullup_down(bool pullup, bool debug=false) {
             pass_test = false;
         }
     }
+    #if ADC_NUM_ADCS>1
     for (auto pin : adc_pins_dig_ADC_1) {
       pinMode(pin, mode);
       delay(10); // settle time
@@ -124,6 +125,7 @@ bool test_pullup_down(bool pullup, bool debug=false) {
             pass_test = false;
         }
     }
+    #endif
 
     return pass_test;
 }
@@ -315,11 +317,13 @@ void resetSettings() {
   adc->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED); // change the conversion speed
   adc->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED); // change the sampling speed
 
+  #if ADC_NUM_ADCS>1
   adc->setAveraging(16, ADC_1); // set number of averages
   adc->setResolution(12, ADC_1); // set bits of resolution
   adc->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED, ADC_1); // change the conversion speed
   adc->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED, ADC_1); // change the sampling speed
   adc->adc1->recalibrate();
+  #endif
   
 }
 
