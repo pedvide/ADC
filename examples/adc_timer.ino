@@ -1,0 +1,123 @@
+/* Example for triggering the ADC with Timer
+*   Valid for Teensy 3.0 and 3.1
+*/
+
+
+#include <ADC.h>
+#include <ADC_util.h>
+
+const int readPin = A9; // ADC0
+const int readPin2 = A2; // ADC1
+
+ADC *adc = new ADC(); // adc object;
+
+void setup() {
+
+    pinMode(LED_BUILTIN, OUTPUT);
+    pinMode(readPin, INPUT);
+    pinMode(readPin2, INPUT);
+
+    Serial.begin(9600);
+
+    Serial.println("Begin setup");
+
+    ///// ADC0 ////
+    adc->setAveraging(1); // set number of averages
+    adc->setResolution(8); // set bits of resolution
+    adc->setConversionSpeed(ADC_CONVERSION_SPEED::VERY_HIGH_SPEED); // change the conversion speed
+    adc->setSamplingSpeed(ADC_SAMPLING_SPEED::VERY_HIGH_SPEED); // change the sampling speed
+
+    ////// ADC1 /////
+    #if ADC_NUM_ADCS>1
+    adc->setAveraging(1, ADC_1); // set number of averages
+    adc->setResolution(8, ADC_1); // set bits of resolution
+    adc->setConversionSpeed(ADC_CONVERSION_SPEED::VERY_HIGH_SPEED, ADC_1); // change the conversion speed
+    adc->setSamplingSpeed(ADC_SAMPLING_SPEED::VERY_HIGH_SPEED, ADC_1); // change the sampling speed
+    #endif
+
+    Serial.println("End setup");
+
+}
+
+char c=0;
+int value;
+int value2;
+
+void loop() {
+
+    if (Serial.available()) {
+        c = Serial.read();
+        if(c=='v') { // value
+            Serial.print("Value ADC0: ");
+            value = (uint16_t)adc->readSingle(ADC_0); // the unsigned is necessary for 16 bits, otherwise values larger than 3.3/2 V are negative!
+            Serial.println(value*3.3/adc->getMaxValue(ADC_0), DEC);
+            #if ADC_NUM_ADCS>1
+            Serial.print("Value ADC1: ");
+            value2 = (uint16_t)adc->readSingle(ADC_1); // the unsigned is necessary for 16 bits, otherwise values larger than 3.3/2 V are negative!
+            Serial.println(value2*3.3/adc->getMaxValue(ADC_1), DEC);
+            #endif
+        } else if(c=='s') { // start Timer, before pressing enter write the frequency in Hz
+            uint32_t freq = Serial.parseInt();
+            if (freq == 0) {
+                Serial.println("Stop Timer.");
+                adc->adc0->stopTimer();
+                adc->adc1->stopTimer();
+            }
+            else {
+                Serial.print("Start Timer with frequency ");
+                Serial.print(freq);
+                Serial.println(" Hz.");
+                adc->adc0->stopTimer();
+                adc->adc0->startSingleRead(readPin); // call this to setup everything before the Timer starts, differential is also possible
+                adc->enableInterrupts(adc0_isr, ADC_0);
+                adc->adc0->startTimer(freq); //frequency in Hz
+                #if ADC_NUM_ADCS>1
+                adc->adc1->stopTimer();
+                adc->adc1->startSingleRead(readPin2); // call this to setup everything before the Timer starts
+                adc->enableInterrupts(adc1_isr, ADC_1);
+                adc->adc1->startTimer(freq); //frequency in Hz
+                #endif
+            }
+        } else if(c=='p') { // pbd stats
+            Serial.print("Frequency: ");
+            Serial.println(adc->adc0->getTimerFrequency());
+        }
+
+    }
+
+
+    // Print errors, if any.
+    if(adc->adc0->fail_flag != ADC_ERROR::CLEAR) {
+      Serial.print("ADC0: "); Serial.println(getStringADCError(adc->adc0->fail_flag));
+    }
+    #if ADC_NUM_ADCS > 1
+    if(adc->adc1->fail_flag != ADC_ERROR::CLEAR) {
+      Serial.print("ADC1: "); Serial.println(getStringADCError(adc->adc1->fail_flag));
+    }
+    #endif
+    adc->resetError();
+
+    //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
+
+    delay(10);
+}
+
+
+// Make sure to call readSingle() to clear the interrupt.
+void adc0_isr() {
+        adc->adc0->readSingle();
+        //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
+}
+
+#if ADC_NUM_ADCS>1
+void adc1_isr() {
+        adc->adc1->readSingle();
+        //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
+}
+#endif
+
+// Timer interrupt is enabled in case you need it.
+void Timer_isr(void) {
+        //PDB0_SC &=~PDB_SC_PDBIF; // clear interrupt
+        //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
+}
