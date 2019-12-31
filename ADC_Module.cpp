@@ -1497,7 +1497,7 @@ void ADC_Module::startTimer(uint32_t freq) {
     // Update the ADC
     uint8_t adc_pin_channel = adc_regs.HC0 & 0x1f; // remember the trigger that was set
     setHardwareTrigger();   // set the hardware trigger
-    adc_regs.HC0 = 16;      // ADC_ETC channel
+    adc_regs.HC0 = (adc_regs.HC0 & ~0x1f) | 16;      // ADC_ETC channel remember other states...
     singleMode();           // make sure continuous is turned off as you want the trigger to di it. 
 
     // setup adc_etc - BUGBUG have not used the preset values yet. 
@@ -1514,7 +1514,12 @@ void ADC_Module::startTimer(uint32_t freq) {
             ADC_ETC_TRIG_CHAIN_IE0(1) /*| ADC_ETC_TRIG_CHAIN_B2B0 */
             | ADC_ETC_TRIG_CHAIN_HWTS0(1) | ADC_ETC_TRIG_CHAIN_CSEL0(adc_pin_channel) ;
 
-        IMXRT_ADC_ETC.DMA_CTRL |= ADC_ETC_DMA_CTRL_TRIQ_ENABLE(ADC_ETC_TRIGGER_INDEX);
+        if (interrupts_enabled) {
+            // Not sure yet? 
+        }
+        if (adc_regs.GC && ADC_GC_DMAEN) {
+            IMXRT_ADC_ETC.DMA_CTRL |= ADC_ETC_DMA_CTRL_TRIQ_ENABLE(ADC_ETC_TRIGGER_INDEX);
+        }
     } else {
         // This is our second one... Try second trigger? 
         // Remove the BYPASS?
@@ -1525,7 +1530,9 @@ void ADC_Module::startTimer(uint32_t freq) {
           ADC_ETC_TRIG_CHAIN_IE0(1) /*| ADC_ETC_TRIG_CHAIN_B2B0 */
           | ADC_ETC_TRIG_CHAIN_HWTS0(1) | ADC_ETC_TRIG_CHAIN_CSEL0(adc_pin_channel) ;
 
-        IMXRT_ADC_ETC.DMA_CTRL = ADC_ETC_DMA_CTRL_TRIQ_ENABLE(ADC_ETC_TRIGGER_INDEX);
+        if (adc_regs.GC && ADC_GC_DMAEN) {
+            IMXRT_ADC_ETC.DMA_CTRL |= ADC_ETC_DMA_CTRL_TRIQ_ENABLE(ADC_ETC_TRIGGER_INDEX);
+        }
     }
 
     // Now init the QTimer.
@@ -1565,7 +1572,7 @@ uint32_t ADC_Module::getTimerFrequency() {
 
     uint8_t pcs = (IMXRT_TMR4.CH[QTIMER4_INDEX].CTRL >> 9) & 0x7;
     uint32_t freq = (F_BUS_ACTUAL >> pcs)/highPlusLow;
-    Serial.printf("ADC_Module::getTimerFrequency H:%u L:%u H+L=%u pcs:%u freq:%u\n", high, low, highPlusLow, pcs, freq);
+    //Serial.printf("ADC_Module::getTimerFrequency H:%u L:%u H+L=%u pcs:%u freq:%u\n", high, low, highPlusLow, pcs, freq);
     return freq;
 }
 
