@@ -32,7 +32,7 @@
 
 /*! \mainpage ADC
 
-Some general info.
+Teensy 4, 3.x, LC ADC library
 
 This manual is divided in the following sections:
 - \subpage adc_doc "ADC"
