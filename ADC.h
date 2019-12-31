@@ -23,15 +23,29 @@
  * SOFTWARE.
  */
 
-/* ADC.h: Control for one (Teensy 3.0, LC) or two ADC modules (Teensy 3.1).
- *
- */
-
 /* TODO
 * - Function to measure more that 1 pin consecutively (stream?)
 *
 * bugs:
 * - comparison values in 16 bit differential mode are twice what they should be
+*/
+
+/*! \mainpage ADC
+
+Some general info.
+
+This manual is divided in the following sections:
+- \subpage adc_doc "ADC"
+- \subpage adc_module "ADC Module"
+- \subpage settings "Board settings"
+- \subpage error "ADC error codes"
+- \subpage util "ADC util"
+
+*/
+
+/*! \page adc_doc ADC
+Make Analog to Digital conversions using the ADC interface.
+See the ADC class for all methods.
 */
 
 #ifndef ADC_H
@@ -82,8 +96,10 @@ class ADC
         #endif
 
         #if ADC_NUM_ADCS==1
+        //! Array with the ADC Modules
         ADC_Module *const adc[ADC_NUM_ADCS] = {adc0};
         #else
+        //! Array with the ADC Modules
         ADC_Module *const adc[ADC_NUM_ADCS] = {adc0, adc1};
         #endif
 

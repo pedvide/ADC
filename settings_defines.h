@@ -23,10 +23,18 @@
  * SOFTWARE.
  */
 
+/*! \page settings ADC Settings
+Board-dependent settings.
+See the namespace ADC_settings for all functions.
+*/
+
 #ifndef ADC_SETTINGS_H
 #define ADC_SETTINGS_H
 
 #include <Arduino.h>
+
+//! Board-dependent settings
+namespace ADC_settings {
 
 // Easier names for the boards
 #if defined(__MK20DX256__) // Teensy 3.1/3.2
@@ -44,8 +52,6 @@
 #else
 #error "Board not supported!"
 #endif
-
-
 
 // Teensy 3.1 has 2 ADCs, Teensy 3.0 and LC only 1.
 #if defined(ADC_TEENSY_3_1) // Teensy 3.1
@@ -122,15 +128,15 @@
         #define ADC_USE_INTERNAL_VREF (0)
 #endif
 
-
-// Select the voltage reference sources for ADC. This is an internal setting, do not use
+//! \cond internal
+//! Select the voltage reference sources for ADC. This is an internal setting, do not use, @internal 
 enum class ADC_REF_SOURCE : uint8_t {REF_DEFAULT = 0, REF_ALT = 1, REF_NONE = 2}; // internal, do not use
+//! \endcond
 #if defined(ADC_TEENSY_3_0) || defined(ADC_TEENSY_3_1) || defined(ADC_TEENSY_3_5) || defined(ADC_TEENSY_3_6)
 // default is the external, that is connected to the 3.3V supply.
 // To use the external simply connect AREF to a different voltage
 // alt is connected to the 1.2 V ref.
-/*! \file */
-/*! Reference for the ADC */
+//! Voltage reference for the ADC
 enum class ADC_REFERENCE : uint8_t {
     REF_3V3 = static_cast<uint8_t>(ADC_REF_SOURCE::REF_DEFAULT), /*!< 3.3 volts */
     REF_1V2 = static_cast<uint8_t>(ADC_REF_SOURCE::REF_ALT), /*!< 1.2 volts */
@@ -140,8 +146,7 @@ enum class ADC_REFERENCE : uint8_t {
 #elif defined(ADC_TEENSY_LC)
 // alt is the internal ref, 3.3 V
 // the default is AREF
-/*! \file */
-/*! Reference for the ADC */
+//! Voltage reference for the ADC
 enum class ADC_REFERENCE : uint8_t {
     REF_3V3 = static_cast<uint8_t>(ADC_REF_SOURCE::REF_ALT), /*!< 3.3 volts */
     REF_EXT = static_cast<uint8_t>(ADC_REF_SOURCE::REF_DEFAULT), /*!< External VREF */
@@ -149,8 +154,7 @@ enum class ADC_REFERENCE : uint8_t {
 };
 #elif defined(ADC_TEENSY_4)
 // default is the external, that is connected to the 3.3V supply.
-/*! \file */
-/*! Reference for the ADC */
+//! Voltage reference for the ADC
 enum class ADC_REFERENCE : uint8_t {
     REF_3V3 = static_cast<uint8_t>(ADC_REF_SOURCE::REF_DEFAULT), /*!< 3.3 volts */
     NONE = static_cast<uint8_t>(ADC_REF_SOURCE::REF_NONE) // internal, do not use
@@ -171,7 +175,6 @@ enum class ADC_REFERENCE : uint8_t {
 #elif defined(ADC_TEENSY_4) // Teensy 4
         #define ADC_MAX_PIN (27)
 #endif
-
 
 // number of differential pairs PER ADC!
 #if defined(ADC_TEENSY_3_1) // Teensy 3.1
@@ -230,6 +233,7 @@ enum class ADC_REFERENCE : uint8_t {
 #endif
 
 
+// Struct containing the registers controlling the ADC
 #if defined(ADC_TEENSY_4)
 typedef struct {
     volatile uint32_t HC0;
@@ -369,7 +373,8 @@ Divide by   ADC_CFG1_ADIV   ADC_CFG1_ADICLK TOTAL   VALUE
     #define ADC_F_BUS F_BUS
 #endif
 
-// ADC_CFG1_VERY_LOW_SPEED is the lowest freq
+//! \cond internal
+//! ADC_CFG1_VERY_LOW_SPEED is the lowest freq @internal
 constexpr uint32_t get_CFG_VERY_LOW_SPEED(uint32_t f_adc_clock) {
     if (f_adc_clock/16 >= ADC_MIN_FREQ) {
         return (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(1));
@@ -384,7 +389,7 @@ constexpr uint32_t get_CFG_VERY_LOW_SPEED(uint32_t f_adc_clock) {
     }
 }
 
-// ADC_CFG1_LOW_SPEED is the lowest freq for 16 bits
+//! ADC_CFG1_LOW_SPEED is the lowest freq for 16 bits @internal
 constexpr uint32_t get_CFG_LOW_SPEED(uint32_t f_adc_clock) {
     if (f_adc_clock/16 >= ADC_MIN_FREQ_16BITS) {
         return (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(1));
@@ -399,7 +404,7 @@ constexpr uint32_t get_CFG_LOW_SPEED(uint32_t f_adc_clock) {
     }
 }
 
-// ADC_CFG1_HI_SPEED_16_BITS is the highest freq for 16 bits
+//! ADC_CFG1_HI_SPEED_16_BITS is the highest freq for 16 bits @internal
 constexpr uint32_t get_CFG_HI_SPEED_16_BITS(uint32_t f_adc_clock) {
     if (f_adc_clock <= ADC_MAX_FREQ_16BITS) {
         return (ADC_LIB_CFG1_ADIV(0) + ADC_LIB_CFG1_ADICLK(0));
@@ -414,8 +419,8 @@ constexpr uint32_t get_CFG_HI_SPEED_16_BITS(uint32_t f_adc_clock) {
     }
 }
 
-// For ADC_CFG1_MED_SPEED the idea is to check if there's an unused setting between
-// ADC_CFG1_LOW_SPEED and ADC_CFG1_HI_SPEED_16_BITS
+//! For ADC_CFG1_MED_SPEED the idea is to check if there's an unused setting between
+// ADC_CFG1_LOW_SPEED and ADC_CFG1_HI_SPEED_16_BITS  @internal
 constexpr uint32_t get_CFG_MEDIUM_SPEED(uint32_t f_adc_clock) {
     uint32_t ADC_CFG1_LOW_SPEED = get_CFG_LOW_SPEED(f_adc_clock);
     uint32_t ADC_CFG1_HI_SPEED_16_BITS = get_CFG_HI_SPEED_16_BITS(f_adc_clock);
@@ -427,7 +432,7 @@ constexpr uint32_t get_CFG_MEDIUM_SPEED(uint32_t f_adc_clock) {
 
 }
 
-// ADC_CFG1_HI_SPEED is the highest freq for under 16 bits
+//! ADC_CFG1_HI_SPEED is the highest freq for under 16 bits @internal
 constexpr uint32_t get_CFG_HIGH_SPEED(uint32_t f_adc_clock) {
     if (f_adc_clock <= ADC_MAX_FREQ) {
         return (ADC_LIB_CFG1_ADIV(0) + ADC_LIB_CFG1_ADICLK(0));
@@ -442,7 +447,8 @@ constexpr uint32_t get_CFG_HIGH_SPEED(uint32_t f_adc_clock) {
     }
 }
 
-// ADC_CFG1_VERY_HIGH_SPEED >= ADC_CFG1_HI_SPEED and may be out of specs, but not more than ADC_VERY_HIGH_SPEED_FACTOR*ADC_MAX_FREQ
+//! ADC_CFG1_VERY_HIGH_SPEED >= ADC_CFG1_HI_SPEED and may be out of specs,  @internal
+// but not more than ADC_VERY_HIGH_SPEED_FACTOR*ADC_MAX_FREQ
 constexpr uint32_t get_CFG_VERY_HIGH_SPEED(uint32_t f_adc_clock) {
     const uint8_t speed_factor = 2;
     if (f_adc_clock <= speed_factor*ADC_MAX_FREQ) {
@@ -457,6 +463,7 @@ constexpr uint32_t get_CFG_VERY_HIGH_SPEED(uint32_t f_adc_clock) {
         return (ADC_LIB_CFG1_ADIV(3) + ADC_LIB_CFG1_ADICLK(1));
     }
 }
+//! \endcond
 
 
 // Settings for the power/speed of conversions/sampling
@@ -530,11 +537,18 @@ enum class ADC_SAMPLING_SPEED : uint8_t {
 #define ADC_ERROR_DIFF_VALUE (-70000)
 #define ADC_ERROR_VALUE ADC_ERROR_DIFF_VALUE
 
+} // namespace settings
+
+/*! \page error ADC error codes
+Handle ADC errors. See the namespace ADC_Error for all functions.
+*/
+
 //! Handle ADC errors
 namespace ADC_Error {
 
     //! ADC errors.
-    /*! Use adc->adX->fail_flag to print the errors (if any) in a human-readable form.
+    /*! Each board has a adc->adX->fail_flag.
+    *   Include ADC_util.h and use getStringADCError to print the errors (if any) in a human-readable form.
     *   Use adc->adX->resetError() to reset them.
     */
     enum class ADC_ERROR : uint16_t {
@@ -551,19 +565,20 @@ namespace ADC_Error {
 
         CLEAR               = 0,    /*!< No error. */
     };
-    //! OR operator for ADC_ERRORs.
+    //! \cond internal
+    //! OR operator for ADC_ERRORs. @internal
     inline constexpr ADC_ERROR operator|(ADC_ERROR lhs, ADC_ERROR rhs) {
         return static_cast<ADC_ERROR> (static_cast<uint16_t>(lhs) | static_cast<uint16_t>(rhs));
     }
-    //! AND operator for ADC_ERRORs.
+    //! AND operator for ADC_ERRORs. @internal
     inline constexpr ADC_ERROR operator&(ADC_ERROR lhs, ADC_ERROR rhs) {
         return static_cast<ADC_ERROR> (static_cast<uint16_t>(lhs) & static_cast<uint16_t>(rhs));
     }
-    //! |= operator for ADC_ERRORs, it changes the left hand side ADC_ERROR.
+    //! |= operator for ADC_ERRORs, it changes the left hand side ADC_ERROR. @internal
     inline ADC_ERROR operator|=(volatile ADC_ERROR& lhs, ADC_ERROR rhs) {
         return lhs = static_cast<ADC_ERROR> (static_cast<uint16_t>(lhs) | static_cast<uint16_t>(rhs));
     }
-    //! &= operator for ADC_ERRORs, it changes the left hand side ADC_ERROR.
+    //! &= operator for ADC_ERRORs, it changes the left hand side ADC_ERROR. @internal
     inline ADC_ERROR operator&=(volatile ADC_ERROR& lhs, ADC_ERROR rhs) {
         return lhs = static_cast<ADC_ERROR> (static_cast<uint16_t>(lhs) & static_cast<uint16_t>(rhs));
     }
@@ -573,10 +588,11 @@ namespace ADC_Error {
     // inline const char* getError(ADC_ERROR fail_flag)
     
 
-    //! Resets all errors from the ADC, if any.
+    //! Resets all errors from the ADC, if any. @internal
     inline void resetError(volatile ADC_ERROR& fail_flag) {
         fail_flag = ADC_ERROR::CLEAR;
     }
+    //! \endcond
 
 }
 

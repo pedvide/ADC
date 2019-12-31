@@ -27,6 +27,11 @@
  *
  */
 
+/*! \page adc_module ADC Module
+Control each ADC_Module independently.
+See the ADC_Module class for all methods.
+*/
+
 
 #ifndef ADC_MODULE_H
 #define ADC_MODULE_H
@@ -36,6 +41,7 @@
 #include <atomic.h>
 
 using ADC_Error::ADC_ERROR;
+using namespace ADC_settings;
 
 
 // debug mode: blink the led light
@@ -59,6 +65,7 @@ public:
     };
     #endif
 
+    #if ADC_DIFF_PAIRS > 0
     //! Constructor
     /** Pass the ADC number and the Channel number to SC1A number arrays.
     *   \param ADC_number Number of the ADC module, from 0.
@@ -68,10 +75,19 @@ public:
     */
     ADC_Module(uint8_t ADC_number, 
                const uint8_t* const a_channel2sc1a, 
-               #if ADC_DIFF_PAIRS > 0
                const ADC_NLIST* const a_diff_table,
-               #endif
                ADC_REGS_t &a_adc_regs);
+    #else
+    //! Constructor
+    /** Pass the ADC number and the Channel number to SC1A number arrays.
+    *   \param ADC_number Number of the ADC module, from 0.
+    *   \param a_channel2sc1a contains an index that pairs each pin to its SC1A number (used to start a conversion on that pin)
+    *   \param a_adc_regs pointer to start of the ADC registers
+    */
+    ADC_Module(uint8_t ADC_number, 
+               const uint8_t* const a_channel2sc1a, 
+               ADC_REGS_t &a_adc_regs);
+    #endif
 
 
     //! Starts the calibration sequence, waits until it's done and writes the results
@@ -534,7 +550,9 @@ public:
     //! Was the adc in use before a call?
     uint8_t adcWasInUse;
 
-    //! Save config of the ADC to the ADC_Config struct
+    /** Save config of the ADC to the ADC_Config struct
+    * \param config ADC_Config where the config will be stored
+    */
     void saveConfig(ADC_Config* config) {
         #ifdef ADC_TEENSY_4
         config->savedHC0 = adc_regs.HC0;
@@ -550,7 +568,9 @@ public:
         #endif
     }
 
-    //! Load config to the ADC
+    /** Load config to the ADC
+    * \param config ADC_Config from where the config will be loaded
+    */
     void loadConfig(const ADC_Config* config) {
         #ifdef ADC_TEENSY_4
         adc_regs.HC0 = config->savedHC0;

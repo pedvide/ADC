@@ -27,13 +27,28 @@
  *         This would increase the size of the ADC library because of the strings.
  */
 
+/*! \page util ADC util
+Util functions for ino sketches and tests.
+This would increase the size of the ADC library because of the strings.
+See the namespace ADC_util for all functions.
+*/
+
 #ifndef ADC_UTIL_H
 #define ADC_UTIL_H
 
 #include <settings_defines.h>
 
 using ADC_Error::ADC_ERROR;
- 
+using namespace ADC_settings;
+
+//! Util functions for ino sketches and tests.
+namespace ADC_util {
+
+//! Convert the conversion speed code to text
+/** Convert the conversion speed code to text
+* \param conv_speed The conversion speed code
+* \return the corresponding text
+*/
 const char* getConversionEnumStr(ADC_CONVERSION_SPEED conv_speed) {
   switch(conv_speed) {
     #if defined(ADC_TEENSY_4)  // Teensy 4
@@ -73,6 +88,11 @@ const char* getConversionEnumStr(ADC_CONVERSION_SPEED conv_speed) {
   return (const char*)"NONE"; 
 }
 
+//! Convert the sampling speed code to text
+/** Convert the sampling speed code to text
+* \param samp_speed The sampling speed code
+* \return the corresponding text
+*/
 const char* getSamplingEnumStr(ADC_SAMPLING_SPEED samp_speed) {
   switch(samp_speed) {
     case ADC_SAMPLING_SPEED::VERY_LOW_SPEED:
@@ -97,7 +117,11 @@ const char* getSamplingEnumStr(ADC_SAMPLING_SPEED samp_speed) {
   return (const char*)"NONE"; 
 }
 
-//! Prints the human-readable error, if any.
+//! Converts the error code to text.
+/** Converts the error code to text.
+* \param fail_flag The error code
+* \return the corresponding text
+*/
 const char* getStringADCError(ADC_ERROR fail_flag) {
     if(fail_flag != ADC_ERROR::CLEAR) {
         switch(fail_flag) {
@@ -128,13 +152,19 @@ const char* getStringADCError(ADC_ERROR fail_flag) {
     return (const char*)"";
 }
 
+//! List of possible averages
 const uint8_t averages_list[] = {1, 4, 8, 16, 32};
+
 #if defined(ADC_TEENSY_4)  // Teensy 4
+//! List of possible resolutions
 const uint8_t resolutions_list[] = {8, 10, 12}; 
 #else
+//! List of possible resolutions
 const uint8_t resolutions_list[] = {8, 10, 12, 16}; 
 #endif
+
 #if defined(ADC_TEENSY_4)  // Teensy 4
+//! List of possible conversion speeds
 const ADC_CONVERSION_SPEED conversion_speed_list[] = {
     ADC_CONVERSION_SPEED::LOW_SPEED,
     ADC_CONVERSION_SPEED::MED_SPEED,
@@ -142,6 +172,7 @@ const ADC_CONVERSION_SPEED conversion_speed_list[] = {
     ADC_CONVERSION_SPEED::ADACK_10,
     ADC_CONVERSION_SPEED::ADACK_20};
 #else
+//! List of possible conversion speeds
 const ADC_CONVERSION_SPEED conversion_speed_list[] = {
     ADC_CONVERSION_SPEED::VERY_LOW_SPEED,
     ADC_CONVERSION_SPEED::LOW_SPEED,
@@ -154,7 +185,9 @@ const ADC_CONVERSION_SPEED conversion_speed_list[] = {
     ADC_CONVERSION_SPEED::ADACK_5_2,
     ADC_CONVERSION_SPEED::ADACK_6_2};
 #endif
+
 #if defined(ADC_TEENSY_4)  // Teensy 4
+//! List of possible sampling speeds
 const ADC_SAMPLING_SPEED sampling_speed_list[] = {
     ADC_SAMPLING_SPEED::VERY_LOW_SPEED,
     ADC_SAMPLING_SPEED::LOW_SPEED,
@@ -166,6 +199,7 @@ const ADC_SAMPLING_SPEED sampling_speed_list[] = {
     ADC_SAMPLING_SPEED::VERY_HIGH_SPEED
     };
 #else
+//! List of possible sampling speeds
 const ADC_SAMPLING_SPEED sampling_speed_list[] = {
     ADC_SAMPLING_SPEED::VERY_LOW_SPEED,
     ADC_SAMPLING_SPEED::LOW_SPEED,
@@ -174,5 +208,9 @@ const ADC_SAMPLING_SPEED sampling_speed_list[] = {
     ADC_SAMPLING_SPEED::VERY_HIGH_SPEED
     };
 #endif
+
+} // namespace util
+
+using namespace ADC_util;
 
 #endif // ADC_UTIL_H
