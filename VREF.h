@@ -29,6 +29,9 @@
 #include <Arduino.h>
 
 #include <atomic.h>
+#include <settings_defines.h>
+
+#if ADC_USE_INTERNAL_VREF
 
 //! Controls the Teensy internal voltage reference module (VREFV1)
 namespace VREF
@@ -110,5 +113,7 @@ namespace VREF
     }
 
 }
+
+#endif // ADC_USE_INTERNAL_VREF
 
 #endif // ADC_VREF_H
