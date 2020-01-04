@@ -43,6 +43,10 @@ AnalogBufferDMA *AnalogBufferDMA::_activeObjectPerADC[2] = {nullptr, nullptr};
 #define DMAMUX_ADC_0    DMAMUX_SOURCE_ADC0
 #endif
 
+//=============================================================================
+// Debug support
+//=============================================================================
+
 #ifdef DEBUG_DUMP_DATA
 static void dumpDMA_TCD(DMABaseClass *dmabc)
 {
@@ -63,6 +67,9 @@ static void dumpDMA_TCD(DMABaseClass *dmabc)
 
 
 
+//=============================================================================
+// Init - Initialize the object including setup DMA structures
+//=============================================================================
 void AnalogBufferDMA::init(ADC *adc, int8_t adc_num)
 {
   // enable DMA and interrupts
@@ -73,18 +80,30 @@ void AnalogBufferDMA::init(ADC *adc, int8_t adc_num)
 #ifndef KINETISL
   // setup a DMA Channel.
   // Now lets see the different things that RingbufferDMA setup for us before
+  // See if we were created with one or two buffers.  If one assume we stop on completion, else assume continuous.
+  if (_buffer2 && _buffer2_count) {
+    _dmasettings_adc[0].source((volatile uint16_t&)((adc_num == 1) ? SOURCE_ADC_1 : SOURCE_ADC_0));
+    _dmasettings_adc[0].destinationBuffer((uint16_t*)_buffer1, _buffer1_count * 2); // 2*b_size is necessary for some reason
+    _dmasettings_adc[0].replaceSettingsOnCompletion(_dmasettings_adc[1]);    // go off and use second one...
+    _dmasettings_adc[0].interruptAtCompletion(); //interruptAtHalf or interruptAtCompletion
 
-  _dmasettings_adc[0].source((volatile uint16_t&)((adc_num == 1) ? SOURCE_ADC_1 : SOURCE_ADC_0));
-  _dmasettings_adc[0].destinationBuffer((uint16_t*)_buffer1, _buffer1_count * 2); // 2*b_size is necessary for some reason
-  _dmasettings_adc[0].replaceSettingsOnCompletion(_dmasettings_adc[1]);    // go off and use second one...
-  _dmasettings_adc[0].interruptAtCompletion(); //interruptAtHalf or interruptAtCompletion
+    _dmasettings_adc[1].source((volatile uint16_t&)((adc_num == 1) ? SOURCE_ADC_1 : SOURCE_ADC_0));
+    _dmasettings_adc[1].destinationBuffer((uint16_t*)_buffer2, _buffer2_count * 2); // 2*b_size is necessary for some reason
+    _dmasettings_adc[1].replaceSettingsOnCompletion(_dmasettings_adc[0]);    // Cycle back to the first one
+    _dmasettings_adc[1].interruptAtCompletion(); //interruptAtHalf or interruptAtCompletion
 
-  _dmasettings_adc[1].source((volatile uint16_t&)((adc_num == 1) ? SOURCE_ADC_1 : SOURCE_ADC_0));
-  _dmasettings_adc[1].destinationBuffer((uint16_t*)_buffer2, _buffer2_count * 2); // 2*b_size is necessary for some reason
-  _dmasettings_adc[1].replaceSettingsOnCompletion(_dmasettings_adc[0]);    // Cycle back to the first one
-  _dmasettings_adc[1].interruptAtCompletion(); //interruptAtHalf or interruptAtCompletion
+    _dmachannel_adc = _dmasettings_adc[0];
 
-  _dmachannel_adc = _dmasettings_adc[0];
+    _stop_on_completion = false;
+  } else {
+    // Only one buffer so lets just setup the dmachannel ...
+    Serial.printf("AnalogBufferDMA::init Single buffer %d\n", adc_num);
+    _dmachannel_adc.source((volatile uint16_t&)((adc_num == 1) ? SOURCE_ADC_1 : SOURCE_ADC_0));
+    _dmachannel_adc.destinationBuffer((uint16_t*)_buffer1, _buffer1_count * 2); // 2*b_size is necessary for some reason
+    _dmachannel_adc.interruptAtCompletion(); //interruptAtHalf or interruptAtCompletion
+    _dmachannel_adc.disableOnCompletion();    // we will disable on completion.
+    _stop_on_completion = true;
+  }
 
   if (adc_num == 1) {
     _activeObjectPerADC[1] = this;
@@ -138,6 +157,40 @@ void AnalogBufferDMA::init(ADC *adc, int8_t adc_num)
   _last_isr_time = millis();
 }
 
+//=============================================================================
+// stopOnCompletion: allows you to turn on or off stopping when a DMA buffer
+//    has completed filling. Default is on when only one buffer passed in to the
+//    constructor and off if two buffers passed in.
+//=============================================================================
+void AnalogBufferDMA::stopOnCompletion(bool stop_on_complete)
+{
+#ifndef KINETISL
+  if (stop_on_complete) _dmachannel_adc.TCD->CSR |= DMA_TCD_CSR_DREQ;
+  else _dmachannel_adc.TCD->CSR &= ~DMA_TCD_CSR_DREQ;
+#else
+  if (stop_on_complete) _dmachannel_adc.CFG->DCR |= DMA_DCR_D_REQ;
+  else _dmachannel_adc.CFG->DCR &= ~DMA_DCR_D_REQ;
+#endif
+  _stop_on_completion = stop_on_complete;
+}
+
+//=============================================================================
+// ClearCompletion: if we have stop on completion, then clear the completion state
+//                  i.e. reenable the dma operation.  Note only valid if we are
+//                  in the stopOnCompletion state.
+//=============================================================================
+bool AnalogBufferDMA::clearCompletion()
+{
+  if (!_stop_on_completion) return false;
+  // should probably check to see if we are dsiable or not...
+  _dmachannel_adc.enable();
+  return true;
+}
+
+//=============================================================================
+// processADC_DMAISR: Process the DMA completion ISR
+//     common for both ISRs on those processors who have more than one ADC
+//=============================================================================
 void  AnalogBufferDMA::processADC_DMAISR() {
   digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
   uint32_t cur_time = millis();
@@ -150,16 +203,21 @@ void  AnalogBufferDMA::processADC_DMAISR() {
 #ifdef KINETISL
   // Lets try to clear the previous interrupt, change buffers
   // and restart
-  if (_interrupt_count & 1) {
-    _dmachannel_adc.destinationBuffer((uint16_t*)_buffer2, _buffer2_count * 2); // 2*b_size is necessary for some reason  
+  if (_buffer2 && (_interrupt_count & 1)) {
+    _dmachannel_adc.destinationBuffer((uint16_t*)_buffer2, _buffer2_count * 2); // 2*b_size is necessary for some reason
   } else {
-    _dmachannel_adc.destinationBuffer((uint16_t*)_buffer1, _buffer1_count * 2); // 2*b_size is necessary for some reason  
+    _dmachannel_adc.destinationBuffer((uint16_t*)_buffer1, _buffer1_count * 2); // 2*b_size is necessary for some reason
   }
-  _dmachannel_adc.enable();
+
+  // If we are not stopping on completion, then reenable...
+  if (!_stop_on_completion) _dmachannel_adc.enable();
 
 #endif
 }
 
+//=============================================================================
+// adc_0_dmaISR: called for first ADC when DMA has completed filling a buffer.
+//=============================================================================
 void AnalogBufferDMA::adc_0_dmaISR() {
   if (_activeObjectPerADC[0]) {
     _activeObjectPerADC[0]->processADC_DMAISR();
@@ -169,6 +227,9 @@ void AnalogBufferDMA::adc_0_dmaISR() {
 #endif
 }
 
+//=============================================================================
+// adc_1_dmaISR - Used for processors that have a second ADC object
+//=============================================================================
 void AnalogBufferDMA::adc_1_dmaISR() {
   if (_activeObjectPerADC[1]) {
     _activeObjectPerADC[1]->processADC_DMAISR();

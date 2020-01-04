@@ -44,12 +44,17 @@ public: // At least temporary to play with dma settings.
     void processADC_DMAISR();   
 public: 
     
-    AnalogBufferDMA(volatile uint16_t *buffer1, uint16_t buffer1_count, volatile uint16_t *buffer2, uint16_t buffer2_count) :
+    AnalogBufferDMA(volatile uint16_t *buffer1, uint16_t buffer1_count, 
+                    volatile uint16_t *buffer2 = nullptr, uint16_t buffer2_count = 0) :
             _buffer1(buffer1), _buffer1_count(buffer1_count), _buffer2(buffer2), _buffer2_count(buffer2_count) {};
     
     void init(ADC *adc, int8_t adc_num = -1);
-    inline volatile uint16_t *bufferLastISRFilled() {return (_interrupt_count & 1)? _buffer1 : _buffer2;}
-    inline uint16_t bufferCountLastISRFilled() {return (_interrupt_count & 1)? _buffer1_count : _buffer2_count;}
+
+    void stopOnCompletion(bool stop_on_complete);
+    inline bool stopOnCompletion(void) {return _stop_on_completion;}
+    bool clearCompletion();
+    inline volatile uint16_t *bufferLastISRFilled() {return (!_buffer2 || (_interrupt_count & 1))? _buffer1 : _buffer2;}
+    inline uint16_t bufferCountLastISRFilled() {return (!_buffer2 || (_interrupt_count & 1))? _buffer1_count : _buffer2_count;}
     inline uint32_t interruptCount() {return _interrupt_count;}
     inline uint32_t interruptDeltaTime() {return _interrupt_delta_time;}
     inline bool     interrupted() {return _interrupt_delta_time != 0;}
@@ -67,6 +72,7 @@ protected:
     volatile uint16_t *_buffer2;
     uint16_t _buffer2_count;
     uint32_t  _user_data = 0;
+    bool     _stop_on_completion = false;
 };
 
 #endif

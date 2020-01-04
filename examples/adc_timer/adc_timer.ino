@@ -1,5 +1,22 @@
 /* Example for triggering the ADC with Timer
-    Valid for Teensy 3.0 and 3.1
+    Valid for the current Teensy 3.x and 4.0.
+
+    On Teensy 3.x this uses the PDB timer, and should work the same as the example adc_pdb.ino, but
+    has been extended some to add additional command to read in a whole buffer of readings, using the
+    timer. 
+
+    On Teensy 4, this uses one or two of the unused QTimers. 
+
+    Setting it up:  The variables readPin must be defined for a pin that is valid for the first (or only)
+    ADC.  If the processor has a second ADC and is enabled, than readPin2 must be configured to be a pin
+    that is valid on the second ADC.
+
+    Example usage: 
+        Start the timers at some frequency: s 3000<cr>
+        get a single read from the ADC(s): v<cr>
+        print out the actual frequency: p<cr>
+        Read in a whole buffer and print out data: t<cr>
+        Stop the timers: s<cr>
 */
 
 
@@ -11,7 +28,7 @@ const int readPin = A0; // ADC0
 #define USE_ADC_1
 
 #if ADC_NUM_ADCS>1
-const int readPin2 = A1; // ADC1
+const int readPin2 = A2; // ADC1
 #endif
 
 ADC *adc = new ADC(); // adc object;
@@ -98,16 +115,6 @@ void loop() {
         adc->adc1->enableInterrupts(adc1_isr);
         adc->adc1->startTimer(freq); //frequency in Hz
 #endif
-        Serial.println("\n*** ADC and ADC_ETC ***");
-        Serial.printf("ADC1: HC0:%x HS:%x CFG:%x GC:%x GS:%x\n", IMXRT_ADC1.HC0, IMXRT_ADC1.HS,  IMXRT_ADC1.CFG, IMXRT_ADC1.GC, IMXRT_ADC1.GS);
-        Serial.printf("ADC2: HC0:%x HS:%x CFG:%x GC:%x GS:%x\n", IMXRT_ADC2.HC0, IMXRT_ADC2.HS,  IMXRT_ADC2.CFG, IMXRT_ADC2.GC, IMXRT_ADC2.GS);
-        Serial.printf("ADC_ETC: CTRL:%x DONE0_1:%x DONE2_ERR:%x DMA: %x\n", IMXRT_ADC_ETC.CTRL,
-                      IMXRT_ADC_ETC.DONE0_1_IRQ, IMXRT_ADC_ETC.DONE2_ERR_IRQ, IMXRT_ADC_ETC.DMA_CTRL);
-        for (uint8_t trig = 0; trig < 8; trig++) {
-          Serial.printf("    TRIG[%d] CTRL: %x CHAIN_1_0:%x\n",
-                        trig, IMXRT_ADC_ETC.TRIG[trig].CTRL, IMXRT_ADC_ETC.TRIG[trig].CHAIN_1_0);
-        }
-
       }
     } else if (c == 'p') { // print Timer stats
       Serial.print("Frequency: ");
