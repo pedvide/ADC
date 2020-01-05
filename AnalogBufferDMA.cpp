@@ -24,7 +24,7 @@
 */
 #include "AnalogBufferDMA.h"
 
-#define DEBUG_DUMP_DATA
+//#define DEBUG_DUMP_DATA
 // Global objects
 AnalogBufferDMA *AnalogBufferDMA::_activeObjectPerADC[2] = {nullptr, nullptr};
 

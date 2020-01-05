@@ -38,6 +38,7 @@ const int readPin_adc_1 = 26;
 #endif
 
 ADC *adc = new ADC(); // adc object
+const uint32_t initial_average_value = 2048;
 
 extern void dumpDMA_structures(DMABaseClass *dmabc);
 elapsedMillis elapsed_sinc_last_display;
@@ -87,8 +88,10 @@ void setup() {
   // setup a DMA Channel.
   // Now lets see the different things that RingbufferDMA setup for us before
   abdma1.init(adc, ADC_0/*, DMAMUX_SOURCE_ADC_ETC*/);
+  abdma2.userData(initial_average_value); // save away initial starting average
 #if ADC_NUM_ADCS>1
   abdma2.init(adc, ADC_1/*, DMAMUX_SOURCE_ADC_ETC*/);
+  abdma2.userData(initial_average_value); // save away initial starting average
 #endif
   //Serial.println("After enableDMA"); Serial.flush();
 
@@ -107,10 +110,6 @@ void setup() {
   Serial.println("End Setup");
   elapsed_sinc_last_display = 0;
 }
-
-char c = 0;
-
-int average_value = 2048;
 
 void loop() {
 
@@ -151,6 +150,8 @@ void ProcessAnalogData(AnalogBufferDMA *pabdma, int8_t adc_num) {
   uint16_t min_val = 0xffff;
   uint16_t max_val = 0;
 
+  uint32_t average_value = pabdma->userData();
+
   volatile uint16_t *pbuffer = pabdma->bufferLastISRFilled();
   volatile uint16_t *end_pbuffer = pbuffer + pabdma->bufferCountLastISRFilled();
 
@@ -167,9 +168,12 @@ void ProcessAnalogData(AnalogBufferDMA *pabdma, int8_t adc_num) {
   }
 
   int rms = sqrt(sum_delta_sq / buffer_size);
+  average_value = sum_values / buffer_size;
   Serial.printf(" %d - %u(%u): %u <= %u <= %u %d ", adc_num, pabdma->interruptCount(), pabdma->interruptDeltaTime(), min_val,
-                sum_values / buffer_size, max_val, rms);
+                average_value, max_val, rms);
   pabdma->clearInterrupt();
+
+  pabdma->userData(average_value);
 }
 
 void print_debug_information()
