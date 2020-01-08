@@ -62,27 +62,10 @@ void setup() {
     delay(1000);
 
     ///// ADC0 ////
-    // reference can be ADC_REFERENCE::REF_3V3, ADC_REFERENCE::REF_1V2 (not for Teensy LC) or ADC_REFERENCE::REF_EXT.
-    //adc->setReference(ADC_REFERENCE::REF_1V2, ADC_0); // change all 3.3 to 1.2 if you change the reference to 1V2
-
-    adc->setAveraging(16); // set number of averages
-    adc->setResolution(12); // set bits of resolution
-
-    // it can be any of the ADC_CONVERSION_SPEED enum: VERY_LOW_SPEED, LOW_SPEED, MED_SPEED, HIGH_SPEED_16BITS, HIGH_SPEED or VERY_HIGH_SPEED
-    // see the documentation for more information
-    // additionally the conversion speed can also be ADACK_2_4, ADACK_4_0, ADACK_5_2 and ADACK_6_2,
-    // where the numbers are the frequency of the ADC clock in MHz and are independent on the bus speed.
-    adc->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED); // change the conversion speed
-    // it can be any of the ADC_MED_SPEED enum: VERY_LOW_SPEED, LOW_SPEED, MED_SPEED, HIGH_SPEED or VERY_HIGH_SPEED
-    adc->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED); // change the sampling speed
-
-    // always call the compare functions after changing the resolution!
-    //adc->enableCompare(1.0/3.3*adc->getMaxValue(ADC_0), 0, ADC_0); // measurement will be ready if value < 1.0V
-    //adc->enableCompareRange(1.0*adc->getMaxValue(ADC_0)/3.3, 2.0*adc->getMaxValue(ADC_0)/3.3, 0, 1, ADC_0); // ready if value lies out of [1.0,2.0] V
-
-    // If you enable interrupts, notice that the isr will read the result, so that isComplete() will return false (most of the time)
-    //adc->enableInterrupts(adc0_isr, ADC_0);
-
+    adc->adc0->setAveraging(16); // set number of averages
+    adc->adc0->setResolution(12); // set bits of resolution
+    adc->adc0->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED); // change the conversion speed
+    adc->adc0->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED); // change the sampling speed
 
     Serial.println("Starting Timers");
 
@@ -106,7 +89,7 @@ void setup() {
     // if you change the periods, make sure you don't go into a loop, with the timers always interrupting each other
     startTimerValue1 = timer1.begin(timer1_callback, period1);
 
-    adc->enableInterrupts(adc0_isr, ADC_0);
+    adc->adc0->enableInterrupts(adc0_isr);
 
     Serial.println("Timers started");
 
@@ -127,12 +110,12 @@ void loop() {
 
     if(!buffer0->isEmpty()) { // read the values in the buffer
         Serial.print("Read pin 0: ");
-        Serial.println(buffer0->read()*3.3/adc->getMaxValue());
+        Serial.println(buffer0->read()*3.3/adc->adc0->getMaxValue());
         //Serial.println("New value!");
     }
     if(!buffer1->isEmpty()) { // read the values in the buffer
         Serial.print("Read pin 1: ");
-        Serial.println(buffer1->read()*3.3/adc->getMaxValue());
+        Serial.println(buffer1->read()*3.3/adc->adc0->getMaxValue());
         //Serial.println("New value!");
     }
 
@@ -162,7 +145,7 @@ void timer0_callback(void) {
 
     digitalWriteFast(ledPin+1, HIGH);
 
-    adc->startSingleRead(readPin0, ADC_0); // also: startSingleDifferential, analogSynchronizedRead, analogSynchronizedReadDifferential
+    adc->adc0->startSingleRead(readPin0); // also: startSingleDifferential, analogSynchronizedRead, analogSynchronizedReadDifferential
 
     digitalWriteFast(ledPin+1, LOW);
     //digitalWriteFast(ledPin+1, !digitalReadFast(ledPin+1));
@@ -175,7 +158,7 @@ void timer1_callback(void) {
 
     digitalWriteFast(ledPin+2, HIGH);
 
-    adc->startSingleRead(readPin1, ADC_0);
+    adc->adc0->startSingleRead(readPin1);
 
     digitalWriteFast(ledPin+2, LOW);
 
@@ -190,11 +173,11 @@ void adc0_isr() {
     // add value to correct buffer
     if(pin==readPin0) {
         digitalWriteFast(ledPin+3, HIGH);
-        buffer0->write(adc->readSingle());
+        buffer0->write(adc->adc0->readSingle());
         digitalWriteFast(ledPin+3, LOW);
     } else if(pin==readPin1) {
         digitalWriteFast(ledPin+4, HIGH);
-        buffer1->write(adc->readSingle());
+        buffer1->write(adc->adc0->readSingle());
         if(adc->adc0->isConverting()) {
             digitalWriteFast(LED_BUILTIN, 1);
         }

@@ -38,8 +38,8 @@ void setup() {
     // reference can be ADC_REFERENCE::REF_3V3, ADC_REFERENCE::REF_1V2 (not for Teensy LC) or ADC_REF_EXT.
     //adc->setReference(ADC_REFERENCE::REF_1V2, ADC_0); // change all 3.3 to 1.2 if you change the reference to 1V2
 
-    adc->setAveraging(8); // set number of averages
-    adc->setResolution(12); // set bits of resolution
+    adc->adc0->setAveraging(8); // set number of averages
+    adc->adc0->setResolution(12); // set bits of resolution
 
 
     // always call the compare functions after changing the resolution!
@@ -47,10 +47,10 @@ void setup() {
     //adc->enableCompareRange(1.0*adc->getMaxValue(ADC_1)/3.3, 2.0*adc->getMaxValue(ADC_1)/3.3, 0, 1, ADC_1); // ready if value lies out of [1.0,2.0] V
 
     // enable DMA and interrupts
-    adc->enableDMA(ADC_0);
+    adc->adc0->enableDMA();
 
     // ADC interrupt enabled isn't mandatory for DMA to work.
-    adc->enableInterrupts(adc0_isr, ADC_0);
+    adc->adc0->enableInterrupts(adc0_isr);
 }
 
 char c=0;
@@ -65,7 +65,7 @@ void loop() {
             dmaBuffer->start(&dmaBuffer_isr);
       } else if(c=='c') { // start conversion
           Serial.println("Conversion: ");
-          adc->analogRead(readPin, ADC_0);
+          adc->adc0->analogRead(readPin);
       } else if(c=='p') { // print buffer
           printBuffer();
       } else if(c=='l') { // toggle led

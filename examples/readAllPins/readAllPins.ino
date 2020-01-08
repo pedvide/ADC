@@ -65,24 +65,18 @@ void setup() {
 
 
     ///// ADC0 ////
-    adc->setAveraging(16); // set number of averages
-    adc->setResolution(12); // set bits of resolution
-
-    // it can be any of the ADC_CONVERSION_SPEED enum: VERY_LOW_SPEED, LOW_SPEED, MED_SPEED, HIGH_SPEED_16BITS, HIGH_SPEED or VERY_HIGH_SPEED
-    // see the documentation for more information
-    // additionally the conversion speed can also be ADACK_2_4, ADACK_4_0, ADACK_5_2 and ADACK_6_2,
-    // where the numbers are the frequency of the ADC clock in MHz and are independent on the bus speed.
-    adc->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED); // change the conversion speed
-    // it can be any of the ADC_MED_SPEED enum: VERY_LOW_SPEED, LOW_SPEED, MED_SPEED, HIGH_SPEED or VERY_HIGH_SPEED
-    adc->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED); // change the sampling speed
+    adc->adc0->setAveraging(16); // set number of averages
+    adc->adc0->setResolution(12); // set bits of resolution
+    adc->adc0->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED); // change the conversion speed
+    adc->adc0->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED); // change the sampling speed
 
 
     ////// ADC1 /////
     #if ADC_NUM_ADCS>1
-    adc->setAveraging(16, ADC_1); // set number of averages
-    adc->setResolution(12, ADC_1); // set bits of resolution
-    adc->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED, ADC_1); // change the conversion speed
-    adc->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED, ADC_1); // change the sampling speed
+    adc->adc1->setAveraging(16); // set number of averages
+    adc->adc1->setResolution(12); // set bits of resolution
+    adc->adc1->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED); // change the conversion speed
+    adc->adc1->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED); // change the sampling speed
     #endif
 
     delay(500);
@@ -98,7 +92,7 @@ void loop() {
         Serial.print("A");
         Serial.print(i);
         Serial.print(": ");
-        Serial.print(value*3.3/adc->getMaxValue(ADC_0), 2);
+        Serial.print(value*3.3/adc->adc0->getMaxValue(), 2);
         Serial.print(". ");
         if(i==9) {
             Serial.println();
@@ -117,7 +111,7 @@ void loop() {
         value = adc->analogReadDifferential(adc_pins_diff[i], adc_pins_diff[i+1]); // read a new value, will return ADC_ERROR_VALUE if the comparison is false.
         Serial.print(i);
         Serial.print(": ");
-        Serial.print(value*3.3/adc->getMaxValue(ADC_0), 2);
+        Serial.print(value*3.3/adc->adc0->getMaxValue(), 2);
         Serial.print(". ");
     }
     Serial.println();
@@ -127,7 +121,7 @@ void loop() {
     //Serial.print("Temperature sensor (approx.): ");
     //value = adc->analogRead(ADC_INTERNAL_SOURCE::TEMP_SENSOR); // read a new value, will return ADC_ERROR_VALUE if the comparison is false.
     //Serial.print(": ");
-    //float volts = value*3.3/adc->getMaxValue(ADC_0);
+    //float volts = value*3.3/adc->adc0->getMaxValue();
     //Serial.print(25-(volts-0.72)/1.7*1000, 2); // slope is 1.6 for T3.0
     //Serial.println(" C.");
 
