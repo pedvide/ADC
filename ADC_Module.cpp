@@ -58,7 +58,11 @@ ADC_Module::ADC_Module(uint8_t ADC_number,
         , PDB0_CHnC1(ADC_num? PDB0_CH1C1 : PDB0_CH0C1)
         #endif
         #if defined(ADC_TEENSY_4)
-        , IRQ_ADC(ADC_num? IRQ_NUMBER_t::IRQ_ADC2 : IRQ_NUMBER_t::IRQ_ADC1)
+        , XBAR_IN(ADC_num? XBARA1_IN_QTIMER4_TIMER3 : XBARA1_IN_QTIMER4_TIMER0)
+        , XBAR_OUT(ADC_num? XBARA1_OUT_ADC_ETC_TRIG10 : XBARA1_OUT_ADC_ETC_TRIG00)
+        , QTIMER4_INDEX(ADC_num? 3 : 0)
+        , ADC_ETC_TRIGGER_INDEX(ADC_num? 4 : 0) 
+        , IRQ_ADC(ADC_num? IRQ_NUMBER_t::IRQ_ADC2 : IRQ_NUMBER_t::IRQ_ADC1)        
         #elif ADC_NUM_ADCS==2
         // IRQ_ADC0 and IRQ_ADC1 aren't consecutive in Teensy 3.6
         // fix by SB, https://github.com/pedvide/ADC/issues/19
@@ -1473,3 +1477,104 @@ uint32_t ADC_Module::getPDBFrequency() {
 }
 
 #endif
+
+#if ADC_USE_TIMER && !ADC_USE_PDB
+#if defined(ADC_TEENSY_4) // only supported by Teensy 4...
+// try to use some teensy core functions...
+// mainly out of pwm.c
+extern "C" {
+    extern void xbar_connect(unsigned int input, unsigned int output);
+    extern void quadtimer_init(IMXRT_TMR_t *p);
+    extern void quadtimerWrite(IMXRT_TMR_t *p, unsigned int submodule, uint16_t val);
+    extern void quadtimerFrequency(IMXRT_TMR_t *p, unsigned int submodule, float frequency);
+}
+
+void ADC_Module::startTimer(uint32_t freq) {
+    // First lets setup the XBAR
+    CCM_CCGR2 |= CCM_CCGR2_XBAR1(CCM_CCGR_ON);   //turn clock on for xbara1
+    xbar_connect(XBAR_IN, XBAR_OUT);
+
+    // Update the ADC
+    uint8_t adc_pin_channel = adc_regs.HC0 & 0x1f; // remember the trigger that was set
+    setHardwareTrigger();   // set the hardware trigger
+    adc_regs.HC0 = (adc_regs.HC0 & ~0x1f) | 16;      // ADC_ETC channel remember other states...
+    singleMode();           // make sure continuous is turned off as you want the trigger to di it. 
+
+    // setup adc_etc - BUGBUG have not used the preset values yet. 
+    if ( IMXRT_ADC_ETC.CTRL & ADC_ETC_CTRL_SOFTRST) {// SOFTRST
+        // Soft reset 
+        atomic::clearBitFlag(IMXRT_ADC_ETC.CTRL, ADC_ETC_CTRL_SOFTRST);
+        delay(5); // give some time to be sure it is init
+    }
+    if (ADC_num == 0) { // BUGBUG - in real code, should probably know we init ADC or not..
+        IMXRT_ADC_ETC.CTRL |= 
+            (ADC_ETC_CTRL_TSC_BYPASS | ADC_ETC_CTRL_DMA_MODE_SEL | ADC_ETC_CTRL_TRIG_ENABLE(1 << ADC_ETC_TRIGGER_INDEX)); // 0x40000001;  // start with trigger 0
+        IMXRT_ADC_ETC.TRIG[ADC_ETC_TRIGGER_INDEX].CTRL = ADC_ETC_TRIG_CTRL_TRIG_CHAIN(0);   // chainlength -1 only us
+        IMXRT_ADC_ETC.TRIG[ADC_ETC_TRIGGER_INDEX].CHAIN_1_0 =
+            ADC_ETC_TRIG_CHAIN_IE0(1) /*| ADC_ETC_TRIG_CHAIN_B2B0 */
+            | ADC_ETC_TRIG_CHAIN_HWTS0(1) | ADC_ETC_TRIG_CHAIN_CSEL0(adc_pin_channel) ;
+
+        if (interrupts_enabled) {
+            // Not sure yet? 
+        }
+        if (adc_regs.GC && ADC_GC_DMAEN) {
+            IMXRT_ADC_ETC.DMA_CTRL |= ADC_ETC_DMA_CTRL_TRIQ_ENABLE(ADC_ETC_TRIGGER_INDEX);
+        }
+    } else {
+        // This is our second one... Try second trigger? 
+        // Remove the BYPASS?
+        IMXRT_ADC_ETC.CTRL &= ~(ADC_ETC_CTRL_TSC_BYPASS); // 0x40000001;  // start with trigger 0
+        IMXRT_ADC_ETC.CTRL |= ADC_ETC_CTRL_DMA_MODE_SEL | ADC_ETC_CTRL_TRIG_ENABLE(1 << ADC_ETC_TRIGGER_INDEX);     // Add trigger 
+        IMXRT_ADC_ETC.TRIG[ADC_ETC_TRIGGER_INDEX].CTRL = ADC_ETC_TRIG_CTRL_TRIG_CHAIN(0);   // chainlength -1 only us
+        IMXRT_ADC_ETC.TRIG[ADC_ETC_TRIGGER_INDEX].CHAIN_1_0 =
+          ADC_ETC_TRIG_CHAIN_IE0(1) /*| ADC_ETC_TRIG_CHAIN_B2B0 */
+          | ADC_ETC_TRIG_CHAIN_HWTS0(1) | ADC_ETC_TRIG_CHAIN_CSEL0(adc_pin_channel) ;
+
+        if (adc_regs.GC && ADC_GC_DMAEN) {
+            IMXRT_ADC_ETC.DMA_CTRL |= ADC_ETC_DMA_CTRL_TRIQ_ENABLE(ADC_ETC_TRIGGER_INDEX);
+        }
+    }
+
+    // Now init the QTimer.
+    // Extracted from quadtimer_init in pwm.c but only the one channel...
+    // Maybe see if we have to do this every time we call this.  But how often is that? 
+    IMXRT_TMR4.CH[QTIMER4_INDEX].CTRL = 0; // stop timer
+    IMXRT_TMR4.CH[QTIMER4_INDEX].CNTR = 0;
+    IMXRT_TMR4.CH[QTIMER4_INDEX].SCTRL = TMR_SCTRL_OEN | TMR_SCTRL_OPS | TMR_SCTRL_VAL | TMR_SCTRL_FORCE;
+    IMXRT_TMR4.CH[QTIMER4_INDEX].CSCTRL = TMR_CSCTRL_CL1(1) | TMR_CSCTRL_ALT_LOAD;
+    // COMP must be less than LOAD - otherwise output is always low
+    IMXRT_TMR4.CH[QTIMER4_INDEX].LOAD = 24000;   // low time  (65537 - x) - 
+    IMXRT_TMR4.CH[QTIMER4_INDEX].COMP1 = 0;  // high time (0 = always low, max = LOAD-1)
+    IMXRT_TMR4.CH[QTIMER4_INDEX].CMPLD1 = 0;
+    IMXRT_TMR4.CH[QTIMER4_INDEX].CTRL = TMR_CTRL_CM(1) | TMR_CTRL_PCS(8) |
+        TMR_CTRL_LENGTH | TMR_CTRL_OUTMODE(6);
+
+    quadtimerFrequency(&IMXRT_TMR4, QTIMER4_INDEX, freq);
+    quadtimerWrite(&IMXRT_TMR4, QTIMER4_INDEX, 5);
+
+}
+
+//! Stop the PDB
+void ADC_Module::stopTimer() {
+    quadtimerWrite(&IMXRT_TMR4, QTIMER4_INDEX, 0);  
+    setSoftwareTrigger();
+    
+
+}
+
+//! Return the PDB's frequency
+uint32_t ADC_Module::getTimerFrequency() {
+    // Can I reverse the calculations of quad timer set frequency?
+    uint32_t high = IMXRT_TMR4.CH[QTIMER4_INDEX].CMPLD1; 
+    uint32_t low = 65537 - IMXRT_TMR4.CH[QTIMER4_INDEX].LOAD;
+    uint32_t highPlusLow = high + low;   // 
+    if (highPlusLow == 0) return 0; // 
+
+    uint8_t pcs = (IMXRT_TMR4.CH[QTIMER4_INDEX].CTRL >> 9) & 0x7;
+    uint32_t freq = (F_BUS_ACTUAL >> pcs)/highPlusLow;
+    //Serial.printf("ADC_Module::getTimerFrequency H:%u L:%u H+L=%u pcs:%u freq:%u\n", high, low, highPlusLow, pcs, freq);
+    return freq;
+}
+
+#endif // Teensy 4
+#endif // ADC_USE_TIMER

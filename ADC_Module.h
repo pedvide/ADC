@@ -517,7 +517,7 @@ public:
 
 
     //////////// PDB ////////////////
-    //// Only works for Teensy 3.0 and 3.1, not LC (it doesn't have PDB)
+    //// Only works for Teensy 3.x not LC nor tensy 4.0 (they don't have PDB)
     #if ADC_USE_PDB
 
     //! Start PDB triggering the ADC at the frequency
@@ -533,6 +533,37 @@ public:
     //! Return the PDB's frequency
     uint32_t getPDBFrequency();
     #endif
+
+    //////////// TIMER ////////////////
+    //// Only works for Teensy T3.x and T4 (not LC) on T3.x (If USE_PDB is defined just calls back to PDB)
+    #if ADC_USE_TIMER
+        #if ADC_USE_PDB
+        void startTimer(uint32_t freq) __attribute__((always_inline)) { startPDB(freq); }
+
+        //! Stop the PDB
+        void stopTimer() __attribute__((always_inline)) { stopPDB(); }
+
+        //! Return the PDB's frequency
+        uint32_t getTimerFrequency() __attribute__((always_inline)) { return getPDBFrequency(); }
+
+
+        #else
+        //! Start a timer to trigger the ADC at the frequency
+        /** Call startSingleRead or startSingleDifferential on the pin that you want to measure before calling this function.
+        *   See the example adc_pdb.ino.
+        *   \param freq is the frequency of the ADC conversion, it can't be lower that 1 Hz
+        */
+        void startTimer(uint32_t freq);
+    
+        //! Stop the timer
+        void stopTimer();
+    
+        //! Return the timer's frequency
+        uint32_t getTimerFrequency();
+        #endif
+        
+    #endif
+
 
 
     //////// OTHER STUFF ///////////
@@ -690,7 +721,12 @@ private:
     #if ADC_USE_PDB
     reg PDB0_CHnC1; // PDB channel 0 or 1
     #endif
-
+    #ifdef ADC_TEENSY_4
+    uint8_t XBAR_IN;
+    uint8_t XBAR_OUT;
+    uint8_t QTIMER4_INDEX;
+    uint8_t ADC_ETC_TRIGGER_INDEX;    
+    #endif
     const IRQ_NUMBER_t IRQ_ADC; // IRQ number
 
 protected:

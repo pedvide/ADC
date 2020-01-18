@@ -113,6 +113,21 @@ namespace ADC_settings {
         #define ADC_USE_PDB (0)
 #endif
 
+// Use TIMER - Either PDB above or other...?
+#if defined(ADC_TEENSY_3_1) // Teensy 3.1
+        #define ADC_USE_TIMER (1)
+#elif defined(ADC_TEENSY_3_0) // Teensy 3.0
+        #define ADC_USE_TIMER (1)
+#elif defined(ADC_TEENSY_LC) // Teensy LC
+        #define ADC_USE_TIMER (0)
+#elif defined(ADC_TEENSY_3_5) // Teensy 3.5
+        #define ADC_USE_TIMER (1)
+#elif defined(ADC_TEENSY_3_6) // Teensy 3.6
+        #define ADC_USE_TIMER (1)
+#elif defined(ADC_TEENSY_4) // Teensy 4
+        #define ADC_USE_TIMER (1)
+#endif
+
 // Has internal reference?
 #if defined(ADC_TEENSY_3_1) // Teensy 3.1
         #define ADC_USE_INTERNAL_VREF (1)

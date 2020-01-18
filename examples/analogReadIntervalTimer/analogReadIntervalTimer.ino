@@ -168,8 +168,12 @@ void timer1_callback(void) {
 // first: see which pin finished and then save the measurement into the correct buffer
 void adc0_isr() {
 
-    uint8_t pin = ADC::sc1a2channelADC0[ADC0_SC1A&ADC_SC1A_CHANNELS]; // the bits 0-4 of ADC0_SC1A have the channel
 
+#if defined(__IMXRT1062__)  // Teensy 4.0
+    uint8_t pin = ADC::sc1a2channelADC0[ADC1_HC0&0x1f]; // the bits 0-4 of ADC0_SC1A have the channel
+#else
+    uint8_t pin = ADC::sc1a2channelADC0[ADC0_SC1A&ADC_SC1A_CHANNELS]; // the bits 0-4 of ADC0_SC1A have the channel
+#endif
     // add value to correct buffer
     if(pin==readPin0) {
         digitalWriteFast(ledPin+3, HIGH);
