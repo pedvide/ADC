@@ -515,11 +515,23 @@ public:
     //! Stops continuous conversion
     void stopContinuous();
 
+    //////////// FREQUENCY METHODS ////////
+    // The general API is:
+    // void startTimer(uint32_t freq)
+    // void stopTimer()
+    // uint32_t getTimerFrequency()
+    // For each board the best timer method will be selected
 
     //////////// PDB ////////////////
-    //// Only works for Teensy 3.x not LC nor tensy 4.0 (they don't have PDB)
+    //// Only works for Teensy 3.x not LC nor Tensy 4.0 (they don't have PDB)
     #if ADC_USE_PDB
 
+    //! Start the default timer (PDB) triggering the ADC at the frequency
+    /** Call startSingleRead or startSingleDifferential on the pin that you want to measure before calling this function.
+    *   See the example adc_pdb.ino.
+    *   \param freq is the frequency of the ADC conversion, it can't be lower that 1 Hz
+    */
+    void startTimer(uint32_t freq) __attribute__((always_inline)) { startPDB(freq); }
     //! Start PDB triggering the ADC at the frequency
     /** Call startSingleRead or startSingleDifferential on the pin that you want to measure before calling this function.
     *   See the example adc_pdb.ino.
@@ -527,41 +539,42 @@ public:
     */
     void startPDB(uint32_t freq);
 
+    //! Stop the default timer (PDB)
+    void stopTimer() __attribute__((always_inline)) { stopPDB(); }
     //! Stop the PDB
     void stopPDB();
 
+    //! Return the default timer's (PDB) frequency
+    uint32_t getTimerFrequency() __attribute__((always_inline)) { return getPDBFrequency(); }
     //! Return the PDB's frequency
     uint32_t getPDBFrequency();
     #endif
 
     //////////// TIMER ////////////////
-    //// Only works for Teensy T3.x and T4 (not LC) on T3.x (If USE_PDB is defined just calls back to PDB)
-    #if ADC_USE_TIMER
-        #if ADC_USE_PDB
-        void startTimer(uint32_t freq) __attribute__((always_inline)) { startPDB(freq); }
+    //// Only works for Teensy 3.x and 4 (not LC)
+    #if ADC_USE_QUAD_TIMER && (!ADC_USE_PDB)
+    //! Start the default timer (QuadTimer) triggering the ADC at the frequency
+    /** Call startSingleRead or startSingleDifferential on the pin that you want to measure before calling this function.
+    *   See the example adc_pdb.ino.
+    *   \param freq is the frequency of the ADC conversion, it can't be lower that 1 Hz
+    */
+    void startTimer(uint32_t freq) __attribute__((always_inline)) { startQuadTimer(freq); }
+    //! Start a Quad timer to trigger the ADC at the frequency
+    /** Call startSingleRead or startSingleDifferential on the pin that you want to measure before calling this function.
+    *   See the example adc_pdb.ino.
+    *   \param freq is the frequency of the ADC conversion, it can't be lower that 1 Hz
+    */
+    void startQuadTimer(uint32_t freq);
 
-        //! Stop the PDB
-        void stopTimer() __attribute__((always_inline)) { stopPDB(); }
+    //! Stop the default timer (QuadTimer)
+    void stopTimer() __attribute__((always_inline)) { stopQuadTimer(); }
+    //! Stop the Quad timer
+    void stopQuadTimer();
 
-        //! Return the PDB's frequency
-        uint32_t getTimerFrequency() __attribute__((always_inline)) { return getPDBFrequency(); }
-
-
-        #else
-        //! Start a timer to trigger the ADC at the frequency
-        /** Call startSingleRead or startSingleDifferential on the pin that you want to measure before calling this function.
-        *   See the example adc_pdb.ino.
-        *   \param freq is the frequency of the ADC conversion, it can't be lower that 1 Hz
-        */
-        void startTimer(uint32_t freq);
-    
-        //! Stop the timer
-        void stopTimer();
-    
-        //! Return the timer's frequency
-        uint32_t getTimerFrequency();
-        #endif
-        
+    //! Return the default timer's (QuadTimer) frequency
+    uint32_t getTimerFrequency() __attribute__((always_inline)) { return getQuadTimerFrequency(); }
+    //! Return the Quad timer's frequency
+    uint32_t getQuadTimerFrequency();
     #endif
 
 

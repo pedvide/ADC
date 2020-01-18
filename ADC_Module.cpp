@@ -1344,9 +1344,10 @@ void ADC_Module::stopContinuous() {
     return;
 }
 
-//////////// PDB ////////////////
-//// Only works for Teensy 3.0 and 3.1, not LC (it doesn't have PDB)
 
+//////////// FREQUENCY METHODS ////////
+
+//////////// PDB ////////////////
 #if ADC_USE_PDB
 
 // frequency in Hz
@@ -1478,7 +1479,8 @@ uint32_t ADC_Module::getPDBFrequency() {
 
 #endif
 
-#if ADC_USE_TIMER && !ADC_USE_PDB
+#if ADC_USE_QUAD_TIMER
+// TODO: Add support for Teensy 3.x Quad timer
 #if defined(ADC_TEENSY_4) // only supported by Teensy 4...
 // try to use some teensy core functions...
 // mainly out of pwm.c
@@ -1489,7 +1491,7 @@ extern "C" {
     extern void quadtimerFrequency(IMXRT_TMR_t *p, unsigned int submodule, float frequency);
 }
 
-void ADC_Module::startTimer(uint32_t freq) {
+void ADC_Module::startQuadTimer(uint32_t freq) {
     // First lets setup the XBAR
     CCM_CCGR2 |= CCM_CCGR2_XBAR1(CCM_CCGR_ON);   //turn clock on for xbara1
     xbar_connect(XBAR_IN, XBAR_OUT);
@@ -1555,15 +1557,13 @@ void ADC_Module::startTimer(uint32_t freq) {
 }
 
 //! Stop the PDB
-void ADC_Module::stopTimer() {
+void ADC_Module::stopQuadTimer() {
     quadtimerWrite(&IMXRT_TMR4, QTIMER4_INDEX, 0);  
     setSoftwareTrigger();
-    
-
 }
 
 //! Return the PDB's frequency
-uint32_t ADC_Module::getTimerFrequency() {
+uint32_t ADC_Module::getQuadTimerFrequency() {
     // Can I reverse the calculations of quad timer set frequency?
     uint32_t high = IMXRT_TMR4.CH[QTIMER4_INDEX].CMPLD1; 
     uint32_t low = 65537 - IMXRT_TMR4.CH[QTIMER4_INDEX].LOAD;
@@ -1577,4 +1577,4 @@ uint32_t ADC_Module::getTimerFrequency() {
 }
 
 #endif // Teensy 4
-#endif // ADC_USE_TIMER
+#endif // ADC_USE_QUAD_TIMER
