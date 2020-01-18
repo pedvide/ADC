@@ -192,7 +192,7 @@ bool AnalogBufferDMA::clearCompletion()
 //     common for both ISRs on those processors who have more than one ADC
 //=============================================================================
 void  AnalogBufferDMA::processADC_DMAISR() {
-  digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
+  //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
   uint32_t cur_time = millis();
 
   _interrupt_count++;

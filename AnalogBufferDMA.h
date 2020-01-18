@@ -26,7 +26,6 @@
 #ifndef ANALOGBUFFERDMA_H
 #define ANALOGBUFFERDMA_H
 
-#include <Arduino.h> // for digitalWrite
 #include "DMAChannel.h"
 #include "ADC.h"
 // lets wrap some of our Dmasettings stuff into helper class
