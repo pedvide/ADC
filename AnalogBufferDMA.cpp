@@ -97,7 +97,7 @@ void AnalogBufferDMA::init(ADC *adc, int8_t adc_num)
     _stop_on_completion = false;
   } else {
     // Only one buffer so lets just setup the dmachannel ...
-    Serial.printf("AnalogBufferDMA::init Single buffer %d\n", adc_num);
+    // Serial.printf("AnalogBufferDMA::init Single buffer %d\n", adc_num);
     _dmachannel_adc.source((volatile uint16_t&)((adc_num == 1) ? SOURCE_ADC_1 : SOURCE_ADC_0));
     _dmachannel_adc.destinationBuffer((uint16_t*)_buffer1, _buffer1_count * 2); // 2*b_size is necessary for some reason
     _dmachannel_adc.interruptAtCompletion(); //interruptAtHalf or interruptAtCompletion
