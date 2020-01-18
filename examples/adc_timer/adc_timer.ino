@@ -99,7 +99,9 @@ void loop() {
       if (freq == 0) {
         Serial.println("Stop Timer.");
         adc->adc0->stopTimer();
+        #if ADC_NUM_ADCS>1
         adc->adc1->stopTimer();
+        #endif
       }
       else {
         Serial.print("Start Timer with frequency ");

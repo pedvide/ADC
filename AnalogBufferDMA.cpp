@@ -36,8 +36,10 @@ AnalogBufferDMA *AnalogBufferDMA::_activeObjectPerADC[2] = {nullptr, nullptr};
 #elif defined(KINETISK)
 #define SOURCE_ADC_0    ADC0_RA
 #define DMAMUX_ADC_0    DMAMUX_SOURCE_ADC0
+#if ADC_NUM_ADCS>1
 #define SOURCE_ADC_1    ADC1_RA
 #define DMAMUX_ADC_1    DMAMUX_SOURCE_ADC1
+#endif
 #elif defined(KINETISL)
 #define SOURCE_ADC_0    ADC0_RA
 #define DMAMUX_ADC_0    DMAMUX_SOURCE_ADC0
@@ -82,15 +84,20 @@ void AnalogBufferDMA::init(ADC *adc, int8_t adc_num)
   // Now lets see the different things that RingbufferDMA setup for us before
   // See if we were created with one or two buffers.  If one assume we stop on completion, else assume continuous.
   if (_buffer2 && _buffer2_count) {
+    #if ADC_NUM_ADCS>1
     _dmasettings_adc[0].source((volatile uint16_t&)((adc_num == 1) ? SOURCE_ADC_1 : SOURCE_ADC_0));
+    #else
+    _dmasettings_adc[0].source((volatile uint16_t&)(SOURCE_ADC_0));
+    #endif
     _dmasettings_adc[0].destinationBuffer((uint16_t*)_buffer1, _buffer1_count * 2); // 2*b_size is necessary for some reason
     _dmasettings_adc[0].replaceSettingsOnCompletion(_dmasettings_adc[1]);    // go off and use second one...
     _dmasettings_adc[0].interruptAtCompletion(); //interruptAtHalf or interruptAtCompletion
-
+    #if ADC_NUM_ADCS>1
     _dmasettings_adc[1].source((volatile uint16_t&)((adc_num == 1) ? SOURCE_ADC_1 : SOURCE_ADC_0));
     _dmasettings_adc[1].destinationBuffer((uint16_t*)_buffer2, _buffer2_count * 2); // 2*b_size is necessary for some reason
     _dmasettings_adc[1].replaceSettingsOnCompletion(_dmasettings_adc[0]);    // Cycle back to the first one
     _dmasettings_adc[1].interruptAtCompletion(); //interruptAtHalf or interruptAtCompletion
+    #endif
 
     _dmachannel_adc = _dmasettings_adc[0];
 
@@ -98,7 +105,11 @@ void AnalogBufferDMA::init(ADC *adc, int8_t adc_num)
   } else {
     // Only one buffer so lets just setup the dmachannel ...
     // Serial.printf("AnalogBufferDMA::init Single buffer %d\n", adc_num);
+    #if ADC_NUM_ADCS>1
     _dmachannel_adc.source((volatile uint16_t&)((adc_num == 1) ? SOURCE_ADC_1 : SOURCE_ADC_0));
+    #else
+    _dmachannel_adc.source((volatile uint16_t&)(SOURCE_ADC_0));
+    #endif
     _dmachannel_adc.destinationBuffer((uint16_t*)_buffer1, _buffer1_count * 2); // 2*b_size is necessary for some reason
     _dmachannel_adc.interruptAtCompletion(); //interruptAtHalf or interruptAtCompletion
     _dmachannel_adc.disableOnCompletion();    // we will disable on completion.
@@ -106,9 +117,11 @@ void AnalogBufferDMA::init(ADC *adc, int8_t adc_num)
   }
 
   if (adc_num == 1) {
+    #if ADC_NUM_ADCS>1
     _activeObjectPerADC[1] = this;
     _dmachannel_adc.attachInterrupt(&adc_1_dmaISR);
     _dmachannel_adc.triggerAtHardwareEvent(DMAMUX_ADC_1); // start DMA channel when ADC finishes a conversion
+    #endif
   } else {
     _activeObjectPerADC[0] = this;
     _dmachannel_adc.attachInterrupt(&adc_0_dmaISR);
