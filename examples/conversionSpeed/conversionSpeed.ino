@@ -37,13 +37,13 @@ void setup() {
     // Single-shot conversions. The fastest way to do conversions is with continuous mode (see below)
     Serial.println("Single-shot conversion speeds. Value should be 1."); 
     for(auto average : averages_list) {
-      adc->setAveraging(average, ADC_0); // set number of averages
+      adc->adc0->setAveraging(average); // set number of averages
       for (auto resolution : resolutions_list) {
-        adc->setResolution(resolution, ADC_0); // set bits of resolution
+        adc->adc0->setResolution(resolution); // set bits of resolution
         for (auto conv_speed : conversion_speed_list) {
-            adc->setConversionSpeed(conv_speed, ADC_0); // change the conversion speed
+            adc->adc0->setConversionSpeed(conv_speed); // change the conversion speed
             for (auto samp_speed: sampling_speed_list) {
-                adc->setSamplingSpeed(samp_speed, ADC_0); // change the sampling speed
+                adc->adc0->setSamplingSpeed(samp_speed); // change the sampling speed
                 
                 adc->adc0->wait_for_cal();
 
@@ -69,15 +69,15 @@ void setup() {
 
     // Continuous mode
     Serial.println("Continuous mode conversion speeds. Value should be 1."); 
-    adc->enableInterrupts(adc0_isr, ADC_0);
+    adc->adc0->enableInterrupts(adc0_isr);
     for(auto average : averages_list) {
-      adc->setAveraging(average, ADC_0); // set number of averages
+      adc->adc0->setAveraging(average); // set number of averages
       for (auto resolution : resolutions_list) {
-        adc->setResolution(resolution, ADC_0); // set bits of resolution
+        adc->adc0->setResolution(resolution); // set bits of resolution
         for (auto conv_speed : conversion_speed_list) {
-            adc->setConversionSpeed(conv_speed, ADC_0); // change the conversion speed
+            adc->adc0->setConversionSpeed(conv_speed); // change the conversion speed
             for (auto samp_speed: sampling_speed_list) {
-                adc->setSamplingSpeed(samp_speed, ADC_0); // change the sampling speed
+                adc->adc0->setSamplingSpeed(samp_speed); // change the sampling speed
                 
                 adc->adc0->wait_for_cal();
 
@@ -86,10 +86,10 @@ void setup() {
                 value = 0;
                 num_iter = 0;
                 timeElapsed = 0;
-                adc->startContinuous(readPin, ADC_0);
+                adc->adc0->startContinuous(readPin);
                 while (num_iter<num_samples) {}
                 double time_us = (float)timeElapsed/num_samples;
-                adc->stopContinuous(ADC_0);
+                adc->adc0->stopContinuous();
                 Serial.print("Average: "); Serial.print(average);
                 Serial.print(", Resolution: "); Serial.print(resolution);
                 Serial.print(", Conversion speed: "); Serial.print(getConversionEnumStr(conv_speed));

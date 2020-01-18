@@ -32,7 +32,7 @@ float get_voltage(uint8_t trim) {
     VREF::waitUntilStable();
     delay(50);
     for(int i=0; i<NUM_AVGS; i++) {
-        average += 1.195/adc->analogRead(ADC_INTERNAL_SOURCE::VREF_OUT)*(adc->getMaxValue(ADC_0));
+        average += 1.195/adc->analogRead(ADC_INTERNAL_SOURCE::VREF_OUT)*(adc->adc0->getMaxValue());
     }
     return average/NUM_AVGS;
 }
@@ -100,15 +100,15 @@ void setup() {
     Serial.begin(9600);
 
     // Best measurement conditions
-    adc->setAveraging(32);
-    adc->setResolution(16);
-    adc->setConversionSpeed(ADC_CONVERSION_SPEED::VERY_LOW_SPEED);
-    adc->setSamplingSpeed(ADC_SAMPLING_SPEED::VERY_LOW_SPEED);
+    adc->adc0->setAveraging(32);
+    adc->adc0->setResolution(16);
+    adc->adc0->setConversionSpeed(ADC_CONVERSION_SPEED::VERY_LOW_SPEED);
+    adc->adc0->setSamplingSpeed(ADC_SAMPLING_SPEED::VERY_LOW_SPEED);
     #if ADC_NUM_ADCS>1
-    adc->setAveraging(32, ADC_1);
-    adc->setResolution(16, ADC_1);
-    adc->setConversionSpeed(ADC_CONVERSION_SPEED::VERY_LOW_SPEED, ADC_1);
-    adc->setSamplingSpeed(ADC_SAMPLING_SPEED::VERY_LOW_SPEED, ADC_1);
+    adc->adc1->setAveraging(32);
+    adc->adc1->setResolution(16);
+    adc->adc1->setConversionSpeed(ADC_CONVERSION_SPEED::VERY_LOW_SPEED);
+    adc->adc1->setSamplingSpeed(ADC_SAMPLING_SPEED::VERY_LOW_SPEED);
     #endif // ADC_NUM_ADCS
 
     delay(2000);
@@ -120,15 +120,15 @@ void setup() {
     VREF::waitUntilStable();
 
     Serial.print("3.3V pin value: ");
-    Serial.print(1.195/adc->analogRead(ADC_INTERNAL_SOURCE::VREF_OUT)*adc->getMaxValue(ADC_0), 5);
+    Serial.print(1.195/adc->adc0->analogRead(ADC_INTERNAL_SOURCE::VREF_OUT)*adc->adc0->getMaxValue(), 5);
     Serial.println(" V.");
 
 
     Serial.print("Bandgap value: ");
-    //Serial.print(3.3*adc->analogRead(ADC_INTERNAL_SOURCE::BANDGAP)/adc->getMaxValue(ADC_0), 5);
+    //Serial.print(3.3*adc->adc0->analogRead(ADC_INTERNAL_SOURCE::BANDGAP)/adc->adc0->getMaxValue(), 5);
     adc->adc0->analogRead(ADC_INTERNAL_SOURCE::BANDGAP);
     adc->adc0->differentialMode(); // Use differential mode for better precision.
-    Serial.print(voltage_target*adc->adc0->readSingle()/adc->getMaxValue(ADC_0), 5);
+    Serial.print(voltage_target*adc->adc0->readSingle()/adc->adc0->getMaxValue(), 5);
     Serial.println(" V. (Should be between 0.97 and 1.03 V.)");
 
     // VREF::stop(); // you can stop it to save power.
@@ -140,7 +140,7 @@ void loop() {
     // If you now run your teensy from a battery you can check the charge by looking at the 3.3V pin voltage
     // it should be 3.3V, but it will fall as the battery discharges.
     Serial.print("3.3V pin value: ");
-    Serial.print(1.195/adc->analogRead(ADC_INTERNAL_SOURCE::VREF_OUT)*adc->getMaxValue(ADC_0), 5);
+    Serial.print(1.195/adc->adc0->analogRead(ADC_INTERNAL_SOURCE::VREF_OUT)*adc->adc0->getMaxValue(), 5);
     Serial.println(" V.");
 
     delay(3000);

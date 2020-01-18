@@ -86,7 +86,7 @@ const uint32_t num_samples = 100;
 bool test_pullup_down(bool pullup, bool debug=false) {
     uint8_t mode = pullup ? INPUT_PULLUP : INPUT_PULLDOWN;
 
-    const int max_val = adc->getMaxValue(ADC_0);
+    const int max_val = adc->adc0->getMaxValue();
 
     bool pass_test = true;
 
@@ -136,12 +136,12 @@ bool test_compare(bool debug=false) {
     bool pass_test = true;
 
     // measurement will be ready if value < 1.0V
-    adc->enableCompare((int)(1.0/3.3*adc->getMaxValue(ADC_0)), 0, ADC_0);
+    adc->adc0->enableCompare((int)(1.0/3.3*adc->adc0->getMaxValue()), 0);
 
     pinMode(pin_cmp, INPUT_PULLUP); // set to max
     delay(10);
     // this should fail
-    value = adc->analogRead(pin_cmp, ADC_0);
+    value = adc->adc0->analogRead(pin_cmp);
     if (adc->adc0->fail_flag != ADC_ERROR::COMPARISON) {
       if (debug) {
         Serial.println("Comparison didn't fail.");
@@ -154,7 +154,7 @@ bool test_compare(bool debug=false) {
     pinMode(pin_cmp, INPUT_PULLDOWN); // set to min
     delay(50);
     // this should be ok
-    value = adc->analogRead(pin_cmp, ADC_0);
+    value = adc->adc0->analogRead(pin_cmp);
     if(adc->adc0->fail_flag == ADC_ERROR::COMPARISON) {
       if (debug) {
         Serial.println("Comparison didn't succeed.");
@@ -174,12 +174,12 @@ bool test_compare_range(bool debug=false) {
     bool pass_test = true;
 
     // ready if value lies out of [1.0,2.0] V
-    adc->enableCompareRange(1.0*adc->getMaxValue(ADC_0)/3.3, 2.0*adc->getMaxValue(ADC_0)/3.3, 0, 1, ADC_0);
+    adc->adc0->enableCompareRange(1.0*adc->adc0->getMaxValue()/3.3, 2.0*adc->adc0->getMaxValue()/3.3, 0, 1);
 
 
     pinMode(pin_cmp, INPUT_PULLUP); // set to max
     // this should be ok
-    value = adc->analogRead(pin_cmp, ADC_0);
+    value = adc->adc0->analogRead(pin_cmp);
     if(adc->adc0->fail_flag != ADC_ERROR::CLEAR) {
       if (debug) {
         Serial.println("Some other error happened when comparison should have succeeded.");
@@ -191,7 +191,7 @@ bool test_compare_range(bool debug=false) {
     pinMode(pin_cmp, INPUT_PULLDOWN); // set to min
     adc->adc0->resetError();
     // this should be ok
-    value = adc->analogRead(pin_cmp, ADC_0);
+    value = adc->adc0->analogRead(pin_cmp);
     if(adc->adc0->fail_flag != ADC_ERROR::CLEAR) {
       if (debug) {
         Serial.println("Some other error happened when comparison should have succeeded.");
@@ -214,10 +214,10 @@ bool test_averages(bool debug=false) {
     float avg_times[4];
     volatile int value = 0;
 
-    adc->setAveraging(1);
+    adc->adc0->setAveraging(1);
     timeElapsed = 0;
     for(uint32_t i=0; i<num_samples; i++) {
-        value += adc->analogRead(A0, ADC_0);
+        value += adc->adc0->analogRead(A0);
     }
     float one_avg_time = (float)timeElapsed/num_samples;
 //    Serial.print("1: "); Serial.println(one_avg_time);
@@ -225,11 +225,11 @@ bool test_averages(bool debug=false) {
 
 
     for(uint8_t i=0; i<4; i++) {
-        adc->setAveraging(averages[i]);
+        adc->adc0->setAveraging(averages[i]);
         timeElapsed = 0;
         value = 0;
         for(uint32_t j=0; j<num_samples; j++) {
-            value += adc->analogRead(A0, ADC_0);
+            value += adc->adc0->analogRead(A0);
         }
         float time = (float)timeElapsed/num_samples;
         avg_times[i] = time;
@@ -268,17 +268,17 @@ bool test_all_combinations(bool debug=false) {
     bool pass_test = true;
 
     for(auto average : averages_list) {
-      adc->setAveraging(average, ADC_0); // set number of averages
-      adc->setAveraging(average, ADC_1); // set number of averages
+      adc->adc0->setAveraging(average); // set number of averages
+      adc->adc0->setAveraging(average); // set number of averages
       for (auto resolution : resolutions_list) {
-        adc->setResolution(resolution, ADC_0); // set bits of resolution
-        adc->setResolution(resolution, ADC_1); // set bits of resolution
+        adc->adc0->setResolution(resolution); // set bits of resolution
+        adc->adc0->setResolution(resolution); // set bits of resolution
         for (auto conv_speed : conversion_speed_list) {
-            adc->setConversionSpeed(conv_speed, ADC_0); // change the conversion speed
-            adc->setConversionSpeed(conv_speed, ADC_1); // change the conversion speed
+            adc->adc0->setConversionSpeed(conv_speed); // change the conversion speed
+            adc->adc0->setConversionSpeed(conv_speed); // change the conversion speed
             for (auto samp_speed: sampling_speed_list) {
-              adc->setSamplingSpeed(samp_speed, ADC_0); // change the sampling speed
-              adc->setSamplingSpeed(samp_speed, ADC_1); // change the sampling speed
+              adc->adc0->setSamplingSpeed(samp_speed); // change the sampling speed
+              adc->adc0->setSamplingSpeed(samp_speed); // change the sampling speed
               
               adc->adc0->wait_for_cal();
               #if ADC_NUM_ADCS>1
@@ -312,16 +312,16 @@ bool test_all_combinations(bool debug=false) {
 }
 
 void resetSettings() {
-  adc->setAveraging(16); // set number of averages
-  adc->setResolution(12); // set bits of resolution
-  adc->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED); // change the conversion speed
-  adc->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED); // change the sampling speed
+  adc->adc0->setAveraging(16); // set number of averages
+  adc->adc0->setResolution(12); // set bits of resolution
+  adc->adc0->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED); // change the conversion speed
+  adc->adc0->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED); // change the sampling speed
 
   #if ADC_NUM_ADCS>1
-  adc->setAveraging(16, ADC_1); // set number of averages
-  adc->setResolution(12, ADC_1); // set bits of resolution
-  adc->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED, ADC_1); // change the conversion speed
-  adc->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED, ADC_1); // change the sampling speed
+  adc->adc1->setAveraging(16); // set number of averages
+  adc->adc1->setResolution(12); // set bits of resolution
+  adc->adc1->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED); // change the conversion speed
+  adc->adc1->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED); // change the sampling speed
   adc->adc1->recalibrate();
   #endif
   
@@ -337,18 +337,18 @@ void setup() {
     // reference can be ADC_REFERENCE::REF_3V3, ADC_REFERENCE::REF_1V2 (not for Teensy LC) or ADC_REFERENCE::REF_EXT.
     //adc->setReference(ADC_REFERENCE::REF_1V2, ADC_0); // change all 3.3 to 1.2 if you change the reference to 1V2
 
-    adc->setAveraging(16); // set number of averages
-    adc->setResolution(12); // set bits of resolution
-    adc->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED); // change the conversion speed
-    adc->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED); // change the sampling speed
+    adc->adc0->setAveraging(16); // set number of averages
+    adc->adc0->setResolution(12); // set bits of resolution
+    adc->adc0->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED); // change the conversion speed
+    adc->adc0->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED); // change the sampling speed
     adc->adc0->recalibrate();
 
     ////// ADC1 /////
     #if ADC_NUM_ADCS>1
-    adc->setAveraging(16, ADC_1); // set number of averages
-    adc->setResolution(12, ADC_1); // set bits of resolution
-    adc->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED, ADC_1); // change the conversion speed
-    adc->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED, ADC_1); // change the sampling speed
+    adc->adc1->setAveraging(16); // set number of averages
+    adc->adc1->setResolution(12); // set bits of resolution
+    adc->adc1->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED); // change the conversion speed
+    adc->adc1->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED); // change the sampling speed
     adc->adc1->recalibrate();
     #endif
 
