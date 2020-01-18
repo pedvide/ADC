@@ -67,20 +67,14 @@ void setup() {
 #endif
   Serial.begin(9600);
   Serial.println("Setup both ADCs");
-  // reference can be ADC_REFERENCE::REF_3V3, ADC_REFERENCE::REF_1V2 (not for Teensy LC) or ADC_REF_EXT.
-  //adc->setReference(ADC_REFERENCE::REF_1V2, ADC_0); // change all 3.3 to 1.2 if you change the reference to 1V2
 
   // Setup both ADCs
-  adc->setAveraging(8); // set number of averages
-  adc->setResolution(12); // set bits of resolution
-#if ADC_NUM_ADCS>1
-  adc->setAveraging(8, ADC_1); // set number of averages
-  adc->setResolution(12, ADC_1); // set bits of resolution
-#endif
-
-  // always call the compare functions after changing the resolution!
-  //adc->enableCompare(1.0/3.3*adc->getMaxValue(ADC_0), 0, ADC_0); // measurement will be ready if value < 1.0V
-  //adc->enableCompareRange(1.0*adc->getMaxValue(ADC_1)/3.3, 2.0*adc->getMaxValue(ADC_1)/3.3, 0, 1, ADC_1); // ready if value lies out of [1.0,2.0] V
+  adc->adc0->setAveraging(8); // set number of averages
+  adc->adc0->setResolution(12); // set bits of resolution
+  #if ADC_NUM_ADCS>1
+  adc->adc1->setAveraging(8); // set number of averages
+  adc->adc1->setResolution(12); // set bits of resolution
+  #endif
 
   // enable DMA and interrupts
   Serial.println("before enableDMA"); Serial.flush();
@@ -90,10 +84,10 @@ void setup() {
   // Now lets see the different things that RingbufferDMA setup for us before
   abdma1.init(adc, ADC_0/*, DMAMUX_SOURCE_ADC_ETC*/);
   abdma1.userData(initial_average_value); // save away initial starting average
-#if ADC_NUM_ADCS>1
+  #if ADC_NUM_ADCS>1
   abdma2.init(adc, ADC_1/*, DMAMUX_SOURCE_ADC_ETC*/);
   abdma2.userData(initial_average_value); // save away initial starting average
-#endif
+  #endif
   Serial.println("After enableDMA"); Serial.flush();
 
   // Start the dma operation..

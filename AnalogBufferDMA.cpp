@@ -117,8 +117,8 @@ void AnalogBufferDMA::init(ADC *adc, int8_t adc_num)
   //arm_dcache_flush((void*)dmaChannel, sizeof(dmaChannel));
   _dmachannel_adc.enable();
 
-  adc->startContinuous(adc_num);
-  adc->enableDMA(adc_num);
+  adc->adc[adc_num]->continuousMode();
+  adc->adc[adc_num]->enableDMA();
 
 #ifdef DEBUG_DUMP_DATA
   dumpDMA_TCD(&_dmachannel_adc);
