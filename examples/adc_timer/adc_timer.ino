@@ -88,7 +88,7 @@ void loop() {
       value = (uint16_t)adc->adc0->readSingle(); // the unsigned is necessary for 16 bits, otherwise values larger than 3.3/2 V are negative!
       Serial.printf("%d = ", value);
       Serial.println(value * 3.3 / adc->adc0->getMaxValue(), DEC);
-      #ifdef ADC_DUAL_ADCS && defined(USE_ADC_1)
+      #if defined(ADC_DUAL_ADCS) && defined(USE_ADC_1)
       Serial.print("Value ADC1: ");
       value2 = (uint16_t)adc->adc1->readSingle(); // the unsigned is necessary for 16 bits, otherwise values larger than 3.3/2 V are negative!
       Serial.printf("%d = ", value2);
@@ -111,7 +111,7 @@ void loop() {
         adc->adc0->startSingleRead(readPin); // call this to setup everything before the Timer starts, differential is also possible
         adc->adc0->enableInterrupts(adc0_isr);
         adc->adc0->startTimer(freq); //frequency in Hz
-        #ifdef ADC_DUAL_ADCS && defined(USE_ADC_1)
+        #if defined(ADC_DUAL_ADCS) && defined(USE_ADC_1)
         adc->adc1->stopTimer();
         adc->adc1->startSingleRead(readPin2); // call this to setup everything before the Timer starts
         adc->adc1->enableInterrupts(adc1_isr);
@@ -134,7 +134,7 @@ void loop() {
   if (adc->adc0->fail_flag != ADC_ERROR::CLEAR) {
     Serial.print("ADC0: "); Serial.println(getStringADCError(adc->adc0->fail_flag));
   }
-#ifdef ADC_DUAL_ADCS && defined(USE_ADC_1)
+#if defined(ADC_DUAL_ADCS) && defined(USE_ADC_1)
   if (adc->adc1->fail_flag != ADC_ERROR::CLEAR) {
     Serial.print("ADC1: "); Serial.println(getStringADCError(adc->adc1->fail_flag));
   }

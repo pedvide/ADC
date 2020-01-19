@@ -82,7 +82,7 @@ void setup() {
   // setup a DMA Channel.
   // Now lets see the different things that RingbufferDMA setup for us before
   abdma1.init(adc, ADC_0/*, DMAMUX_SOURCE_ADC_ETC*/);
-  abdma2.userData(initial_average_value); // save away initial starting average
+  abdma1.userData(initial_average_value); // save away initial starting average
 #ifdef ADC_DUAL_ADCS
   abdma2.init(adc, ADC_1/*, DMAMUX_SOURCE_ADC_ETC*/);
   abdma2.userData(initial_average_value); // save away initial starting average
