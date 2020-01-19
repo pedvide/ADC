@@ -32,7 +32,7 @@
 #include "ADC_Module.h"
 
 // include the internal reference
-#if ADC_USE_INTERNAL_VREF
+#ifdef ADC_USE_INTERNAL_VREF
 #include <VREF.h>
 #endif
 
@@ -54,7 +54,7 @@ ADC_Module::ADC_Module(uint8_t ADC_number,
         , diff_table(a_diff_table)
         #endif
         , adc_regs(a_adc_regs)
-        #if ADC_USE_PDB
+        #ifdef ADC_USE_PDB
         , PDB0_CHnC1(ADC_num? PDB0_CH1C1 : PDB0_CH0C1)
         #endif
         #if defined(ADC_TEENSY_4)
@@ -63,7 +63,7 @@ ADC_Module::ADC_Module(uint8_t ADC_number,
         , QTIMER4_INDEX(ADC_num? 3 : 0)
         , ADC_ETC_TRIGGER_INDEX(ADC_num? 4 : 0) 
         , IRQ_ADC(ADC_num? IRQ_NUMBER_t::IRQ_ADC2 : IRQ_NUMBER_t::IRQ_ADC1)        
-        #elif ADC_NUM_ADCS==2
+        #elif defined(ADC_DUAL_ADCS)
         // IRQ_ADC0 and IRQ_ADC1 aren't consecutive in Teensy 3.6
         // fix by SB, https://github.com/pedvide/ADC/issues/19
         , IRQ_ADC(ADC_num? IRQ_NUMBER_t::IRQ_ADC1 : IRQ_NUMBER_t::IRQ_ADC0) 
@@ -108,7 +108,7 @@ void ADC_Module::analog_init() {
     analog_max_val = 0;
     analog_num_average = 0;
     analog_reference_internal = ADC_REF_SOURCE::REF_NONE;
-    #if ADC_USE_PGA 
+    #ifdef ADC_USE_PGA 
     pga_value = 1;
     #endif
     interrupts_enabled = false;
@@ -267,7 +267,7 @@ void ADC_Module::setReference(ADC_REFERENCE type) {
 
     if (ref_type == ADC_REF_SOURCE::REF_ALT) { // 1.2V ref for Teensy 3.x, 3.3 VDD for Teensy LC
         // internal reference requested
-        #if ADC_USE_INTERNAL_VREF
+        #ifdef ADC_USE_INTERNAL_VREF
         VREF::start(); // enable VREF if Teensy 3.x
         #endif
 
@@ -283,7 +283,7 @@ void ADC_Module::setReference(ADC_REFERENCE type) {
     } else if(ref_type == ADC_REF_SOURCE::REF_DEFAULT) { // ext ref for all Teensys, vcc also for Teensy 3.x
         // vcc or external reference requested
 
-        #if ADC_USE_INTERNAL_VREF
+        #ifdef ADC_USE_INTERNAL_VREF
         VREF::stop(); // disable 1.2V reference source when using the external ref (p. 102, 3.7.1.7)
         #endif
 
@@ -716,7 +716,7 @@ void ADC_Module::disableInterrupts() {
 }
 
 
-#if ADC_USE_DMA
+#ifdef ADC_USE_DMA
 /* Enable DMA request: An ADC DMA request will be raised when the conversion is completed
 *  (including hardware averages and if the comparison (if any) is true).
 */
@@ -846,7 +846,7 @@ void ADC_Module::disableCompare() {
     #endif
 }
 
-#if ADC_USE_PGA 
+#ifdef ADC_USE_PGA 
 /* Enables the PGA and sets the gain
 *   Use only for signals lower than 1.2 V
 *   \param gain can be 1, 2, 4, 8, 16 32 or 64
@@ -934,7 +934,7 @@ bool ADC_Module::checkDifferentialPins(uint8_t pinP, uint8_t pinN) {
         return false;   // all others are invalid
     }
 
-    #if ADC_USE_PGA
+    #ifdef ADC_USE_PGA
     // check if PGA is enabled, and whether the pin has access to it in this ADC module
     if( isPGAEnabled() && !(sc1a_pin&ADC_SC1A_PIN_PGA) ) {
         return false;
@@ -986,7 +986,7 @@ void ADC_Module::startDifferentialFast(uint8_t pinP, uint8_t pinN) {
     // get SC1A number
      uint8_t sc1a_pin = getDifferentialPair(pinP);
 
-    #if ADC_USE_PGA
+    #ifdef ADC_USE_PGA
     // check if PGA is enabled
     if(isPGAEnabled()) {
         sc1a_pin = 0x2; // PGA always uses DAD2
@@ -1348,7 +1348,7 @@ void ADC_Module::stopContinuous() {
 //////////// FREQUENCY METHODS ////////
 
 //////////// PDB ////////////////
-#if ADC_USE_PDB
+#ifdef ADC_USE_PDB
 
 // frequency in Hz
 void ADC_Module::startPDB(uint32_t freq) {
@@ -1479,7 +1479,7 @@ uint32_t ADC_Module::getPDBFrequency() {
 
 #endif
 
-#if ADC_USE_QUAD_TIMER
+#ifdef ADC_USE_QUAD_TIMER
 // TODO: Add support for Teensy 3.x Quad timer
 #if defined(ADC_TEENSY_4) // only supported by Teensy 4...
 // try to use some teensy core functions...

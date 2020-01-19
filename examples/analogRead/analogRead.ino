@@ -19,7 +19,7 @@ void setup() {
 
     pinMode(A10, INPUT); //Diff Channel 0 Positive
     pinMode(A11, INPUT); //Diff Channel 0 Negative
-    #if ADC_NUM_ADCS>1
+    #ifdef ADC_DUAL_ADCS
     pinMode(A12, INPUT); //Diff Channel 3 Positive
     pinMode(A13, INPUT); //Diff Channel 3 Negative
     #endif
@@ -52,7 +52,7 @@ void setup() {
 
 
     ////// ADC1 /////
-    #if ADC_NUM_ADCS>1
+    #ifdef ADC_DUAL_ADCS
     adc->adc1->setAveraging(16); // set number of averages
     adc->adc1->setResolution(16); // set bits of resolution
     adc->adc1->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED); // change the conversion speed
@@ -88,7 +88,7 @@ void loop() {
     Serial.print(", value ADC0: ");
     Serial.println(value*3.3/adc->adc0->getMaxValue(), DEC);
 
-    #if ADC_NUM_ADCS>1
+    #ifdef ADC_DUAL_ADCS
     value2 = adc->adc1->analogRead(readPin2);
 
     Serial.print("Pin: ");
@@ -99,7 +99,7 @@ void loop() {
 
     // Differential reads
     #if ADC_DIFF_PAIRS > 0
-    #if ADC_USE_PGA
+    #ifdef ADC_USE_PGA
     double V_per_bit = 3.3/adc->adc0->getPGA()/adc->adc0->getMaxValue();
     #else
     double V_per_bit = 3.3/adc->adc0->getMaxValue();
@@ -112,7 +112,7 @@ void loop() {
     
     Serial.println(value*V_per_bit, DEC);
 
-    #if ADC_NUM_ADCS>1
+    #ifdef ADC_DUAL_ADCS
     value2 = adc->adc1->analogReadDifferential(A12, A13);
 
     Serial.print(" Value A12-A13: ");
@@ -124,7 +124,7 @@ void loop() {
     if(adc->adc0->fail_flag != ADC_ERROR::CLEAR) {
       Serial.print("ADC0: "); Serial.println(getStringADCError(adc->adc0->fail_flag));
     }
-    #if ADC_NUM_ADCS > 1
+    #ifdef ADC_DUAL_ADCS
     if(adc->adc1->fail_flag != ADC_ERROR::CLEAR) {
       Serial.print("ADC1: "); Serial.println(getStringADCError(adc->adc1->fail_flag));
     }

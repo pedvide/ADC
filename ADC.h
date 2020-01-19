@@ -72,7 +72,7 @@ class ADC
 
         // ADCs objects
         ADC_Module adc0_obj;
-        #if ADC_NUM_ADCS>1
+        #ifdef ADC_DUAL_ADCS
         ADC_Module adc1_obj;
         #endif
 
@@ -90,12 +90,12 @@ class ADC
 
         //! Object to control the ADC0
         ADC_Module *const adc0 = &adc0_obj; // adc object pointer
-        #if ADC_NUM_ADCS>1
+        #ifdef ADC_DUAL_ADCS
         //! Object to control the ADC1
         ADC_Module *const adc1 = &adc1_obj; // adc object pointer
         #endif
 
-        #if ADC_NUM_ADCS==1
+        #ifdef ADC_SINGLE_ADC
         //! Array with the ADC Modules
         ADC_Module *const adc[ADC_NUM_ADCS] = {adc0};
         #else
@@ -222,7 +222,7 @@ class ADC
 
         /////////// SYNCHRONIZED METHODS ///////////////
         ///// ONLY FOR BOARDS WITH MORE THAN ONE ADC /////
-        #if ADC_NUM_ADCS>1
+        #ifdef ADC_DUAL_ADCS
 
         //! Struct for synchronous measurements
         /** result_adc0 has the result from ADC0 and result_adc1 from ADC1.
@@ -356,14 +356,14 @@ class ADC
         //! Translate pin number to SC1A nomenclature
         // should this be a constexpr?
         static const uint8_t channel2sc1aADC0[ADC_MAX_PIN+1];
-        #if ADC_NUM_ADCS>1
+        #ifdef ADC_DUAL_ADCS
         //! Translate pin number to SC1A nomenclature
         static const uint8_t channel2sc1aADC1[ADC_MAX_PIN+1];
         #endif
 
         //! Translate pin number to SC1A nomenclature for differential pins
         static const uint8_t sc1a2channelADC0[ADC_MAX_PIN+1];
-        #if ADC_NUM_ADCS>1
+        #ifdef ADC_DUAL_ADCS
         //! Translate pin number to SC1A nomenclature for differential pins
         static const uint8_t sc1a2channelADC1[ADC_MAX_PIN+1];
         #endif
@@ -372,7 +372,7 @@ class ADC
         #if ADC_DIFF_PAIRS > 0
         //! Translate differential pin number to SC1A nomenclature
         static const ADC_Module::ADC_NLIST diff_table_ADC0[ADC_DIFF_PAIRS];
-        #if ADC_NUM_ADCS>1
+        #ifdef ADC_DUAL_ADCS
         //! Translate differential pin number to SC1A nomenclature
         static const ADC_Module::ADC_NLIST diff_table_ADC1[ADC_DIFF_PAIRS];
         #endif

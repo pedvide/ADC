@@ -74,7 +74,7 @@ void loop() {
     if(adc->adc0->fail_flag != ADC_ERROR::CLEAR) {
       Serial.print("ADC0: "); Serial.println(getStringADCError(adc->adc0->fail_flag));
     }
-    #if ADC_NUM_ADCS > 1
+    #ifdef ADC_DUAL_ADCS
     if(adc->adc1->fail_flag != ADC_ERROR::CLEAR) {
       Serial.print("ADC1: "); Serial.println(getStringADCError(adc->adc1->fail_flag));
     }

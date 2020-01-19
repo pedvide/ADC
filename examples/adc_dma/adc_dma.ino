@@ -40,7 +40,7 @@ DMAMEM static volatile uint16_t __attribute__((aligned(32))) dma_adc_buff1[buffe
 DMAMEM static volatile uint16_t __attribute__((aligned(32))) dma_adc_buff2[buffer_size];
 AnalogBufferDMA abdma1(dma_adc_buff1, buffer_size, dma_adc_buff2, buffer_size);
 
-#if ADC_NUM_ADCS>1
+#ifdef ADC_DUAL_ADCS
 DMAMEM static volatile uint16_t __attribute__((aligned(32))) dma_adc2_buff1[buffer_size];
 DMAMEM static volatile uint16_t __attribute__((aligned(32))) dma_adc2_buff2[buffer_size];
 AnalogBufferDMA abdma2(dma_adc2_buff1, buffer_size, dma_adc2_buff2, buffer_size);
@@ -51,7 +51,7 @@ void setup() {
 
     pinMode(LED_BUILTIN, OUTPUT);
     pinMode(readPin_adc_0, INPUT); //pin 23 single ended
-#if ADC_NUM_ADCS>1
+#ifdef ADC_DUAL_ADCS
     pinMode(readPin_adc_1, INPUT);
 #endif
 
@@ -76,7 +76,7 @@ void setup() {
     // Now lets see the different things that RingbufferDMA setup for us before
     abdma1.init(adc, ADC_0);
     abdma1.userData(initial_average_value); // save away initial starting average
-#if ADC_NUM_ADCS>1
+#ifdef ADC_DUAL_ADCS
     Serial.println("Setup ADC_1");
     adc->setAveraging(8, ADC_1); // set number of averages
     adc->setResolution(12, ADC_1); // set bits of resolution
@@ -97,7 +97,7 @@ char c = 0;
 void loop() {
 
     // Maybe only when both have triggered?
-#if ADC_NUM_ADCS>1
+#ifdef ADC_DUAL_ADCS
     if ( abdma1.interrupted() && abdma2.interrupted()) {
         if (abdma1.interrupted()) ProcessAnalogData(&abdma1, 0);
         if (abdma2.interrupted()) ProcessAnalogData(&abdma2, 1);

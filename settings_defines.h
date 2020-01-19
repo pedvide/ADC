@@ -56,91 +56,87 @@ namespace ADC_settings {
 // Teensy 3.1 has 2 ADCs, Teensy 3.0 and LC only 1.
 #if defined(ADC_TEENSY_3_1) // Teensy 3.1
         #define ADC_NUM_ADCS (2)
+        #define ADC_DUAL_ADCS
 #elif defined(ADC_TEENSY_3_0) // Teensy 3.0
         #define ADC_NUM_ADCS (1)
+        #define ADC_SINGLE_ADC
 #elif defined(ADC_TEENSY_LC) // Teensy LC
         #define ADC_NUM_ADCS (1)
+        #define ADC_SINGLE_ADC
 #elif defined(ADC_TEENSY_3_5) // Teensy 3.5
         #define ADC_NUM_ADCS (2)
+        #define ADC_DUAL_ADCS
 #elif defined(ADC_TEENSY_3_6) // Teensy 3.6
         #define ADC_NUM_ADCS (2)
+        #define ADC_DUAL_ADCS
 #elif defined(ADC_TEENSY_4) // Teensy 3.6
         #define ADC_NUM_ADCS (2)
+        #define ADC_DUAL_ADCS
 #endif
 
 // Use DMA?
 #if defined(ADC_TEENSY_3_1) // Teensy 3.1
-        #define ADC_USE_DMA (1)
+        #define ADC_USE_DMA
 #elif defined(ADC_TEENSY_3_0) // Teensy 3.0
-        #define ADC_USE_DMA (1)
+        #define ADC_USE_DMA
 #elif defined(ADC_TEENSY_LC) // Teensy LC
-        #define ADC_USE_DMA (1)
+        #define ADC_USE_DMA
 #elif defined(ADC_TEENSY_3_5) // Teensy 3.5
-        #define ADC_USE_DMA (1)
+        #define ADC_USE_DMA
 #elif defined(ADC_TEENSY_3_6) // Teensy 3.6
-        #define ADC_USE_DMA (1)
+        #define ADC_USE_DMA
 #elif defined(ADC_TEENSY_4) // Teensy 4.0
-        #define ADC_USE_DMA (1)
+        #define ADC_USE_DMA
 #endif
 
 // Use PGA?
 #if defined(ADC_TEENSY_3_1) // Teensy 3.1
-        #define ADC_USE_PGA (1)
+        #define ADC_USE_PGA
 #elif defined(ADC_TEENSY_3_0) // Teensy 3.0
-        #define ADC_USE_PGA (0)
 #elif defined(ADC_TEENSY_LC) // Teensy LC
-        #define ADC_USE_PGA (0)
 #elif defined(ADC_TEENSY_3_5) // Teensy 3.5
-        #define ADC_USE_PGA (0)
 #elif defined(ADC_TEENSY_3_6) // Teensy 3.6
-        #define ADC_USE_PGA (0)
 #elif defined(ADC_TEENSY_4) // Teensy 4
-        #define ADC_USE_PGA (0)
 #endif
 
 // Use PDB?
 #if defined(ADC_TEENSY_3_1) // Teensy 3.1
-        #define ADC_USE_PDB (1)
+        #define ADC_USE_PDB
 #elif defined(ADC_TEENSY_3_0) // Teensy 3.0
-        #define ADC_USE_PDB (1)
+        #define ADC_USE_PDB
 #elif defined(ADC_TEENSY_LC) // Teensy LC
-        #define ADC_USE_PDB (0)
 #elif defined(ADC_TEENSY_3_5) // Teensy 3.5
-        #define ADC_USE_PDB (1)
+        #define ADC_USE_PDB
 #elif defined(ADC_TEENSY_3_6) // Teensy 3.6
-        #define ADC_USE_PDB (1)
+        #define ADC_USE_PDB
 #elif defined(ADC_TEENSY_4) // Teensy 4
-        #define ADC_USE_PDB (0)
 #endif
 
 // Use Quad Timer
 #if defined(ADC_TEENSY_3_1) // Teensy 3.1
-        #define ADC_USE_QUAD_TIMER (1) // TODO: Not implemented
+        #define ADC_USE_QUAD_TIMER // TODO: Not implemented
 #elif defined(ADC_TEENSY_3_0) // Teensy 3.0
-        #define ADC_USE_QUAD_TIMER (1) // TODO: Not implemented
+        #define ADC_USE_QUAD_TIMER // TODO: Not implemented
 #elif defined(ADC_TEENSY_LC) // Teensy LC
-        #define ADC_USE_QUAD_TIMER (0)
 #elif defined(ADC_TEENSY_3_5) // Teensy 3.5
-        #define ADC_USE_QUAD_TIMER (1) // TODO: Not implemented
+        #define ADC_USE_QUAD_TIMER // TODO: Not implemented
 #elif defined(ADC_TEENSY_3_6) // Teensy 3.6
-        #define ADC_USE_QUAD_TIMER (1) // TODO: Not implemented
+        #define ADC_USE_QUAD_TIMER // TODO: Not implemented
 #elif defined(ADC_TEENSY_4) // Teensy 4
-        #define ADC_USE_QUAD_TIMER (1)
+        #define ADC_USE_QUAD_TIMER
 #endif
 
 // Has internal reference?
 #if defined(ADC_TEENSY_3_1) // Teensy 3.1
-        #define ADC_USE_INTERNAL_VREF (1)
+        #define ADC_USE_INTERNAL_VREF
 #elif defined(ADC_TEENSY_3_0) // Teensy 3.0
-        #define ADC_USE_INTERNAL_VREF (1)
+        #define ADC_USE_INTERNAL_VREF
 #elif defined(ADC_TEENSY_LC) // Teensy LC
-        #define ADC_USE_INTERNAL_VREF (0)
 #elif defined(ADC_TEENSY_3_5) // Teensy 3.5
-        #define ADC_USE_INTERNAL_VREF (1)
+        #define ADC_USE_INTERNAL_VREF
 #elif defined(ADC_TEENSY_3_6) // Teensy 3.6
-        #define ADC_USE_INTERNAL_VREF (1)
+        #define ADC_USE_INTERNAL_VREF
 #elif defined(ADC_TEENSY_4) // Teensy 4
-        #define ADC_USE_INTERNAL_VREF (0)
 #endif
 
 //! \cond internal

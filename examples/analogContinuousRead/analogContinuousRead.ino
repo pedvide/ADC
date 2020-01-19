@@ -25,7 +25,7 @@ void setup() {
     pinMode(A10, INPUT); //Diff Channel 0 Positive
     pinMode(A11, INPUT); //Diff Channel 0 Negative
 
-    #if ADC_NUM_ADCS>1
+    #ifdef ADC_DUAL_ADCS
     pinMode(A12, INPUT); //Diff Channel 3 Positive
     pinMode(A13, INPUT); //Diff Channel 3 Negative
     #endif
@@ -59,7 +59,7 @@ void setup() {
 
 
     ////// ADC1 /////
-    #if ADC_NUM_ADCS>1
+    #ifdef ADC_DUAL_ADCS
     adc->adc1->setAveraging(16); // set number of averages
     adc->adc1->setResolution(16); // set bits of resolution
     adc->adc1->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED); // change the conversion speed
@@ -94,7 +94,7 @@ void loop() {
         if(c=='c') { // conversion active?
             Serial.print("Converting? ADC0: ");
             Serial.println(adc->adc0->isConverting());
-            #if ADC_NUM_ADCS>1
+            #ifdef ADC_DUAL_ADCS
             Serial.print("Converting? ADC1: ");
             Serial.println(adc->adc1->isConverting());
             #endif
@@ -104,7 +104,7 @@ void loop() {
         } else if(c=='t') { // conversion successful?
             Serial.print("Conversion successful? ADC0: ");
             Serial.println(adc->adc0->isComplete());
-            #if ADC_NUM_ADCS>1
+            #ifdef ADC_DUAL_ADCS
             Serial.print("Conversion successful? ADC1: ");
             Serial.println(adc->adc1->isComplete());
             #endif
@@ -116,7 +116,7 @@ void loop() {
             Serial.print("Value ADC0: ");
             value = (uint16_t)adc->adc0->analogReadContinuous(); // the unsigned is necessary for 16 bits, otherwise values larger than 3.3/2 V are negative!
             Serial.println(value*3.3/adc->adc0->getMaxValue(), DEC);
-            #if ADC_NUM_ADCS>1
+            #ifdef ADC_DUAL_ADCS
             Serial.print("Value ADC1: ");
             value2 = (uint16_t)adc->adc1->analogReadContinuous(); // the unsigned is necessary for 16 bits, otherwise values larger than 3.3/2 V are negative!
             Serial.println(value2*3.3/adc->adc1->getMaxValue(), DEC);
@@ -133,7 +133,7 @@ void loop() {
     if(adc->adc0->fail_flag != ADC_ERROR::CLEAR) {
       Serial.print("ADC0: "); Serial.println(getStringADCError(adc->adc0->fail_flag));
     }
-    #if ADC_NUM_ADCS > 1
+    #ifdef ADC_DUAL_ADCS
     if(adc->adc1->fail_flag != ADC_ERROR::CLEAR) {
       Serial.print("ADC1: "); Serial.println(getStringADCError(adc->adc1->fail_flag));
     }
@@ -149,7 +149,7 @@ void adc0_isr(void) {
     adc->adc0->analogReadContinuous();
     digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN)); // Toggle the led
 }
-#if ADC_NUM_ADCS>1
+#ifdef ADC_DUAL_ADCS
 void adc1_isr(void) {
     adc->adc1->analogReadContinuous();
     digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));

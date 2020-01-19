@@ -24,14 +24,14 @@
 #include <ADC_util.h>
 
 const int readPin = A0; // ADC0
-#define USE_ADC_0
-#define USE_ADC_1
-
-#if ADC_NUM_ADCS>1
+#ifdef ADC_DUAL_ADCS
 const int readPin2 = A2; // ADC1
 #endif
 
 ADC *adc = new ADC(); // adc object;
+
+#define USE_ADC_0
+#define USE_ADC_1
 
 #define BUFFER_SIZE 500
 
@@ -61,7 +61,7 @@ void setup() {
   adc->adc0->setSamplingSpeed(ADC_SAMPLING_SPEED::VERY_HIGH_SPEED); // change the sampling speed
 
   ////// ADC1 /////
-#if ADC_NUM_ADCS>1
+#ifdef ADC_DUAL_ADCS
   pinMode(readPin2, INPUT);
   adc->adc1->setAveraging(1); // set number of averages
   adc->adc1->setResolution(8); // set bits of resolution
@@ -88,7 +88,7 @@ void loop() {
       value = (uint16_t)adc->adc0->readSingle(); // the unsigned is necessary for 16 bits, otherwise values larger than 3.3/2 V are negative!
       Serial.printf("%d = ", value);
       Serial.println(value * 3.3 / adc->adc0->getMaxValue(), DEC);
-      #if ADC_NUM_ADCS>1 && defined(USE_ADC_1)
+      #ifdef ADC_DUAL_ADCS && defined(USE_ADC_1)
       Serial.print("Value ADC1: ");
       value2 = (uint16_t)adc->adc1->readSingle(); // the unsigned is necessary for 16 bits, otherwise values larger than 3.3/2 V are negative!
       Serial.printf("%d = ", value2);
@@ -99,7 +99,7 @@ void loop() {
       if (freq == 0) {
         Serial.println("Stop Timer.");
         adc->adc0->stopTimer();
-        #if ADC_NUM_ADCS>1
+        #ifdef ADC_DUAL_ADCS
         adc->adc1->stopTimer();
         #endif
       }
@@ -111,7 +111,7 @@ void loop() {
         adc->adc0->startSingleRead(readPin); // call this to setup everything before the Timer starts, differential is also possible
         adc->adc0->enableInterrupts(adc0_isr);
         adc->adc0->startTimer(freq); //frequency in Hz
-        #if ADC_NUM_ADCS>1 && defined(USE_ADC_1)
+        #ifdef ADC_DUAL_ADCS && defined(USE_ADC_1)
         adc->adc1->stopTimer();
         adc->adc1->startSingleRead(readPin2); // call this to setup everything before the Timer starts
         adc->adc1->enableInterrupts(adc1_isr);
@@ -134,7 +134,7 @@ void loop() {
   if (adc->adc0->fail_flag != ADC_ERROR::CLEAR) {
     Serial.print("ADC0: "); Serial.println(getStringADCError(adc->adc0->fail_flag));
   }
-#if ADC_NUM_ADCS>1 && defined(USE_ADC_1)
+#ifdef ADC_DUAL_ADCS && defined(USE_ADC_1)
   if (adc->adc1->fail_flag != ADC_ERROR::CLEAR) {
     Serial.print("ADC1: "); Serial.println(getStringADCError(adc->adc1->fail_flag));
   }
@@ -188,7 +188,7 @@ void adc0_isr() {
 #endif
 }
 
-#if ADC_NUM_ADCS>1
+#ifdef ADC_DUAL_ADCS
 void adc1_isr() {
   uint16_t adc_val = adc->adc1->readSingle();
   if (buffer_adc_1_count < BUFFER_SIZE) {

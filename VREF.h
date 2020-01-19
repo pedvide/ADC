@@ -31,7 +31,7 @@
 #include <atomic.h>
 #include <settings_defines.h>
 
-#if ADC_USE_INTERNAL_VREF
+#ifdef ADC_USE_INTERNAL_VREF
 
 //! Controls the Teensy internal voltage reference module (VREFV1)
 namespace VREF

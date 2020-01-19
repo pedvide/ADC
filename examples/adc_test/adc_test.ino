@@ -107,7 +107,7 @@ bool test_pullup_down(bool pullup, bool debug=false) {
             pass_test = false;
         }
     }
-    #if ADC_NUM_ADCS>1
+    #ifdef ADC_DUAL_ADCS
     for (auto pin : adc_pins_dig_ADC_1) {
       pinMode(pin, mode);
       delay(10); // settle time
@@ -281,7 +281,7 @@ bool test_all_combinations(bool debug=false) {
               adc->adc0->setSamplingSpeed(samp_speed); // change the sampling speed
               
               adc->adc0->wait_for_cal();
-              #if ADC_NUM_ADCS>1
+              #ifdef ADC_DUAL_ADCS
               adc->adc1->wait_for_cal();
               #endif
 
@@ -317,7 +317,7 @@ void resetSettings() {
   adc->adc0->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED); // change the conversion speed
   adc->adc0->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED); // change the sampling speed
 
-  #if ADC_NUM_ADCS>1
+  #ifdef ADC_DUAL_ADCS
   adc->adc1->setAveraging(16); // set number of averages
   adc->adc1->setResolution(12); // set bits of resolution
   adc->adc1->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED); // change the conversion speed
@@ -344,7 +344,7 @@ void setup() {
     adc->adc0->recalibrate();
 
     ////// ADC1 /////
-    #if ADC_NUM_ADCS>1
+    #ifdef ADC_DUAL_ADCS
     adc->adc1->setAveraging(16); // set number of averages
     adc->adc1->setResolution(12); // set bits of resolution
     adc->adc1->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED); // change the conversion speed
@@ -388,7 +388,7 @@ void loop() {
     if(adc->adc0->fail_flag != ADC_ERROR::CLEAR) {
       Serial.print("ADC0: "); Serial.println(getStringADCError(adc->adc0->fail_flag));
     }
-    #if ADC_NUM_ADCS > 1
+    #ifdef ADC_DUAL_ADCS
     if(adc->adc1->fail_flag != ADC_ERROR::CLEAR) {
       Serial.print("ADC1: "); Serial.println(getStringADCError(adc->adc1->fail_flag));
     }

@@ -26,7 +26,7 @@ void setup() {
     adc->adc0->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED); // change the sampling speed
 
     ////// ADC1 /////
-    #if ADC_NUM_ADCS>1
+    #ifdef ADC_DUAL_ADCS
     adc->adc1->setAveraging(16); // set number of averages
     adc->adc1->setResolution(16); // set bits of resolution
     adc->adc1->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED); // change the conversion speed
@@ -56,7 +56,7 @@ void loop() {
     Serial.print(", ADC0 value: ");
     value1 = adc->adc0->analogRead(readPin);
     Serial.print(value1*3.3/adc->adc0->getMaxValue(), DEC);
-    #if ADC_NUM_ADCS>1
+    #ifdef ADC_DUAL_ADCS
     Serial.print(", ADC1 value: ");
     value2 = adc->adc1->analogRead(readPin);
     Serial.println(value2*3.3/adc->adc0->getMaxValue(), DEC);
@@ -69,7 +69,7 @@ void loop() {
     if(adc->adc0->fail_flag != ADC_ERROR::CLEAR) {
       Serial.print("ADC0: "); Serial.println(getStringADCError(adc->adc0->fail_flag));
     }
-    #if ADC_NUM_ADCS > 1
+    #ifdef ADC_DUAL_ADCS
     if(adc->adc1->fail_flag != ADC_ERROR::CLEAR) {
       Serial.print("ADC1: "); Serial.println(getStringADCError(adc->adc1->fail_flag));
     }

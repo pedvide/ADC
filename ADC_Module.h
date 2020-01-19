@@ -194,7 +194,7 @@ public:
     void disableInterrupts();
 
 
-    #if ADC_USE_DMA 
+    #ifdef ADC_USE_DMA 
     //! Enable DMA request
     /** An ADC DMA request will be raised when the conversion is completed
     *  (including hardware averages and if the comparison (if any) is true).
@@ -233,7 +233,7 @@ public:
     void disableCompare();
 
 
-    #if ADC_USE_PGA
+    #ifdef ADC_USE_PGA
     //! Enable and set PGA
     /** Enables the PGA and sets the gain
     *   Use only for signals lower than 1.2 V and only in differential mode
@@ -360,7 +360,7 @@ public:
         #endif
     }
 
-    #if ADC_USE_PGA 
+    #ifdef ADC_USE_PGA
     //! Is the PGA function enabled?
     /**
     *   \return true or false
@@ -524,7 +524,7 @@ public:
 
     //////////// PDB ////////////////
     //// Only works for Teensy 3.x not LC nor Tensy 4.0 (they don't have PDB)
-    #if ADC_USE_PDB
+    #if defined(ADC_USE_PDB)
 
     //! Start the default timer (PDB) triggering the ADC at the frequency
     /** Call startSingleRead or startSingleDifferential on the pin that you want to measure before calling this function.
@@ -532,6 +532,7 @@ public:
     *   \param freq is the frequency of the ADC conversion, it can't be lower that 1 Hz
     */
     void startTimer(uint32_t freq) __attribute__((always_inline)) { startPDB(freq); }
+
     //! Start PDB triggering the ADC at the frequency
     /** Call startSingleRead or startSingleDifferential on the pin that you want to measure before calling this function.
     *   See the example adc_pdb.ino.
@@ -541,18 +542,19 @@ public:
 
     //! Stop the default timer (PDB)
     void stopTimer() __attribute__((always_inline)) { stopPDB(); }
+
     //! Stop the PDB
     void stopPDB();
 
     //! Return the default timer's (PDB) frequency
     uint32_t getTimerFrequency() __attribute__((always_inline)) { return getPDBFrequency(); }
+
     //! Return the PDB's frequency
     uint32_t getPDBFrequency();
-    #endif
 
     //////////// TIMER ////////////////
     //// Only works for Teensy 3.x and 4 (not LC)
-    #if ADC_USE_QUAD_TIMER && (!ADC_USE_PDB)
+    #elif defined(ADC_USE_QUAD_TIMER)
     //! Start the default timer (QuadTimer) triggering the ADC at the frequency
     /** Call startSingleRead or startSingleDifferential on the pin that you want to measure before calling this function.
     *   See the example adc_pdb.ino.
@@ -671,7 +673,7 @@ private:
     // reference can be internal or external
     ADC_REF_SOURCE analog_reference_internal;
 
-    #if ADC_USE_PGA 
+    #ifdef ADC_USE_PGA 
     // value of the pga
     uint8_t pga_value;
     #endif
@@ -731,7 +733,7 @@ private:
     // registers that control the adc module
     ADC_REGS_t &adc_regs;
 
-    #if ADC_USE_PDB
+    #ifdef ADC_USE_PDB
     reg PDB0_CHnC1; // PDB channel 0 or 1
     #endif
     #ifdef ADC_TEENSY_4

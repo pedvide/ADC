@@ -223,12 +223,12 @@ const uint8_t ADC::sc1a2channelADC1[]= { // new version, gives directly the pin 
 ADC::ADC() : // awkward initialization  so there are no -Wreorder warnings
     #if ADC_DIFF_PAIRS > 0
     adc0_obj(0, channel2sc1aADC0, diff_table_ADC0, ADC0_START)
-    #if ADC_NUM_ADCS>1
+    #ifdef ADC_DUAL_ADCS
     , adc1_obj(1, channel2sc1aADC1, diff_table_ADC1, ADC1_START)
     #endif
     #else
     adc0_obj(0, channel2sc1aADC0, ADC0_START)
-    #if ADC_NUM_ADCS>1
+    #ifdef ADC_DUAL_ADCS
     , adc1_obj(1, channel2sc1aADC1, ADC1_START)
     #endif
     #endif
@@ -247,9 +247,9 @@ ADC::ADC() : // awkward initialization  so there are no -Wreorder warnings
 * adc_num. If you select ADC1 in Teensy 3.0 it will return ADC_ERROR_VALUE.
 */
 int ADC::analogRead(uint8_t pin, int8_t adc_num) {
-    #if ADC_NUM_ADCS==1
+    #ifdef ADC_SINGLE_ADC
     return adc0->analogRead(pin); // use ADC0
-    #elif ADC_NUM_ADCS==2
+    #else
     /* Teensy 3.1
     */
     if( adc_num==-1 ) { // use no ADC in particular
@@ -297,9 +297,9 @@ int ADC::analogRead(uint8_t pin, int8_t adc_num) {
 */
 int ADC::analogReadDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num) {
 
-    #if ADC_NUM_ADCS==1
+    #ifdef ADC_SINGLE_ADC
     return adc0->analogReadDifferential(pinP, pinN); // use ADC0
-    #elif ADC_NUM_ADCS==2
+    #else
     /* Teensy 3.1
     */
     if( adc_num==-1 ) { // use no ADC in particular
@@ -343,9 +343,9 @@ int ADC::analogReadDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num) {
 *   restart the adc if it stopped a measurement. If you modify the adc_isr then this won't happen.
 */
 bool ADC::startSingleRead(uint8_t pin, int8_t adc_num) {
-    #if ADC_NUM_ADCS==1
+    #ifdef ADC_SINGLE_ADC
     return adc0->startSingleRead(pin); // use ADC0
-    #elif ADC_NUM_ADCS==2
+    #else
     /* Teensy 3.1
     */
     if( adc_num==-1 ) { // use no ADC in particular
@@ -391,9 +391,9 @@ bool ADC::startSingleRead(uint8_t pin, int8_t adc_num) {
 *   restart the adc if it stopped a measurement. If you modify the adc_isr then this won't happen.
 */
 bool ADC::startSingleDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num) {
-    #if ADC_NUM_ADCS==1
+    #ifdef ADC_SINGLE_ADC
     return adc0->startSingleDifferential(pinP, pinN); // use ADC0
-    #elif ADC_NUM_ADCS==2
+    #else
     /* Teensy 3.1
     */
     if( adc_num==-1 ) { // use no ADC in particular
@@ -434,7 +434,7 @@ bool ADC::startSingleDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num) {
 *   \return the converted value.
 */
 int ADC::readSingle(int8_t adc_num) {
-    #if ADC_NUM_ADCS==1
+    #ifdef ADC_SINGLE_ADC
     return adc0->readSingle();
     #else
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
@@ -449,9 +449,9 @@ int ADC::readSingle(int8_t adc_num) {
 /* It returns as soon as the ADC is set, use analogReadContinuous() to read the value.
 */
 bool ADC::startContinuous(uint8_t pin, int8_t adc_num) {
-    #if ADC_NUM_ADCS==1
+    #ifdef ADC_SINGLE_ADC
     return adc0->startContinuous(pin); // use ADC0
-    #elif ADC_NUM_ADCS==2
+    #else
     /* Teensy 3.1
     */
     if( adc_num==-1 ) { // use no ADC in particular
@@ -494,9 +494,9 @@ bool ADC::startContinuous(uint8_t pin, int8_t adc_num) {
 * Other pins will return ADC_ERROR_DIFF_VALUE.
 */
 bool ADC::startContinuousDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num) {
-    #if ADC_NUM_ADCS==1
+    #ifdef ADC_SINGLE_ADC
     return adc0->startContinuousDifferential(pinP, pinN); // use ADC0
-    #elif ADC_NUM_ADCS==2
+    #else
     /* Teensy 3.1
     */
     if( adc_num==-1 ) { // use no ADC in particular
@@ -539,7 +539,7 @@ bool ADC::startContinuousDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num
 *   otherwise values larger than 3.3/2 V are interpreted as negative!
 */
 int ADC::analogReadContinuous(int8_t adc_num) {
-    #if ADC_NUM_ADCS==1
+    #ifdef ADC_SINGLE_ADC
     return adc0->analogReadContinuous();
     #else
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
@@ -551,7 +551,7 @@ int ADC::analogReadContinuous(int8_t adc_num) {
 
 //! Stops continuous conversion
 void ADC::stopContinuous(int8_t adc_num) {
-    #if ADC_NUM_ADCS==1
+    #ifdef ADC_SINGLE_ADC
     adc0->stopContinuous();
     #else
     if(adc_num==1){ // user wants ADC 1, do nothing if it's a Teensy 3.0
@@ -569,7 +569,7 @@ void ADC::stopContinuous(int8_t adc_num) {
 ///// ONLY FOR BOARDS WITH MORE THAN ONE ADC /////
 /////////////////////////////////////////////////////////////////
 
-#if ADC_NUM_ADCS>1
+#ifdef ADC_DUAL_ADCS
 
 /*Returns the analog values of both pins, measured at the same time by the two ADC modules.
 * It waits until the value is read and then returns the result as a struct Sync_result,

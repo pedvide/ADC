@@ -28,7 +28,7 @@ void setup() {
     adc->adc0->setSamplingSpeed(ADC_SAMPLING_SPEED::VERY_HIGH_SPEED); // change the sampling speed
 
     ////// ADC1 /////
-    #if ADC_NUM_ADCS>1
+    #ifdef ADC_DUAL_ADCS
     adc->adc1->setAveraging(1); // set number of averages
     adc->adc1->setResolution(8); // set bits of resolution
     adc->adc1->setConversionSpeed(ADC_CONVERSION_SPEED::VERY_HIGH_SPEED); // change the conversion speed
@@ -51,7 +51,7 @@ void loop() {
             Serial.print("Value ADC0: ");
             value = (uint16_t)adc->adc0->readSingle(); // the unsigned is necessary for 16 bits, otherwise values larger than 3.3/2 V are negative!
             Serial.println(value*3.3/adc->adc0->getMaxValue(), DEC);
-            #if ADC_NUM_ADCS>1
+            #ifdef ADC_DUAL_ADCS
             Serial.print("Value ADC1: ");
             value2 = (uint16_t)adc->adc1->readSingle(); // the unsigned is necessary for 16 bits, otherwise values larger than 3.3/2 V are negative!
             Serial.println(value2*3.3/adc->adc1->getMaxValue(), DEC);
@@ -71,7 +71,7 @@ void loop() {
                 adc->adc0->startSingleRead(readPin); // call this to setup everything before the pdb starts, differential is also possible
                 adc->adc0->enableInterrupts(adc0_isr);
                 adc->adc0->startPDB(freq); //frequency in Hz
-                #if ADC_NUM_ADCS>1
+                #ifdef ADC_DUAL_ADCS
                 adc->adc1->stopPDB();
                 adc->adc1->startSingleRead(readPin2); // call this to setup everything before the pdb starts
                 adc->adc1->enableInterrupts(adc1_isr);
@@ -90,7 +90,7 @@ void loop() {
     if(adc->adc0->fail_flag != ADC_ERROR::CLEAR) {
       Serial.print("ADC0: "); Serial.println(getStringADCError(adc->adc0->fail_flag));
     }
-    #if ADC_NUM_ADCS > 1
+    #ifdef ADC_DUAL_ADCS
     if(adc->adc1->fail_flag != ADC_ERROR::CLEAR) {
       Serial.print("ADC1: "); Serial.println(getStringADCError(adc->adc1->fail_flag));
     }
@@ -109,7 +109,7 @@ void adc0_isr() {
         //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
 }
 
-#if ADC_NUM_ADCS>1
+#ifdef ADC_DUAL_ADCS
 void adc1_isr() {
         adc->adc1->readSingle();
         //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );

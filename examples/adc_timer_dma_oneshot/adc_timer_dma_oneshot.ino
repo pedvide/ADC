@@ -52,7 +52,7 @@ const uint32_t buffer_size = 1600;
 DMAMEM static volatile uint16_t __attribute__((aligned(32))) dma_adc_buff1[buffer_size];
 AnalogBufferDMA abdma1(dma_adc_buff1, buffer_size);
 
-#if ADC_NUM_ADCS>1
+#ifdef ADC_DUAL_ADCS
 DMAMEM static volatile uint16_t __attribute__((aligned(32))) dma_adc_buff2_1[buffer_size];
 AnalogBufferDMA abdma2(dma_adc_buff2_1, buffer_size);
 #endif
@@ -62,7 +62,7 @@ void setup() {
 
   pinMode(LED_BUILTIN, OUTPUT);
   pinMode(readPin_adc_0, INPUT); // Not sure this does anything for us
-#if ADC_NUM_ADCS>1
+#ifdef ADC_DUAL_ADCS
   pinMode(readPin_adc_1, INPUT);
 #endif
   Serial.begin(9600);
@@ -71,7 +71,7 @@ void setup() {
   // Setup both ADCs
   adc->adc0->setAveraging(8); // set number of averages
   adc->adc0->setResolution(12); // set bits of resolution
-  #if ADC_NUM_ADCS>1
+  #ifdef ADC_DUAL_ADCS
   adc->adc1->setAveraging(8); // set number of averages
   adc->adc1->setResolution(12); // set bits of resolution
   #endif
@@ -84,7 +84,7 @@ void setup() {
   // Now lets see the different things that RingbufferDMA setup for us before
   abdma1.init(adc, ADC_0/*, DMAMUX_SOURCE_ADC_ETC*/);
   abdma1.userData(initial_average_value); // save away initial starting average
-  #if ADC_NUM_ADCS>1
+  #ifdef ADC_DUAL_ADCS
   abdma2.init(adc, ADC_1/*, DMAMUX_SOURCE_ADC_ETC*/);
   abdma2.userData(initial_average_value); // save away initial starting average
   #endif
@@ -95,7 +95,7 @@ void setup() {
   adc->adc0->startTimer(3000); //frequency in Hz
 
   // Start the dma operation..
-#if ADC_NUM_ADCS>1
+#ifdef ADC_DUAL_ADCS
   adc->adc1->startSingleRead(readPin_adc_1); // call this to setup everything before the Timer starts, differential is also possible
   adc->adc1->startTimer(3000); //frequency in Hz
 #endif
@@ -110,7 +110,7 @@ void setup() {
 void loop() {
 
   // Maybe only when both have triggered?
-#if ADC_NUM_ADCS>1
+#ifdef ADC_DUAL_ADCS
   if ( abdma1.interrupted() && (abdma2.interrupted())) {
     if ( abdma1.interrupted()) {
       ProcessAnalogData(&abdma1, 0);
@@ -132,7 +132,7 @@ void loop() {
   if (Serial.available()) {
     while (Serial.read() != -1) ; // get rid of everything...
     abdma1.clearCompletion();  // run it again
-#if ADC_NUM_ADCS>1
+#ifdef ADC_DUAL_ADCS
     abdma2.clearCompletion();  // run it again...
 #endif
   }
