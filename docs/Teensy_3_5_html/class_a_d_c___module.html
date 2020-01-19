@@ -103,9 +103,9 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ab65bd1bb76ab7fbf4743c0e1bf456cb7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#ab65bd1bb76ab7fbf4743c0e1bf456cb7">ADC_Module</a> (uint8_t ADC_number, const uint8_t *const a_channel2sc1a, ADC_REGS_t &amp;a_adc_regs)</td></tr>
-<tr class="memdesc:ab65bd1bb76ab7fbf4743c0e1bf456cb7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="class_a_d_c___module.html#ab65bd1bb76ab7fbf4743c0e1bf456cb7">More...</a><br /></td></tr>
-<tr class="separator:ab65bd1bb76ab7fbf4743c0e1bf456cb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1ebe515d43edd360286c3a3a44db5b8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#ac1ebe515d43edd360286c3a3a44db5b8">ADC_Module</a> (uint8_t ADC_number, const uint8_t *const a_channel2sc1a, const ADC_NLIST *const a_diff_table, ADC_REGS_t &amp;a_adc_regs)</td></tr>
+<tr class="memdesc:ac1ebe515d43edd360286c3a3a44db5b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="class_a_d_c___module.html#ac1ebe515d43edd360286c3a3a44db5b8">More...</a><br /></td></tr>
+<tr class="separator:ac1ebe515d43edd360286c3a3a44db5b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe8ed6f2a6c811ec3ef2c4aba768982f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#afe8ed6f2a6c811ec3ef2c4aba768982f">recalibrate</a> ()</td></tr>
 <tr class="memdesc:afe8ed6f2a6c811ec3ef2c4aba768982f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts the calibration sequence, waits until it's done and writes the results.  <a href="class_a_d_c___module.html#afe8ed6f2a6c811ec3ef2c4aba768982f">More...</a><br /></td></tr>
 <tr class="separator:afe8ed6f2a6c811ec3ef2c4aba768982f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -145,6 +145,13 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#aa4509062644982526fee3c02e0b528fc">disableInterrupts</a> ()</td></tr>
 <tr class="memdesc:aa4509062644982526fee3c02e0b528fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable interrupts. <br /></td></tr>
 <tr class="separator:aa4509062644982526fee3c02e0b528fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3d14c01b1442c0c34b5dbc9a6e49f35"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#af3d14c01b1442c0c34b5dbc9a6e49f35">enableDMA</a> ()</td></tr>
+<tr class="memdesc:af3d14c01b1442c0c34b5dbc9a6e49f35"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable DMA request.  <a href="class_a_d_c___module.html#af3d14c01b1442c0c34b5dbc9a6e49f35">More...</a><br /></td></tr>
+<tr class="separator:af3d14c01b1442c0c34b5dbc9a6e49f35"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1610dcab46476f287c2dd4d96465c47"><td class="memItemLeft" align="right" valign="top"><a id="ac1610dcab46476f287c2dd4d96465c47"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#ac1610dcab46476f287c2dd4d96465c47">disableDMA</a> ()</td></tr>
+<tr class="memdesc:ac1610dcab46476f287c2dd4d96465c47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable <a class="el" href="class_a_d_c.html">ADC</a> DMA request. <br /></td></tr>
+<tr class="separator:ac1610dcab46476f287c2dd4d96465c47"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae7a632267f21b79c31c1dae56b5da188"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#ae7a632267f21b79c31c1dae56b5da188">enableCompare</a> (int16_t compValue, bool greaterThan)</td></tr>
 <tr class="memdesc:ae7a632267f21b79c31c1dae56b5da188"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable the compare function to a single value.  <a href="class_a_d_c___module.html#ae7a632267f21b79c31c1dae56b5da188">More...</a><br /></td></tr>
 <tr class="separator:ae7a632267f21b79c31c1dae56b5da188"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -167,6 +174,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a7edf0189517f42a2bcbc389c116d9f58">singleEndedMode</a> ()</td></tr>
 <tr class="memdesc:a7edf0189517f42a2bcbc389c116d9f58"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set single-ended conversion mode. <br /></td></tr>
 <tr class="separator:a7edf0189517f42a2bcbc389c116d9f58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adaba2c3f43e9c702a873da6539b3d25f"><td class="memItemLeft" align="right" valign="top"><a id="adaba2c3f43e9c702a873da6539b3d25f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#adaba2c3f43e9c702a873da6539b3d25f">differentialMode</a> ()</td></tr>
+<tr class="memdesc:adaba2c3f43e9c702a873da6539b3d25f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set differential conversion mode. <br /></td></tr>
+<tr class="separator:adaba2c3f43e9c702a873da6539b3d25f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4f8137bfcdc459b4f8767ad46f325af6"><td class="memItemLeft" align="right" valign="top"><a id="a4f8137bfcdc459b4f8767ad46f325af6"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a4f8137bfcdc459b4f8767ad46f325af6">setSoftwareTrigger</a> ()</td></tr>
 <tr class="memdesc:a4f8137bfcdc459b4f8767ad46f325af6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use software to trigger the <a class="el" href="class_a_d_c.html">ADC</a>, this is the most common setting. <br /></td></tr>
@@ -181,6 +192,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:a3aefadc245d1582d3ae97e1b9c7acac8"><td class="memItemLeft" align="right" valign="top">volatile bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a3aefadc245d1582d3ae97e1b9c7acac8">isComplete</a> ()</td></tr>
 <tr class="memdesc:a3aefadc245d1582d3ae97e1b9c7acac8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is an <a class="el" href="class_a_d_c.html">ADC</a> conversion ready?  <a href="class_a_d_c___module.html#a3aefadc245d1582d3ae97e1b9c7acac8">More...</a><br /></td></tr>
 <tr class="separator:a3aefadc245d1582d3ae97e1b9c7acac8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f6124f3fee4cae59f011184525822a6"><td class="memItemLeft" align="right" valign="top">volatile bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a4f6124f3fee4cae59f011184525822a6">isDifferential</a> ()</td></tr>
+<tr class="memdesc:a4f6124f3fee4cae59f011184525822a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is the <a class="el" href="class_a_d_c.html">ADC</a> in differential mode?  <a href="class_a_d_c___module.html#a4f6124f3fee4cae59f011184525822a6">More...</a><br /></td></tr>
+<tr class="separator:a4f6124f3fee4cae59f011184525822a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a038874878778ef351e45f902fcee47df"><td class="memItemLeft" align="right" valign="top">volatile bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a038874878778ef351e45f902fcee47df">isContinuous</a> ()</td></tr>
 <tr class="memdesc:a038874878778ef351e45f902fcee47df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is the <a class="el" href="class_a_d_c.html">ADC</a> in continuous mode?  <a href="class_a_d_c___module.html#a038874878778ef351e45f902fcee47df">More...</a><br /></td></tr>
 <tr class="separator:a038874878778ef351e45f902fcee47df"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -193,21 +207,33 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:a33cc7fbfcb158a33e8ca276cc7b309b5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a33cc7fbfcb158a33e8ca276cc7b309b5">startReadFast</a> (uint8_t pin)</td></tr>
 <tr class="memdesc:a33cc7fbfcb158a33e8ca276cc7b309b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts a single-ended conversion on the pin.  <a href="class_a_d_c___module.html#a33cc7fbfcb158a33e8ca276cc7b309b5">More...</a><br /></td></tr>
 <tr class="separator:a33cc7fbfcb158a33e8ca276cc7b309b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa503b484e691fe31172033fc928576bd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#aa503b484e691fe31172033fc928576bd">startDifferentialFast</a> (uint8_t pinP, uint8_t pinN)</td></tr>
+<tr class="memdesc:aa503b484e691fe31172033fc928576bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts a differential conversion on the pair of pins.  <a href="class_a_d_c___module.html#aa503b484e691fe31172033fc928576bd">More...</a><br /></td></tr>
+<tr class="separator:aa503b484e691fe31172033fc928576bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad492adad4a9fa728625be82602bf1672"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#ad492adad4a9fa728625be82602bf1672">analogRead</a> (uint8_t pin)</td></tr>
 <tr class="memdesc:ad492adad4a9fa728625be82602bf1672"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the analog value of the pin.  <a href="class_a_d_c___module.html#ad492adad4a9fa728625be82602bf1672">More...</a><br /></td></tr>
 <tr class="separator:ad492adad4a9fa728625be82602bf1672"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6eaddace77e00a063abeb7331fae6abe"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a6eaddace77e00a063abeb7331fae6abe">analogRead</a> (<a class="el" href="namespace_a_d_c__settings.html#a8c2a64f3fca3ac6b82e8df8cf44f6ca2">ADC_INTERNAL_SOURCE</a> pin)</td></tr>
 <tr class="memdesc:a6eaddace77e00a063abeb7331fae6abe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the analog value of the special internal source, such as the temperature sensor.  <a href="class_a_d_c___module.html#a6eaddace77e00a063abeb7331fae6abe">More...</a><br /></td></tr>
 <tr class="separator:a6eaddace77e00a063abeb7331fae6abe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a57f6a9b0e3884f3862062b33f1a447"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a4a57f6a9b0e3884f3862062b33f1a447">analogReadDifferential</a> (uint8_t pinP, uint8_t pinN)</td></tr>
+<tr class="memdesc:a4a57f6a9b0e3884f3862062b33f1a447"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads the differential analog value of two pins (pinP - pinN).  <a href="class_a_d_c___module.html#a4a57f6a9b0e3884f3862062b33f1a447">More...</a><br /></td></tr>
+<tr class="separator:a4a57f6a9b0e3884f3862062b33f1a447"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af8a13facb0c15ef14e527a37f2386ce5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#af8a13facb0c15ef14e527a37f2386ce5">startSingleRead</a> (uint8_t pin)</td></tr>
 <tr class="memdesc:af8a13facb0c15ef14e527a37f2386ce5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts an analog measurement on the pin and enables interrupts.  <a href="class_a_d_c___module.html#af8a13facb0c15ef14e527a37f2386ce5">More...</a><br /></td></tr>
 <tr class="separator:af8a13facb0c15ef14e527a37f2386ce5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe85ed1855a09f18c5d2026cf08968a7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#abe85ed1855a09f18c5d2026cf08968a7">startSingleDifferential</a> (uint8_t pinP, uint8_t pinN)</td></tr>
+<tr class="memdesc:abe85ed1855a09f18c5d2026cf08968a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start a differential conversion between two pins (pinP - pinN) and enables interrupts.  <a href="class_a_d_c___module.html#abe85ed1855a09f18c5d2026cf08968a7">More...</a><br /></td></tr>
+<tr class="separator:abe85ed1855a09f18c5d2026cf08968a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a60d0edc82fd1dbb2e20d090a53718ce2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a60d0edc82fd1dbb2e20d090a53718ce2">readSingle</a> ()</td></tr>
 <tr class="memdesc:a60d0edc82fd1dbb2e20d090a53718ce2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads the analog value of a single conversion.  <a href="class_a_d_c___module.html#a60d0edc82fd1dbb2e20d090a53718ce2">More...</a><br /></td></tr>
 <tr class="separator:a60d0edc82fd1dbb2e20d090a53718ce2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2b6284a613c9d3e452d2fc708bf6ce98"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a2b6284a613c9d3e452d2fc708bf6ce98">startContinuous</a> (uint8_t pin)</td></tr>
 <tr class="memdesc:a2b6284a613c9d3e452d2fc708bf6ce98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts continuous conversion on the pin.  <a href="class_a_d_c___module.html#a2b6284a613c9d3e452d2fc708bf6ce98">More...</a><br /></td></tr>
 <tr class="separator:a2b6284a613c9d3e452d2fc708bf6ce98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23fd4fa6b759dcc0c029b3266f6a5fb7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a23fd4fa6b759dcc0c029b3266f6a5fb7">startContinuousDifferential</a> (uint8_t pinP, uint8_t pinN)</td></tr>
+<tr class="memdesc:a23fd4fa6b759dcc0c029b3266f6a5fb7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts continuous conversion between the pins (pinP-pinN).  <a href="class_a_d_c___module.html#a23fd4fa6b759dcc0c029b3266f6a5fb7">More...</a><br /></td></tr>
+<tr class="separator:a23fd4fa6b759dcc0c029b3266f6a5fb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8bddd248a9d52110b923fa94438f7f0a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a8bddd248a9d52110b923fa94438f7f0a">analogReadContinuous</a> ()</td></tr>
 <tr class="memdesc:a8bddd248a9d52110b923fa94438f7f0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads the analog value of a continuous conversion.  <a href="class_a_d_c___module.html#a8bddd248a9d52110b923fa94438f7f0a">More...</a><br /></td></tr>
 <tr class="separator:a8bddd248a9d52110b923fa94438f7f0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -215,6 +241,26 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a9af29f865bdd376d954112d36b0992f0">stopContinuous</a> ()</td></tr>
 <tr class="memdesc:a9af29f865bdd376d954112d36b0992f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stops continuous conversion. <br /></td></tr>
 <tr class="separator:a9af29f865bdd376d954112d36b0992f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aebdd7b54f91fe0834321fb632177151e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#aebdd7b54f91fe0834321fb632177151e">startTimer</a> (uint32_t freq)</td></tr>
+<tr class="memdesc:aebdd7b54f91fe0834321fb632177151e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start the default timer (PDB) triggering the <a class="el" href="class_a_d_c.html">ADC</a> at the frequency.  <a href="class_a_d_c___module.html#aebdd7b54f91fe0834321fb632177151e">More...</a><br /></td></tr>
+<tr class="separator:aebdd7b54f91fe0834321fb632177151e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acced2e2266868323ff2c53df96791a15"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#acced2e2266868323ff2c53df96791a15">startPDB</a> (uint32_t freq)</td></tr>
+<tr class="memdesc:acced2e2266868323ff2c53df96791a15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start PDB triggering the <a class="el" href="class_a_d_c.html">ADC</a> at the frequency.  <a href="class_a_d_c___module.html#acced2e2266868323ff2c53df96791a15">More...</a><br /></td></tr>
+<tr class="separator:acced2e2266868323ff2c53df96791a15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4361eec1c9f93a99661afb1a43d15284"><td class="memItemLeft" align="right" valign="top"><a id="a4361eec1c9f93a99661afb1a43d15284"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a4361eec1c9f93a99661afb1a43d15284">stopTimer</a> ()</td></tr>
+<tr class="memdesc:a4361eec1c9f93a99661afb1a43d15284"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop the default timer (PDB) <br /></td></tr>
+<tr class="separator:a4361eec1c9f93a99661afb1a43d15284"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab25eb12b50ef1002100ac6cd865cc6dc"><td class="memItemLeft" align="right" valign="top"><a id="ab25eb12b50ef1002100ac6cd865cc6dc"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#ab25eb12b50ef1002100ac6cd865cc6dc">stopPDB</a> ()</td></tr>
+<tr class="memdesc:ab25eb12b50ef1002100ac6cd865cc6dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop the PDB. <br /></td></tr>
+<tr class="separator:ab25eb12b50ef1002100ac6cd865cc6dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3c47b374f4f68eb815812c6a373e439"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#ae3c47b374f4f68eb815812c6a373e439">getTimerFrequency</a> ()</td></tr>
+<tr class="memdesc:ae3c47b374f4f68eb815812c6a373e439"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the default timer's (PDB) frequency.  <a href="class_a_d_c___module.html#ae3c47b374f4f68eb815812c6a373e439">More...</a><br /></td></tr>
+<tr class="separator:ae3c47b374f4f68eb815812c6a373e439"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae113f4168d9dd343f66ecc6e59a245f6"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#ae113f4168d9dd343f66ecc6e59a245f6">getPDBFrequency</a> ()</td></tr>
+<tr class="memdesc:ae113f4168d9dd343f66ecc6e59a245f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the PDB's frequency.  <a href="class_a_d_c___module.html#ae113f4168d9dd343f66ecc6e59a245f6">More...</a><br /></td></tr>
+<tr class="separator:ae113f4168d9dd343f66ecc6e59a245f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af2ee5bc5b76647506e597c178c9691d3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#af2ee5bc5b76647506e597c178c9691d3">saveConfig</a> (<a class="el" href="struct_a_d_c___module_1_1_a_d_c___config.html">ADC_Config</a> *config)</td></tr>
 <tr class="separator:af2ee5bc5b76647506e597c178c9691d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1bb50f669bbc41937fb5157abe2050ca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_d_c___module.html#a1bb50f669bbc41937fb5157abe2050ca">loadConfig</a> (const <a class="el" href="struct_a_d_c___module_1_1_a_d_c___config.html">ADC_Config</a> *config)</td></tr>
@@ -248,8 +294,8 @@ const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" h
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class <a class="el" href="class_a_d_c___module.html">ADC_Module</a>: Implements all functions of the Teensy 3.x, LC analog to digital converter </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ab65bd1bb76ab7fbf4743c0e1bf456cb7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab65bd1bb76ab7fbf4743c0e1bf456cb7">&#9670;&nbsp;</a></span>ADC_Module()</h2>
+<a id="ac1ebe515d43edd360286c3a3a44db5b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac1ebe515d43edd360286c3a3a44db5b8">&#9670;&nbsp;</a></span>ADC_Module()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -265,6 +311,12 @@ const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" h
           <td></td>
           <td class="paramtype">const uint8_t *const&#160;</td>
           <td class="paramname"><em>a_channel2sc1a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const ADC_NLIST *const&#160;</td>
+          <td class="paramname"><em>a_diff_table</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -285,6 +337,7 @@ const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" h
   <table class="params">
     <tr><td class="paramname">ADC_number</td><td>Number of the <a class="el" href="class_a_d_c.html">ADC</a> module, from 0. </td></tr>
     <tr><td class="paramname">a_channel2sc1a</td><td>contains an index that pairs each pin to its SC1A number (used to start a conversion on that pin) </td></tr>
+    <tr><td class="paramname">a_diff_table</td><td>is similar to a_channel2sc1a, but for differential pins. </td></tr>
     <tr><td class="paramname">a_adc_regs</td><td>pointer to start of the <a class="el" href="class_a_d_c.html">ADC</a> registers </td></tr>
   </table>
   </dd>
@@ -380,6 +433,44 @@ const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" h
 
 <p>Reads the analog value of a continuous conversion. </p>
 <p>Set the continuous conversion with with analogStartContinuous(pin) or startContinuousDifferential(pinP, pinN). </p><dl class="section return"><dt>Returns</dt><dd>the last converted value. If single-ended and 16 bits it's necessary to typecast it to an unsigned type (like uint16_t), otherwise values larger than 3.3/2 V are interpreted as negative! </dd></dl>
+
+</div>
+</div>
+<a id="a4a57f6a9b0e3884f3862062b33f1a447"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a57f6a9b0e3884f3862062b33f1a447">&#9670;&nbsp;</a></span>analogReadDifferential()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int ADC_Module::analogReadDifferential </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>pinP</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>pinN</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Reads the differential analog value of two pins (pinP - pinN). </p>
+<p>It waits until the value is read and then returns the result. If a comparison has been set up and fails, it will return ADC_ERROR_DIFF_VALUE. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pinP</td><td>must be A10 or A12. </td></tr>
+    <tr><td class="paramname">pinN</td><td>must be A11 (if pinP=A10) or A13 (if pinP=A12). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the difference between the pins if they are valid, othewise returns ADC_ERROR_DIFF_VALUE. This function is interrupt safe, so it will restore the adc to the state it was before being called </dd></dl>
 
 </div>
 </div>
@@ -536,6 +627,26 @@ const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" h
 
 </div>
 </div>
+<a id="af3d14c01b1442c0c34b5dbc9a6e49f35"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3d14c01b1442c0c34b5dbc9a6e49f35">&#9670;&nbsp;</a></span>enableDMA()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ADC_Module::enableDMA </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enable DMA request. </p>
+<p>An <a class="el" href="class_a_d_c.html">ADC</a> DMA request will be raised when the conversion is completed (including hardware averages and if the comparison (if any) is true). </p>
+
+</div>
+</div>
 <a id="a65395dfc2a15bc015e1ee723b22235b5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a65395dfc2a15bc015e1ee723b22235b5">&#9670;&nbsp;</a></span>enableInterrupts()</h2>
 
@@ -593,6 +704,26 @@ const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" h
 
 </div>
 </div>
+<a id="ae113f4168d9dd343f66ecc6e59a245f6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae113f4168d9dd343f66ecc6e59a245f6">&#9670;&nbsp;</a></span>getPDBFrequency()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t ADC_Module::getPDBFrequency </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the PDB's frequency. </p>
+<p>Return the PDB's frequency </p><dl class="section return"><dt>Returns</dt><dd>the timer's frequency in Hz. </dd></dl>
+
+</div>
+</div>
 <a id="a58cabc09d41f6aa25319fd514b47c48f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a58cabc09d41f6aa25319fd514b47c48f">&#9670;&nbsp;</a></span>getResolution()</h2>
 
@@ -610,6 +741,34 @@ const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" h
 
 <p>Returns the resolution of the <a class="el" href="class_a_d_c___module.html">ADC_Module</a>. </p>
 <dl class="section return"><dt>Returns</dt><dd>the resolution of the <a class="el" href="class_a_d_c___module.html">ADC_Module</a>. </dd></dl>
+
+</div>
+</div>
+<a id="ae3c47b374f4f68eb815812c6a373e439"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3c47b374f4f68eb815812c6a373e439">&#9670;&nbsp;</a></span>getTimerFrequency()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t ADC_Module::getTimerFrequency </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the default timer's (PDB) frequency. </p>
+<p>The default timer in this board is the PDB, you can also call it directly with <a class="el" href="class_a_d_c___module.html#ae113f4168d9dd343f66ecc6e59a245f6" title="Return the PDB&#39;s frequency.">getPDBFrequency()</a>. </p><dl class="section return"><dt>Returns</dt><dd>the timer's frequency in Hz. </dd></dl>
 
 </div>
 </div>
@@ -693,6 +852,34 @@ const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" h
 </div><div class="memdoc">
 
 <p>Is the <a class="el" href="class_a_d_c.html">ADC</a> converting at the moment? </p>
+<dl class="section return"><dt>Returns</dt><dd>true or false </dd></dl>
+
+</div>
+</div>
+<a id="a4f6124f3fee4cae59f011184525822a6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f6124f3fee4cae59f011184525822a6">&#9670;&nbsp;</a></span>isDifferential()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">volatile bool ADC_Module::isDifferential </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Is the <a class="el" href="class_a_d_c.html">ADC</a> in differential mode? </p>
 <dl class="section return"><dt>Returns</dt><dd>true or false </dd></dl>
 
 </div>
@@ -972,6 +1159,107 @@ const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" h
 
 </div>
 </div>
+<a id="a23fd4fa6b759dcc0c029b3266f6a5fb7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23fd4fa6b759dcc0c029b3266f6a5fb7">&#9670;&nbsp;</a></span>startContinuousDifferential()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ADC_Module::startContinuousDifferential </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>pinP</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>pinN</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Starts continuous conversion between the pins (pinP-pinN). </p>
+<p>It returns as soon as the <a class="el" href="class_a_d_c.html">ADC</a> is set, use <a class="el" href="class_a_d_c___module.html#a8bddd248a9d52110b923fa94438f7f0a" title="Reads the analog value of a continuous conversion.">analogReadContinuous()</a> to read the value. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pinP</td><td>must be A10 or A12. </td></tr>
+    <tr><td class="paramname">pinN</td><td>must be A11 (if pinP=A10) or A13 (if pinP=A12). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the pins are valid, false otherwise. </dd></dl>
+
+</div>
+</div>
+<a id="aa503b484e691fe31172033fc928576bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa503b484e691fe31172033fc928576bd">&#9670;&nbsp;</a></span>startDifferentialFast()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ADC_Module::startDifferentialFast </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>pinP</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>pinN</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Starts a differential conversion on the pair of pins. </p>
+<p>It sets the mux correctly, doesn't do any of the checks on the pin and doesn't change the continuous conversion bit. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pinP</td><td>positive pin to read. </td></tr>
+    <tr><td class="paramname">pinN</td><td>negative pin to read. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="acced2e2266868323ff2c53df96791a15"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acced2e2266868323ff2c53df96791a15">&#9670;&nbsp;</a></span>startPDB()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ADC_Module::startPDB </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>freq</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Start PDB triggering the <a class="el" href="class_a_d_c.html">ADC</a> at the frequency. </p>
+<p>Call startSingleRead or startSingleDifferential on the pin that you want to measure before calling this function. See the example adc_pdb.ino. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">freq</td><td>is the frequency of the <a class="el" href="class_a_d_c.html">ADC</a> conversion, it can't be lower that 1 Hz </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a33cc7fbfcb158a33e8ca276cc7b309b5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a33cc7fbfcb158a33e8ca276cc7b309b5">&#9670;&nbsp;</a></span>startReadFast()</h2>
 
@@ -995,6 +1283,44 @@ const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" h
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="abe85ed1855a09f18c5d2026cf08968a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe85ed1855a09f18c5d2026cf08968a7">&#9670;&nbsp;</a></span>startSingleDifferential()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ADC_Module::startSingleDifferential </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>pinP</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>pinN</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Start a differential conversion between two pins (pinP - pinN) and enables interrupts. </p>
+<p>It returns immediately, get value with <a class="el" href="class_a_d_c___module.html#a60d0edc82fd1dbb2e20d090a53718ce2" title="Reads the analog value of a single conversion.">readSingle()</a>. If this function interrupts a measurement, it stores the settings in adc_config </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pinP</td><td>must be A10 or A12. </td></tr>
+    <tr><td class="paramname">pinN</td><td>must be A11 (if pinP=A10) or A13 (if pinP=A12). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the pins are valid, false otherwise. </dd></dl>
 
 </div>
 </div>
@@ -1025,6 +1351,40 @@ const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" h
 
 </div>
 </div>
+<a id="aebdd7b54f91fe0834321fb632177151e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aebdd7b54f91fe0834321fb632177151e">&#9670;&nbsp;</a></span>startTimer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ADC_Module::startTimer </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>freq</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Start the default timer (PDB) triggering the <a class="el" href="class_a_d_c.html">ADC</a> at the frequency. </p>
+<p>The default timer in this board is the PDB, you can also call it directly with <a class="el" href="class_a_d_c___module.html#acced2e2266868323ff2c53df96791a15" title="Start PDB triggering the ADC at the frequency.">startPDB()</a>. Call startSingleRead or startSingleDifferential on the pin that you want to measure before calling this function. See the example adc_pdb.ino. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">freq</td><td>is the frequency of the <a class="el" href="class_a_d_c.html">ADC</a> conversion, it can't be lower that 1 Hz </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="a2d0cc3360073881658e578faf4ae5632"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2d0cc3360073881658e578faf4ae5632">&#9670;&nbsp;</a></span>fail_flag</h2>
@@ -1052,7 +1412,7 @@ const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" h
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_a_d_c___module.html">ADC_Module</a></li>
-    <li class="footer">Generated on Tue Dec 31 2019 14:32:30 for ADC by
+    <li class="footer">Generated on Sun Jan 19 2020 12:56:00 for ADC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

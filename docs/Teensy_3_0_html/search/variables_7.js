@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['resolutions_5flist_193',['resolutions_list',['../namespace_a_d_c__util.html#a1f7a8c6dcdadcb5dd43a77de9a380bb0',1,'ADC_util']]]
+  ['pg_317',['PG',['../struct_a_d_c__settings_1_1_a_d_c___r_e_g_s__t.html#a63537e0272e98f3506952e2e7de4e500',1,'ADC_settings::ADC_REGS_t']]],
+  ['pga_318',['PGA',['../struct_a_d_c__settings_1_1_a_d_c___r_e_g_s__t.html#aecfae9b52d259cf8e544266ef4a3927c',1,'ADC_settings::ADC_REGS_t']]]
 ];

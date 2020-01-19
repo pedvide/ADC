@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['dmachannel_171',['dmaChannel',['../class_ring_buffer_d_m_a.html#a289ca5377bb36f35f87127ce9719cbb7',1,'RingBufferDMA']]]
+  ['num_5fmeasurements_179',['num_measurements',['../class_a_d_c___module.html#a27fdc83a7dbe3a8c8c24fc4273414256',1,'ADC_Module']]]
 ];

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['ringbuffer_118',['RingBuffer',['../class_ring_buffer.html',1,'']]],
-  ['ringbufferdma_119',['RingBufferDMA',['../class_ring_buffer_d_m_a.html',1,'']]]
+  ['sync_5fresult_139',['Sync_result',['../struct_a_d_c_1_1_sync__result.html',1,'ADC']]]
 ];

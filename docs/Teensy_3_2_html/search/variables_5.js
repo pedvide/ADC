@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['num_5fmeasurements_191',['num_measurements',['../class_a_d_c___module.html#a27fdc83a7dbe3a8c8c24fc4273414256',1,'ADC_Module']]]
+  ['resolutions_5flist_232',['resolutions_list',['../namespace_a_d_c__util.html#a1f7a8c6dcdadcb5dd43a77de9a380bb0',1,'ADC_util']]]
 ];

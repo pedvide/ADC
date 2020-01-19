@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['disablecompare_39',['disableCompare',['../class_a_d_c.html#a3f511deae378e46a4a9ec80af90bf723',1,'ADC::disableCompare()'],['../class_a_d_c___module.html#ac635f675a9690a4db016c73c31818262',1,'ADC_Module::disableCompare()']]],
-  ['disableinterrupts_40',['disableInterrupts',['../class_a_d_c.html#a269ea8bf6891c3095eea3b9d6decce67',1,'ADC::disableInterrupts()'],['../class_a_d_c___module.html#aa4509062644982526fee3c02e0b528fc',1,'ADC_Module::disableInterrupts()']]],
-  ['dmachannel_41',['dmaChannel',['../class_ring_buffer_d_m_a.html#a289ca5377bb36f35f87127ce9719cbb7',1,'RingBufferDMA']]]
+  ['enablecompare_43',['enableCompare',['../class_a_d_c___module.html#ae7a632267f21b79c31c1dae56b5da188',1,'ADC_Module']]],
+  ['enablecomparerange_44',['enableCompareRange',['../class_a_d_c___module.html#ab8e64bab9d4e7f1935a260629e5d71d5',1,'ADC_Module']]],
+  ['enabledma_45',['enableDMA',['../class_a_d_c___module.html#af3d14c01b1442c0c34b5dbc9a6e49f35',1,'ADC_Module']]],
+  ['enableinterrupts_46',['enableInterrupts',['../class_a_d_c___module.html#a65395dfc2a15bc015e1ee723b22235b5',1,'ADC_Module']]]
 ];

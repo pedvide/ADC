@@ -1,6 +1,10 @@
 var searchData=
 [
-  ['enablecompare_135',['enableCompare',['../class_a_d_c.html#a1987df39ccda1ce923eca878b3816383',1,'ADC::enableCompare()'],['../class_a_d_c___module.html#ae7a632267f21b79c31c1dae56b5da188',1,'ADC_Module::enableCompare()']]],
-  ['enablecomparerange_136',['enableCompareRange',['../class_a_d_c.html#aa5b39a0ee459618f6b95cf4e48f77528',1,'ADC::enableCompareRange()'],['../class_a_d_c___module.html#ab8e64bab9d4e7f1935a260629e5d71d5',1,'ADC_Module::enableCompareRange()']]],
-  ['enableinterrupts_137',['enableInterrupts',['../class_a_d_c.html#aa8fdb66bc9725ce05a2dde129541c0ad',1,'ADC::enableInterrupts()'],['../class_a_d_c___module.html#a65395dfc2a15bc015e1ee723b22235b5',1,'ADC_Module::enableInterrupts()']]]
+  ['getconversionenumstr_140',['getConversionEnumStr',['../namespace_a_d_c__util.html#ab6104e4e363b1fecb3b9158ee8bee37b',1,'ADC_util']]],
+  ['getmaxvalue_141',['getMaxValue',['../class_a_d_c___module.html#af3704819ccda64bae9c13a95a74e70a8',1,'ADC_Module']]],
+  ['getpdbfrequency_142',['getPDBFrequency',['../class_a_d_c___module.html#ae113f4168d9dd343f66ecc6e59a245f6',1,'ADC_Module']]],
+  ['getresolution_143',['getResolution',['../class_a_d_c___module.html#a58cabc09d41f6aa25319fd514b47c48f',1,'ADC_Module']]],
+  ['getsamplingenumstr_144',['getSamplingEnumStr',['../namespace_a_d_c__util.html#ab07f137e89f16be8bfb6e05c8bba8905',1,'ADC_util']]],
+  ['getstringadcerror_145',['getStringADCError',['../namespace_a_d_c__util.html#a0414ae3ca07a90b40e0515956ca0e49d',1,'ADC_util']]],
+  ['gettimerfrequency_146',['getTimerFrequency',['../class_a_d_c___module.html#ae3c47b374f4f68eb815812c6a373e439',1,'ADC_Module']]]
 ];

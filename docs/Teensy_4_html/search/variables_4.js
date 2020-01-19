@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['fail_5fflag_172',['fail_flag',['../class_a_d_c___module.html#a2d0cc3360073881658e578faf4ae5632',1,'ADC_Module']]]
+  ['resolutions_5flist_180',['resolutions_list',['../namespace_a_d_c__util.html#a1f7a8c6dcdadcb5dd43a77de9a380bb0',1,'ADC_util']]]
 ];

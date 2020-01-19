@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['calibrate_116',['calibrate',['../class_a_d_c___module.html#a037ab0589e2966cd07292c8186cad83e',1,'ADC_Module']]],
-  ['checkdifferentialpins_117',['checkDifferentialPins',['../class_a_d_c___module.html#a80d29662a1a32a51fec606351685ebaf',1,'ADC_Module']]],
-  ['checkpin_118',['checkPin',['../class_a_d_c___module.html#a9fd95a61d263a9d82918b50e81aee2e9',1,'ADC_Module']]],
-  ['continuousmode_119',['continuousMode',['../class_a_d_c___module.html#a8b00e0669bbc7917544d4e2e543f1a27',1,'ADC_Module']]]
+  ['disablecompare_124',['disableCompare',['../class_a_d_c___module.html#ac635f675a9690a4db016c73c31818262',1,'ADC_Module']]],
+  ['disabledma_125',['disableDMA',['../class_a_d_c___module.html#ac1610dcab46476f287c2dd4d96465c47',1,'ADC_Module']]],
+  ['disableinterrupts_126',['disableInterrupts',['../class_a_d_c___module.html#aa4509062644982526fee3c02e0b528fc',1,'ADC_Module']]]
 ];

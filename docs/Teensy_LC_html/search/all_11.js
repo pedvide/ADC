@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['very_5fhigh_5fspeed_97',['VERY_HIGH_SPEED',['../namespace_a_d_c__settings.html#aab853fc1fcb1992fd5d51408adf7688ea605020f3fad4a24098fbbb0fa4a293f1',1,'ADC_settings::VERY_HIGH_SPEED()'],['../namespace_a_d_c__settings.html#af0d80a1aae7288f77b13f0e01d9da0d3a605020f3fad4a24098fbbb0fa4a293f1',1,'ADC_settings::VERY_HIGH_SPEED()']]],
-  ['very_5flow_5fspeed_98',['VERY_LOW_SPEED',['../namespace_a_d_c__settings.html#aab853fc1fcb1992fd5d51408adf7688ea5afd4ce3e51232e5889cfd918354ff2d',1,'ADC_settings::VERY_LOW_SPEED()'],['../namespace_a_d_c__settings.html#af0d80a1aae7288f77b13f0e01d9da0d3a5afd4ce3e51232e5889cfd918354ff2d',1,'ADC_settings::VERY_LOW_SPEED()']]],
-  ['vrefh_99',['VREFH',['../namespace_a_d_c__settings.html#a8c2a64f3fca3ac6b82e8df8cf44f6ca2a1f5248caa2d2138480493dd069530462',1,'ADC_settings']]],
-  ['vrefl_100',['VREFL',['../namespace_a_d_c__settings.html#a8c2a64f3fca3ac6b82e8df8cf44f6ca2ab546f9ad5f80e932f2fd1038bbaddaa8',1,'ADC_settings']]]
+  ['wait_5ffor_5fcal_98',['wait_for_cal',['../class_a_d_c___module.html#a4fb69b5b2d07c3fc8f5f0bbbf05dfa2a',1,'ADC_Module']]],
+  ['wrong_5fadc_99',['WRONG_ADC',['../namespace_a_d_c___error.html#ad050c44d1f3422d02e5f9726edeee8f0a52df2c8ae830ed21e0c2fc269087b3ec',1,'ADC_Error']]],
+  ['wrong_5fpin_100',['WRONG_PIN',['../namespace_a_d_c___error.html#ad050c44d1f3422d02e5f9726edeee8f0ab578c19f4fab8e2bfeddc85fa17b5acf',1,'ADC_Error']]]
 ];

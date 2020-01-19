@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['num_5fmeasurements_63',['num_measurements',['../class_a_d_c___module.html#a27fdc83a7dbe3a8c8c24fc4273414256',1,'ADC_Module']]]
+  ['other_66',['OTHER',['../namespace_a_d_c___error.html#ad050c44d1f3422d02e5f9726edeee8f0a03570470bad94692ce93e32700d2e1cb',1,'ADC_Error']]]
 ];

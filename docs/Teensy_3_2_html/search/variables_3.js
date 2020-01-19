@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['dmachannel_189',['dmaChannel',['../class_ring_buffer_d_m_a.html#a289ca5377bb36f35f87127ce9719cbb7',1,'RingBufferDMA']]]
+  ['fail_5fflag_230',['fail_flag',['../class_a_d_c___module.html#a2d0cc3360073881658e578faf4ae5632',1,'ADC_Module']]]
 ];

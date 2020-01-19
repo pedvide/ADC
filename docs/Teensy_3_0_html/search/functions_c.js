@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['_7eringbuffer_178',['~RingBuffer',['../class_ring_buffer.html#a4d88e7e80ba00e057bee078118cda302',1,'RingBuffer']]],
-  ['_7eringbufferdma_179',['~RingBufferDMA',['../class_ring_buffer_d_m_a.html#ae7b0ff5b6789ac462a657602dbedc7c4',1,'RingBufferDMA']]]
+  ['userdata_272',['userData',['../class_analog_buffer_d_m_a.html#a954fe8ae896c3570b13d76b5e122bf85',1,'AnalogBufferDMA::userData(uint32_t new_data)'],['../class_analog_buffer_d_m_a.html#ad46e5a0de97999d41407b0ad02b975c2',1,'AnalogBufferDMA::userData(void)']]]
 ];

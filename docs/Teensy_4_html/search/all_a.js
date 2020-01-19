@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['med_5fhigh_5fspeed_61',['MED_HIGH_SPEED',['../namespace_a_d_c__settings.html#af0d80a1aae7288f77b13f0e01d9da0d3a3ce1b5cfee34884796a01e03c7dc6e22',1,'ADC_settings']]],
-  ['med_5fspeed_62',['MED_SPEED',['../namespace_a_d_c__settings.html#aab853fc1fcb1992fd5d51408adf7688ea9d9b800360e0fb88ba3d964b0b30feba',1,'ADC_settings::MED_SPEED()'],['../namespace_a_d_c__settings.html#af0d80a1aae7288f77b13f0e01d9da0d3a9d9b800360e0fb88ba3d964b0b30feba',1,'ADC_settings::MED_SPEED()']]]
+  ['num_5fmeasurements_65',['num_measurements',['../class_a_d_c___module.html#a27fdc83a7dbe3a8c8c24fc4273414256',1,'ADC_Module']]]
 ];
