@@ -56,6 +56,7 @@ class ADC_Module {
 public:
 
     #if ADC_DIFF_PAIRS > 0
+    //! \cond internal
     //! Dictionary with the differential pins as keys and the SC1A number as values
     /** Internal, do not use.
     */
@@ -64,6 +65,7 @@ public:
         uint8_t pin, sc1a;
     };
     #endif
+    //! \endcond
 
     #if ADC_DIFF_PAIRS > 0
     //! Constructor

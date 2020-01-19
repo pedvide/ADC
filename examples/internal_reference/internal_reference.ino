@@ -109,7 +109,7 @@ void setup() {
     adc->adc1->setResolution(16);
     adc->adc1->setConversionSpeed(ADC_CONVERSION_SPEED::VERY_LOW_SPEED);
     adc->adc1->setSamplingSpeed(ADC_SAMPLING_SPEED::VERY_LOW_SPEED);
-    #endif // ADC_NUM_ADCS
+    #endif // ADC_DUAL_ADCS
 
     delay(2000);
 

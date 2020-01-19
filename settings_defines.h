@@ -243,8 +243,8 @@ enum class ADC_REFERENCE : uint8_t {
     };
 #endif
 
-
-// Struct containing the registers controlling the ADC
+//! \cond internal
+//! Struct containing the registers controlling the ADC
 #if defined(ADC_TEENSY_4)
 typedef struct {
     volatile uint32_t HC0;
@@ -307,6 +307,7 @@ typedef struct {
 #define ADC0_START (*(ADC_REGS_t *)0x4003B000)
 #define ADC1_START (*(ADC_REGS_t *)0x400BB000)
 #endif
+//! \endcond
 
 
 /* MK20DX256 Datasheet:
