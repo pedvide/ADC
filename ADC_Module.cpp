@@ -1519,7 +1519,7 @@ void ADC_Module::startQuadTimer(uint32_t freq) {
         if (interrupts_enabled) {
             // Not sure yet? 
         }
-        if (adc_regs.GC && ADC_GC_DMAEN) {
+        if (adc_regs.GC & ADC_GC_DMAEN) {
             IMXRT_ADC_ETC.DMA_CTRL |= ADC_ETC_DMA_CTRL_TRIQ_ENABLE(ADC_ETC_TRIGGER_INDEX);
         }
     } else {
@@ -1532,7 +1532,7 @@ void ADC_Module::startQuadTimer(uint32_t freq) {
           ADC_ETC_TRIG_CHAIN_IE0(1) /*| ADC_ETC_TRIG_CHAIN_B2B0 */
           | ADC_ETC_TRIG_CHAIN_HWTS0(1) | ADC_ETC_TRIG_CHAIN_CSEL0(adc_pin_channel) ;
 
-        if (adc_regs.GC && ADC_GC_DMAEN) {
+        if (adc_regs.GC & ADC_GC_DMAEN) {
             IMXRT_ADC_ETC.DMA_CTRL |= ADC_ETC_DMA_CTRL_TRIQ_ENABLE(ADC_ETC_TRIGGER_INDEX);
         }
     }
