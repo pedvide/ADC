@@ -142,8 +142,8 @@ void loop() {
   adc->resetError();
 
   // See if we have a timed read test that finished.
-  if (delta_time_adc_0)printTimedADCInfo(ADC_0, buffer_ADC_0, delta_time_adc_0);
-  if (delta_time_adc_1)printTimedADCInfo(ADC_1, buffer_ADC_1, delta_time_adc_1);
+  if (delta_time_adc_0) printTimedADCInfo(ADC_0, buffer_ADC_0, delta_time_adc_0);
+  if (delta_time_adc_1) printTimedADCInfo(ADC_1, buffer_ADC_1, delta_time_adc_1);
 
   //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
 
