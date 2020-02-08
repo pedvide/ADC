@@ -60,8 +60,8 @@ void setup() {
     // reference can be ADC_REFERENCE::REF_3V3, ADC_REFERENCE::REF_1V2 (not for Teensy LC) or ADC_REF_EXT.
     //adc->setReference(ADC_REFERENCE::REF_1V2, ADC_0); // change all 3.3 to 1.2 if you change the reference to 1V2
 
-    adc->setAveraging(8); // set number of averages
-    adc->setResolution(12); // set bits of resolution
+    adc->adc0->setAveraging(8); // set number of averages
+    adc->adc0->setResolution(12); // set bits of resolution
 
 
     // always call the compare functions after changing the resolution!
@@ -78,8 +78,8 @@ void setup() {
     abdma1.userData(initial_average_value); // save away initial starting average
 #ifdef ADC_DUAL_ADCS
     Serial.println("Setup ADC_1");
-    adc->setAveraging(8, ADC_1); // set number of averages
-    adc->setResolution(12, ADC_1); // set bits of resolution
+    adc->adc1->setAveraging(8); // set number of averages
+    adc->adc1->setResolution(12); // set bits of resolution
     abdma2.init(adc, ADC_1);
     abdma2.userData(initial_average_value); // save away initial starting average
     adc->adc1->startContinuous(readPin_adc_1);
