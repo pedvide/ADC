@@ -5,6 +5,8 @@ Teensy 3.0, 3.1, 3.2, LC, 3.5, 3.6, and 4 ADC implementation library created by 
 
 See examples and [documentation](http://pedvide.github.io/ADC/).
 
+If you download the library from here, also install the latest Teensyduino version at https://www.pjrc.com/teensy/td_download.html.
+
 This thread in the Teensy forum also has information:
 http://forum.pjrc.com/threads/25532-ADC-library-update-now-with-support-for-Teensy-3-1
 
