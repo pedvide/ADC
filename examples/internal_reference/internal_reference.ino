@@ -8,6 +8,8 @@
 *   Because of noise, the trim value is not accurate to 1 step, it fluctuates +- 1 or 2 steps.
 */
 
+#ifdef ADC_USE_INTERNAL_VREF
+
 #include <ADC.h>
 #include <VREF.h>
 
@@ -192,3 +194,8 @@ Bandgap value: 1.01978 V.
 
 
 */
+
+#else // make sure the example can run for any boards (automated testing)
+void setup() {}
+void loop() {}
+#endif // ADC_USE_INTERNAL_VREF
