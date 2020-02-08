@@ -2,6 +2,8 @@
 *  You can change the number of averages, bits of resolution and also the comparison value or range.
 */
 
+#ifdef ADC_DUAL_ADCS
+
 
 #include <ADC.h>
 #include <ADC_util.h>
@@ -94,3 +96,7 @@ void loop() {
 
 */
 
+#else // make sure the example can run for any boards (automated testing)
+void setup() {}
+void loop() {}
+#endif // ADC_DUAL_ADCS
