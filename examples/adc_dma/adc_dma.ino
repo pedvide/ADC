@@ -10,6 +10,7 @@
     For the RMS it keeps the average from the previous set of data.
 */
 
+#ifdef ADC_USE_DMA
 
 #include <ADC.h>
 #include <AnalogBufferDMA.h>
@@ -142,3 +143,8 @@ void ProcessAnalogData(AnalogBufferDMA *pabdma, int8_t adc_num) {
 
   pabdma->userData(average_value);
 }
+
+#else // make sure the example can run for any boards (automated testing)
+void setup() {}
+void loop() {}
+#endif // ADC_USE_DMA

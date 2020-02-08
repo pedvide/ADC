@@ -22,6 +22,9 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
+
+#ifdef ADC_USE_DMA
+
 #include "AnalogBufferDMA.h"
 
 //#define DEBUG_DUMP_DATA
@@ -251,3 +254,6 @@ void AnalogBufferDMA::adc_1_dmaISR() {
   asm("DSB");
 #endif
 }
+
+
+#endif // ADC_USE_DMA

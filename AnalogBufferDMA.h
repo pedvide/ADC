@@ -23,6 +23,8 @@
  * SOFTWARE.
  */
 
+#ifdef ADC_USE_DMA
+
 #ifndef ANALOGBUFFERDMA_H
 #define ANALOGBUFFERDMA_H
 
@@ -75,3 +77,5 @@ protected:
 };
 
 #endif
+
+#endif // ADC_USE_DMA
