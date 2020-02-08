@@ -44,6 +44,7 @@ int value;
 int value2;
 
 void loop() {
+    #ifdef ADC_USE_PDB
 
     if (Serial.available()) {
         c = Serial.read();
@@ -100,6 +101,8 @@ void loop() {
     //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
 
     delay(10);
+
+    #endif // ADC_USE_PDB
 }
 
 
@@ -116,8 +119,10 @@ void adc1_isr() {
 }
 #endif
 
+#ifdef ADC_USE_PDB
 // pdb interrupt is enabled in case you need it.
 void pdb_isr(void) {
         PDB0_SC &=~PDB_SC_PDBIF; // clear interrupt
         //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
 }
+#endif
