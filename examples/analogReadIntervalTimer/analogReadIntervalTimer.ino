@@ -21,8 +21,7 @@
 
 
 
-#include "ADC.h"
-#include "RingBuffer.h"
+#include <ADC.h>
 // and IntervalTimer
 #include <IntervalTimer.h>
 
@@ -40,8 +39,16 @@ ADC *adc = new ADC(); // adc object
 
 IntervalTimer timer0, timer1; // timers
 
-RingBuffer *buffer0 = new RingBuffer; // buffers to store the values
-RingBuffer *buffer1 = new RingBuffer;
+#define BUFFER_SIZE 500
+
+uint16_t buffer_0[BUFFER_SIZE];
+uint16_t buffer_0_count = 0xffff;
+uint32_t delta_time_0 = 0;
+uint16_t buffer_1[BUFFER_SIZE];
+uint16_t buffer_1_count = 0xffff;
+uint32_t delta_time_1 = 0;
+
+elapsedMillis timed_read_elapsed;
 
 int startTimerValue0 = 0, startTimerValue1 = 0;
 
@@ -108,16 +115,9 @@ void loop() {
             Serial.println("Timer1 setup failed");
     }
 
-    if(!buffer0->isEmpty()) { // read the values in the buffer
-        Serial.print("Read pin 0: ");
-        Serial.println(buffer0->read()*3.3/adc->adc0->getMaxValue());
-        //Serial.println("New value!");
-    }
-    if(!buffer1->isEmpty()) { // read the values in the buffer
-        Serial.print("Read pin 1: ");
-        Serial.println(buffer1->read()*3.3/adc->adc0->getMaxValue());
-        //Serial.println("New value!");
-    }
+    // See if we have a timed read test that finished.
+    if (delta_time_0) printTimedADCInfo(ADC_0, buffer_0, delta_time_0);
+    if (delta_time_1) printTimedADCInfo(ADC_0, buffer_1, delta_time_1);
 
     if (Serial.available()) {
         c = Serial.read();
@@ -136,6 +136,30 @@ void loop() {
     //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
 
     delayMicroseconds(readPeriod);
+}
+
+void printTimedADCInfo(uint8_t adc_num, uint16_t *buffer, uint32_t &delta_time) {
+  uint32_t min_value = 0xffff;
+  uint32_t max_value = 0;
+  uint32_t sum = 0;
+  for (int i = 0; i < BUFFER_SIZE; i++) {
+    if (buffer[i] < min_value) min_value = buffer[i];
+    if (buffer[i] > max_value) max_value = buffer[i];
+    sum += buffer[i];
+  }
+  float average_value = (float)sum / BUFFER_SIZE; // get an average...
+  float sum_delta_sq = 0;
+  for (int i = 0; i < BUFFER_SIZE; i++) {
+    int delta_from_center = (int)buffer[i] - average_value;
+    sum_delta_sq += delta_from_center * delta_from_center;
+  }
+  int rms = sqrt(sum_delta_sq / BUFFER_SIZE);
+  Serial.printf("ADC:%d delta time:%d freq:%d - min:%d max:%d avg:%d rms:%d\n", adc_num,
+                delta_time, (1000 * BUFFER_SIZE) / delta_time,
+                min_value, max_value, (int)average_value, rms);
+
+  delta_time = 0;
+
 }
 
 // This function will be called with the desired frequency
@@ -177,13 +201,19 @@ void adc0_isr() {
     // add value to correct buffer
     if(pin==readPin0) {
         digitalWriteFast(ledPin+3, HIGH);
-        buffer0->write(adc->adc0->readSingle());
+        uint16_t adc_val = adc->adc0->readSingle();
+        if (buffer_0_count < BUFFER_SIZE) {
+          buffer_0[buffer_0_count++] = adc_val;
+          if (buffer_0_count == BUFFER_SIZE) delta_time_0 = timed_read_elapsed;
+        }
         digitalWriteFast(ledPin+3, LOW);
+        
     } else if(pin==readPin1) {
         digitalWriteFast(ledPin+4, HIGH);
-        buffer1->write(adc->adc0->readSingle());
-        if(adc->adc0->isConverting()) {
-            digitalWriteFast(LED_BUILTIN, 1);
+        uint16_t adc_val = adc->adc0->readSingle();
+        if (buffer_1_count < BUFFER_SIZE) {
+          buffer_1[buffer_1_count++] = adc_val;
+          if (buffer_1_count == BUFFER_SIZE) delta_time_1 = timed_read_elapsed;
         }
         digitalWriteFast(ledPin+4, LOW);
     } else { // clear interrupt anyway
@@ -200,5 +230,9 @@ void adc0_isr() {
 
 
     //digitalWriteFast(ledPin+2, !digitalReadFast(ledPin+2));
+
+    #if defined(__IMXRT1062__)  // Teensy 4.0
+        asm("DSB");
+    #endif
 
 }
