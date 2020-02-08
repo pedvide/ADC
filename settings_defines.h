@@ -126,6 +126,11 @@ namespace ADC_settings {
         #define ADC_USE_QUAD_TIMER
 #endif
 
+// Has a timer?
+#if defined(ADC_USE_PDB) || defined(ADC_USE_QUAD_TIMER)
+    #define ADC_USE_TIMER
+#endif
+
 // Has internal reference?
 #if defined(ADC_TEENSY_3_1) // Teensy 3.1
         #define ADC_USE_INTERNAL_VREF

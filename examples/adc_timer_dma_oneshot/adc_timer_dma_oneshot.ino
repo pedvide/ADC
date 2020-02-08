@@ -21,6 +21,7 @@
     For the RMS it keeps the average from the previous set of data.
 */
 
+#if defined(ADC_USE_DMA) && defined(ADC_USE_TIMER)
 
 #include <ADC.h>
 #include <DMAChannel.h>
@@ -218,3 +219,8 @@ void dumpDMA_structures(DMABaseClass *dmabc)
                 dmabc->TCD->DOFF, dmabc->TCD->CITER, dmabc->TCD->DLASTSGA, dmabc->TCD->CSR, dmabc->TCD->BITER);
 }
 #endif
+
+#else // make sure the example can run for any boards (automated testing)
+void setup() {}
+void loop() {}
+#endif // ADC_USE_TIMER and DMA

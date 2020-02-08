@@ -19,6 +19,7 @@
         Stop the timers: s<cr>
 */
 
+#ifdef ADC_USE_TIMER
 
 #include <ADC.h>
 #include <ADC_util.h>
@@ -201,3 +202,8 @@ void adc1_isr() {
   //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN) );
 }
 #endif
+
+#else // make sure the example can run for any boards (automated testing)
+void setup() {}
+void loop() {}
+#endif // ADC_USE_TIMER

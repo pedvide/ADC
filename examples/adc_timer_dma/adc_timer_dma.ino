@@ -17,6 +17,7 @@
     For the RMS it keeps the average from the previous set of data.
 */
 
+#if defined(ADC_USE_DMA) && defined(ADC_USE_TIMER)
 
 #include <ADC.h>
 #include <DMAChannel.h>
@@ -24,12 +25,8 @@
 
 //#define PRINT_DEBUG_INFO
 
-#ifdef KINETISL
-#error "Sorry: This example will not run on Teensy LC"
-#endif
-
 // This version uses both ADC1 and ADC2
-#ifdef KINETISK
+#ifdef ADC_DUAL_ADCS
 const int readPin_adc_0 = A0;
 const int readPin_adc_1 = A2;
 #else
@@ -208,3 +205,8 @@ void dumpDMA_structures(DMABaseClass *dmabc)
                 dmabc->TCD->DOFF, dmabc->TCD->CITER, dmabc->TCD->DLASTSGA, dmabc->TCD->CSR, dmabc->TCD->BITER);
 }
 #endif
+
+#else // make sure the example can run for any boards (automated testing)
+void setup() {}
+void loop() {}
+#endif // ADC_USE_TIMER and DMA
