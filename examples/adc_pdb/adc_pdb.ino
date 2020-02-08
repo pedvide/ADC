@@ -62,7 +62,9 @@ void loop() {
             if (freq == 0) {
                 Serial.println("Stop pdb.");
                 adc->adc0->stopPDB();
+                #ifdef ADC_DUAL_ADCS
                 adc->adc1->stopPDB();
+                #endif
             }
             else {
                 Serial.print("Start pdb with frequency ");
