@@ -111,7 +111,7 @@ class ADC
         *   \param type can be ADC_REFERENCE::REF_3V3, ADC_REFERENCE::REF_1V2 (not for Teensy LC) or ADC_REFERENCE::REF_EXT
         *   \param adc_num ADC number to change.
         */
-       [[deprecated("Use adc->adcX->setReference instead")]]
+        __attribute__((error("Use adc->adcX->setReference instead")))
         void setReference(ADC_REFERENCE type, int8_t adc_num = -1);
 
 
@@ -125,7 +125,7 @@ class ADC
         *  Whenever you change the resolution, change also the comparison values (if you use them).
         *   \param adc_num ADC number to change.
         */
-       [[deprecated("Use adc->adcX->setResolution instead")]]
+       __attribute__((error("Use adc->adcX->setResolution instead")))
         void setResolution(uint8_t bits, int8_t adc_num = -1);
 
         //! Returns the resolution of the ADC_Module.
@@ -133,7 +133,7 @@ class ADC
         *   \param adc_num ADC number to query.
         *   \return the resolution of adc_num ADC.
         */
-       [[deprecated("Use adc->adcX->getResolution instead")]]
+       __attribute__((error("Use adc->adcX->getResolution instead")))
         uint8_t getResolution(int8_t adc_num = -1);
 
         //! Returns the maximum value for a measurement: 2^res-1.
@@ -141,7 +141,7 @@ class ADC
         *   \param adc_num ADC number to query.
         *   \return the maximum value of adc_num ADC.
         */
-       [[deprecated("Use adc->adcX->getMaxValue instead")]]
+       __attribute__((error("Use adc->adcX->getMaxValue instead")))
         uint32_t getMaxValue(int8_t adc_num = -1);
 
 
@@ -164,7 +164,7 @@ class ADC
         * but if F_BUS<F_ADCK, you can't use VERY_HIGH_SPEED for sampling speed.
         *   \param adc_num ADC number to change.
         */
-       [[deprecated("Use adc->adcX->setConversionSpeed instead")]]
+       __attribute__((error("Use adc->adcX->setConversionSpeed instead")))
         void setConversionSpeed(ADC_CONVERSION_SPEED speed, int8_t adc_num = -1);
 
 
@@ -179,7 +179,7 @@ class ADC
         * VERY_HIGH_SPEED is the highest possible sampling speed (0 ADCK added).
         *   \param adc_num ADC number to change.
         */
-       [[deprecated("Use adc->adcX->setSamplingSpeed instead")]]
+       __attribute__((error("Use adc->adcX->setSamplingSpeed instead")))
         void setSamplingSpeed(ADC_SAMPLING_SPEED speed, int8_t adc_num = -1);
 
 
@@ -188,7 +188,7 @@ class ADC
         * \param num can be 0, 4, 8, 16 or 32.
         *   \param adc_num ADC number to change.
         */
-       [[deprecated("Use adc->adcX->setAveraging instead")]]
+       __attribute__((error("Use adc->adcX->setAveraging instead")))
         void setAveraging(uint8_t num, int8_t adc_num = -1);
 
 
@@ -199,14 +199,14 @@ class ADC
         *   \param isr function (returns void and accepts no arguments) that will be executed after an interrupt.
         *   \param priority Interrupt priority, highest is 0, lowest is 255.
         */
-       [[deprecated("Use adc->adcX->enableInterrupts instead")]]
+       __attribute__((error("Use adc->adcX->enableInterrupts instead")))
         void enableInterrupts(void (*isr)(void), uint8_t priority=255, int8_t adc_num = -1);
 
         //! Disable interrupts
         /**
         *   \param adc_num ADC number to change.
         */
-       [[deprecated("Use adc->adcX->disableInterrupts instead")]]
+       __attribute__((error("Use adc->adcX->disableInterrupts instead")))
         void disableInterrupts(int8_t adc_num = -1);
 
 
@@ -216,14 +216,14 @@ class ADC
         *  (including hardware averages and if the comparison (if any) is true).
         *   \param adc_num ADC number to change.
         */
-       [[deprecated("Use adc->adcX->enableDMA instead")]]
+       __attribute__((error("Use adc->adcX->enableDMA instead")))
         void enableDMA(int8_t adc_num = -1);
 
         //! Disable ADC DMA request
         /**
         *   \param adc_num ADC number to change.
         */
-       [[deprecated("Use adc->adcX->disableDMA instead")]]
+       __attribute__((error("Use adc->adcX->disableDMA instead")))
         void disableDMA(int8_t adc_num = -1);
         #endif
 
@@ -237,7 +237,7 @@ class ADC
         *   \param greaterThan true or false
         *   \param adc_num ADC number to change.
         */
-       [[deprecated("Use adc->adcX->enableCompare instead")]]
+       __attribute__((error("Use adc->adcX->enableCompare instead")))
         void enableCompare(int16_t compValue, bool greaterThan, int8_t adc_num = -1);
 
         //! Enable the compare function to a range
@@ -252,14 +252,14 @@ class ADC
         *   \param inclusive true or false
         *   \param adc_num ADC number to change.
         */
-       [[deprecated("Use adc->adcX->enableCompareRange instead")]]
+       __attribute__((error("Use adc->adcX->enableCompareRange instead")))
         void enableCompareRange(int16_t lowerLimit, int16_t upperLimit, bool insideRange, bool inclusive, int8_t adc_num = -1);
 
         //! Disable the compare function
         /**
         *   \param adc_num ADC number to change.
         */
-       [[deprecated("Use adc->adcX->disableCompare instead")]]
+       __attribute__((error("Use adc->adcX->disableCompare instead")))
         void disableCompare(int8_t adc_num = -1);
 
 
@@ -270,7 +270,7 @@ class ADC
         *   \param gain can be 1, 2, 4, 8, 16, 32 or 64
         *   \param adc_num ADC number to change.
         */
-       [[deprecated("Use adc->adcX->enablePGA instead")]]
+       __attribute__((error("Use adc->adcX->enablePGA instead")))
         void enablePGA(uint8_t gain, int8_t adc_num = -1);
 
         //! Returns the PGA level
@@ -278,14 +278,14 @@ class ADC
         *   \param adc_num ADC number to query.
         *   \return PGA level = from 1 to 64
         */
-       [[deprecated("Use adc->adcX->getPGA instead")]]
+       __attribute__((error("Use adc->adcX->getPGA instead")))
         uint8_t getPGA(int8_t adc_num = -1);
 
         //! Disable PGA
         /**
         *   \param adc_num ADC number to query
         */
-       [[deprecated("Use adc->adcX->disablePGA instead")]]
+       __attribute__((error("Use adc->adcX->disablePGA instead")))
         void disablePGA(int8_t adc_num = -1);
         #endif
 
@@ -298,7 +298,7 @@ class ADC
         *   \param adc_num ADC number to query
         *   \return true if yes, false if not.
         */
-       [[deprecated("Use adc->adcX->isConverting instead")]]
+       __attribute__((error("Use adc->adcX->isConverting instead")))
         bool isConverting(int8_t adc_num = -1);
 
         //! Is an ADC conversion ready?
@@ -307,7 +307,7 @@ class ADC
         *   \param adc_num ADC number to query
         *   \return true if yes, false if not.
         */
-       [[deprecated("Use adc->adcX->isComplete instead")]]
+       __attribute__((error("Use adc->adcX->isComplete instead")))
         bool isComplete(int8_t adc_num = -1);
 
         #if ADC_DIFF_PAIRS > 0
@@ -316,7 +316,7 @@ class ADC
         *   \param adc_num ADC number to query
         *   \return true or false
         */
-       [[deprecated("Use adc->adcX->isDifferential instead")]]
+       __attribute__((error("Use adc->adcX->isDifferential instead")))
         bool isDifferential(int8_t adc_num = -1);
         #endif
 
@@ -325,7 +325,7 @@ class ADC
         *   \param adc_num ADC number to query
         *   \return true or false
         */
-       [[deprecated("Use adc->adcX->isContinuous instead")]]
+       __attribute__((error("Use adc->adcX->isContinuous instead")))
         bool isContinuous(int8_t adc_num = -1);
 
 
