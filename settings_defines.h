@@ -47,8 +47,14 @@ namespace ADC_settings {
 #define ADC_TEENSY_3_5
 #elif defined(__MK66FX1M0__) // Teensy 3.6
 #define ADC_TEENSY_3_6
-#elif defined(__IMXRT1062__) // Teensy 4.0
-#define ADC_TEENSY_4
+#elif defined(__IMXRT1062__) // Teensy 4.0/4.1
+    // They only differ in the number of exposed pins
+    #define ADC_TEENSY_4
+    #ifdef ARDUINO_TEENSY41
+    #define ADC_TEENSY_4_1
+    #else
+    #define ADC_TEENSY_4_0
+    #endif
 #else
 #error "Board not supported!"
 #endif
