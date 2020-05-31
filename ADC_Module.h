@@ -1,6 +1,6 @@
-/* Teensy 4, 3.x, LC ADC library
+/* Teensy 4.x, 3.x, LC ADC library
  * https://github.com/pedvide/ADC
- * Copyright (c) 2019 Pedro Villanueva
+ * Copyright (c) 2020 Pedro Villanueva
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -32,7 +32,6 @@ Control each ADC_Module independently.
 See the ADC_Module class for all methods.
 */
 
-
 #ifndef ADC_MODULE_H
 #define ADC_MODULE_H
 
@@ -43,31 +42,30 @@ See the ADC_Module class for all methods.
 using ADC_Error::ADC_ERROR;
 using namespace ADC_settings;
 
-
 // debug mode: blink the led light
 #define ADC_debug 0
-
 
 /** Class ADC_Module: Implements all functions of the Teensy 3.x, LC analog to digital converter
 *
 */
-class ADC_Module {
+class ADC_Module
+{
 
 public:
-
-    #if ADC_DIFF_PAIRS > 0
+#if ADC_DIFF_PAIRS > 0
     //! \cond internal
     //! Dictionary with the differential pins as keys and the SC1A number as values
     /** Internal, do not use.
     */
-    struct ADC_NLIST {
+    struct ADC_NLIST
+    {
         //! Pin and corresponding SC1A value.
         uint8_t pin, sc1a;
     };
-    #endif
+#endif
     //! \endcond
 
-    #if ADC_DIFF_PAIRS > 0
+#if ADC_DIFF_PAIRS > 0
     //! Constructor
     /** Pass the ADC number and the Channel number to SC1A number arrays.
     *   \param ADC_number Number of the ADC module, from 0.
@@ -75,22 +73,21 @@ public:
     *   \param a_diff_table is similar to a_channel2sc1a, but for differential pins.
     *   \param a_adc_regs pointer to start of the ADC registers
     */
-    ADC_Module(uint8_t ADC_number, 
-               const uint8_t* const a_channel2sc1a, 
-               const ADC_NLIST* const a_diff_table,
+    ADC_Module(uint8_t ADC_number,
+               const uint8_t *const a_channel2sc1a,
+               const ADC_NLIST *const a_diff_table,
                ADC_REGS_t &a_adc_regs);
-    #else
+#else
     //! Constructor
     /** Pass the ADC number and the Channel number to SC1A number arrays.
     *   \param ADC_number Number of the ADC module, from 0.
     *   \param a_channel2sc1a contains an index that pairs each pin to its SC1A number (used to start a conversion on that pin)
     *   \param a_adc_regs pointer to start of the ADC registers
     */
-    ADC_Module(uint8_t ADC_number, 
-               const uint8_t* const a_channel2sc1a, 
+    ADC_Module(uint8_t ADC_number,
+               const uint8_t *const a_channel2sc1a,
                ADC_REGS_t &a_adc_regs);
-    #endif
-
+#endif
 
     //! Starts the calibration sequence, waits until it's done and writes the results
     /** Usually it's not necessary to call this function directly, but do it if the "environment" changed
@@ -104,7 +101,6 @@ public:
     //! Waits until calibration is finished and writes the corresponding registers
     void wait_for_cal();
 
-
     /////////////// METHODS TO SET/GET SETTINGS OF THE ADC ////////////////////
 
     //! Set the voltage reference you prefer, default is vcc
@@ -114,7 +110,6 @@ public:
     *  It recalibrates at the end.
     */
     void setReference(ADC_REFERENCE ref_type);
-
 
     //! Change the resolution of the measurement.
     /*!
@@ -140,7 +135,6 @@ public:
     */
     uint32_t getMaxValue();
 
-
     //! Sets the conversion speed (changes the ADC clock, ADCK)
     /**
     * \param speed can be any from the ADC_CONVERSION_SPEED enum: VERY_LOW_SPEED, LOW_SPEED, MED_SPEED, HIGH_SPEED_16BITS, HIGH_SPEED, VERY_HIGH_SPEED,
@@ -161,7 +155,6 @@ public:
     */
     void setConversionSpeed(ADC_CONVERSION_SPEED speed);
 
-
     //! Sets the sampling speed
     /** Increase the sampling speed for low impedance sources, decrease it for higher impedance ones.
     * \param speed can be any of the ADC_SAMPLING_SPEED enum: VERY_LOW_SPEED, LOW_SPEED, MED_SPEED, HIGH_SPEED or VERY_HIGH_SPEED.
@@ -174,7 +167,6 @@ public:
     */
     void setSamplingSpeed(ADC_SAMPLING_SPEED speed);
 
-
     //! Set the number of averages
     /*!
     * \param num can be 0, 4, 8, 16 or 32.
@@ -183,20 +175,18 @@ public:
     */
     void setAveraging(uint8_t num);
 
-
     //! Enable interrupts
     /** An IRQ_ADCx Interrupt will be raised when the conversion is completed
     *  (including hardware averages and if the comparison (if any) is true).
     * \param isr function (returns void and accepts no arguments) that will be executed after an interrupt.
     * \param priority Interrupt priority, highest is 0, lowest is 255.
     */
-    void enableInterrupts(void (*isr)(void), uint8_t priority=255);
+    void enableInterrupts(void (*isr)(void), uint8_t priority = 255);
 
     //! Disable interrupts
     void disableInterrupts();
 
-
-    #ifdef ADC_USE_DMA 
+#ifdef ADC_USE_DMA
     //! Enable DMA request
     /** An ADC DMA request will be raised when the conversion is completed
     *  (including hardware averages and if the comparison (if any) is true).
@@ -205,8 +195,7 @@ public:
 
     //! Disable ADC DMA request
     void disableDMA();
-    #endif
-
+#endif
 
     //! Enable the compare function to a single value
     /** A conversion will be completed only when the ADC value
@@ -234,8 +223,7 @@ public:
     //! Disable the compare function
     void disableCompare();
 
-
-    #ifdef ADC_USE_PGA
+#ifdef ADC_USE_PGA
     //! Enable and set PGA
     /** Enables the PGA and sets the gain
     *   Use only for signals lower than 1.2 V and only in differential mode
@@ -251,59 +239,63 @@ public:
 
     //! Disable PGA
     void disablePGA();
-    #endif
-
+#endif
 
     //! Set continuous conversion mode
-    void continuousMode() __attribute__((always_inline)) {
-        #ifdef ADC_TEENSY_4
+    void continuousMode() __attribute__((always_inline))
+    {
+#ifdef ADC_TEENSY_4
         atomic::setBitFlag(adc_regs.GC, ADC_GC_ADCO);
-        #else
+#else
         atomic::setBitFlag(adc_regs.SC3, ADC_SC3_ADCO);
-        #endif
+#endif
     }
     //! Set single-shot conversion mode
-    void singleMode() __attribute__((always_inline)) {
-        #ifdef ADC_TEENSY_4
+    void singleMode() __attribute__((always_inline))
+    {
+#ifdef ADC_TEENSY_4
         atomic::clearBitFlag(adc_regs.GC, ADC_GC_ADCO);
-        #else
+#else
         atomic::clearBitFlag(adc_regs.SC3, ADC_SC3_ADCO);
-        #endif
+#endif
     }
 
     //! Set single-ended conversion mode
-    void singleEndedMode() __attribute__((always_inline)) {
-        #ifdef ADC_TEENSY_4
-        // Teensy 4 is always single-ended
-        #else
+    void singleEndedMode() __attribute__((always_inline))
+    {
+#ifdef ADC_TEENSY_4
+// Teensy 4 is always single-ended
+#else
         atomic::clearBitFlag(adc_regs.SC1A, ADC_SC1_DIFF);
-        #endif
+#endif
     }
-    #if ADC_DIFF_PAIRS > 0
+#if ADC_DIFF_PAIRS > 0
     //! Set differential conversion mode
-    void differentialMode() __attribute__((always_inline)) {
+    void differentialMode() __attribute__((always_inline))
+    {
         atomic::setBitFlag(adc_regs.SC1A, ADC_SC1_DIFF);
     }
-    #endif
+#endif
 
     //! Use software to trigger the ADC, this is the most common setting
-    void setSoftwareTrigger() __attribute__((always_inline)) {
-        #ifdef ADC_TEENSY_4
+    void setSoftwareTrigger() __attribute__((always_inline))
+    {
+#ifdef ADC_TEENSY_4
         atomic::clearBitFlag(adc_regs.CFG, ADC_CFG_ADTRG);
-        #else
+#else
         atomic::clearBitFlag(adc_regs.SC2, ADC_SC2_ADTRG);
-        #endif
+#endif
     }
 
     //! Use hardware to trigger the ADC
-    void setHardwareTrigger() __attribute__((always_inline)) {
-        #ifdef ADC_TEENSY_4
+    void setHardwareTrigger() __attribute__((always_inline))
+    {
+#ifdef ADC_TEENSY_4
         atomic::setBitFlag(adc_regs.CFG, ADC_CFG_ADTRG);
-        #else
+#else
         atomic::setBitFlag(adc_regs.SC2, ADC_SC2_ADTRG);
-        #endif
+#endif
     }
-
 
     ////////////// INFORMATION ABOUT THE STATE OF THE ADC /////////////////
 
@@ -311,14 +303,15 @@ public:
     /**
     *   \return true or false
     */
-    volatile bool isConverting() __attribute__((always_inline)) {
-        #ifdef ADC_TEENSY_4
+    volatile bool isConverting() __attribute__((always_inline))
+    {
+#ifdef ADC_TEENSY_4
         return atomic::getBitFlag(adc_regs.GS, ADC_GS_ADACT);
-        #else
+#else
         //return (ADC_SC2_adact);
         return atomic::getBitFlag(adc_regs.SC2, ADC_SC2_ADACT);
-        //return ((adc_regs.SC2) & ADC_SC2_ADACT) >> 7;
-        #endif
+//return ((adc_regs.SC2) & ADC_SC2_ADACT) >> 7;
+#endif
     }
 
     //! Is an ADC conversion ready?
@@ -327,51 +320,54 @@ public:
     *  When a value is read this function returns false until a new value exists,
     *  so it only makes sense to call it before analogReadContinuous() or readSingle()
     */
-    volatile bool isComplete() __attribute__((always_inline)) {
-        #ifdef ADC_TEENSY_4
+    volatile bool isComplete() __attribute__((always_inline))
+    {
+#ifdef ADC_TEENSY_4
         return atomic::getBitFlag(adc_regs.HS, ADC_HS_COCO0);
-        #else
+#else
         //return (ADC_SC1A_coco);
         return atomic::getBitFlag(adc_regs.SC1A, ADC_SC1_COCO);
-        //return ((adc_regs.SC1A) & ADC_SC1_COCO) >> 7;
-        #endif
+//return ((adc_regs.SC1A) & ADC_SC1_COCO) >> 7;
+#endif
     }
 
-    #if ADC_DIFF_PAIRS > 0
+#if ADC_DIFF_PAIRS > 0
     //! Is the ADC in differential mode?
     /**
     *   \return true or false
     */
-    volatile bool isDifferential() __attribute__((always_inline)) {
+    volatile bool isDifferential() __attribute__((always_inline))
+    {
         //return ((adc_regs.SC1A) & ADC_SC1_DIFF) >> 5;
         return atomic::getBitFlag(adc_regs.SC1A, ADC_SC1_DIFF);
     }
-    #endif
+#endif
 
     //! Is the ADC in continuous mode?
     /**
     *   \return true or false
     */
-    volatile bool isContinuous() __attribute__((always_inline)) {
-        #ifdef ADC_TEENSY_4
+    volatile bool isContinuous() __attribute__((always_inline))
+    {
+#ifdef ADC_TEENSY_4
         return atomic::getBitFlag(adc_regs.GC, ADC_GC_ADCO);
-        #else
+#else
         //return (ADC_SC3_adco);
         return atomic::getBitFlag(adc_regs.SC3, ADC_SC3_ADCO);
-        //return ((adc_regs.SC3) & ADC_SC3_ADCO) >> 3;
-        #endif
+//return ((adc_regs.SC3) & ADC_SC3_ADCO) >> 3;
+#endif
     }
 
-    #ifdef ADC_USE_PGA
+#ifdef ADC_USE_PGA
     //! Is the PGA function enabled?
     /**
     *   \return true or false
     */
-    volatile bool isPGAEnabled() __attribute__((always_inline)) {
+    volatile bool isPGAEnabled() __attribute__((always_inline))
+    {
         return atomic::getBitFlag(adc_regs.PGA, ADC_PGA_PGAEN);
     }
-    #endif
-
+#endif
 
     //////////////// INFORMATION ABOUT VALID PINS //////////////////
 
@@ -390,7 +386,6 @@ public:
     */
     bool checkDifferentialPins(uint8_t pinP, uint8_t pinN);
 
-
     //////////////// HELPER METHODS FOR CONVERSION /////////////////
 
     //! Starts a single-ended conversion on the pin
@@ -400,7 +395,7 @@ public:
     */
     void startReadFast(uint8_t pin); // helper method
 
-    #if ADC_DIFF_PAIRS > 0
+#if ADC_DIFF_PAIRS > 0
     //! Starts a differential conversion on the pair of pins
     /** It sets the mux correctly, doesn't do any of the checks on the pin and
     *   doesn't change the continuous conversion bit.
@@ -408,8 +403,7 @@ public:
     *   \param pinN negative pin to read.
     */
     void startDifferentialFast(uint8_t pinP, uint8_t pinN);
-    #endif
-
+#endif
 
     //////////////// BLOCKING CONVERSION METHODS //////////////////
 
@@ -433,12 +427,12 @@ public:
     *   \param pin ADC_INTERNAL_SOURCE to read.
     *   \return the value of the pin.
     */
-    int analogRead(ADC_INTERNAL_SOURCE pin) __attribute__((always_inline)) {
+    int analogRead(ADC_INTERNAL_SOURCE pin) __attribute__((always_inline))
+    {
         return analogRead(static_cast<uint8_t>(pin));
     }
 
-
-    #if ADC_DIFF_PAIRS > 0
+#if ADC_DIFF_PAIRS > 0
     //! Reads the differential analog value of two pins (pinP - pinN).
     /** It waits until the value is read and then returns the result.
     *   If a comparison has been set up and fails, it will return ADC_ERROR_DIFF_VALUE.
@@ -448,8 +442,7 @@ public:
     *   This function is interrupt safe, so it will restore the adc to the state it was before being called
     */
     int analogReadDifferential(uint8_t pinP, uint8_t pinN);
-    #endif
-
+#endif
 
     /////////////// NON-BLOCKING CONVERSION METHODS //////////////
 
@@ -461,7 +454,7 @@ public:
     */
     bool startSingleRead(uint8_t pin);
 
-    #if ADC_DIFF_PAIRS > 0
+#if ADC_DIFF_PAIRS > 0
     //! Start a differential conversion between two pins (pinP - pinN) and enables interrupts.
     /** It returns immediately, get value with readSingle().
     *   If this function interrupts a measurement, it stores the settings in adc_config
@@ -470,16 +463,16 @@ public:
     *   \return true if the pins are valid, false otherwise.
     */
     bool startSingleDifferential(uint8_t pinP, uint8_t pinN);
-    #endif
+#endif
 
     //! Reads the analog value of a single conversion.
     /** Set the conversion with with startSingleRead(pin) or startSingleDifferential(pinP, pinN).
     *   \return the converted value.
     */
-    int readSingle() __attribute__((always_inline)) {
+    int readSingle() __attribute__((always_inline))
+    {
         return analogReadContinuous();
     }
-
 
     ///////////// CONTINUOUS CONVERSION METHODS ////////////
 
@@ -490,7 +483,7 @@ public:
     */
     bool startContinuous(uint8_t pin);
 
-    #if ADC_DIFF_PAIRS > 0
+#if ADC_DIFF_PAIRS > 0
     //! Starts continuous conversion between the pins (pinP-pinN).
     /** It returns as soon as the ADC is set, use analogReadContinuous() to read the value.
     * \param pinP must be A10 or A12.
@@ -498,7 +491,7 @@ public:
     * \return true if the pins are valid, false otherwise.
     */
     bool startContinuousDifferential(uint8_t pinP, uint8_t pinN);
-    #endif
+#endif
 
     //! Reads the analog value of a continuous conversion.
     /** Set the continuous conversion with with analogStartContinuous(pin) or startContinuousDifferential(pinP, pinN).
@@ -506,27 +499,28 @@ public:
     *   If single-ended and 16 bits it's necessary to typecast it to an unsigned type (like uint16_t),
     *   otherwise values larger than 3.3/2 V are interpreted as negative!
     */
-    int analogReadContinuous() __attribute__((always_inline)) {
-        #ifdef ADC_TEENSY_4
+    int analogReadContinuous() __attribute__((always_inline))
+    {
+#ifdef ADC_TEENSY_4
         return (int16_t)(int32_t)adc_regs.R0;
-        #else
+#else
         return (int16_t)(int32_t)adc_regs.RA;
-        #endif
+#endif
     }
 
     //! Stops continuous conversion
     void stopContinuous();
 
-    //////////// FREQUENCY METHODS ////////
-    // The general API is:
-    // void startTimer(uint32_t freq)
-    // void stopTimer()
-    // uint32_t getTimerFrequency()
-    // For each board the best timer method will be selected
+//////////// FREQUENCY METHODS ////////
+// The general API is:
+// void startTimer(uint32_t freq)
+// void stopTimer()
+// uint32_t getTimerFrequency()
+// For each board the best timer method will be selected
 
-    //////////// PDB ////////////////
-    //// Only works for Teensy 3.x not LC nor Tensy 4.0 (they don't have PDB)
-    #if defined(ADC_USE_PDB)
+//////////// PDB ////////////////
+//// Only works for Teensy 3.x not LC nor Tensy 4.0 (they don't have PDB)
+#if defined(ADC_USE_PDB)
 
     //! Start the default timer (PDB) triggering the ADC at the frequency
     /** The default timer in this board is the PDB, you can also call it directly with startPDB().
@@ -558,9 +552,9 @@ public:
     */
     uint32_t getPDBFrequency();
 
-    //////////// TIMER ////////////////
-    //// Only works for Teensy 3.x and 4 (not LC)
-    #elif defined(ADC_USE_QUAD_TIMER)
+//////////// TIMER ////////////////
+//// Only works for Teensy 3.x and 4 (not LC)
+#elif defined(ADC_USE_QUAD_TIMER)
     //! Start the default timer (QuadTimer) triggering the ADC at the frequency
     /** The default timer in this board is the QuadTimer, you can also call it directly with startQuadTimer().
     *   Call startSingleRead or startSingleDifferential on the pin that you want to measure before calling this function.
@@ -590,20 +584,19 @@ public:
     *   \return the timer's frequency in Hz.
     */
     uint32_t getQuadTimerFrequency();
-    #endif
-
-
+#endif
 
     //////// OTHER STUFF ///////////
 
     //! Store the config of the adc
-    struct ADC_Config {
-        //! ADC registers
-        #ifdef ADC_TEENSY_4
+    struct ADC_Config
+    {
+//! ADC registers
+#ifdef ADC_TEENSY_4
         uint32_t savedHC0, savedCFG, savedGC, savedGS;
-        #else
+#else
         uint32_t savedSC1A, savedSC2, savedSC3, savedCFG1, savedCFG2;
-        #endif
+#endif
     } adc_config;
 
     //! Was the adc in use before a call?
@@ -612,43 +605,43 @@ public:
     /** Save config of the ADC to the ADC_Config struct
     * \param config ADC_Config where the config will be stored
     */
-    void saveConfig(ADC_Config* config) {
-        #ifdef ADC_TEENSY_4
+    void saveConfig(ADC_Config *config)
+    {
+#ifdef ADC_TEENSY_4
         config->savedHC0 = adc_regs.HC0;
         config->savedCFG = adc_regs.CFG;
         config->savedGC = adc_regs.GC;
-        config->savedGS = adc_regs.GS;        
-        #else
+        config->savedGS = adc_regs.GS;
+#else
         config->savedSC1A = adc_regs.SC1A;
         config->savedCFG1 = adc_regs.CFG1;
         config->savedCFG2 = adc_regs.CFG2;
         config->savedSC2 = adc_regs.SC2;
         config->savedSC3 = adc_regs.SC3;
-        #endif
+#endif
     }
 
     /** Load config to the ADC
     * \param config ADC_Config from where the config will be loaded
     */
-    void loadConfig(const ADC_Config* config) {
-        #ifdef ADC_TEENSY_4
+    void loadConfig(const ADC_Config *config)
+    {
+#ifdef ADC_TEENSY_4
         adc_regs.HC0 = config->savedHC0;
         adc_regs.CFG = config->savedCFG;
         adc_regs.GC = config->savedGC;
-        adc_regs.GS = config->savedGS;         
-        #else
+        adc_regs.GS = config->savedGS;
+#else
         adc_regs.CFG1 = config->savedCFG1;
         adc_regs.CFG2 = config->savedCFG2;
         adc_regs.SC2 = config->savedSC2;
         adc_regs.SC3 = config->savedSC3;
         adc_regs.SC1A = config->savedSC1A; // restore last
-        #endif
+#endif
     }
-
 
     //! Number of measurements that the ADC is performing
     uint8_t num_measurements;
-
 
     //! This flag indicates that some kind of error took place
     /** Use the defines at the beginning of this file to find out what caused the fail.
@@ -656,17 +649,15 @@ public:
     volatile ADC_ERROR fail_flag;
 
     //! Resets all errors from the ADC, if any.
-    void resetError() {
+    void resetError()
+    {
         ADC_Error::resetError(fail_flag);
     }
-
 
     //! Which adc is this?
     const uint8_t ADC_num;
 
-
 private:
-
     // is set to 1 when the calibration procedure is taking place
     uint8_t calibrating;
 
@@ -686,10 +677,10 @@ private:
     // reference can be internal or external
     ADC_REF_SOURCE analog_reference_internal;
 
-    #ifdef ADC_USE_PGA 
+#ifdef ADC_USE_PGA
     // value of the pga
     uint8_t pga_value;
-    #endif
+#endif
 
     // conversion speed
     ADC_CONVERSION_SPEED conversion_speed;
@@ -698,68 +689,74 @@ private:
     ADC_SAMPLING_SPEED sampling_speed;
 
     // translate pin number to SC1A nomenclature
-    const uint8_t* const channel2sc1a;
+    const uint8_t *const channel2sc1a;
 
     // are interrupts on?
     bool interrupts_enabled;
 
-    
-    // same for differential pins
-    #if ADC_DIFF_PAIRS > 0
-    const ADC_NLIST* const diff_table;
+// same for differential pins
+#if ADC_DIFF_PAIRS > 0
+    const ADC_NLIST *const diff_table;
 
     //! Get the SC1A value of the differential pair for this pin
-    uint8_t getDifferentialPair(uint8_t pin) {
-        for(uint8_t i=0; i<ADC_DIFF_PAIRS; i++) {
-            if(diff_table[i].pin == pin) {
+    uint8_t getDifferentialPair(uint8_t pin)
+    {
+        for (uint8_t i = 0; i < ADC_DIFF_PAIRS; i++)
+        {
+            if (diff_table[i].pin == pin)
+            {
                 return diff_table[i].sc1a;
             }
         }
         return ADC_SC1A_PIN_INVALID;
     }
-    #endif
-
+#endif
 
     //! Initialize ADC
     void analog_init();
 
     //! Switch on clock to ADC
-    void startClock() {
-        #if defined(ADC_TEENSY_4)
-        if (ADC_num == 0) {
+    void startClock()
+    {
+#if defined(ADC_TEENSY_4)
+        if (ADC_num == 0)
+        {
             CCM_CCGR1 |= CCM_CCGR1_ADC1(CCM_CCGR_ON);
-        } else {
+        }
+        else
+        {
             CCM_CCGR1 |= CCM_CCGR1_ADC2(CCM_CCGR_ON);
         }
-        #else
-        if (ADC_num == 0) {
+#else
+        if (ADC_num == 0)
+        {
             SIM_SCGC6 |= SIM_SCGC6_ADC0;
-        } else {
+        }
+        else
+        {
             SIM_SCGC3 |= SIM_SCGC3_ADC1;
         }
-        #endif
+#endif
     }
 
     // registers point to the correct ADC module
-    typedef volatile uint32_t& reg;
+    typedef volatile uint32_t &reg;
 
     // registers that control the adc module
     ADC_REGS_t &adc_regs;
 
-    #ifdef ADC_USE_PDB
+#ifdef ADC_USE_PDB
     reg PDB0_CHnC1; // PDB channel 0 or 1
-    #endif
-    #ifdef ADC_TEENSY_4
+#endif
+#ifdef ADC_TEENSY_4
     uint8_t XBAR_IN;
     uint8_t XBAR_OUT;
     uint8_t QTIMER4_INDEX;
-    uint8_t ADC_ETC_TRIGGER_INDEX;    
-    #endif
+    uint8_t ADC_ETC_TRIGGER_INDEX;
+#endif
     const IRQ_NUMBER_t IRQ_ADC; // IRQ number
 
 protected:
-
-
 };
 
 #endif // ADC_MODULE_H
