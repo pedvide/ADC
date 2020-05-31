@@ -1,6 +1,6 @@
-/* Teensy 4, 3.x, LC ADC library
+/* Teensy 4.x, 3.x, LC ADC library
  * https://github.com/pedvide/ADC
- * Copyright (c) 2019 Pedro Villanueva
+ * Copyright (c) 2020 Pedro Villanueva
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -48,8 +48,9 @@ namespace VREF
     *   \param trim adjusts the reference value, from 0 to 0x3F (63). Default is 32.
     *
     */
-    inline void start(uint8_t mode = VREF_SC_MODE_LV_HIGHPOWERBUF, uint8_t trim = 0x20) {
-        VREF_TRM = VREF_TRM_CHOPEN | (trim&0x3F); // enable module and set the trimmer to medium (max=0x3F=63)
+    inline void start(uint8_t mode = VREF_SC_MODE_LV_HIGHPOWERBUF, uint8_t trim = 0x20)
+    {
+        VREF_TRM = VREF_TRM_CHOPEN | (trim & 0x3F); // enable module and set the trimmer to medium (max=0x3F=63)
         // enable 1.2 volt ref with all compensations in high power mode
         VREF_SC = VREF_SC_VREFEN | VREF_SC_REGEN | VREF_SC_ICOMPEN | VREF_SC_MODE_LV(mode);
 
@@ -65,15 +66,17 @@ namespace VREF
     /** Set the trim, the change in the reference is about 0.5 mV per step.
     *   \param trim adjusts the reference value, from 0 to 0x3F (63).
     */
-    inline void trim(uint8_t trim) {
+    inline void trim(uint8_t trim)
+    {
         bool chopen = atomic::getBitFlag(VREF_TRM, VREF_TRM_CHOPEN);
-        VREF_TRM = (chopen ? VREF_TRM_CHOPEN : 0) | (trim&0x3F);
+        VREF_TRM = (chopen ? VREF_TRM_CHOPEN : 0) | (trim & 0x3F);
     }
 
     //! Stops the internal reference
     /** This is called automatically by ADC_Module::setReference(ref) when ref is any other than REF_1V2
     */
-    __attribute__((always_inline)) inline void stop(){
+    __attribute__((always_inline)) inline void stop()
+    {
         VREF_SC = 0;
         atomic::clearBitFlag(PMC_REGSC, PMC_REGSC_BGBE);
     }
@@ -88,7 +91,8 @@ namespace VREF
     *
     *   \return true if the VREF module is already in a stable condition and can be used.
     */
-    __attribute__((always_inline)) inline volatile bool isStable() {
+    __attribute__((always_inline)) inline volatile bool isStable()
+    {
         return atomic::getBitFlag(VREF_SC, VREF_SC_VREFST);
     }
 
@@ -96,7 +100,8 @@ namespace VREF
     /**
     *   \return true if the VREF module is switched on.
     */
-    __attribute__((always_inline)) inline volatile bool isOn() {
+    __attribute__((always_inline)) inline volatile bool isOn()
+    {
         return atomic::getBitFlag(VREF_SC, VREF_SC_VREFEN);
     }
 
@@ -105,14 +110,16 @@ namespace VREF
     *   It will block until the reference has stabilized, or return immediately if the
     *   reference is not enabled in the first place.
     */
-    inline void waitUntilStable() {
+    inline void waitUntilStable()
+    {
         delay(35); // see note in isStable()
-        while(isOn() && !isStable()) {
+        while (isOn() && !isStable())
+        {
             yield();
         }
     }
 
-}
+} // namespace VREF
 
 #endif // ADC_USE_INTERNAL_VREF
 
