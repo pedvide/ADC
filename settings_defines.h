@@ -76,7 +76,7 @@ namespace ADC_settings
 #elif defined(ADC_TEENSY_3_6) // Teensy 3.6
 #define ADC_NUM_ADCS (2)
 #define ADC_DUAL_ADCS
-#elif defined(ADC_TEENSY_4) // Teensy 3.6
+#elif defined(ADC_TEENSY_4) // Teensy 4, 4.1
 #define ADC_NUM_ADCS (2)
 #define ADC_DUAL_ADCS
 #endif
@@ -92,7 +92,7 @@ namespace ADC_settings
 #define ADC_USE_DMA
 #elif defined(ADC_TEENSY_3_6) // Teensy 3.6
 #define ADC_USE_DMA
-#elif defined(ADC_TEENSY_4) // Teensy 4.0
+#elif defined(ADC_TEENSY_4) // Teensy 4, 4.1
 #define ADC_USE_DMA
 #endif
 
@@ -103,7 +103,7 @@ namespace ADC_settings
 #elif defined(ADC_TEENSY_LC)  // Teensy LC
 #elif defined(ADC_TEENSY_3_5) // Teensy 3.5
 #elif defined(ADC_TEENSY_3_6) // Teensy 3.6
-#elif defined(ADC_TEENSY_4)   // Teensy 4
+#elif defined(ADC_TEENSY_4)   // Teensy 4, 4.1
 #endif
 
 // Use PDB?
@@ -116,7 +116,7 @@ namespace ADC_settings
 #define ADC_USE_PDB
 #elif defined(ADC_TEENSY_3_6) // Teensy 3.6
 #define ADC_USE_PDB
-#elif defined(ADC_TEENSY_4) // Teensy 4
+#elif defined(ADC_TEENSY_4) // Teensy 4, 4.1
 #endif
 
 // Use Quad Timer
@@ -129,7 +129,7 @@ namespace ADC_settings
 #define ADC_USE_QUAD_TIMER    // TODO: Not implemented
 #elif defined(ADC_TEENSY_3_6) // Teensy 3.6
 #define ADC_USE_QUAD_TIMER    // TODO: Not implemented
-#elif defined(ADC_TEENSY_4)   // Teensy 4
+#elif defined(ADC_TEENSY_4)   // Teensy 4, 4.1
 #define ADC_USE_QUAD_TIMER
 #endif
 
@@ -148,7 +148,7 @@ namespace ADC_settings
 #define ADC_USE_INTERNAL_VREF
 #elif defined(ADC_TEENSY_3_6) // Teensy 3.6
 #define ADC_USE_INTERNAL_VREF
-#elif defined(ADC_TEENSY_4) // Teensy 4
+#elif defined(ADC_TEENSY_4) // Teensy 4, 4.1
 #endif
 
     //! \cond internal
@@ -218,7 +218,7 @@ namespace ADC_settings
 #define ADC_DIFF_PAIRS (1)
 #elif defined(ADC_TEENSY_3_6) // Teensy 3.6
 #define ADC_DIFF_PAIRS (1)
-#elif defined(ADC_TEENSY_4) // Teensy 4
+#elif defined(ADC_TEENSY_4) // Teensy 4, 4.1
 #define ADC_DIFF_PAIRS (0)
 #endif
 
