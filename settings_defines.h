@@ -203,8 +203,10 @@ namespace ADC_settings
 #define ADC_MAX_PIN (69)
 #elif defined(ADC_TEENSY_3_6) // Teensy 3.6
 #define ADC_MAX_PIN (67)
-#elif defined(ADC_TEENSY_4) // Teensy 4
+#elif defined(ADC_TEENSY_4_0) // Teensy 4
 #define ADC_MAX_PIN (27)
+#elif defined(ADC_TEENSY_4_1) // Teensy 4
+#define ADC_MAX_PIN (31)
 #endif
 
 // number of differential pairs PER ADC!
