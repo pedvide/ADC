@@ -1,6 +1,6 @@
-/* Teensy 3.x, LC ADC library
+/* Teensy 4.x, 3.x, LC ADC library
  * https://github.com/pedvide/ADC
- * Copyright (c) 2017 Pedro Villanueva
+ * Copyright (c) 2020 Pedro Villanueva
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -23,15 +23,29 @@
  * SOFTWARE.
  */
 
-/* ADC.h: Control for one (Teensy 3.0, LC) or two ADC modules (Teensy 3.1).
- *
- */
-
 /* TODO
 * - Function to measure more that 1 pin consecutively (stream?)
 *
 * bugs:
 * - comparison values in 16 bit differential mode are twice what they should be
+*/
+
+/*! \mainpage ADC
+
+Teensy 4.x, 3.x, LC ADC library
+
+This manual is divided in the following sections:
+- \subpage adc_doc "ADC"
+- \subpage adc_module "ADC Module"
+- \subpage settings "Board settings"
+- \subpage error "ADC error codes"
+- \subpage util "ADC util"
+
+*/
+
+/*! \page adc_doc ADC
+Make Analog to Digital conversions using the ADC interface.
+See the ADC class for all methods.
 */
 
 #ifndef ADC_H
@@ -45,48 +59,46 @@
 #include "ADC_Module.h"
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-/** Class ADC: Controls the Teensy 3.x ADC
+    /** Class ADC: Controls the Teensy 3.x, 4 ADC
 *
 */
-class ADC
-{
+    class ADC
+    {
     protected:
     private:
-
         // ADCs objects
         ADC_Module adc0_obj;
-        #if ADC_NUM_ADCS>1
+#ifdef ADC_DUAL_ADCS
         ADC_Module adc1_obj;
-        #endif
+#endif
 
         //! Number of ADC objects
         const uint8_t num_ADCs = ADC_NUM_ADCS;
 
-
     public:
-
         /** Default constructor */
         ADC();
-
 
         // create both adc objects
 
         //! Object to control the ADC0
         ADC_Module *const adc0 = &adc0_obj; // adc object pointer
-        #if ADC_NUM_ADCS>1
+#ifdef ADC_DUAL_ADCS
         //! Object to control the ADC1
         ADC_Module *const adc1 = &adc1_obj; // adc object pointer
-        #endif
+#endif
 
-        #if ADC_NUM_ADCS==1
+#ifdef ADC_SINGLE_ADC
+        //! Array with the ADC Modules
         ADC_Module *const adc[ADC_NUM_ADCS] = {adc0};
-        #else
-        ADC_Module *const adc[ADC_NUM_ADCS] = {adc0, adc1};
-        #endif
-
+#else
+    //! Array with the ADC Modules
+    ADC_Module *const adc[ADC_NUM_ADCS] = {adc0, adc1};
+#endif
 
         /////////////// METHODS TO SET/GET SETTINGS OF THE ADC ////////////////////
 
@@ -95,8 +107,7 @@ class ADC
         *   \param type can be ADC_REFERENCE::REF_3V3, ADC_REFERENCE::REF_1V2 (not for Teensy LC) or ADC_REFERENCE::REF_EXT
         *   \param adc_num ADC number to change.
         */
-        void setReference(ADC_REFERENCE type, int8_t adc_num = -1);
-
+        __attribute__((error("Use adc->adcX->setReference instead"))) void setReference(ADC_REFERENCE type, int8_t adc_num = -1);
 
         //! Change the resolution of the measurement.
         /*!
@@ -108,22 +119,25 @@ class ADC
         *  Whenever you change the resolution, change also the comparison values (if you use them).
         *   \param adc_num ADC number to change.
         */
-        void setResolution(uint8_t bits, int8_t adc_num = -1);
+        __attribute__((error("Use adc->adcX->setResolution instead"))) void setResolution(uint8_t bits, int8_t adc_num = -1);
 
         //! Returns the resolution of the ADC_Module.
         /**
         *   \param adc_num ADC number to query.
         *   \return the resolution of adc_num ADC.
         */
-        uint8_t getResolution(int8_t adc_num = -1);
+        __attribute__((error("Use adc->adcX->getResolution instead")))
+        uint8_t
+        getResolution(int8_t adc_num = -1);
 
         //! Returns the maximum value for a measurement: 2^res-1.
         /**
         *   \param adc_num ADC number to query.
         *   \return the maximum value of adc_num ADC.
         */
-        uint32_t getMaxValue(int8_t adc_num = -1);
-
+        __attribute__((error("Use adc->adcX->getMaxValue instead")))
+        uint32_t
+        getMaxValue(int8_t adc_num = -1);
 
         //! Sets the conversion speed (changes the ADC clock, ADCK)
         /**
@@ -144,8 +158,7 @@ class ADC
         * but if F_BUS<F_ADCK, you can't use VERY_HIGH_SPEED for sampling speed.
         *   \param adc_num ADC number to change.
         */
-        void setConversionSpeed(ADC_CONVERSION_SPEED speed, int8_t adc_num = -1);
-
+        __attribute__((error("Use adc->adcX->setConversionSpeed instead"))) void setConversionSpeed(ADC_CONVERSION_SPEED speed, int8_t adc_num = -1);
 
         //! Sets the sampling speed
         /** Increase the sampling speed for low impedance sources, decrease it for higher impedance ones.
@@ -158,16 +171,14 @@ class ADC
         * VERY_HIGH_SPEED is the highest possible sampling speed (0 ADCK added).
         *   \param adc_num ADC number to change.
         */
-        void setSamplingSpeed(ADC_SAMPLING_SPEED speed, int8_t adc_num = -1);
-
+        __attribute__((error("Use adc->adcX->setSamplingSpeed instead"))) void setSamplingSpeed(ADC_SAMPLING_SPEED speed, int8_t adc_num = -1);
 
         //! Set the number of averages
         /*!
         * \param num can be 0, 4, 8, 16 or 32.
         *   \param adc_num ADC number to change.
         */
-        void setAveraging(uint8_t num, int8_t adc_num = -1);
-
+        __attribute__((error("Use adc->adcX->setAveraging instead"))) void setAveraging(uint8_t num, int8_t adc_num = -1);
 
         //! Enable Hardwaretrigger
         /** 
@@ -186,29 +197,31 @@ class ADC
         /** An IRQ_ADCx Interrupt will be raised when the conversion is completed
         *  (including hardware averages and if the comparison (if any) is true).
         *   \param adc_num ADC number to change.
+        *   \param isr function (returns void and accepts no arguments) that will be executed after an interrupt.
+        *   \param priority Interrupt priority, highest is 0, lowest is 255.
         */
-        void enableInterrupts(int8_t adc_num = -1);
+        __attribute__((error("Use adc->adcX->enableInterrupts instead"))) void enableInterrupts(void (*isr)(void), uint8_t priority = 255, int8_t adc_num = -1);
 
         //! Disable interrupts
         /**
         *   \param adc_num ADC number to change.
         */
-        void disableInterrupts(int8_t adc_num = -1);
+        __attribute__((error("Use adc->adcX->disableInterrupts instead"))) void disableInterrupts(int8_t adc_num = -1);
 
-
+#ifdef ADC_USE_DMA
         //! Enable DMA request
         /** An ADC DMA request will be raised when the conversion is completed
         *  (including hardware averages and if the comparison (if any) is true).
         *   \param adc_num ADC number to change.
         */
-        void enableDMA(int8_t adc_num = -1);
+        __attribute__((error("Use adc->adcX->enableDMA instead"))) void enableDMA(int8_t adc_num = -1);
 
         //! Disable ADC DMA request
         /**
         *   \param adc_num ADC number to change.
         */
-        void disableDMA(int8_t adc_num = -1);
-
+        __attribute__((error("Use adc->adcX->disableDMA instead"))) void disableDMA(int8_t adc_num = -1);
+#endif
 
         //! Enable the compare function to a single value
         /** A conversion will be completed only when the ADC value
@@ -219,7 +232,7 @@ class ADC
         *   \param greaterThan true or false
         *   \param adc_num ADC number to change.
         */
-        void enableCompare(int16_t compValue, bool greaterThan, int8_t adc_num = -1);
+        __attribute__((error("Use adc->adcX->enableCompare instead"))) void enableCompare(int16_t compValue, bool greaterThan, int8_t adc_num = -1);
 
         //! Enable the compare function to a range
         /** A conversion will be completed only when the ADC value is inside (insideRange=1) or outside (=0)
@@ -233,37 +246,38 @@ class ADC
         *   \param inclusive true or false
         *   \param adc_num ADC number to change.
         */
-        void enableCompareRange(int16_t lowerLimit, int16_t upperLimit, bool insideRange, bool inclusive, int8_t adc_num = -1);
+        __attribute__((error("Use adc->adcX->enableCompareRange instead"))) void enableCompareRange(int16_t lowerLimit, int16_t upperLimit, bool insideRange, bool inclusive, int8_t adc_num = -1);
 
         //! Disable the compare function
         /**
         *   \param adc_num ADC number to change.
         */
-        void disableCompare(int8_t adc_num = -1);
+        __attribute__((error("Use adc->adcX->disableCompare instead"))) void disableCompare(int8_t adc_num = -1);
 
-
+#ifdef ADC_USE_PGA
         //! Enable and set PGA
         /** Enables the PGA and sets the gain
         *   Use only for signals lower than 1.2 V and only in differential mode
         *   \param gain can be 1, 2, 4, 8, 16, 32 or 64
         *   \param adc_num ADC number to change.
         */
-        void enablePGA(uint8_t gain, int8_t adc_num = -1);
+        __attribute__((error("Use adc->adcX->enablePGA instead"))) void enablePGA(uint8_t gain, int8_t adc_num = -1);
 
         //! Returns the PGA level
         /** PGA level = from 1 to 64
         *   \param adc_num ADC number to query.
         *   \return PGA level = from 1 to 64
         */
-        uint8_t getPGA(int8_t adc_num = -1);
+        __attribute__((error("Use adc->adcX->getPGA instead")))
+        uint8_t
+        getPGA(int8_t adc_num = -1);
 
         //! Disable PGA
         /**
         *   \param adc_num ADC number to query
         */
-        void disablePGA(int8_t adc_num = -1);
-
-
+        __attribute__((error("Use adc->adcX->disablePGA instead"))) void disablePGA(int8_t adc_num = -1);
+#endif
 
         ////////////// INFORMATION ABOUT THE STATE OF THE ADC /////////////////
 
@@ -272,7 +286,7 @@ class ADC
         *   \param adc_num ADC number to query
         *   \return true if yes, false if not.
         */
-        bool isConverting(int8_t adc_num = -1);
+        __attribute__((error("Use adc->adcX->isConverting instead"))) bool isConverting(int8_t adc_num = -1);
 
         //! Is an ADC conversion ready?
         /** When a value is read this function returns 0 until a new value exists
@@ -280,23 +294,23 @@ class ADC
         *   \param adc_num ADC number to query
         *   \return true if yes, false if not.
         */
-        bool isComplete(int8_t adc_num = -1);
+        __attribute__((error("Use adc->adcX->isComplete instead"))) bool isComplete(int8_t adc_num = -1);
 
+#if ADC_DIFF_PAIRS > 0
         //! Is the ADC in differential mode?
         /**
         *   \param adc_num ADC number to query
         *   \return true or false
         */
-        bool isDifferential(int8_t adc_num = -1);
+        __attribute__((error("Use adc->adcX->isDifferential instead"))) bool isDifferential(int8_t adc_num = -1);
+#endif
 
         //! Is the ADC in continuous mode?
         /**
         *   \param adc_num ADC number to query
         *   \return true or false
         */
-        bool isContinuous(int8_t adc_num = -1);
-
-
+        __attribute__((error("Use adc->adcX->isContinuous instead"))) bool isContinuous(int8_t adc_num = -1);
 
         //////////////// BLOCKING CONVERSION METHODS //////////////////
 
@@ -324,10 +338,12 @@ class ADC
         *   \param adc_num ADC_X ADC module
         *   \return the value of the pin.
         */
-        int analogRead(ADC_INTERNAL_SOURCE pin, int8_t adc_num = -1) __attribute__((always_inline)) {
+        int analogRead(ADC_INTERNAL_SOURCE pin, int8_t adc_num = -1) __attribute__((always_inline))
+        {
             return analogRead(static_cast<uint8_t>(pin), adc_num);
         }
 
+#if ADC_DIFF_PAIRS > 0
         //! Reads the differential analog value of two pins (pinP - pinN).
         /** It waits until the value is read and then returns the result.
         * This function is interrupt safe, so it will restore the adc to the state it was before being called
@@ -340,7 +356,7 @@ class ADC
         *   If a comparison has been set up and fails, it will return ADC_ERROR_VALUE.
         */
         int analogReadDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num = -1);
-
+#endif
 
         /////////////// NON-BLOCKING CONVERSION METHODS //////////////
 
@@ -353,6 +369,7 @@ class ADC
         */
         bool startSingleRead(uint8_t pin, int8_t adc_num = -1);
 
+#if ADC_DIFF_PAIRS > 0
         //! Start a differential conversion between two pins (pinP - pinN) and enables interrupts.
         /** It returns immediately, get value with readSingle().
         *   If this function interrupts a measurement, it stores the settings in adc_config
@@ -362,6 +379,7 @@ class ADC
         *   \return true if the pins are valid, false otherwise.
         */
         bool startSingleDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num = -1);
+#endif
 
         //! Reads the analog value of a single conversion.
         /** Set the conversion with with startSingleRead(pin) or startSingleDifferential(pinP, pinN).
@@ -369,8 +387,6 @@ class ADC
         *   \return the converted value.
         */
         int readSingle(int8_t adc_num = -1);
-
-
 
         ///////////// CONTINUOUS CONVERSION METHODS ////////////
 
@@ -382,6 +398,7 @@ class ADC
         */
         bool startContinuous(uint8_t pin, int8_t adc_num = -1);
 
+#if ADC_DIFF_PAIRS > 0
         //! Starts continuous conversion between the pins (pinP-pinN).
         /** It returns as soon as the ADC is set, use analogReadContinuous() to read the value.
         *   \param pinP must be A10 or A12.
@@ -390,6 +407,7 @@ class ADC
         *   \return true if the pins are valid, false otherwise.
         */
         bool startContinuousDifferential(uint8_t pinP, uint8_t pinN, int8_t adc_num = -1);
+#endif
 
         //! Reads the analog value of a continuous conversion.
         /** Set the continuous conversion with with analogStartContinuous(pin) or startContinuousDifferential(pinP, pinN).
@@ -406,16 +424,15 @@ class ADC
         */
         void stopContinuous(int8_t adc_num = -1);
 
-
-
-        /////////// SYNCHRONIZED METHODS ///////////////
-        ///// ONLY FOR BOARDS WITH MORE THAN ONE ADC /////
-        #if ADC_NUM_ADCS>1
+/////////// SYNCHRONIZED METHODS ///////////////
+///// ONLY FOR BOARDS WITH MORE THAN ONE ADC /////
+#ifdef ADC_DUAL_ADCS
 
         //! Struct for synchronous measurements
         /** result_adc0 has the result from ADC0 and result_adc1 from ADC1.
         */
-        struct Sync_result{
+        struct Sync_result
+        {
             int32_t result_adc0, result_adc1;
         };
 
@@ -438,8 +455,9 @@ class ADC
         *   \param pin1 pin in ADC1
         *   \return a Sync_result struct with the result of each ADC value.
         */
-        Sync_result analogSyncRead(uint8_t pin0, uint8_t pin1) __attribute__((always_inline)) {return analogSynchronizedRead(pin0, pin1);}
+        Sync_result analogSyncRead(uint8_t pin0, uint8_t pin1) __attribute__((always_inline)) { return analogSynchronizedRead(pin0, pin1); }
 
+#if ADC_DIFF_PAIRS > 0
         //! Returns the differential analog values of both sets of pins, measured at the same time by the two ADC modules.
         /** It waits until the values are read and then returns the result as a struct Sync_result,
         *   use Sync_result.result_adc0 and Sync_result.result_adc1.
@@ -461,9 +479,11 @@ class ADC
         *   \param pin1N negative pin in ADC1
         *   \return a Sync_result struct with the result of each differential ADC value.
         */
-        Sync_result analogSyncReadDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N) __attribute__((always_inline)) {
+        Sync_result analogSyncReadDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N) __attribute__((always_inline))
+        {
             return analogSynchronizedReadDifferential(pin0P, pin0N, pin1P, pin1N);
         }
+#endif
 
         /////////////// SYNCHRONIZED NON-BLOCKING METHODS //////////////
 
@@ -476,6 +496,7 @@ class ADC
         */
         bool startSynchronizedSingleRead(uint8_t pin0, uint8_t pin1);
 
+#if ADC_DIFF_PAIRS > 0
         //! Start a differential conversion between two pins (pin0P - pin0N) and (pin1P - pin1N)
         /** It returns immediately, get value with readSynchronizedSingle().
         *   If this function interrupts a measurement, it stores the settings in adc_config
@@ -486,13 +507,13 @@ class ADC
         *   \return true if the pins are valid, false otherwise.
         */
         bool startSynchronizedSingleDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N);
+#endif
 
         //! Reads the analog value of a single conversion.
         /**
         *   \return the converted value.
         */
         Sync_result readSynchronizedSingle();
-
 
         ///////////// SYNCHRONIZED CONTINUOUS CONVERSION METHODS ////////////
 
@@ -504,6 +525,7 @@ class ADC
         */
         bool startSynchronizedContinuous(uint8_t pin0, uint8_t pin1);
 
+#if ADC_DIFF_PAIRS > 0
         //! Starts a continuous differential conversion in both ADCs simultaneously
         /** Use readSynchronizedContinuous to get the values
         *   \param pin0P positive pin in ADC0
@@ -513,6 +535,7 @@ class ADC
         *   \return true if the pins are valid, false otherwise.
         */
         bool startSynchronizedContinuousDifferential(uint8_t pin0P, uint8_t pin0N, uint8_t pin1P, uint8_t pin1N);
+#endif
 
         //! Returns the values of both ADCs.
         /**
@@ -523,57 +546,45 @@ class ADC
         //! Stops synchronous continuous conversion
         void stopSynchronizedContinuous();
 
-        #endif
+#endif
 
-
-        //////////// ERROR PRINTING /////
-        //! Prints the human-readable error from all ADC, if any.
-        void printError() {
-            for(int i=0; i< ADC_NUM_ADCS; i++) {
-                adc[i]->printError();
-            }
-        }
-
+        //////////// ERRORS /////
         //! Resets all errors from all ADCs, if any.
-        void resetError() {
-            for(int i=0; i< ADC_NUM_ADCS; i++) {
+        void resetError()
+        {
+            for (int i = 0; i < ADC_NUM_ADCS; i++)
+            {
                 adc[i]->resetError();
             }
         }
 
-
         //! Translate pin number to SC1A nomenclature
         // should this be a constexpr?
-        static const uint8_t channel2sc1aADC0[ADC_MAX_PIN+1];
-        #if ADC_NUM_ADCS>1
+        static const uint8_t channel2sc1aADC0[ADC_MAX_PIN + 1];
+#ifdef ADC_DUAL_ADCS
         //! Translate pin number to SC1A nomenclature
-        static const uint8_t channel2sc1aADC1[ADC_MAX_PIN+1];
-        #endif
+        static const uint8_t channel2sc1aADC1[ADC_MAX_PIN + 1];
+#endif
 
         //! Translate pin number to SC1A nomenclature for differential pins
-        static const uint8_t sc1a2channelADC0[ADC_MAX_PIN+1];
-        #if ADC_NUM_ADCS>1
+        static const uint8_t sc1a2channelADC0[ADC_MAX_PIN + 1];
+#ifdef ADC_DUAL_ADCS
         //! Translate pin number to SC1A nomenclature for differential pins
-        static const uint8_t sc1a2channelADC1[ADC_MAX_PIN+1];
-        #endif
+        static const uint8_t sc1a2channelADC1[ADC_MAX_PIN + 1];
+#endif
 
-
+#if ADC_DIFF_PAIRS > 0
         //! Translate differential pin number to SC1A nomenclature
         static const ADC_Module::ADC_NLIST diff_table_ADC0[ADC_DIFF_PAIRS];
-        #if ADC_NUM_ADCS>1
+#ifdef ADC_DUAL_ADCS
         //! Translate differential pin number to SC1A nomenclature
         static const ADC_Module::ADC_NLIST diff_table_ADC1[ADC_DIFF_PAIRS];
-        #endif
-
-
-};
-
-
-
+#endif
+#endif
+    };
 
 #ifdef __cplusplus
 }
 #endif
-
 
 #endif // ADC_H

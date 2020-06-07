@@ -1,0 +1,23 @@
+var searchData=
+[
+  ['adc_5f0_377',['ADC_0',['../_a_d_c_8h.html#a5cbcaa568e20fcd4cc9325927d370860',1,'ADC.h']]],
+  ['adc_5f1_378',['ADC_1',['../_a_d_c_8h.html#a3d767e16f12a6ee542079f3c9677192c',1,'ADC.h']]],
+  ['adc_5fdebug_379',['ADC_debug',['../_a_d_c___module_8h.html#aaaf2912bdda454e3fcb88156f1ce20d8',1,'ADC_Module.h']]],
+  ['adc_5fdiff_5fpairs_380',['ADC_DIFF_PAIRS',['../settings__defines_8h.html#ad660fc04fd7a41b126a09c6800565ba8',1,'settings_defines.h']]],
+  ['adc_5fdual_5fadcs_381',['ADC_DUAL_ADCS',['../settings__defines_8h.html#a7a88f35414a1dfcbba64e0412398275e',1,'settings_defines.h']]],
+  ['adc_5ferror_5fdiff_5fvalue_382',['ADC_ERROR_DIFF_VALUE',['../settings__defines_8h.html#af181c4b5c617516517400c427494e7e7',1,'settings_defines.h']]],
+  ['adc_5ferror_5fvalue_383',['ADC_ERROR_VALUE',['../settings__defines_8h.html#a810b46bdaa73057d834142229111adc5',1,'settings_defines.h']]],
+  ['adc_5fmax_5fpin_384',['ADC_MAX_PIN',['../settings__defines_8h.html#ae4e97cfb226e91c33a7154fc3c03421f',1,'settings_defines.h']]],
+  ['adc_5fnum_5fadcs_385',['ADC_NUM_ADCS',['../settings__defines_8h.html#a67c726b0a8264a36249811007dbd69df',1,'settings_defines.h']]],
+  ['adc_5fsc1a_5fchannels_386',['ADC_SC1A_CHANNELS',['../settings__defines_8h.html#ac1636c047cf3a2250b63203ffe6b2422',1,'settings_defines.h']]],
+  ['adc_5fsc1a_5fpin_5fdiff_387',['ADC_SC1A_PIN_DIFF',['../settings__defines_8h.html#ad80038562806ab5bd78bbc252200e3d2',1,'settings_defines.h']]],
+  ['adc_5fsc1a_5fpin_5finvalid_388',['ADC_SC1A_PIN_INVALID',['../settings__defines_8h.html#a08b630986b865a1690bb53be49583cf6',1,'settings_defines.h']]],
+  ['adc_5fsc1a_5fpin_5fmux_389',['ADC_SC1A_PIN_MUX',['../settings__defines_8h.html#a0850b1c7068a83e01dd1d4ef59f4f7c1',1,'settings_defines.h']]],
+  ['adc_5fsc1a_5fpin_5fpga_390',['ADC_SC1A_PIN_PGA',['../settings__defines_8h.html#acca1eb01e09af73dabd7b5e7f770bc62',1,'settings_defines.h']]],
+  ['adc_5fteensy_5f3_5f1_391',['ADC_TEENSY_3_1',['../settings__defines_8h.html#ad0926c9b4db199ff517698850273158d',1,'settings_defines.h']]],
+  ['adc_5fuse_5fdma_392',['ADC_USE_DMA',['../settings__defines_8h.html#acaaa746538d4c886e3f975085e6c1b54',1,'settings_defines.h']]],
+  ['adc_5fuse_5finternal_5fvref_393',['ADC_USE_INTERNAL_VREF',['../settings__defines_8h.html#a37b1a6f3b25b13c5bae4add91d110140',1,'settings_defines.h']]],
+  ['adc_5fuse_5fpdb_394',['ADC_USE_PDB',['../settings__defines_8h.html#a0148590aea34a981c92905265070b024',1,'settings_defines.h']]],
+  ['adc_5fuse_5fpga_395',['ADC_USE_PGA',['../settings__defines_8h.html#a57bc19e36066a197abf3ba58f7dc0521',1,'settings_defines.h']]],
+  ['adc_5fuse_5fquad_5ftimer_396',['ADC_USE_QUAD_TIMER',['../settings__defines_8h.html#aa015e5fceaad6fb9046eaf2314837b9a',1,'settings_defines.h']]]
+];

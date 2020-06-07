@@ -1,24 +1,29 @@
 ADC						KEYWORD1
 Sync_result				KEYWORD1
-ADC_Module				KEYWORD1
-RingBuffer				KEYWORD1
-RingBufferDMA			KEYWORD1
+AnalogBufferDMA			KEYWORD1
 ADC_REFERENCE			KEYWORD1
 ADC_SAMPLING_SPEED		KEYWORD1
 ADC_CONVERSION_SPEED	KEYWORD1
 ADC_INTERNAL_SOURCE		KEYWORD1
-VREF		KEYWORD1
+VREF		            KEYWORD1
+ADC_ERROR               KEYWORD1
 
 
 ADC_0   			LITERAL1
 ADC_1   			LITERAL1
 ADC_NUM_ADCS        LITERAL1
+ADC_DUAL_ADCS       LITERAL1
+ADC_SINGLE_ADC      LITERAL1
 ADC_TEENSY_3_0  	LITERAL1
 ADC_TEENSY_3_1  	LITERAL1
 ADC_TEENSY_3_2  	LITERAL1
 ADC_TEENSY_3_5  	LITERAL1
 ADC_TEENSY_3_6  	LITERAL1
+ADC_TEENSY_4      	LITERAL1
+ADC_TEENSY_4_0     	LITERAL1
+ADC_TEENSY_4_1     	LITERAL1
 ADC_TEENSY_LC	    LITERAL1
+
 VERY_LOW_SPEED  	LITERAL1
 LOW_SPEED       	LITERAL1
 MED_SPEED       	LITERAL1
@@ -80,9 +85,10 @@ saveConfig								KEYWORD2
 calibrate								KEYWORD2
 recalibrate								KEYWORD2
 wait_for_cal							KEYWORD2
-isFull									KEYWORD2
-isEmpty									KEYWORD2
-write									KEYWORD2
-read									KEYWORD2
-start									KEYWORD2
-printError								KEYWORD2
+resetError                              KEYWORD2
+startTimer								KEYWORD2
+stopTimer       						KEYWORD2
+getTimerFrequency						KEYWORD2
+getStringADCError                       KEYWORD2
+getConversionEnumStr                    KEYWORD2
+getSamplingEnumStr                      KEYWORD2

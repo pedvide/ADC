@@ -21,8 +21,7 @@
 
 
 
-#include "ADC.h"
-#include "RingBuffer.h"
+#include <ADC.h>
 // and IntervalTimer
 #include <IntervalTimer.h>
 
@@ -40,8 +39,16 @@ ADC *adc = new ADC(); // adc object
 
 IntervalTimer timer0, timer1; // timers
 
-RingBuffer *buffer0 = new RingBuffer; // buffers to store the values
-RingBuffer *buffer1 = new RingBuffer;
+#define BUFFER_SIZE 500
+
+uint16_t buffer_0[BUFFER_SIZE];
+uint16_t buffer_0_count = 0xffff;
+uint32_t delta_time_0 = 0;
+uint16_t buffer_1[BUFFER_SIZE];
+uint16_t buffer_1_count = 0xffff;
+uint32_t delta_time_1 = 0;
+
+elapsedMillis timed_read_elapsed;
 
 int startTimerValue0 = 0, startTimerValue1 = 0;
 
@@ -62,27 +69,10 @@ void setup() {
     delay(1000);
 
     ///// ADC0 ////
-    // reference can be ADC_REFERENCE::REF_3V3, ADC_REFERENCE::REF_1V2 (not for Teensy LC) or ADC_REFERENCE::REF_EXT.
-    //adc->setReference(ADC_REFERENCE::REF_1V2, ADC_0); // change all 3.3 to 1.2 if you change the reference to 1V2
-
-    adc->setAveraging(16); // set number of averages
-    adc->setResolution(12); // set bits of resolution
-
-    // it can be any of the ADC_CONVERSION_SPEED enum: VERY_LOW_SPEED, LOW_SPEED, MED_SPEED, HIGH_SPEED_16BITS, HIGH_SPEED or VERY_HIGH_SPEED
-    // see the documentation for more information
-    // additionally the conversion speed can also be ADACK_2_4, ADACK_4_0, ADACK_5_2 and ADACK_6_2,
-    // where the numbers are the frequency of the ADC clock in MHz and are independent on the bus speed.
-    adc->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED); // change the conversion speed
-    // it can be any of the ADC_MED_SPEED enum: VERY_LOW_SPEED, LOW_SPEED, MED_SPEED, HIGH_SPEED or VERY_HIGH_SPEED
-    adc->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED); // change the sampling speed
-
-    // always call the compare functions after changing the resolution!
-    //adc->enableCompare(1.0/3.3*adc->getMaxValue(ADC_0), 0, ADC_0); // measurement will be ready if value < 1.0V
-    //adc->enableCompareRange(1.0*adc->getMaxValue(ADC_0)/3.3, 2.0*adc->getMaxValue(ADC_0)/3.3, 0, 1, ADC_0); // ready if value lies out of [1.0,2.0] V
-
-    // If you enable interrupts, notice that the isr will read the result, so that isComplete() will return false (most of the time)
-    //adc->enableInterrupts(ADC_0);
-
+    adc->adc0->setAveraging(16); // set number of averages
+    adc->adc0->setResolution(12); // set bits of resolution
+    adc->adc0->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED); // change the conversion speed
+    adc->adc0->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED); // change the sampling speed
 
     Serial.println("Starting Timers");
 
@@ -106,7 +96,7 @@ void setup() {
     // if you change the periods, make sure you don't go into a loop, with the timers always interrupting each other
     startTimerValue1 = timer1.begin(timer1_callback, period1);
 
-    adc->enableInterrupts(ADC_0);
+    adc->adc0->enableInterrupts(adc0_isr);
 
     Serial.println("Timers started");
 
@@ -125,16 +115,9 @@ void loop() {
             Serial.println("Timer1 setup failed");
     }
 
-    if(!buffer0->isEmpty()) { // read the values in the buffer
-        Serial.print("Read pin 0: ");
-        Serial.println(buffer0->read()*3.3/adc->getMaxValue());
-        //Serial.println("New value!");
-    }
-    if(!buffer1->isEmpty()) { // read the values in the buffer
-        Serial.print("Read pin 1: ");
-        Serial.println(buffer1->read()*3.3/adc->getMaxValue());
-        //Serial.println("New value!");
-    }
+    // See if we have a timed read test that finished.
+    if (delta_time_0) printTimedADCInfo(ADC_0, buffer_0, delta_time_0);
+    if (delta_time_1) printTimedADCInfo(ADC_0, buffer_1, delta_time_1);
 
     if (Serial.available()) {
         c = Serial.read();
@@ -155,6 +138,30 @@ void loop() {
     delayMicroseconds(readPeriod);
 }
 
+void printTimedADCInfo(uint8_t adc_num, uint16_t *buffer, uint32_t &delta_time) {
+  uint32_t min_value = 0xffff;
+  uint32_t max_value = 0;
+  uint32_t sum = 0;
+  for (int i = 0; i < BUFFER_SIZE; i++) {
+    if (buffer[i] < min_value) min_value = buffer[i];
+    if (buffer[i] > max_value) max_value = buffer[i];
+    sum += buffer[i];
+  }
+  float average_value = (float)sum / BUFFER_SIZE; // get an average...
+  float sum_delta_sq = 0;
+  for (int i = 0; i < BUFFER_SIZE; i++) {
+    int delta_from_center = (int)buffer[i] - average_value;
+    sum_delta_sq += delta_from_center * delta_from_center;
+  }
+  int rms = sqrt(sum_delta_sq / BUFFER_SIZE);
+  Serial.printf("ADC:%d delta time:%d freq:%d - min:%d max:%d avg:%d rms:%d\n", adc_num,
+                delta_time, (1000 * BUFFER_SIZE) / delta_time,
+                min_value, max_value, (int)average_value, rms);
+
+  delta_time = 0;
+
+}
+
 // This function will be called with the desired frequency
 // start the measurement
 // in my low-res oscilloscope this function seems to take 1.5-2 us.
@@ -162,7 +169,7 @@ void timer0_callback(void) {
 
     digitalWriteFast(ledPin+1, HIGH);
 
-    adc->startSingleRead(readPin0, ADC_0); // also: startSingleDifferential, analogSynchronizedRead, analogSynchronizedReadDifferential
+    adc->adc0->startSingleRead(readPin0); // also: startSingleDifferential, analogSynchronizedRead, analogSynchronizedReadDifferential
 
     digitalWriteFast(ledPin+1, LOW);
     //digitalWriteFast(ledPin+1, !digitalReadFast(ledPin+1));
@@ -175,7 +182,7 @@ void timer1_callback(void) {
 
     digitalWriteFast(ledPin+2, HIGH);
 
-    adc->startSingleRead(readPin1, ADC_0);
+    adc->adc0->startSingleRead(readPin1);
 
     digitalWriteFast(ledPin+2, LOW);
 
@@ -185,18 +192,28 @@ void timer1_callback(void) {
 // first: see which pin finished and then save the measurement into the correct buffer
 void adc0_isr() {
 
-    uint8_t pin = ADC::sc1a2channelADC0[ADC0_SC1A&ADC_SC1A_CHANNELS]; // the bits 0-4 of ADC0_SC1A have the channel
 
+#if defined(__IMXRT1062__)  // Teensy 4.0
+    uint8_t pin = ADC::sc1a2channelADC0[ADC1_HC0&0x1f]; // the bits 0-4 of ADC0_SC1A have the channel
+#else
+    uint8_t pin = ADC::sc1a2channelADC0[ADC0_SC1A&ADC_SC1A_CHANNELS]; // the bits 0-4 of ADC0_SC1A have the channel
+#endif
     // add value to correct buffer
     if(pin==readPin0) {
         digitalWriteFast(ledPin+3, HIGH);
-        buffer0->write(adc->readSingle());
+        uint16_t adc_val = adc->adc0->readSingle();
+        if (buffer_0_count < BUFFER_SIZE) {
+          buffer_0[buffer_0_count++] = adc_val;
+          if (buffer_0_count == BUFFER_SIZE) delta_time_0 = timed_read_elapsed;
+        }
         digitalWriteFast(ledPin+3, LOW);
+        
     } else if(pin==readPin1) {
         digitalWriteFast(ledPin+4, HIGH);
-        buffer1->write(adc->readSingle());
-        if(adc->adc0->isConverting()) {
-            digitalWriteFast(LED_BUILTIN, 1);
+        uint16_t adc_val = adc->adc0->readSingle();
+        if (buffer_1_count < BUFFER_SIZE) {
+          buffer_1[buffer_1_count++] = adc_val;
+          if (buffer_1_count == BUFFER_SIZE) delta_time_1 = timed_read_elapsed;
         }
         digitalWriteFast(ledPin+4, LOW);
     } else { // clear interrupt anyway
@@ -213,5 +230,9 @@ void adc0_isr() {
 
 
     //digitalWriteFast(ledPin+2, !digitalReadFast(ledPin+2));
+
+    #if defined(__IMXRT1062__)  // Teensy 4.0
+        asm("DSB");
+    #endif
 
 }
