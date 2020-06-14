@@ -103,7 +103,9 @@ const uint8_t ADC::channel2sc1aADC0[] = {
     // new version, gives directly the sc1a number. 0x1F=31 deactivates the ADC.
     7, 8, 12, 11, 6, 5, 15, 0, 13, 14, 1, 2, 31, 31, // 0-13, we treat them as A0-A13
     7, 8, 12, 11, 6, 5, 15, 0, 13, 14,               // 14-23 (A0-A9)
-    1, 2, 31, 31, 31, 31, 9, 10                      // A10-A17
+    1, 2, 31, 31,                                    // A10, A11, A12, A13
+    31, 31, 31, 31, 31, 31, 31, 31, 31, 31,          //
+    31, 31, 9, 10                                    // A14, A15, A16, A17
 };
 #endif // defined
 
@@ -154,7 +156,9 @@ const uint8_t ADC::channel2sc1aADC1[] = {
     // new version, gives directly the sc1a number. 0x1F=31 deactivates the ADC.
     7, 8, 12, 11, 6, 5, 15, 0, 13, 14, 31, 31, 3, 4, // 0-13, we treat them as A0-A13
     7, 8, 12, 11, 6, 5, 15, 0, 13, 14,               // 14-23 (A0-A9)
-    31, 31, 3, 4, 1, 2, 9, 10                        // A10-A17
+    31, 31, 3, 4,                                    // A10, A11, A12, A13
+    31, 31, 31, 31, 31, 31, 31, 31, 31, 31,          //
+    1, 2, 9, 10                                      // A14, A15, A16, A17
 };
 #endif
 
