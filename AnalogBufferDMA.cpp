@@ -23,9 +23,9 @@
    SOFTWARE.
 */
 
-#ifdef ADC_USE_DMA
-
 #include "AnalogBufferDMA.h"
+
+#ifdef ADC_USE_DMA
 
 //#define DEBUG_DUMP_DATA
 // Global objects
