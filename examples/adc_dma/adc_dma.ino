@@ -10,11 +10,10 @@
     For the RMS it keeps the average from the previous set of data.
 */
 
-#ifdef ADC_USE_DMA
-
 #include <ADC.h>
 #include <AnalogBufferDMA.h>
 
+#ifdef ADC_USE_DMA
 
 // This version uses both ADC1 and ADC2
 #if defined(KINETISL)
