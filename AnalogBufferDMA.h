@@ -23,13 +23,15 @@
  * SOFTWARE.
  */
 
-#ifdef ADC_USE_DMA
 
 #ifndef ANALOGBUFFERDMA_H
 #define ANALOGBUFFERDMA_H
 
 #include "DMAChannel.h"
 #include "ADC.h"
+
+#ifdef ADC_USE_DMA
+
 // lets wrap some of our Dmasettings stuff into helper class
 class AnalogBufferDMA
 {
@@ -76,6 +78,6 @@ protected:
     bool _stop_on_completion = false;
 };
 
+#endif // ADC_USE_DMA
 #endif
 
-#endif // ADC_USE_DMA
