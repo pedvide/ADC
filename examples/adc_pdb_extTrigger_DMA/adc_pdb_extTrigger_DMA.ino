@@ -1,13 +1,12 @@
-// teensy adc_pdb_extTrigger_DMA use PDB counter (pin 11) to clock ADC A0
+// Teensy external triggered ADC with DMA
+// adc_pdb_extTrigger_DMA use PDB counter (pin 11) to clock ADC A0
 // jumper PWM 23 to pin 11 for clock source or use PDB timer
 // https://forum.pjrc.com/threads/24492-Using-the-PDB-on-Teensy-3?p=128046&viewfull=1#post128046
 // manitou 12-20-2016 04:03 PM
 // ------------------------------------
 // Teensy 3.2
 // ------------------------------------
-// PDB initiated transfer rates approximates
-// These numbers do not change much if interrupt 
-// services are enabled or disabled or DMA is used
+// Transfer rates:
 // Averaging 0 ------------------------
 // 16 bit 710kS/s, VERY_HIGH, VERY_HIGH
 // 12 bit 830kS/s, VERY_HIGH, VERY_HIGH

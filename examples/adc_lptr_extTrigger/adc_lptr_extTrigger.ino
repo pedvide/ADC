@@ -1,13 +1,13 @@
-// teensy adclptmr  use LPTMR0 counter (pin 13) to clock ADC A0
-// jumper PWM 23 to pin 13 for clock source or use PDB timer
+// Teensy external ADC clock example 
+// Using LPTMR hardwre module
+// adclptmr uses LPTMR0 counter (pin 13) to clock ADC A0
+// jumper PWM pin 23 to pin 13 for clock source or use PDB timer
 // https://forum.pjrc.com/threads/40782-LPTMR-on-the-Teensy-3-1-3-2-3-5-3-6
 
 // ------------------------------------
 // Teensy 3.2
 // ------------------------------------
-// LPTMR initiated transfer rates approximates
-// These numbers do not change much if interrupt 
-// services are enabled or disabled or DMA is used
+// Transfer rates
 // Averaging 0 ------------------------
 // 16 bit 735kS/s, VERY_HIGH, VERY_HIGH
 // 12 bit 870kS/s, VERY_HIGH, VERY_HIGH
@@ -30,9 +30,9 @@ ADC *adc = new ADC();
 
 volatile uint32_t lptmrticks, adcticks, adcval;
 
-void lptmr_isr(void)                                                  //
+void lptmr_isr(void)
 {
-  LPTMR0_CSR |=  LPTMR_CSR_TCF;                                       // clear
+  LPTMR0_CSR |=  LPTMR_CSR_TCF; // clear
   lptmrticks++;
 }
 
@@ -67,11 +67,11 @@ elapsedMicros sinceStart_micros;
 void loop() {
   for (long Fadc = 500000; Fadc < 2000000; Fadc = Fadc+5000) {
     adc->adc0->startExtTrigLPTMR(true);              // enable external LPTMR trigger and its interrupt
-    adc->adc0->startSingleRead(PIN_ADC); // call this to setup everything before the pdb starts, differential is also possible
+    adc->adc0->startSingleRead(PIN_ADC);             // call this to setup everything before the pdb starts, differential is also possible
     adc->enableInterrupts(ADC_0);
-    analogWriteResolution(4);
-    analogWriteFrequency(23,long(Fadc*2));                               // Create clock on pin13
-    analogWrite(23, 8);                                                  // 50% dutycycle clock
+    analogWriteResolution(4);                        // Setup trigger clock
+    analogWriteFrequency(23,long(Fadc*2));           // Create clock on pin13
+    analogWrite(23, 8);                              // 50% dutycycle clock
     sinceStart_micros = 0; 
     adcticks = 0;
     lptmrticks = 0;
