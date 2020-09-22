@@ -1589,10 +1589,10 @@ void ADC_Module::stopPDB()
     if (!(SIM_SCGC6 & SIM_SCGC6_PDB))
     { // if PDB clock wasn't on, return
         setSoftwareTrigger();
-        return false;
+        return;
     }
 
-    if (enablePDBisr) { NVIC_DISABLE_IRQ(IRQ_PDB); }
+    // if (enablePDBisr) { NVIC_DISABLE_IRQ(IRQ_PDB); }
 
     // https://forum.pjrc.com/threads/25532-ADC-library-update-now-with-support-for-Teensy-3-1/
     // KurtE on 04-05-2018 12:06 PM
@@ -1600,8 +1600,6 @@ void ADC_Module::stopPDB()
 
     PDB0_SC = 0;
     setSoftwareTrigger();
-
-    return true;
 
 }
 
@@ -1751,7 +1749,7 @@ uint32_t ADC_Module::getQuadTimerFrequency()
 //}
 // UU 2018-2020
 
-#if ADC_USE_LPTMR
+#ifdef ADC_USE_LPTMR
 void ADC_Module::startExtTrigLPTMR(bool enableLPTMRisr) {
 
     if (!(SIM_SCGC5 & SIM_SCGC5_LPTIMER)) {         // setup LPTMR if not in use
@@ -1815,7 +1813,7 @@ void ADC_Module::stopExtTrigLPTMR(bool enableLPTMRisr) {
 //}
 // UU 2018-2020
 
-#if ADC_USE_PDB
+#ifdef ADC_USE_PDB
 
 // frequency in Hz
 void ADC_Module::startExtTrigPDB(bool enablePDBisr) {

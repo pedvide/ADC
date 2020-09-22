@@ -534,14 +534,12 @@ public:
     *   See the example adc_pdb.ino.
     *   \param freq is the frequency of the ADC conversion, it can't be lower that 1 Hz
     */
-    bool startPDB(uint32_t freq, bool enablePDBisr);
-    bool startPDB(uint32_t freq){ return startPDB(freq, false); }
+    void startPDB(uint32_t freq);
 
     //! Stop the default timer (PDB)
     void stopTimer() __attribute__((always_inline)) { stopPDB(); }
     //! Stop the PDB
-    bool stopPDB(bool enablePDBisr);
-    bool stopPDB() { return stopPDB(false); }
+    void stopPDB();
 
     //! Return the default timer's (PDB) frequency
     /** The default timer in this board is the PDB, you can also call it directly with getPDBFrequency().
@@ -589,7 +587,7 @@ public:
 #endif
 
     //////////// LPTMR  Ext Trig////////////////
-#if ADC_USE_LPTMR
+#ifdef ADC_USE_LPTMR
     //! Start external pin 13 LPTMR triggering the ADC
     /** Call startSingleRead or startSingleDifferential on the pin that you want to measure after calling this function.
     *   See the example adc_lptmr.ino.
@@ -602,7 +600,7 @@ public:
 #endif
 
     //////////// PDB Ext Trig ////////////////
-#if ADC_USE_PDB
+#ifdef ADC_USE_PDB
     //! Start external pin 11 PDB triggering the ADC
     /** Call startSingleRead or startSingleDifferential on the pin that you want to measure after calling this function.
     *   See the example adc_ext_pdb.ino.
@@ -612,7 +610,7 @@ public:
     //! Stop the LPTMR
     void stopExtTrigPDB(bool enablePDBisr);
     void stopExtTrigPDB() { stopExtTrigPDB(false); }
- #endif
+#endif
 
     //////// OTHER STUFF ///////////
 

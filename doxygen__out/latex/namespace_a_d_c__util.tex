@@ -1,0 +1,137 @@
+\hypertarget{namespace_a_d_c__util}{}\doxysection{A\+D\+C\+\_\+util Namespace Reference}
+\label{namespace_a_d_c__util}\index{ADC\_util@{ADC\_util}}
+
+
+Util functions for ino sketches and tests.  
+
+
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+const char $\ast$ \mbox{\hyperlink{namespace_a_d_c__util_ab6104e4e363b1fecb3b9158ee8bee37b}{get\+Conversion\+Enum\+Str}} (\mbox{\hyperlink{namespace_a_d_c__settings_aab853fc1fcb1992fd5d51408adf7688e}{A\+D\+C\+\_\+\+C\+O\+N\+V\+E\+R\+S\+I\+O\+N\+\_\+\+S\+P\+E\+ED}} conv\+\_\+speed)
+\begin{DoxyCompactList}\small\item\em Convert the conversion speed code to text. \end{DoxyCompactList}\item 
+const char $\ast$ \mbox{\hyperlink{namespace_a_d_c__util_ab07f137e89f16be8bfb6e05c8bba8905}{get\+Sampling\+Enum\+Str}} (\mbox{\hyperlink{namespace_a_d_c__settings_af0d80a1aae7288f77b13f0e01d9da0d3}{A\+D\+C\+\_\+\+S\+A\+M\+P\+L\+I\+N\+G\+\_\+\+S\+P\+E\+ED}} samp\+\_\+speed)
+\begin{DoxyCompactList}\small\item\em Convert the sampling speed code to text. \end{DoxyCompactList}\item 
+const char $\ast$ \mbox{\hyperlink{namespace_a_d_c__util_a0414ae3ca07a90b40e0515956ca0e49d}{get\+String\+A\+D\+C\+Error}} (A\+D\+C\+\_\+\+E\+R\+R\+OR fail\+\_\+flag)
+\begin{DoxyCompactList}\small\item\em Converts the error code to text. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespace_a_d_c__util_a307171b253b7da9afe30eb6c2588d34b}\label{namespace_a_d_c__util_a307171b253b7da9afe30eb6c2588d34b}} 
+const uint8\+\_\+t \mbox{\hyperlink{namespace_a_d_c__util_a307171b253b7da9afe30eb6c2588d34b}{averages\+\_\+list}} \mbox{[}$\,$\mbox{]} = \{1, 4, 8, 16, 32\}
+\begin{DoxyCompactList}\small\item\em List of possible averages. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{namespace_a_d_c__util_a1f7a8c6dcdadcb5dd43a77de9a380bb0}\label{namespace_a_d_c__util_a1f7a8c6dcdadcb5dd43a77de9a380bb0}} 
+const uint8\+\_\+t \mbox{\hyperlink{namespace_a_d_c__util_a1f7a8c6dcdadcb5dd43a77de9a380bb0}{resolutions\+\_\+list}} \mbox{[}$\,$\mbox{]} = \{8, 10, 12, 16\}
+\begin{DoxyCompactList}\small\item\em List of possible resolutions. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{namespace_a_d_c__settings_aab853fc1fcb1992fd5d51408adf7688e}{A\+D\+C\+\_\+\+C\+O\+N\+V\+E\+R\+S\+I\+O\+N\+\_\+\+S\+P\+E\+ED}} \mbox{\hyperlink{namespace_a_d_c__util_afb6703ab0983fe02a0c5de9d771c0757}{conversion\+\_\+speed\+\_\+list}} \mbox{[}$\,$\mbox{]}
+\begin{DoxyCompactList}\small\item\em List of possible conversion speeds. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{namespace_a_d_c__settings_af0d80a1aae7288f77b13f0e01d9da0d3}{A\+D\+C\+\_\+\+S\+A\+M\+P\+L\+I\+N\+G\+\_\+\+S\+P\+E\+ED}} \mbox{\hyperlink{namespace_a_d_c__util_ad813ee6b28ef93d8bc7d0c3bf62b967b}{sampling\+\_\+speed\+\_\+list}} \mbox{[}$\,$\mbox{]}
+\begin{DoxyCompactList}\small\item\em List of possible sampling speeds. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Util functions for ino sketches and tests. 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespace_a_d_c__util_ab6104e4e363b1fecb3b9158ee8bee37b}\label{namespace_a_d_c__util_ab6104e4e363b1fecb3b9158ee8bee37b}} 
+\index{ADC\_util@{ADC\_util}!getConversionEnumStr@{getConversionEnumStr}}
+\index{getConversionEnumStr@{getConversionEnumStr}!ADC\_util@{ADC\_util}}
+\doxysubsubsection{\texorpdfstring{getConversionEnumStr()}{getConversionEnumStr()}}
+{\footnotesize\ttfamily const char$\ast$ A\+D\+C\+\_\+util\+::get\+Conversion\+Enum\+Str (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_a_d_c__settings_aab853fc1fcb1992fd5d51408adf7688e}{A\+D\+C\+\_\+\+C\+O\+N\+V\+E\+R\+S\+I\+O\+N\+\_\+\+S\+P\+E\+ED}}}]{conv\+\_\+speed }\end{DoxyParamCaption})}
+
+
+
+Convert the conversion speed code to text. 
+
+Convert the conversion speed code to text 
+\begin{DoxyParams}{Parameters}
+{\em conv\+\_\+speed} & The conversion speed code \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the corresponding text 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespace_a_d_c__util_ab07f137e89f16be8bfb6e05c8bba8905}\label{namespace_a_d_c__util_ab07f137e89f16be8bfb6e05c8bba8905}} 
+\index{ADC\_util@{ADC\_util}!getSamplingEnumStr@{getSamplingEnumStr}}
+\index{getSamplingEnumStr@{getSamplingEnumStr}!ADC\_util@{ADC\_util}}
+\doxysubsubsection{\texorpdfstring{getSamplingEnumStr()}{getSamplingEnumStr()}}
+{\footnotesize\ttfamily const char$\ast$ A\+D\+C\+\_\+util\+::get\+Sampling\+Enum\+Str (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_a_d_c__settings_af0d80a1aae7288f77b13f0e01d9da0d3}{A\+D\+C\+\_\+\+S\+A\+M\+P\+L\+I\+N\+G\+\_\+\+S\+P\+E\+ED}}}]{samp\+\_\+speed }\end{DoxyParamCaption})}
+
+
+
+Convert the sampling speed code to text. 
+
+Convert the sampling speed code to text 
+\begin{DoxyParams}{Parameters}
+{\em samp\+\_\+speed} & The sampling speed code \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the corresponding text 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespace_a_d_c__util_a0414ae3ca07a90b40e0515956ca0e49d}\label{namespace_a_d_c__util_a0414ae3ca07a90b40e0515956ca0e49d}} 
+\index{ADC\_util@{ADC\_util}!getStringADCError@{getStringADCError}}
+\index{getStringADCError@{getStringADCError}!ADC\_util@{ADC\_util}}
+\doxysubsubsection{\texorpdfstring{getStringADCError()}{getStringADCError()}}
+{\footnotesize\ttfamily const char$\ast$ A\+D\+C\+\_\+util\+::get\+String\+A\+D\+C\+Error (\begin{DoxyParamCaption}\item[{A\+D\+C\+\_\+\+E\+R\+R\+OR}]{fail\+\_\+flag }\end{DoxyParamCaption})}
+
+
+
+Converts the error code to text. 
+
+Converts the error code to text. 
+\begin{DoxyParams}{Parameters}
+{\em fail\+\_\+flag} & The error code \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the corresponding text 
+\end{DoxyReturn}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespace_a_d_c__util_afb6703ab0983fe02a0c5de9d771c0757}\label{namespace_a_d_c__util_afb6703ab0983fe02a0c5de9d771c0757}} 
+\index{ADC\_util@{ADC\_util}!conversion\_speed\_list@{conversion\_speed\_list}}
+\index{conversion\_speed\_list@{conversion\_speed\_list}!ADC\_util@{ADC\_util}}
+\doxysubsubsection{\texorpdfstring{conversion\_speed\_list}{conversion\_speed\_list}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{namespace_a_d_c__settings_aab853fc1fcb1992fd5d51408adf7688e}{A\+D\+C\+\_\+\+C\+O\+N\+V\+E\+R\+S\+I\+O\+N\+\_\+\+S\+P\+E\+ED}} A\+D\+C\+\_\+util\+::conversion\+\_\+speed\+\_\+list\mbox{[}$\,$\mbox{]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{= \{}
+\DoxyCodeLine{      ADC\_CONVERSION\_SPEED::VERY\_LOW\_SPEED,}
+\DoxyCodeLine{      ADC\_CONVERSION\_SPEED::LOW\_SPEED,}
+\DoxyCodeLine{      ADC\_CONVERSION\_SPEED::MED\_SPEED,}
+\DoxyCodeLine{      ADC\_CONVERSION\_SPEED::HIGH\_SPEED,}
+\DoxyCodeLine{      ADC\_CONVERSION\_SPEED::HIGH\_SPEED\_16BITS,}
+\DoxyCodeLine{      ADC\_CONVERSION\_SPEED::VERY\_HIGH\_SPEED,}
+\DoxyCodeLine{      ADC\_CONVERSION\_SPEED::ADACK\_2\_4,}
+\DoxyCodeLine{      ADC\_CONVERSION\_SPEED::ADACK\_4\_0,}
+\DoxyCodeLine{      ADC\_CONVERSION\_SPEED::ADACK\_5\_2,}
+\DoxyCodeLine{      ADC\_CONVERSION\_SPEED::ADACK\_6\_2\}}
+
+\end{DoxyCode}
+
+
+List of possible conversion speeds. 
+
+\mbox{\Hypertarget{namespace_a_d_c__util_ad813ee6b28ef93d8bc7d0c3bf62b967b}\label{namespace_a_d_c__util_ad813ee6b28ef93d8bc7d0c3bf62b967b}} 
+\index{ADC\_util@{ADC\_util}!sampling\_speed\_list@{sampling\_speed\_list}}
+\index{sampling\_speed\_list@{sampling\_speed\_list}!ADC\_util@{ADC\_util}}
+\doxysubsubsection{\texorpdfstring{sampling\_speed\_list}{sampling\_speed\_list}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{namespace_a_d_c__settings_af0d80a1aae7288f77b13f0e01d9da0d3}{A\+D\+C\+\_\+\+S\+A\+M\+P\+L\+I\+N\+G\+\_\+\+S\+P\+E\+ED}} A\+D\+C\+\_\+util\+::sampling\+\_\+speed\+\_\+list\mbox{[}$\,$\mbox{]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{= \{}
+\DoxyCodeLine{      ADC\_SAMPLING\_SPEED::VERY\_LOW\_SPEED,}
+\DoxyCodeLine{      ADC\_SAMPLING\_SPEED::LOW\_SPEED,}
+\DoxyCodeLine{      ADC\_SAMPLING\_SPEED::MED\_SPEED,}
+\DoxyCodeLine{      ADC\_SAMPLING\_SPEED::HIGH\_SPEED,}
+\DoxyCodeLine{      ADC\_SAMPLING\_SPEED::VERY\_HIGH\_SPEED\}}
+
+\end{DoxyCode}
+
+
+List of possible sampling speeds. 
+

@@ -1,0 +1,561 @@
+\hypertarget{class_a_d_c}{}\doxysection{A\+DC Class Reference}
+\label{class_a_d_c}\index{ADC@{ADC}}
+
+
+{\ttfamily \#include $<$A\+D\+C.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_a_d_c_a60b6e21403b1f30984f63832c0562960}{A\+DC}} ()
+\item 
+\mbox{\hyperlink{class_a_d_c_a9fd694316f0488501a9e0e289860bc23}{\+\_\+\+\_\+attribute\+\_\+\+\_\+}} ((error(\char`\"{}Use \mbox{\hyperlink{class_a_d_c_a03e1c7f64c02dec1976810a0a4967cf2}{adc}}-\/$>$adcX-\/$>$set\+Reference instead\char`\"{}))) void set\+Reference(A\+D\+C\+\_\+\+R\+E\+F\+E\+R\+E\+N\+CE type
+\begin{DoxyCompactList}\small\item\em Set the voltage reference you prefer, default is vcc. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_a_d_c_ac684c7a650cd531945898268650fe972}{\+\_\+\+\_\+attribute\+\_\+\+\_\+}} ((error(\char`\"{}Use \mbox{\hyperlink{class_a_d_c_a03e1c7f64c02dec1976810a0a4967cf2}{adc}}-\/$>$adcX-\/$>$set\+Resolution instead\char`\"{}))) void set\+Resolution(uint8\+\_\+t bits
+\begin{DoxyCompactList}\small\item\em Change the resolution of the measurement. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_a_d_c_a23e3ab8d5bd526d6dc48b9a604ed8f98}{\+\_\+\+\_\+attribute\+\_\+\+\_\+}} ((error(\char`\"{}Use \mbox{\hyperlink{class_a_d_c_a03e1c7f64c02dec1976810a0a4967cf2}{adc}}-\/$>$adcX-\/$>$get\+Resolution instead\char`\"{}))) uint8\+\_\+t get\+Resolution(int8\+\_\+t adc\+\_\+num
+\begin{DoxyCompactList}\small\item\em Returns the resolution of the \mbox{\hyperlink{class_a_d_c___module}{A\+D\+C\+\_\+\+Module}}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_a_d_c_a0d456481cdf5a2990b8e66915d7bdfd6}{\+\_\+\+\_\+attribute\+\_\+\+\_\+}} ((error(\char`\"{}Use \mbox{\hyperlink{class_a_d_c_a03e1c7f64c02dec1976810a0a4967cf2}{adc}}-\/$>$adcX-\/$>$get\+Max\+Value instead\char`\"{}))) uint32\+\_\+t get\+Max\+Value(int8\+\_\+t adc\+\_\+num
+\begin{DoxyCompactList}\small\item\em Returns the maximum value for a measurement\+: 2$^\wedge$res-\/1. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_a_d_c_abd5e55e03894b9327c2edefff68101db}{\+\_\+\+\_\+attribute\+\_\+\+\_\+}} ((error(\char`\"{}Use \mbox{\hyperlink{class_a_d_c_a03e1c7f64c02dec1976810a0a4967cf2}{adc}}-\/$>$adcX-\/$>$set\+Conversion\+Speed instead\char`\"{}))) void set\+Conversion\+Speed(\mbox{\hyperlink{namespace_a_d_c__settings_aab853fc1fcb1992fd5d51408adf7688e}{A\+D\+C\+\_\+\+C\+O\+N\+V\+E\+R\+S\+I\+O\+N\+\_\+\+S\+P\+E\+ED}} speed
+\begin{DoxyCompactList}\small\item\em Sets the conversion speed (changes the \mbox{\hyperlink{class_a_d_c}{A\+DC}} clock, A\+D\+CK) \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_a_d_c_aeb66d9e20f089336d2ffea8a68a28277}{\+\_\+\+\_\+attribute\+\_\+\+\_\+}} ((error(\char`\"{}Use \mbox{\hyperlink{class_a_d_c_a03e1c7f64c02dec1976810a0a4967cf2}{adc}}-\/$>$adcX-\/$>$set\+Sampling\+Speed instead\char`\"{}))) void set\+Sampling\+Speed(\mbox{\hyperlink{namespace_a_d_c__settings_af0d80a1aae7288f77b13f0e01d9da0d3}{A\+D\+C\+\_\+\+S\+A\+M\+P\+L\+I\+N\+G\+\_\+\+S\+P\+E\+ED}} speed
+\begin{DoxyCompactList}\small\item\em Sets the sampling speed. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_a_d_c_a35003f61d22e747cdb3aa2a32970428c}{\+\_\+\+\_\+attribute\+\_\+\+\_\+}} ((error(\char`\"{}Use \mbox{\hyperlink{class_a_d_c_a03e1c7f64c02dec1976810a0a4967cf2}{adc}}-\/$>$adcX-\/$>$set\+Averaging instead\char`\"{}))) void set\+Averaging(uint8\+\_\+t num
+\begin{DoxyCompactList}\small\item\em Set the number of averages. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_a_d_c_ad816352221bf9c10b258c7cdf570a514}{set\+Hardware\+Trigger}} (int8\+\_\+t adc\+\_\+num=-\/1)
+\begin{DoxyCompactList}\small\item\em Enable Hardwaretrigger. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_a_d_c_aeba2399df78ffa0514f4eb4a93f025aa}{set\+Software\+Trigger}} (int8\+\_\+t adc\+\_\+num=-\/1)
+\begin{DoxyCompactList}\small\item\em Enable Software\+Trigger. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_a_d_c_a11a3caa3c0b88516c324103a4a869504}{\+\_\+\+\_\+attribute\+\_\+\+\_\+}} ((error(\char`\"{}Use \mbox{\hyperlink{class_a_d_c_a03e1c7f64c02dec1976810a0a4967cf2}{adc}}-\/$>$adcX-\/$>$enable\+Interrupts instead\char`\"{}))) void enable\+Interrupts(void($\ast$isr)(void)
+\begin{DoxyCompactList}\small\item\em Enable interrupts. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_a_d_c_acaa5a6782ea7d15ae1ce3175f2bd625f}{\+\_\+\+\_\+attribute\+\_\+\+\_\+}} ((error(\char`\"{}Use \mbox{\hyperlink{class_a_d_c_a03e1c7f64c02dec1976810a0a4967cf2}{adc}}-\/$>$adcX-\/$>$disable\+Interrupts instead\char`\"{}))) void disable\+Interrupts(int8\+\_\+t adc\+\_\+num
+\begin{DoxyCompactList}\small\item\em Disable interrupts. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_a_d_c_ab56bb4f0a185a272d5ebb5e7d761a5a9}{\+\_\+\+\_\+attribute\+\_\+\+\_\+}} ((error(\char`\"{}Use \mbox{\hyperlink{class_a_d_c_a03e1c7f64c02dec1976810a0a4967cf2}{adc}}-\/$>$adcX-\/$>$enable\+Compare instead\char`\"{}))) void enable\+Compare(int16\+\_\+t comp\+Value
+\begin{DoxyCompactList}\small\item\em Enable the compare function to a single value. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_a_d_c_ad0042d813ac8b2a726304e88939a2db7}{\+\_\+\+\_\+attribute\+\_\+\+\_\+}} ((error(\char`\"{}Use \mbox{\hyperlink{class_a_d_c_a03e1c7f64c02dec1976810a0a4967cf2}{adc}}-\/$>$adcX-\/$>$enable\+Compare\+Range instead\char`\"{}))) void enable\+Compare\+Range(int16\+\_\+t lower\+Limit
+\begin{DoxyCompactList}\small\item\em Enable the compare function to a range. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_a_d_c_a0bfc9e36bba679a2e4755441db69fb46}{\+\_\+\+\_\+attribute\+\_\+\+\_\+}} ((error(\char`\"{}Use \mbox{\hyperlink{class_a_d_c_a03e1c7f64c02dec1976810a0a4967cf2}{adc}}-\/$>$adcX-\/$>$disable\+Compare instead\char`\"{}))) void disable\+Compare(int8\+\_\+t adc\+\_\+num
+\begin{DoxyCompactList}\small\item\em Disable the compare function. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_a_d_c_ad51488eb906bf3d8643f4884128f6c44}{\+\_\+\+\_\+attribute\+\_\+\+\_\+}} ((error(\char`\"{}Use \mbox{\hyperlink{class_a_d_c_a03e1c7f64c02dec1976810a0a4967cf2}{adc}}-\/$>$adcX-\/$>$is\+Converting instead\char`\"{}))) bool is\+Converting(int8\+\_\+t adc\+\_\+num
+\begin{DoxyCompactList}\small\item\em Is the \mbox{\hyperlink{class_a_d_c}{A\+DC}} converting at the moment? \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_a_d_c_a0be91aeaed16766afb869bca991526e4}{\+\_\+\+\_\+attribute\+\_\+\+\_\+}} ((error(\char`\"{}Use \mbox{\hyperlink{class_a_d_c_a03e1c7f64c02dec1976810a0a4967cf2}{adc}}-\/$>$adcX-\/$>$is\+Complete instead\char`\"{}))) bool is\+Complete(int8\+\_\+t adc\+\_\+num
+\begin{DoxyCompactList}\small\item\em Is an \mbox{\hyperlink{class_a_d_c}{A\+DC}} conversion ready? \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_a_d_c_adbaf0665d9dfbdeffee2890f97508879}{\+\_\+\+\_\+attribute\+\_\+\+\_\+}} ((error(\char`\"{}Use \mbox{\hyperlink{class_a_d_c_a03e1c7f64c02dec1976810a0a4967cf2}{adc}}-\/$>$adcX-\/$>$is\+Continuous instead\char`\"{}))) bool is\+Continuous(int8\+\_\+t adc\+\_\+num
+\begin{DoxyCompactList}\small\item\em Is the \mbox{\hyperlink{class_a_d_c}{A\+DC}} in continuous mode? \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_a_d_c_aaf6079870b115d8b029d3613d44091dd}{analog\+Read}} (uint8\+\_\+t pin, int8\+\_\+t adc\+\_\+num=-\/1)
+\begin{DoxyCompactList}\small\item\em Returns the analog value of the pin. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_a_d_c_a17c4eedd3b304f64139c4bb25e156c91}{analog\+Read}} (A\+D\+C\+\_\+\+I\+N\+T\+E\+R\+N\+A\+L\+\_\+\+S\+O\+U\+R\+CE pin, int8\+\_\+t adc\+\_\+num=-\/1) \mbox{\hyperlink{class_a_d_c_a9fd694316f0488501a9e0e289860bc23}{\+\_\+\+\_\+attribute\+\_\+\+\_\+}}((always\+\_\+inline))
+\begin{DoxyCompactList}\small\item\em Returns the analog value of the special internal source, such as the temperature sensor. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_a_d_c_a113479488fae5f5407f884dd95fbec72}{start\+Single\+Read}} (uint8\+\_\+t pin, int8\+\_\+t adc\+\_\+num=-\/1)
+\begin{DoxyCompactList}\small\item\em Starts an analog measurement on the pin and enables interrupts. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_a_d_c_aee7423bfcbb03465bb0bd1e3c6474452}{read\+Single}} (int8\+\_\+t adc\+\_\+num=-\/1)
+\begin{DoxyCompactList}\small\item\em Reads the analog value of a single conversion. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_a_d_c_ad592f87ec644457b5056ae41c645ac0a}{start\+Continuous}} (uint8\+\_\+t pin, int8\+\_\+t adc\+\_\+num=-\/1)
+\begin{DoxyCompactList}\small\item\em Starts continuous conversion on the pin. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_a_d_c_a749efc928425a1eea18341ccfafd1819}{analog\+Read\+Continuous}} (int8\+\_\+t adc\+\_\+num=-\/1)
+\begin{DoxyCompactList}\small\item\em Reads the analog value of a continuous conversion. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_a_d_c_a436e52cf82ca735f636899de670a2f0c}{stop\+Continuous}} (int8\+\_\+t adc\+\_\+num=-\/1)
+\begin{DoxyCompactList}\small\item\em Stops continuous conversion. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_a_d_c_aa65014de31051e06a469982ca286496b}{reset\+Error}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_a_d_c_a0d5b4dd16bbb03082daeeaadafec2474}\label{class_a_d_c_a0d5b4dd16bbb03082daeeaadafec2474}} 
+\mbox{\hyperlink{class_a_d_c___module}{A\+D\+C\+\_\+\+Module}} $\ast$const \mbox{\hyperlink{class_a_d_c_a0d5b4dd16bbb03082daeeaadafec2474}{adc0}} = \&adc0\+\_\+obj
+\begin{DoxyCompactList}\small\item\em Object to control the A\+D\+C0. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_a_d_c_a03e1c7f64c02dec1976810a0a4967cf2}\label{class_a_d_c_a03e1c7f64c02dec1976810a0a4967cf2}} 
+\mbox{\hyperlink{class_a_d_c___module}{A\+D\+C\+\_\+\+Module}} $\ast$const \mbox{\hyperlink{class_a_d_c_a03e1c7f64c02dec1976810a0a4967cf2}{adc}} \mbox{[}A\+D\+C\+\_\+\+N\+U\+M\+\_\+\+A\+D\+CS\mbox{]} = \{\mbox{\hyperlink{class_a_d_c_a0d5b4dd16bbb03082daeeaadafec2474}{adc0}}, adc1\}
+\begin{DoxyCompactList}\small\item\em Array with the \mbox{\hyperlink{class_a_d_c}{A\+DC}} Modules. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_a_d_c_ad466a843d43d5ed4decc8d0c1499d220}\label{class_a_d_c_ad466a843d43d5ed4decc8d0c1499d220}} 
+int8\+\_\+t {\bfseries adc\+\_\+num} = -\/1)
+\item 
+\mbox{\Hypertarget{class_a_d_c_ab1cbac7b7585eddbd0faf86e1faccafc}\label{class_a_d_c_ab1cbac7b7585eddbd0faf86e1faccafc}} 
+uint8\+\_\+t {\bfseries priority} = 255
+\item 
+\mbox{\Hypertarget{class_a_d_c_a55d07dcc7b3161cf35a69eb4b71d33b4}\label{class_a_d_c_a55d07dcc7b3161cf35a69eb4b71d33b4}} 
+uint8\+\_\+t int8\+\_\+t {\bfseries adc\+\_\+num} = -\/1)
+\item 
+\mbox{\Hypertarget{class_a_d_c_a713d3c9bc0aaed78393d15f3336175ee}\label{class_a_d_c_a713d3c9bc0aaed78393d15f3336175ee}} 
+bool {\bfseries greater\+Than}
+\item 
+\mbox{\Hypertarget{class_a_d_c_a3f6d1eeb7a0f069facdeb64fdccfe9a9}\label{class_a_d_c_a3f6d1eeb7a0f069facdeb64fdccfe9a9}} 
+bool int8\+\_\+t {\bfseries adc\+\_\+num} = -\/1)
+\item 
+\mbox{\Hypertarget{class_a_d_c_ab8b1e7c021f2bfd3ff247c6701f39930}\label{class_a_d_c_ab8b1e7c021f2bfd3ff247c6701f39930}} 
+int16\+\_\+t {\bfseries upper\+Limit}
+\item 
+\mbox{\Hypertarget{class_a_d_c_aeff7a7741106c80cad118b978385473f}\label{class_a_d_c_aeff7a7741106c80cad118b978385473f}} 
+int16\+\_\+t bool {\bfseries inside\+Range}
+\item 
+\mbox{\Hypertarget{class_a_d_c_abfa918929d70f18cabf2b732c224b9c6}\label{class_a_d_c_abfa918929d70f18cabf2b732c224b9c6}} 
+int16\+\_\+t bool bool {\bfseries inclusive}
+\item 
+\mbox{\Hypertarget{class_a_d_c_a7810787e10e1f1ab1073f775d0f8ad1e}\label{class_a_d_c_a7810787e10e1f1ab1073f775d0f8ad1e}} 
+int16\+\_\+t bool bool int8\+\_\+t {\bfseries adc\+\_\+num} = -\/1)
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_a_d_c_ae873ea32d672d2d3ea1549fa0ec50f97}\label{class_a_d_c_ae873ea32d672d2d3ea1549fa0ec50f97}} 
+static const uint8\+\_\+t \mbox{\hyperlink{class_a_d_c_ae873ea32d672d2d3ea1549fa0ec50f97}{channel2sc1a\+A\+D\+C0}} \mbox{[}A\+D\+C\+\_\+\+M\+A\+X\+\_\+\+P\+IN+1\mbox{]}
+\begin{DoxyCompactList}\small\item\em Translate pin number to S\+C1A nomenclature. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_a_d_c_a4377c680975fe754de24b8f8617042de}\label{class_a_d_c_a4377c680975fe754de24b8f8617042de}} 
+static const uint8\+\_\+t \mbox{\hyperlink{class_a_d_c_a4377c680975fe754de24b8f8617042de}{sc1a2channel\+A\+D\+C0}} \mbox{[}A\+D\+C\+\_\+\+M\+A\+X\+\_\+\+P\+IN+1\mbox{]}
+\begin{DoxyCompactList}\small\item\em Translate pin number to S\+C1A nomenclature for differential pins. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class \mbox{\hyperlink{class_a_d_c}{A\+DC}}\+: Controls the Teensy 3.\+x, 4 \mbox{\hyperlink{class_a_d_c}{A\+DC}} 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_a_d_c_a60b6e21403b1f30984f63832c0562960}\label{class_a_d_c_a60b6e21403b1f30984f63832c0562960}} 
+\index{ADC@{ADC}!ADC@{ADC}}
+\index{ADC@{ADC}!ADC@{ADC}}
+\doxysubsubsection{\texorpdfstring{ADC()}{ADC()}}
+{\footnotesize\ttfamily A\+D\+C\+::\+A\+DC (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Default constructor 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_a_d_c_a0bfc9e36bba679a2e4755441db69fb46}\label{class_a_d_c_a0bfc9e36bba679a2e4755441db69fb46}} 
+\index{ADC@{ADC}!\_\_attribute\_\_@{\_\_attribute\_\_}}
+\index{\_\_attribute\_\_@{\_\_attribute\_\_}!ADC@{ADC}}
+\doxysubsubsection{\texorpdfstring{\_\_attribute\_\_()}{\_\_attribute\_\_()}\hspace{0.1cm}{\footnotesize\ttfamily [1/15]}}
+{\footnotesize\ttfamily A\+D\+C\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{(error(\char`\"{}Use \mbox{\hyperlink{class_a_d_c_a03e1c7f64c02dec1976810a0a4967cf2}{adc}}-\/$>$adcX-\/$>$disable\+Compare instead\char`\"{}))}]{ }\end{DoxyParamCaption})}
+
+
+
+Disable the compare function. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em adc\+\_\+num} & \mbox{\hyperlink{class_a_d_c}{A\+DC}} number to change. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_a_d_c_acaa5a6782ea7d15ae1ce3175f2bd625f}\label{class_a_d_c_acaa5a6782ea7d15ae1ce3175f2bd625f}} 
+\index{ADC@{ADC}!\_\_attribute\_\_@{\_\_attribute\_\_}}
+\index{\_\_attribute\_\_@{\_\_attribute\_\_}!ADC@{ADC}}
+\doxysubsubsection{\texorpdfstring{\_\_attribute\_\_()}{\_\_attribute\_\_()}\hspace{0.1cm}{\footnotesize\ttfamily [2/15]}}
+{\footnotesize\ttfamily A\+D\+C\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{(error(\char`\"{}Use \mbox{\hyperlink{class_a_d_c_a03e1c7f64c02dec1976810a0a4967cf2}{adc}}-\/$>$adcX-\/$>$disable\+Interrupts instead\char`\"{}))}]{ }\end{DoxyParamCaption})}
+
+
+
+Disable interrupts. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em adc\+\_\+num} & \mbox{\hyperlink{class_a_d_c}{A\+DC}} number to change. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_a_d_c_ab56bb4f0a185a272d5ebb5e7d761a5a9}\label{class_a_d_c_ab56bb4f0a185a272d5ebb5e7d761a5a9}} 
+\index{ADC@{ADC}!\_\_attribute\_\_@{\_\_attribute\_\_}}
+\index{\_\_attribute\_\_@{\_\_attribute\_\_}!ADC@{ADC}}
+\doxysubsubsection{\texorpdfstring{\_\_attribute\_\_()}{\_\_attribute\_\_()}\hspace{0.1cm}{\footnotesize\ttfamily [3/15]}}
+{\footnotesize\ttfamily A\+D\+C\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{(error(\char`\"{}Use \mbox{\hyperlink{class_a_d_c_a03e1c7f64c02dec1976810a0a4967cf2}{adc}}-\/$>$adcX-\/$>$enable\+Compare instead\char`\"{}))}]{ }\end{DoxyParamCaption})}
+
+
+
+Enable the compare function to a single value. 
+
+A conversion will be completed only when the \mbox{\hyperlink{class_a_d_c}{A\+DC}} value is $>$= comp\+Value (greater\+Than=1) or $<$ comp\+Value (greater\+Than=0) Call it after changing the resolution Use with interrupts or poll conversion completion with is\+Complete() 
+\begin{DoxyParams}{Parameters}
+{\em comp\+Value} & value to compare \\
+\hline
+{\em greater\+Than} & true or false \\
+\hline
+{\em adc\+\_\+num} & \mbox{\hyperlink{class_a_d_c}{A\+DC}} number to change. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_a_d_c_ad0042d813ac8b2a726304e88939a2db7}\label{class_a_d_c_ad0042d813ac8b2a726304e88939a2db7}} 
+\index{ADC@{ADC}!\_\_attribute\_\_@{\_\_attribute\_\_}}
+\index{\_\_attribute\_\_@{\_\_attribute\_\_}!ADC@{ADC}}
+\doxysubsubsection{\texorpdfstring{\_\_attribute\_\_()}{\_\_attribute\_\_()}\hspace{0.1cm}{\footnotesize\ttfamily [4/15]}}
+{\footnotesize\ttfamily A\+D\+C\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{(error(\char`\"{}Use \mbox{\hyperlink{class_a_d_c_a03e1c7f64c02dec1976810a0a4967cf2}{adc}}-\/$>$adcX-\/$>$enable\+Compare\+Range instead\char`\"{}))}]{ }\end{DoxyParamCaption})}
+
+
+
+Enable the compare function to a range. 
+
+A conversion will be completed only when the \mbox{\hyperlink{class_a_d_c}{A\+DC}} value is inside (inside\+Range=1) or outside (=0) the range given by (lower\+Limit, upper\+Limit),including (inclusive=1) the limits or not (inclusive=0). See Table 31-\/78, p. 617 of the freescale manual. Call it after changing the resolution Use with interrupts or poll conversion completion with is\+Complete() 
+\begin{DoxyParams}{Parameters}
+{\em lower\+Limit} & lower value to compare \\
+\hline
+{\em upper\+Limit} & upper value to compare \\
+\hline
+{\em inside\+Range} & true or false \\
+\hline
+{\em inclusive} & true or false \\
+\hline
+{\em adc\+\_\+num} & \mbox{\hyperlink{class_a_d_c}{A\+DC}} number to change. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_a_d_c_a11a3caa3c0b88516c324103a4a869504}\label{class_a_d_c_a11a3caa3c0b88516c324103a4a869504}} 
+\index{ADC@{ADC}!\_\_attribute\_\_@{\_\_attribute\_\_}}
+\index{\_\_attribute\_\_@{\_\_attribute\_\_}!ADC@{ADC}}
+\doxysubsubsection{\texorpdfstring{\_\_attribute\_\_()}{\_\_attribute\_\_()}\hspace{0.1cm}{\footnotesize\ttfamily [5/15]}}
+{\footnotesize\ttfamily A\+D\+C\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{(error(\char`\"{}Use \mbox{\hyperlink{class_a_d_c_a03e1c7f64c02dec1976810a0a4967cf2}{adc}}-\/$>$adcX-\/$>$enable\+Interrupts instead\char`\"{}))}]{ }\end{DoxyParamCaption})}
+
+
+
+Enable interrupts. 
+
+An I\+R\+Q\+\_\+\+A\+D\+Cx Interrupt will be raised when the conversion is completed (including hardware averages and if the comparison (if any) is true). 
+\begin{DoxyParams}{Parameters}
+{\em adc\+\_\+num} & \mbox{\hyperlink{class_a_d_c}{A\+DC}} number to change. \\
+\hline
+{\em isr} & function (returns void and accepts no arguments) that will be executed after an interrupt. \\
+\hline
+{\em priority} & Interrupt priority, highest is 0, lowest is 255. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_a_d_c_a0d456481cdf5a2990b8e66915d7bdfd6}\label{class_a_d_c_a0d456481cdf5a2990b8e66915d7bdfd6}} 
+\index{ADC@{ADC}!\_\_attribute\_\_@{\_\_attribute\_\_}}
+\index{\_\_attribute\_\_@{\_\_attribute\_\_}!ADC@{ADC}}
+\doxysubsubsection{\texorpdfstring{\_\_attribute\_\_()}{\_\_attribute\_\_()}\hspace{0.1cm}{\footnotesize\ttfamily [6/15]}}
+{\footnotesize\ttfamily A\+D\+C\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{(error(\char`\"{}Use \mbox{\hyperlink{class_a_d_c_a03e1c7f64c02dec1976810a0a4967cf2}{adc}}-\/$>$adcX-\/$>$get\+Max\+Value instead\char`\"{}))}]{ }\end{DoxyParamCaption})}
+
+
+
+Returns the maximum value for a measurement\+: 2$^\wedge$res-\/1. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em adc\+\_\+num} & \mbox{\hyperlink{class_a_d_c}{A\+DC}} number to query. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the maximum value of adc\+\_\+num \mbox{\hyperlink{class_a_d_c}{A\+DC}}. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_a_d_c_a23e3ab8d5bd526d6dc48b9a604ed8f98}\label{class_a_d_c_a23e3ab8d5bd526d6dc48b9a604ed8f98}} 
+\index{ADC@{ADC}!\_\_attribute\_\_@{\_\_attribute\_\_}}
+\index{\_\_attribute\_\_@{\_\_attribute\_\_}!ADC@{ADC}}
+\doxysubsubsection{\texorpdfstring{\_\_attribute\_\_()}{\_\_attribute\_\_()}\hspace{0.1cm}{\footnotesize\ttfamily [7/15]}}
+{\footnotesize\ttfamily A\+D\+C\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{(error(\char`\"{}Use \mbox{\hyperlink{class_a_d_c_a03e1c7f64c02dec1976810a0a4967cf2}{adc}}-\/$>$adcX-\/$>$get\+Resolution instead\char`\"{}))}]{ }\end{DoxyParamCaption})}
+
+
+
+Returns the resolution of the \mbox{\hyperlink{class_a_d_c___module}{A\+D\+C\+\_\+\+Module}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em adc\+\_\+num} & \mbox{\hyperlink{class_a_d_c}{A\+DC}} number to query. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the resolution of adc\+\_\+num \mbox{\hyperlink{class_a_d_c}{A\+DC}}. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_a_d_c_a0be91aeaed16766afb869bca991526e4}\label{class_a_d_c_a0be91aeaed16766afb869bca991526e4}} 
+\index{ADC@{ADC}!\_\_attribute\_\_@{\_\_attribute\_\_}}
+\index{\_\_attribute\_\_@{\_\_attribute\_\_}!ADC@{ADC}}
+\doxysubsubsection{\texorpdfstring{\_\_attribute\_\_()}{\_\_attribute\_\_()}\hspace{0.1cm}{\footnotesize\ttfamily [8/15]}}
+{\footnotesize\ttfamily A\+D\+C\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{(error(\char`\"{}Use \mbox{\hyperlink{class_a_d_c_a03e1c7f64c02dec1976810a0a4967cf2}{adc}}-\/$>$adcX-\/$>$is\+Complete instead\char`\"{}))}]{ }\end{DoxyParamCaption})}
+
+
+
+Is an \mbox{\hyperlink{class_a_d_c}{A\+DC}} conversion ready? 
+
+When a value is read this function returns 0 until a new value exists So it only makes sense to call it with continuous or non-\/blocking methods 
+\begin{DoxyParams}{Parameters}
+{\em adc\+\_\+num} & \mbox{\hyperlink{class_a_d_c}{A\+DC}} number to query \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if yes, false if not. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_a_d_c_adbaf0665d9dfbdeffee2890f97508879}\label{class_a_d_c_adbaf0665d9dfbdeffee2890f97508879}} 
+\index{ADC@{ADC}!\_\_attribute\_\_@{\_\_attribute\_\_}}
+\index{\_\_attribute\_\_@{\_\_attribute\_\_}!ADC@{ADC}}
+\doxysubsubsection{\texorpdfstring{\_\_attribute\_\_()}{\_\_attribute\_\_()}\hspace{0.1cm}{\footnotesize\ttfamily [9/15]}}
+{\footnotesize\ttfamily A\+D\+C\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{(error(\char`\"{}Use \mbox{\hyperlink{class_a_d_c_a03e1c7f64c02dec1976810a0a4967cf2}{adc}}-\/$>$adcX-\/$>$is\+Continuous instead\char`\"{}))}]{ }\end{DoxyParamCaption})}
+
+
+
+Is the \mbox{\hyperlink{class_a_d_c}{A\+DC}} in continuous mode? 
+
+
+\begin{DoxyParams}{Parameters}
+{\em adc\+\_\+num} & \mbox{\hyperlink{class_a_d_c}{A\+DC}} number to query \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true or false 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_a_d_c_ad51488eb906bf3d8643f4884128f6c44}\label{class_a_d_c_ad51488eb906bf3d8643f4884128f6c44}} 
+\index{ADC@{ADC}!\_\_attribute\_\_@{\_\_attribute\_\_}}
+\index{\_\_attribute\_\_@{\_\_attribute\_\_}!ADC@{ADC}}
+\doxysubsubsection{\texorpdfstring{\_\_attribute\_\_()}{\_\_attribute\_\_()}\hspace{0.1cm}{\footnotesize\ttfamily [10/15]}}
+{\footnotesize\ttfamily A\+D\+C\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{(error(\char`\"{}Use \mbox{\hyperlink{class_a_d_c_a03e1c7f64c02dec1976810a0a4967cf2}{adc}}-\/$>$adcX-\/$>$is\+Converting instead\char`\"{}))}]{ }\end{DoxyParamCaption})}
+
+
+
+Is the \mbox{\hyperlink{class_a_d_c}{A\+DC}} converting at the moment? 
+
+
+\begin{DoxyParams}{Parameters}
+{\em adc\+\_\+num} & \mbox{\hyperlink{class_a_d_c}{A\+DC}} number to query \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if yes, false if not. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_a_d_c_a35003f61d22e747cdb3aa2a32970428c}\label{class_a_d_c_a35003f61d22e747cdb3aa2a32970428c}} 
+\index{ADC@{ADC}!\_\_attribute\_\_@{\_\_attribute\_\_}}
+\index{\_\_attribute\_\_@{\_\_attribute\_\_}!ADC@{ADC}}
+\doxysubsubsection{\texorpdfstring{\_\_attribute\_\_()}{\_\_attribute\_\_()}\hspace{0.1cm}{\footnotesize\ttfamily [11/15]}}
+{\footnotesize\ttfamily A\+D\+C\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{(error(\char`\"{}Use \mbox{\hyperlink{class_a_d_c_a03e1c7f64c02dec1976810a0a4967cf2}{adc}}-\/$>$adcX-\/$>$set\+Averaging instead\char`\"{}))}]{ }\end{DoxyParamCaption})}
+
+
+
+Set the number of averages. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em num} & can be 0, 4, 8, 16 or 32. \\
+\hline
+{\em adc\+\_\+num} & \mbox{\hyperlink{class_a_d_c}{A\+DC}} number to change. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_a_d_c_abd5e55e03894b9327c2edefff68101db}\label{class_a_d_c_abd5e55e03894b9327c2edefff68101db}} 
+\index{ADC@{ADC}!\_\_attribute\_\_@{\_\_attribute\_\_}}
+\index{\_\_attribute\_\_@{\_\_attribute\_\_}!ADC@{ADC}}
+\doxysubsubsection{\texorpdfstring{\_\_attribute\_\_()}{\_\_attribute\_\_()}\hspace{0.1cm}{\footnotesize\ttfamily [12/15]}}
+{\footnotesize\ttfamily A\+D\+C\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{(error(\char`\"{}Use \mbox{\hyperlink{class_a_d_c_a03e1c7f64c02dec1976810a0a4967cf2}{adc}}-\/$>$adcX-\/$>$set\+Conversion\+Speed instead\char`\"{}))}]{ }\end{DoxyParamCaption})}
+
+
+
+Sets the conversion speed (changes the \mbox{\hyperlink{class_a_d_c}{A\+DC}} clock, A\+D\+CK) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em speed} & can be any from the A\+D\+C\+\_\+\+C\+O\+N\+V\+E\+R\+S\+I\+O\+N\+\_\+\+S\+P\+E\+ED enum\+: V\+E\+R\+Y\+\_\+\+L\+O\+W\+\_\+\+S\+P\+E\+ED, L\+O\+W\+\_\+\+S\+P\+E\+ED, M\+E\+D\+\_\+\+S\+P\+E\+ED, H\+I\+G\+H\+\_\+\+S\+P\+E\+E\+D\+\_\+16\+B\+I\+TS, H\+I\+G\+H\+\_\+\+S\+P\+E\+ED, V\+E\+R\+Y\+\_\+\+H\+I\+G\+H\+\_\+\+S\+P\+E\+ED, A\+D\+A\+C\+K\+\_\+2\+\_\+4, A\+D\+A\+C\+K\+\_\+4\+\_\+0, A\+D\+A\+C\+K\+\_\+5\+\_\+2 or A\+D\+A\+C\+K\+\_\+6\+\_\+2.\\
+\hline
+\end{DoxyParams}
+V\+E\+R\+Y\+\_\+\+L\+O\+W\+\_\+\+S\+P\+E\+ED is guaranteed to be the lowest possible speed within specs for resolutions less than 16 bits (higher than 1 M\+Hz), it\textquotesingle{}s different from L\+O\+W\+\_\+\+S\+P\+E\+ED only for 24, 4 or 2 M\+Hz bus frequency. L\+O\+W\+\_\+\+S\+P\+E\+ED is guaranteed to be the lowest possible speed within specs for all resolutions (higher than 2 M\+Hz). M\+E\+D\+\_\+\+S\+P\+E\+ED is always $>$= L\+O\+W\+\_\+\+S\+P\+E\+ED and $<$= H\+I\+G\+H\+\_\+\+S\+P\+E\+ED. H\+I\+G\+H\+\_\+\+S\+P\+E\+E\+D\+\_\+16\+B\+I\+TS is guaranteed to be the highest possible speed within specs for all resolutions (lower or eq than 12 M\+Hz). H\+I\+G\+H\+\_\+\+S\+P\+E\+ED is guaranteed to be the highest possible speed within specs for resolutions less than 16 bits (lower or eq than 18 M\+Hz). V\+E\+R\+Y\+\_\+\+H\+I\+G\+H\+\_\+\+S\+P\+E\+ED may be out of specs, it\textquotesingle{}s different from H\+I\+G\+H\+\_\+\+S\+P\+E\+ED only for 48, 40 or 24 M\+Hz bus frequency.
+
+Additionally the conversion speed can also be A\+D\+A\+C\+K\+\_\+2\+\_\+4, A\+D\+A\+C\+K\+\_\+4\+\_\+0, A\+D\+A\+C\+K\+\_\+5\+\_\+2 and A\+D\+A\+C\+K\+\_\+6\+\_\+2, where the numbers are the frequency of the \mbox{\hyperlink{class_a_d_c}{A\+DC}} clock (A\+D\+CK) in M\+Hz and are independent on the bus speed. This is useful if you are using the Teensy at a very low clock frequency but want faster conversions, but if F\+\_\+\+B\+US$<$F\+\_\+\+A\+D\+CK, you can\textquotesingle{}t use V\+E\+R\+Y\+\_\+\+H\+I\+G\+H\+\_\+\+S\+P\+E\+ED for sampling speed. 
+\begin{DoxyParams}{Parameters}
+{\em adc\+\_\+num} & \mbox{\hyperlink{class_a_d_c}{A\+DC}} number to change. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_a_d_c_a9fd694316f0488501a9e0e289860bc23}\label{class_a_d_c_a9fd694316f0488501a9e0e289860bc23}} 
+\index{ADC@{ADC}!\_\_attribute\_\_@{\_\_attribute\_\_}}
+\index{\_\_attribute\_\_@{\_\_attribute\_\_}!ADC@{ADC}}
+\doxysubsubsection{\texorpdfstring{\_\_attribute\_\_()}{\_\_attribute\_\_()}\hspace{0.1cm}{\footnotesize\ttfamily [13/15]}}
+{\footnotesize\ttfamily A\+D\+C\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{(error(\char`\"{}Use \mbox{\hyperlink{class_a_d_c_a03e1c7f64c02dec1976810a0a4967cf2}{adc}}-\/$>$adcX-\/$>$set\+Reference instead\char`\"{}))}]{ }\end{DoxyParamCaption})}
+
+
+
+Set the voltage reference you prefer, default is vcc. 
+
+It recalibrates at the end. 
+\begin{DoxyParams}{Parameters}
+{\em type} & can be A\+D\+C\+\_\+\+R\+E\+F\+E\+R\+E\+N\+C\+E\+::\+R\+E\+F\+\_\+3\+V3, A\+D\+C\+\_\+\+R\+E\+F\+E\+R\+E\+N\+C\+E\+::\+R\+E\+F\+\_\+1\+V2 (not for Teensy LC) or A\+D\+C\+\_\+\+R\+E\+F\+E\+R\+E\+N\+C\+E\+::\+R\+E\+F\+\_\+\+E\+XT \\
+\hline
+{\em adc\+\_\+num} & \mbox{\hyperlink{class_a_d_c}{A\+DC}} number to change. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_a_d_c_ac684c7a650cd531945898268650fe972}\label{class_a_d_c_ac684c7a650cd531945898268650fe972}} 
+\index{ADC@{ADC}!\_\_attribute\_\_@{\_\_attribute\_\_}}
+\index{\_\_attribute\_\_@{\_\_attribute\_\_}!ADC@{ADC}}
+\doxysubsubsection{\texorpdfstring{\_\_attribute\_\_()}{\_\_attribute\_\_()}\hspace{0.1cm}{\footnotesize\ttfamily [14/15]}}
+{\footnotesize\ttfamily A\+D\+C\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{(error(\char`\"{}Use \mbox{\hyperlink{class_a_d_c_a03e1c7f64c02dec1976810a0a4967cf2}{adc}}-\/$>$adcX-\/$>$set\+Resolution instead\char`\"{}))}]{ }\end{DoxyParamCaption})}
+
+
+
+Change the resolution of the measurement. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bits} & is the number of bits of resolution. For single-\/ended measurements\+: 8, 10, 12 or 16 bits. For differential measurements\+: 9, 11, 13 or 16 bits. If you want something in between (11 bits single-\/ended for example) select the immediate higher and shift the result one to the right. Whenever you change the resolution, change also the comparison values (if you use them). \\
+\hline
+{\em adc\+\_\+num} & \mbox{\hyperlink{class_a_d_c}{A\+DC}} number to change. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_a_d_c_aeb66d9e20f089336d2ffea8a68a28277}\label{class_a_d_c_aeb66d9e20f089336d2ffea8a68a28277}} 
+\index{ADC@{ADC}!\_\_attribute\_\_@{\_\_attribute\_\_}}
+\index{\_\_attribute\_\_@{\_\_attribute\_\_}!ADC@{ADC}}
+\doxysubsubsection{\texorpdfstring{\_\_attribute\_\_()}{\_\_attribute\_\_()}\hspace{0.1cm}{\footnotesize\ttfamily [15/15]}}
+{\footnotesize\ttfamily A\+D\+C\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{(error(\char`\"{}Use \mbox{\hyperlink{class_a_d_c_a03e1c7f64c02dec1976810a0a4967cf2}{adc}}-\/$>$adcX-\/$>$set\+Sampling\+Speed instead\char`\"{}))}]{ }\end{DoxyParamCaption})}
+
+
+
+Sets the sampling speed. 
+
+Increase the sampling speed for low impedance sources, decrease it for higher impedance ones. 
+\begin{DoxyParams}{Parameters}
+{\em speed} & can be any of the A\+D\+C\+\_\+\+S\+A\+M\+P\+L\+I\+N\+G\+\_\+\+S\+P\+E\+ED enum\+: V\+E\+R\+Y\+\_\+\+L\+O\+W\+\_\+\+S\+P\+E\+ED, L\+O\+W\+\_\+\+S\+P\+E\+ED, M\+E\+D\+\_\+\+S\+P\+E\+ED, H\+I\+G\+H\+\_\+\+S\+P\+E\+ED or V\+E\+R\+Y\+\_\+\+H\+I\+G\+H\+\_\+\+S\+P\+E\+ED.\\
+\hline
+\end{DoxyParams}
+V\+E\+R\+Y\+\_\+\+L\+O\+W\+\_\+\+S\+P\+E\+ED is the lowest possible sampling speed (+24 A\+D\+CK). L\+O\+W\+\_\+\+S\+P\+E\+ED adds +16 A\+D\+CK. M\+E\+D\+\_\+\+S\+P\+E\+ED adds +10 A\+D\+CK. H\+I\+G\+H\+\_\+\+S\+P\+E\+ED adds +6 A\+D\+CK. V\+E\+R\+Y\+\_\+\+H\+I\+G\+H\+\_\+\+S\+P\+E\+ED is the highest possible sampling speed (0 A\+D\+CK added). 
+\begin{DoxyParams}{Parameters}
+{\em adc\+\_\+num} & \mbox{\hyperlink{class_a_d_c}{A\+DC}} number to change. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_a_d_c_a17c4eedd3b304f64139c4bb25e156c91}\label{class_a_d_c_a17c4eedd3b304f64139c4bb25e156c91}} 
+\index{ADC@{ADC}!analogRead@{analogRead}}
+\index{analogRead@{analogRead}!ADC@{ADC}}
+\doxysubsubsection{\texorpdfstring{analogRead()}{analogRead()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily int A\+D\+C\+::analog\+Read (\begin{DoxyParamCaption}\item[{A\+D\+C\+\_\+\+I\+N\+T\+E\+R\+N\+A\+L\+\_\+\+S\+O\+U\+R\+CE}]{pin,  }\item[{int8\+\_\+t}]{adc\+\_\+num = {\ttfamily -\/1} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns the analog value of the special internal source, such as the temperature sensor. 
+
+It calls analog\+Read(uint8\+\_\+t pin) internally, with the correct value for the pin for all boards. Possible values\+: T\+E\+M\+P\+\_\+\+S\+E\+N\+S\+OR, Temperature sensor. V\+R\+E\+F\+\_\+\+O\+UT, 1.\+2 V reference (switch on first using \mbox{\hyperlink{_v_r_e_f_8h_source}{V\+R\+E\+F.\+h}}). B\+A\+N\+D\+G\+AP, B\+A\+N\+D\+G\+AP (switch on first using \mbox{\hyperlink{_v_r_e_f_8h_source}{V\+R\+E\+F.\+h}}). V\+R\+E\+FH, High V\+R\+EF. V\+R\+E\+FL, Low V\+R\+EF. 
+\begin{DoxyParams}{Parameters}
+{\em pin} & A\+D\+C\+\_\+\+I\+N\+T\+E\+R\+N\+A\+L\+\_\+\+S\+O\+U\+R\+CE to read. \\
+\hline
+{\em adc\+\_\+num} & A\+D\+C\+\_\+X \mbox{\hyperlink{class_a_d_c}{A\+DC}} module \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the value of the pin. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_a_d_c_aaf6079870b115d8b029d3613d44091dd}\label{class_a_d_c_aaf6079870b115d8b029d3613d44091dd}} 
+\index{ADC@{ADC}!analogRead@{analogRead}}
+\index{analogRead@{analogRead}!ADC@{ADC}}
+\doxysubsubsection{\texorpdfstring{analogRead()}{analogRead()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily int A\+D\+C\+::analog\+Read (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{pin,  }\item[{int8\+\_\+t}]{adc\+\_\+num = {\ttfamily -\/1} }\end{DoxyParamCaption})}
+
+
+
+Returns the analog value of the pin. 
+
+It waits until the value is read and then returns the result. If a comparison has been set up and fails, it will return A\+D\+C\+\_\+\+E\+R\+R\+O\+R\+\_\+\+V\+A\+L\+UE. This function is interrupt safe, so it will restore the adc to the state it was before being called If more than one \mbox{\hyperlink{class_a_d_c}{A\+DC}} exists, it will select the module with less workload, you can force a selection using adc\+\_\+num. If you select A\+D\+C1 in Teensy 3.\+0 it will return A\+D\+C\+\_\+\+E\+R\+R\+O\+R\+\_\+\+V\+A\+L\+UE. 
+\begin{DoxyParams}{Parameters}
+{\em pin} & can be any of the analog pins \\
+\hline
+{\em adc\+\_\+num} & A\+D\+C\+\_\+X \mbox{\hyperlink{class_a_d_c}{A\+DC}} module \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the value of the pin. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_a_d_c_a749efc928425a1eea18341ccfafd1819}\label{class_a_d_c_a749efc928425a1eea18341ccfafd1819}} 
+\index{ADC@{ADC}!analogReadContinuous@{analogReadContinuous}}
+\index{analogReadContinuous@{analogReadContinuous}!ADC@{ADC}}
+\doxysubsubsection{\texorpdfstring{analogReadContinuous()}{analogReadContinuous()}}
+{\footnotesize\ttfamily int A\+D\+C\+::analog\+Read\+Continuous (\begin{DoxyParamCaption}\item[{int8\+\_\+t}]{adc\+\_\+num = {\ttfamily -\/1} }\end{DoxyParamCaption})}
+
+
+
+Reads the analog value of a continuous conversion. 
+
+Set the continuous conversion with with analog\+Start\+Continuous(pin) or start\+Continuous\+Differential(pin\+P, pin\+N). If single-\/ended and 16 bits it\textquotesingle{}s necessary to typecast it to an unsigned type (like uint16\+\_\+t), otherwise values larger than 3.\+3/2 V are interpreted as negative! 
+\begin{DoxyParams}{Parameters}
+{\em adc\+\_\+num} & A\+D\+C\+\_\+X \mbox{\hyperlink{class_a_d_c}{A\+DC}} module \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the last converted value.
+\end{DoxyReturn}
+Set the continuous conversion with with analog\+Start\+Continuous(pin) or start\+Continuous\+Differential(pin\+P, pin\+N). \begin{DoxyReturn}{Returns}
+the last converted value. If single-\/ended and 16 bits it\textquotesingle{}s necessary to typecast it to an unsigned type (like uint16\+\_\+t), otherwise values larger than 3.\+3/2 V are interpreted as negative! 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_a_d_c_aee7423bfcbb03465bb0bd1e3c6474452}\label{class_a_d_c_aee7423bfcbb03465bb0bd1e3c6474452}} 
+\index{ADC@{ADC}!readSingle@{readSingle}}
+\index{readSingle@{readSingle}!ADC@{ADC}}
+\doxysubsubsection{\texorpdfstring{readSingle()}{readSingle()}}
+{\footnotesize\ttfamily int A\+D\+C\+::read\+Single (\begin{DoxyParamCaption}\item[{int8\+\_\+t}]{adc\+\_\+num = {\ttfamily -\/1} }\end{DoxyParamCaption})}
+
+
+
+Reads the analog value of a single conversion. 
+
+Set the conversion with with start\+Single\+Read(pin) or start\+Single\+Differential(pin\+P, pin\+N). 
+\begin{DoxyParams}{Parameters}
+{\em adc\+\_\+num} & A\+D\+C\+\_\+X \mbox{\hyperlink{class_a_d_c}{A\+DC}} module \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the converted value. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_a_d_c_aa65014de31051e06a469982ca286496b}\label{class_a_d_c_aa65014de31051e06a469982ca286496b}} 
+\index{ADC@{ADC}!resetError@{resetError}}
+\index{resetError@{resetError}!ADC@{ADC}}
+\doxysubsubsection{\texorpdfstring{resetError()}{resetError()}}
+{\footnotesize\ttfamily void A\+D\+C\+::reset\+Error (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+E\+R\+R\+O\+RS ///// Resets all errors from all A\+D\+Cs, if any. \mbox{\Hypertarget{class_a_d_c_ad816352221bf9c10b258c7cdf570a514}\label{class_a_d_c_ad816352221bf9c10b258c7cdf570a514}} 
+\index{ADC@{ADC}!setHardwareTrigger@{setHardwareTrigger}}
+\index{setHardwareTrigger@{setHardwareTrigger}!ADC@{ADC}}
+\doxysubsubsection{\texorpdfstring{setHardwareTrigger()}{setHardwareTrigger()}}
+{\footnotesize\ttfamily void A\+D\+C\+::set\+Hardware\+Trigger (\begin{DoxyParamCaption}\item[{int8\+\_\+t}]{adc\+\_\+num = {\ttfamily -\/1} }\end{DoxyParamCaption})}
+
+
+
+Enable Hardwaretrigger. 
+
+This enables analog to digital conversion by P\+DB or L\+B\+TR triggering \mbox{\Hypertarget{class_a_d_c_aeba2399df78ffa0514f4eb4a93f025aa}\label{class_a_d_c_aeba2399df78ffa0514f4eb4a93f025aa}} 
+\index{ADC@{ADC}!setSoftwareTrigger@{setSoftwareTrigger}}
+\index{setSoftwareTrigger@{setSoftwareTrigger}!ADC@{ADC}}
+\doxysubsubsection{\texorpdfstring{setSoftwareTrigger()}{setSoftwareTrigger()}}
+{\footnotesize\ttfamily void A\+D\+C\+::set\+Software\+Trigger (\begin{DoxyParamCaption}\item[{int8\+\_\+t}]{adc\+\_\+num = {\ttfamily -\/1} }\end{DoxyParamCaption})}
+
+
+
+Enable Software\+Trigger. 
+
+Enables analog to digital conversion by writing to S\+C\+A1 register \mbox{\Hypertarget{class_a_d_c_ad592f87ec644457b5056ae41c645ac0a}\label{class_a_d_c_ad592f87ec644457b5056ae41c645ac0a}} 
+\index{ADC@{ADC}!startContinuous@{startContinuous}}
+\index{startContinuous@{startContinuous}!ADC@{ADC}}
+\doxysubsubsection{\texorpdfstring{startContinuous()}{startContinuous()}}
+{\footnotesize\ttfamily bool A\+D\+C\+::start\+Continuous (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{pin,  }\item[{int8\+\_\+t}]{adc\+\_\+num = {\ttfamily -\/1} }\end{DoxyParamCaption})}
+
+
+
+Starts continuous conversion on the pin. 
+
+It returns as soon as the \mbox{\hyperlink{class_a_d_c}{A\+DC}} is set, use \mbox{\hyperlink{class_a_d_c_a749efc928425a1eea18341ccfafd1819}{analog\+Read\+Continuous()}} to read the value. 
+\begin{DoxyParams}{Parameters}
+{\em pin} & can be any of the analog pins \\
+\hline
+{\em adc\+\_\+num} & A\+D\+C\+\_\+X \mbox{\hyperlink{class_a_d_c}{A\+DC}} module \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the pin is valid, false otherwise. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_a_d_c_a113479488fae5f5407f884dd95fbec72}\label{class_a_d_c_a113479488fae5f5407f884dd95fbec72}} 
+\index{ADC@{ADC}!startSingleRead@{startSingleRead}}
+\index{startSingleRead@{startSingleRead}!ADC@{ADC}}
+\doxysubsubsection{\texorpdfstring{startSingleRead()}{startSingleRead()}}
+{\footnotesize\ttfamily bool A\+D\+C\+::start\+Single\+Read (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{pin,  }\item[{int8\+\_\+t}]{adc\+\_\+num = {\ttfamily -\/1} }\end{DoxyParamCaption})}
+
+
+
+Starts an analog measurement on the pin and enables interrupts. 
+
+It returns immediately, get value with \mbox{\hyperlink{class_a_d_c_aee7423bfcbb03465bb0bd1e3c6474452}{read\+Single()}}. If this function interrupts a measurement, it stores the settings in adc\+\_\+config 
+\begin{DoxyParams}{Parameters}
+{\em pin} & can be any of the analog pins \\
+\hline
+{\em adc\+\_\+num} & A\+D\+C\+\_\+X \mbox{\hyperlink{class_a_d_c}{A\+DC}} module \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the pin is valid, false otherwise. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_a_d_c_a436e52cf82ca735f636899de670a2f0c}\label{class_a_d_c_a436e52cf82ca735f636899de670a2f0c}} 
+\index{ADC@{ADC}!stopContinuous@{stopContinuous}}
+\index{stopContinuous@{stopContinuous}!ADC@{ADC}}
+\doxysubsubsection{\texorpdfstring{stopContinuous()}{stopContinuous()}}
+{\footnotesize\ttfamily void A\+D\+C\+::stop\+Continuous (\begin{DoxyParamCaption}\item[{int8\+\_\+t}]{adc\+\_\+num = {\ttfamily -\/1} }\end{DoxyParamCaption})}
+
+
+
+Stops continuous conversion. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em adc\+\_\+num} & A\+D\+C\+\_\+X \mbox{\hyperlink{class_a_d_c}{A\+DC}} module \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+D\+:/\+Git\+Hub/\+Teensy Playground/\+A\+D\+C-\/externalsync/A\+D\+C.\+h\item 
+D\+:/\+Git\+Hub/\+Teensy Playground/\+A\+D\+C-\/externalsync/A\+D\+C.\+cpp\end{DoxyCompactItemize}

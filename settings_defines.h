@@ -107,7 +107,7 @@ namespace ADC_settings
 #endif
 
 // Use PDB?
-#if defined(ADC_TEENSY_3_1) // Teensy 3.1
+#if defined(ADC_TEENSY_3_1)   // Teensy 3.1
 #define ADC_USE_PDB
 #elif defined(ADC_TEENSY_3_0) // Teensy 3.0
 #define ADC_USE_PDB
@@ -116,7 +116,20 @@ namespace ADC_settings
 #define ADC_USE_PDB
 #elif defined(ADC_TEENSY_3_6) // Teensy 3.6
 #define ADC_USE_PDB
-#elif defined(ADC_TEENSY_4) // Teensy 4, 4.1
+#elif defined(ADC_TEENSY_4)   // Teensy 4, 4.1
+#endif
+
+// Use LPTMR?
+#if defined(ADC_TEENSY_3_1)   // Teensy 3.1
+#define ADC_USE_LPTMR
+#elif defined(ADC_TEENSY_3_0) // Teensy 3.0
+#define ADC_USE_LPTMR
+#elif defined(ADC_TEENSY_LC)  // Teensy LC
+#elif defined(ADC_TEENSY_3_5) // Teensy 3.5
+#define ADC_USE_LPTMR
+#elif defined(ADC_TEENSY_3_6) // Teensy 3.6
+#define ADC_USE_LPTMR
+#elif defined(ADC_TEENSY_4)   // Teensy 4, 4.1
 #endif
 
 // Use Quad Timer
