@@ -1728,3 +1728,142 @@ uint32_t ADC_Module::getQuadTimerFrequency()
 
 #endif // Teensy 4
 #endif // ADC_USE_QUAD_TIMER
+
+
+//////////// EXT TRIG LPTMR ////////////////
+//// External Trigger through LPTMR hardware block
+//// https://github.com/manitou48/teensy3/blob/master/adclptmr.ino
+//
+// ADC trigger is on pin 13
+//
+// Example ISRs
+// ------------
+//volatile uint32_t aticks, lticks;
+//void adc0_isr() {
+//  aticks++;
+//  adcval = ADC0_RA;  // read and clear
+//}
+//
+//void lptmr_isr(void)      // not used
+//{
+//  LPTMR0_CSR |=  LPTMR_CSR_TCF;    // clear
+//  lticks++;
+//}
+// UU 2018-2020
+
+#if ADC_USE_LPTMR
+void ADC_Module::startExtTrigLPTMR(bool enableLPTMRisr) {
+
+    if (!(SIM_SCGC5 & SIM_SCGC5_LPTIMER)) {         // setup LPTMR if not in use
+        SIM_SCGC5 |= SIM_SCGC5_LPTIMER;             // enable LPTMR
+        CORE_PIN13_CONFIG = PORT_PCR_MUX(3);        // pin 13 alt for LPTMR
+    }
+
+    LPTMR0_CSR  = 0;                               // Disable (necessary to make changes to LPTMR)
+    LPTMR0_PSR  = LPTMR_PSR_PBYP;                  // Bypass prescaler/glitch filter
+    LPTMR0_CMR  = 1;                               // Counts til interrupt occurs, rate = freq/(CMR+1)
+                                                   // If CMR = 0 hardware trigger remains asserted until LPTMR disabled
+    if (enableLPTMRisr) {
+    LPTMR0_CSR  = LPTMR_CSR_TIE |                  // Interrupt Enable
+                  LPTMR_CSR_TPS(2) |               // Pin: 0=CMP0, 1=xtal, 2=pin13
+                //LPTMR_CSR_TFC |                  // Free-Running Counter
+                  LPTMR_CSR_TMS;                   // Mode Select, 0=timer, 1=counter
+    } else {
+    LPTMR0_CSR  = LPTMR_CSR_TPS(2) |               // Pin: 0=CMP0, 1=xtal, 2=pin13
+                //LPTMR_CSR_TFC |                  // Free-Running Counter
+                  LPTMR_CSR_TMS;                   // Mode Select, 0=timer, 1=counter
+    }
+    LPTMR0_CSR |=   LPTMR_CSR_TEN;                 // Enable
+
+    // Set ADCn to trigger from the LPTMR
+    SIM_SOPT7   = (ADC_num? SIM_SOPT7_ADC1ALTTRGEN   : SIM_SOPT7_ADC0ALTTRGEN)  |   // Enable ADCn alternate trigger
+                  (ADC_num? SIM_SOPT7_ADC1TRGSEL(14) : SIM_SOPT7_ADC0TRGSEL(14));   // Trigger ADCn by LPTMR0
+    setHardwareTrigger();                          // trigger ADC with hardware
+
+    if (enableLPTMRisr) { NVIC_ENABLE_IRQ(IRQ_LPTMR); }
+}
+
+void ADC_Module::stopExtTrigLPTMR(bool enableLPTMRisr) {
+
+    if (!(SIM_SCGC5 & SIM_SCGC5_LPTIMER)) {        // if LPTMR wasn't enabled, return
+        return;
+    }
+
+    if (enableLPTMRisr) { NVIC_DISABLE_IRQ(IRQ_LPTMR); }
+
+    LPTMR0_CSR = 0;                                // Disable
+    setSoftwareTrigger();
+}
+
+#endif
+
+//////////// EXT TRIG PDB ////////////////
+//// External Trigger though PDB hardware block
+// https://forum.pjrc.com/threads/24492-Using-the-PDB-on-Teensy-3?p=128046&viewfull=1#post128046
+// manitou 12-20-2016 04:03 PM
+//
+// ADC trigger is on pin 11
+//
+// Example ISRs
+// ------------
+//
+//volatile uint32_t pdbticks;
+//
+//void pdb_isr() {
+//  PDB0_SC = (PDB_SC_TRGSEL(00) | PDB_SC_PDBEN | PDB_SC_PDBIE ) | PDB_SC_LDOK; // (also clears interrupt flag)
+//  pdbticks++;
+//}
+// UU 2018-2020
+
+#if ADC_USE_PDB
+
+// frequency in Hz
+void ADC_Module::startExtTrigPDB(bool enablePDBisr) {
+    if (!(SIM_SCGC6 & SIM_SCGC6_PDB)) {        // Setup PDB
+         SIM_SCGC6 |= SIM_SCGC6_PDB;           // Enable the PDB clock
+        CORE_PIN11_CONFIG = PORT_PCR_MUX(3);   // pin 11 alt for PDB
+    }
+
+    // remove later
+    // PDB pre trigger selection
+    //constexpr uint32_t PDB_CHnC1_TOS_1 = 0x0100;
+    //constexpr uint32_t PDB_CHnC1_EN_1 = 0x01;
+    //PDB0_CHnC1 = PDB_CHnC1_TOS_1 | PDB_CHnC1_EN_1; // enable pretrigger 0 (SC1A)
+    // remove later
+
+    PDB0_IDLY = 0; // the pdb interrupt delay CNT+0
+    //           external trigger  | PDB enable   | interrupt enable   
+    if (enablePDBisr) { 
+      // might also need: continuous mode | load immediately
+      //                    | PDB_SC_CONT | PDB_SC_LDMOD(0);
+      PDB0_SC = (PDB_SC_TRGSEL(00) | PDB_SC_PDBEN | PDB_SC_PDBIE);
+    } else {
+      PDB0_SC = (PDB_SC_TRGSEL(00) | PDB_SC_PDBEN);
+    }
+    // loads the registers MOD, IDLY, CHnDLYm, DACINTx,and POyDLY after PDBEN is set
+    PDB0_SC |= PDB_SC_LDOK;
+
+    // Set ADCn to trigger from the PDB
+    SIM_SOPT7   = (ADC_num? SIM_SOPT7_ADC1ALTTRGEN  : SIM_SOPT7_ADC0ALTTRGEN)  |   // Enable ADCn alternate trigger
+                  (ADC_num? SIM_SOPT7_ADC1TRGSEL(0) : SIM_SOPT7_ADC0TRGSEL(0));    // Trigger ADCn PDB0_EXTRG
+    // trigger ADC with hardware
+    setHardwareTrigger();
+
+    if (enablePDBisr) { NVIC_ENABLE_IRQ(IRQ_PDB); }
+}
+
+void ADC_Module::stopExtTrigPDB(bool enablePDBisr) {
+    if (!(SIM_SCGC6 & SIM_SCGC6_PDB)) {         // if PDB wasn't on, return
+        setSoftwareTrigger();
+        return;
+    }
+
+    if (enablePDBisr) {NVIC_DISABLE_IRQ(IRQ_PDB);}
+
+    PDB0_CHnC1 = 0; // diasble ADC0 pre triggers
+    PDB0_SC = 0;    // reset configuration register
+    
+    setSoftwareTrigger();
+}
+
+#endif

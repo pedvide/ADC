@@ -588,6 +588,32 @@ public:
     uint32_t getQuadTimerFrequency();
 #endif
 
+    //////////// LPTMR  Ext Trig////////////////
+#if ADC_USE_LPTMR
+    //! Start external pin 13 LPTMR triggering the ADC
+    /** Call startSingleRead or startSingleDifferential on the pin that you want to measure after calling this function.
+    *   See the example adc_lptmr.ino.
+    */
+    void startExtTrigLPTMR(bool enableLPTMRisr);
+    void startExtTrigLPTMR() { startExtTrigLPTMR(false); }
+    //! Stop the LPTMR
+    void stopExtTrigLPTMR(bool enableLPTMRisr);
+    void stopExtTrigLPTMR() { stopExtTrigLPTMR(false); }
+#endif
+
+    //////////// PDB Ext Trig ////////////////
+#if ADC_USE_PDB
+    //! Start external pin 11 PDB triggering the ADC
+    /** Call startSingleRead or startSingleDifferential on the pin that you want to measure after calling this function.
+    *   See the example adc_ext_pdb.ino.
+    */
+    void startExtTrigPDB(bool enablePDBisr);
+    void startExtTrigPDB() { startExtTrigPDB(false); }
+    //! Stop the LPTMR
+    void stopExtTrigPDB(bool enablePDBisr);
+    void stopExtTrigPDB() { stopExtTrigPDB(false); }
+ #endif
+
     //////// OTHER STUFF ///////////
 
     //! Store the config of the adc
