@@ -4,8 +4,7 @@
 //
 // adc_pdb_extTrigger_DMA uses PDB counter (pin 11) to clock ADC A0
 // jumper PWM 23 to pin 11 for clock source or use PDB timer
-// https://forum.pjrc.com/threads/24492-Using-the-PDB-on-Teensy-3?p=128046&viewfull=1#post128046
-// manitou 12-20-2016 04:03 PM
+
 // ------------------------------------
 // Teensy 3.2
 // ------------------------------------

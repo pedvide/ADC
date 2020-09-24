@@ -5,7 +5,6 @@
 // Using LPTMR hardwre module
 // adclptmr uses LPTMR0 counter (pin 13) to clock ADC A0
 // jumper PWM pin 23 to pin 13 for clock source or use PDB timer
-// https://forum.pjrc.com/threads/40782-LPTMR-on-the-Teensy-3-1-3-2-3-5-3-6
 
 // ------------------------------------
 // Teensy 3.2
@@ -13,7 +12,7 @@
 //ADCr rates
 // Averaging 0 ------------------------
 // 16 bit 735kS/s, VERY_HIGH, VERY_HIGH
-// 12 bit 870kS/s, VERY_HIGH, VERY_HIGH
+// 12 bit 835kS/s, VERY_HIGH, VERY_HIGH
 //  8 bit 975kS/s, VERY_HIGH, VERY_HIGH
 // 16 bit 365kS/s, HIGH16, HIGH
 // 16 bit 365kS/s, HIGH, HIGH
@@ -48,7 +47,7 @@ void adc_init() {
   adc->adc0->disablePGA();        
   adc->adc0->setReference(ADC_REFERENCE::REF_3V3);
   adc->adc0->setAveraging(0); 
-  adc->adc0->setResolution(12); 
+  adc->adc0->setResolution(8); 
   adc->adc0->disableCompare();
   adc->adc0->setConversionSpeed(ADC_CONVERSION_SPEED::VERY_HIGH_SPEED);
   adc->adc0->setSamplingSpeed(ADC_SAMPLING_SPEED::VERY_HIGH_SPEED);      
@@ -58,6 +57,7 @@ void setup() {
   Serial.begin(9600);
   while (!Serial);
   pinMode(PIN_ADC, INPUT);
+  pinMode(23, OUTPUT);
   delay(1000);
   adc_init();
 }
