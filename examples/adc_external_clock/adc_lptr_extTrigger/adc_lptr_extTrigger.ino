@@ -1,10 +1,11 @@
 // Teensy external ADC clock example 
 //
-// This program increases external clock and reports if adc conversion were missed.
+// This program uses pin23 as "external" clock for ADC conversion.
+// It increases the clock and reports if adc conversion were missed.
+// You will need to create a connection between pin 23 and pin 13.
 //
-// Using LPTMR hardwre module
+// We are using the LPTMR hardware module:
 // adclptmr uses LPTMR0 counter (pin 13) to clock ADC A0
-// jumper PWM pin 23 to pin 13 for clock source or use PDB timer
 
 // ------------------------------------
 // Teensy 3.2

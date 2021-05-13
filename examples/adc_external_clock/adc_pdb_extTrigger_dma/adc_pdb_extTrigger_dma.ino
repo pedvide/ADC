@@ -1,9 +1,10 @@
 // Teensy external triggered ADC with DMA
 //
-// This program increases external clock and reports if adc conversion were missed.
+// This program uses pin23 as "external" clock for ADC conversion.
+// It increases the clock and reports if adc conversion were missed.
+// Connect pin 23 to pin 11.
 //
-// adc_pdb_extTrigger_DMA use PDB counter (pin 11) to clock ADC A0
-// jumper PWM 23 to pin 11 for clock source or use PDB timer
+// We are using PDB counter (pin 11) to clock ADC A0
 
 // ------------------------------------
 // Teensy 3.2
