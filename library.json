@@ -10,5 +10,6 @@
   },
   "exclude": "doxygen",
   "frameworks": "arduino",
-  "platforms": "teensy"
+  "platforms": "teensy",
+  "headers": "ADC.h"
 }
