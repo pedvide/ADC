@@ -329,22 +329,28 @@ bool test_all_combinations(bool debug = false)
   for (auto average : averages_list)
   {
     adc->adc0->setAveraging(average); // set number of averages
-    adc->adc0->setAveraging(average); // set number of averages
+#ifdef ADC_DUAL_ADCS
+    adc->adc1->setAveraging(average); // set number of averages
+#endif
     for (auto resolution : resolutions_list)
     {
       adc->adc0->setResolution(resolution); // set bits of resolution
-      adc->adc0->setResolution(resolution); // set bits of resolution
+#ifdef ADC_DUAL_ADCS
+      adc->adc1->setResolution(resolution); // set bits of resolution
+#endif
       for (auto conv_speed : conversion_speed_list)
       {
         adc->adc0->setConversionSpeed(conv_speed); // change the conversion speed
-        adc->adc0->setConversionSpeed(conv_speed); // change the conversion speed
+#ifdef ADC_DUAL_ADCS
+        adc->adc1->setConversionSpeed(conv_speed); // change the conversion speed
+#endif
         for (auto samp_speed : sampling_speed_list)
         {
           adc->adc0->setSamplingSpeed(samp_speed); // change the sampling speed
-          adc->adc0->setSamplingSpeed(samp_speed); // change the sampling speed
-
           adc->adc0->wait_for_cal();
+            
 #ifdef ADC_DUAL_ADCS
+          adc->adc1->setSamplingSpeed(samp_speed); // change the sampling speed
           adc->adc1->wait_for_cal();
 #endif
 
