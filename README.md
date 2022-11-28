@@ -9,6 +9,10 @@ If you download the library from here, also install the latest Teensyduino versi
 This thread in the Teensy forum also has information:
 http://forum.pjrc.com/threads/25532-ADC-library-update-now-with-support-for-Teensy-3-1
 
+# Updates
+
+This library was modified to include external trigger support (does not support Teensy 4.x)
+
 # License
 
 Teensy 4.x, 3.x, LC ADC library
