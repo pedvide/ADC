@@ -20,10 +20,10 @@
         Stop the timers: s<cr>
 */
 
-#ifdef ADC_USE_TIMER
-
 #include <ADC.h>
 #include <ADC_util.h>
+
+#ifdef ADC_USE_TIMER
 
 const int readPin = A0; // ADC0
 #ifdef ADC_DUAL_ADCS

@@ -3,10 +3,10 @@
  * comparison value or range.
  */
 
-#ifdef ADC_DUAL_ADCS
-
 #include <ADC.h>
 #include <ADC_util.h>
+
+#ifdef ADC_DUAL_ADCS
 
 const int readPin = A9;
 const int readPin2 = A3;

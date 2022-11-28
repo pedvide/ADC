@@ -19,9 +19,10 @@
   average from the previous set of data.
 */
 
+#include <ADC.h>
+
 #if defined(ADC_USE_DMA) && defined(ADC_USE_TIMER)
 
-#include <ADC.h>
 #include <AnalogBufferDMA.h>
 #include <DMAChannel.h>
 
