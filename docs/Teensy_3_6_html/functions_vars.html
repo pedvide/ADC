@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">ADC
-   &#160;<span id="projectnumber">8.0</span>
+   &#160;<span id="projectnumber">9.2</span>
    </div>
    <div id="projectbrief">Analog to Digital Conversor library for the Teensy 3.6 microprocessor</div>
   </td>
@@ -93,6 +93,9 @@ $(document).ready(function(){initNavTree('functions_vars.html',''); initResizabl
 <li>adc1
 : <a class="el" href="class_a_d_c.html#a8f6c4642e9e5400220452feeb6be13b8">ADC</a>
 </li>
+<li>adc_config
+: <a class="el" href="class_a_d_c___module.html#afcb1d826e94dad49e376bf3fe0334c39">ADC_Module</a>
+</li>
 <li>ADC_num
 : <a class="el" href="class_a_d_c___module.html#a29c327df90f71838a36efd3c3b68dd8c">ADC_Module</a>
 </li>
@@ -100,16 +103,16 @@ $(document).ready(function(){initNavTree('functions_vars.html',''); initResizabl
 : <a class="el" href="class_a_d_c___module.html#a34f6f7878889aa3644b279f9440dc0bf">ADC_Module</a>
 </li>
 <li>channel2sc1aADC0
-: <a class="el" href="class_a_d_c.html#ae873ea32d672d2d3ea1549fa0ec50f97">ADC</a>
+: <a class="el" href="class_a_d_c.html#ab790c1b44b90ff497cbf3e88f4580be8">ADC</a>
 </li>
 <li>channel2sc1aADC1
-: <a class="el" href="class_a_d_c.html#a2fedeea29293c728d84426e802c61ceb">ADC</a>
+: <a class="el" href="class_a_d_c.html#a756fe8fa6da7ab09cde1f7b27aeffd43">ADC</a>
 </li>
 <li>diff_table_ADC0
-: <a class="el" href="class_a_d_c.html#a1b2c46ade5591fb8038961fb352506a3">ADC</a>
+: <a class="el" href="class_a_d_c.html#a3ac941166af84754393ce2e3006a1c16">ADC</a>
 </li>
 <li>diff_table_ADC1
-: <a class="el" href="class_a_d_c.html#a1a12d4789bc90eea4ed115f8f7f0b457">ADC</a>
+: <a class="el" href="class_a_d_c.html#ac75d6d8768a6def95664d8bb00ae502a">ADC</a>
 </li>
 <li>fail_flag
 : <a class="el" href="class_a_d_c___module.html#a2d0cc3360073881658e578faf4ae5632">ADC_Module</a>
@@ -117,14 +120,32 @@ $(document).ready(function(){initNavTree('functions_vars.html',''); initResizabl
 <li>num_measurements
 : <a class="el" href="class_a_d_c___module.html#a27fdc83a7dbe3a8c8c24fc4273414256">ADC_Module</a>
 </li>
+<li>result_adc0
+: <a class="el" href="struct_a_d_c_1_1_sync__result.html#aa523cf5b3ed9823c0ff672a4b8eb3f4e">ADC::Sync_result</a>
+</li>
+<li>result_adc1
+: <a class="el" href="struct_a_d_c_1_1_sync__result.html#a652c42a16111d4edeb3cd7b324b382c7">ADC::Sync_result</a>
+</li>
+<li>savedCFG1
+: <a class="el" href="struct_a_d_c___module_1_1_a_d_c___config.html#a54092156c81d6dc11b521faf791751f6">ADC_Module::ADC_Config</a>
+</li>
+<li>savedCFG2
+: <a class="el" href="struct_a_d_c___module_1_1_a_d_c___config.html#ab1fc8559f2f2f9b9fc0c77a9e67ff2a6">ADC_Module::ADC_Config</a>
+</li>
 <li>savedSC1A
 : <a class="el" href="struct_a_d_c___module_1_1_a_d_c___config.html#a708e83c3bbd11a06d88802b8941e19a8">ADC_Module::ADC_Config</a>
 </li>
+<li>savedSC2
+: <a class="el" href="struct_a_d_c___module_1_1_a_d_c___config.html#a9f2fc51728d47cd8f6e8b00e8f400296">ADC_Module::ADC_Config</a>
+</li>
+<li>savedSC3
+: <a class="el" href="struct_a_d_c___module_1_1_a_d_c___config.html#ae04df65edae35a9beaaec59ce39b1e9e">ADC_Module::ADC_Config</a>
+</li>
 <li>sc1a2channelADC0
-: <a class="el" href="class_a_d_c.html#a4377c680975fe754de24b8f8617042de">ADC</a>
+: <a class="el" href="class_a_d_c.html#aa3fc624721f8108ef8b77b45a857bdc6">ADC</a>
 </li>
 <li>sc1a2channelADC1
-: <a class="el" href="class_a_d_c.html#a34e8ad9674e566e5ad7e0187e4393fcd">ADC</a>
+: <a class="el" href="class_a_d_c.html#ad1ed91f3ef9e283133455802c37c6501">ADC</a>
 </li>
 </ul>
 </div><!-- contents -->
@@ -132,7 +153,7 @@ $(document).ready(function(){initNavTree('functions_vars.html',''); initResizabl
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sun Jan 19 2020 12:56:13 for ADC by
+    <li class="footer">Generated on Tue Nov 29 2022 23:16:33 for ADC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">ADC
-   &#160;<span id="projectnumber">8.0</span>
+   &#160;<span id="projectnumber">9.2</span>
    </div>
    <div id="projectbrief">Analog to Digital Conversor library for the Teensy 3.1/3.2 microprocessor</div>
   </td>
@@ -97,10 +97,10 @@ $(document).ready(function(){initNavTree('namespace_a_d_c__settings.html',''); i
 Enumerations</h2></td></tr>
 <tr class="memitem:a5f42fd9e070e88475ec7cee39bbf4f8d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_a_d_c__settings.html#a5f42fd9e070e88475ec7cee39bbf4f8d">ADC_REFERENCE</a> : uint8_t { <a class="el" href="namespace_a_d_c__settings.html#a5f42fd9e070e88475ec7cee39bbf4f8dacbdca6103ed9d1895ad7cabeda125dac">ADC_REFERENCE::REF_3V3</a> = static_cast&lt;uint8_t&gt;(ADC_REF_SOURCE::REF_DEFAULT), 
 <a class="el" href="namespace_a_d_c__settings.html#a5f42fd9e070e88475ec7cee39bbf4f8da77f9ecbcb2044013c35ce1156c14b3a0">ADC_REFERENCE::REF_1V2</a> = static_cast&lt;uint8_t&gt;(ADC_REF_SOURCE::REF_ALT), 
-<a class="el" href="namespace_a_d_c__settings.html#a5f42fd9e070e88475ec7cee39bbf4f8da5f3cc7cfab06012c0aa6a4b8a5a77161">ADC_REFERENCE::REF_EXT</a> = static_cast&lt;uint8_t&gt;(ADC_REF_SOURCE::REF_DEFAULT), 
-<b>NONE</b> = static_cast&lt;uint8_t&gt;(ADC_REF_SOURCE::REF_NONE)
+<a class="el" href="namespace_a_d_c__settings.html#a5f42fd9e070e88475ec7cee39bbf4f8da5f3cc7cfab06012c0aa6a4b8a5a77161">ADC_REFERENCE::REF_EXT</a>, 
+<b>NONE</b>
  }</td></tr>
-<tr class="memdesc:a5f42fd9e070e88475ec7cee39bbf4f8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Voltage reference for the <a class="el" href="class_a_d_c.html">ADC</a>.  <a href="namespace_a_d_c__settings.html#a5f42fd9e070e88475ec7cee39bbf4f8d">More...</a><br /></td></tr>
+<tr class="memdesc:a5f42fd9e070e88475ec7cee39bbf4f8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Voltage reference for the <a class="el" href="class_a_d_c.html">ADC</a> default is the external, that is connected to the 3.3V supply. To use the external simply connect AREF to a different voltage alt is connected to the 1.2 V ref.  <a href="namespace_a_d_c__settings.html#a5f42fd9e070e88475ec7cee39bbf4f8d">More...</a><br /></td></tr>
 <tr class="separator:a5f42fd9e070e88475ec7cee39bbf4f8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c2a64f3fca3ac6b82e8df8cf44f6ca2"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_a_d_c__settings.html#a8c2a64f3fca3ac6b82e8df8cf44f6ca2">ADC_INTERNAL_SOURCE</a> : uint8_t { <br />
 &#160;&#160;<a class="el" href="namespace_a_d_c__settings.html#a8c2a64f3fca3ac6b82e8df8cf44f6ca2a2d8001cb5670d5668694dbf8697ee69f">ADC_INTERNAL_SOURCE::TEMP_SENSOR</a> = 38, 
@@ -111,6 +111,7 @@ Enumerations</h2></td></tr>
 &#160;&#160;<a class="el" href="namespace_a_d_c__settings.html#a8c2a64f3fca3ac6b82e8df8cf44f6ca2ab546f9ad5f80e932f2fd1038bbaddaa8">ADC_INTERNAL_SOURCE::VREFL</a> = 43
 <br />
  }</td></tr>
+<tr class="memdesc:a8c2a64f3fca3ac6b82e8df8cf44f6ca2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Other <a class="el" href="class_a_d_c.html">ADC</a> sources to measure, such as the temperature sensor.  <a href="namespace_a_d_c__settings.html#a8c2a64f3fca3ac6b82e8df8cf44f6ca2">More...</a><br /></td></tr>
 <tr class="separator:a8c2a64f3fca3ac6b82e8df8cf44f6ca2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab853fc1fcb1992fd5d51408adf7688e"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_a_d_c__settings.html#aab853fc1fcb1992fd5d51408adf7688e">ADC_CONVERSION_SPEED</a> : uint8_t { <br />
 &#160;&#160;<a class="el" href="namespace_a_d_c__settings.html#aab853fc1fcb1992fd5d51408adf7688ea5afd4ce3e51232e5889cfd918354ff2d">ADC_CONVERSION_SPEED::VERY_LOW_SPEED</a>, 
@@ -127,6 +128,7 @@ Enumerations</h2></td></tr>
 <a class="el" href="namespace_a_d_c__settings.html#aab853fc1fcb1992fd5d51408adf7688eac168966569a6773f0227ea1b761c6fd7">ADC_CONVERSION_SPEED::ADACK_6_2</a>
 <br />
  }</td></tr>
+<tr class="memdesc:aab853fc1fcb1992fd5d51408adf7688e"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_a_d_c.html">ADC</a> conversion speed. Common set of options to select the <a class="el" href="class_a_d_c.html">ADC</a> clock speed F_ADCK, which depends on ADC_F_BUS, except for the ADACK_X_Y options that are independent. This selection affects the sampling speed too. Note: the F_ADCK speed is not equal to the conversion speed; any measurement takes several F_ADCK cycles to complete including the sampling and conversion steps.  <a href="namespace_a_d_c__settings.html#aab853fc1fcb1992fd5d51408adf7688e">More...</a><br /></td></tr>
 <tr class="separator:aab853fc1fcb1992fd5d51408adf7688e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af0d80a1aae7288f77b13f0e01d9da0d3"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_a_d_c__settings.html#af0d80a1aae7288f77b13f0e01d9da0d3">ADC_SAMPLING_SPEED</a> : uint8_t { <br />
 &#160;&#160;<a class="el" href="namespace_a_d_c__settings.html#af0d80a1aae7288f77b13f0e01d9da0d3a5afd4ce3e51232e5889cfd918354ff2d">ADC_SAMPLING_SPEED::VERY_LOW_SPEED</a>, 
@@ -137,6 +139,7 @@ Enumerations</h2></td></tr>
 &#160;&#160;<a class="el" href="namespace_a_d_c__settings.html#af0d80a1aae7288f77b13f0e01d9da0d3a605020f3fad4a24098fbbb0fa4a293f1">ADC_SAMPLING_SPEED::VERY_HIGH_SPEED</a>
 <br />
  }</td></tr>
+<tr class="memdesc:af0d80a1aae7288f77b13f0e01d9da0d3"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_a_d_c.html">ADC</a> sampling speed. It selects how many ADCK clock cycles to add.  <a href="namespace_a_d_c__settings.html#af0d80a1aae7288f77b13f0e01d9da0d3">More...</a><br /></td></tr>
 <tr class="separator:af0d80a1aae7288f77b13f0e01d9da0d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -161,7 +164,9 @@ Enumerations</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
 <p><a class="el" href="class_a_d_c.html">ADC</a> conversion speed. Common set of options to select the <a class="el" href="class_a_d_c.html">ADC</a> clock speed F_ADCK, which depends on ADC_F_BUS, except for the ADACK_X_Y options that are independent. This selection affects the sampling speed too. Note: the F_ADCK speed is not equal to the conversion speed; any measurement takes several F_ADCK cycles to complete including the sampling and conversion steps. </p>
+<p>Note: ADACK_X_Y is useful if you are using the Teensy at a very low clock frequency but want faster conversions, but if F_BUS&lt;F_ADCK, you can't use VERY_HIGH_SPEED for sampling speed. </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="aab853fc1fcb1992fd5d51408adf7688ea5afd4ce3e51232e5889cfd918354ff2d"></a>VERY_LOW_SPEED&#160;</td><td class="fielddoc"><p>is guaranteed to be the lowest possible speed within specs for resolutions less than 16 bits. </p>
 </td></tr>
@@ -185,6 +190,8 @@ Enumerations</h2></td></tr>
 </td></tr>
 </table>
 
+<p class="definition">Definition at line <a class="el" href="settings__defines_8h_source.html#l00562">562</a> of file <a class="el" href="settings__defines_8h_source.html">settings_defines.h</a>.</p>
+
 </div>
 </div>
 <a id="a8c2a64f3fca3ac6b82e8df8cf44f6ca2"></a>
@@ -206,6 +213,7 @@ Enumerations</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
 <p>Other <a class="el" href="class_a_d_c.html">ADC</a> sources to measure, such as the temperature sensor. </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a8c2a64f3fca3ac6b82e8df8cf44f6ca2a2d8001cb5670d5668694dbf8697ee69f"></a>TEMP_SENSOR&#160;</td><td class="fielddoc"><p>Temperature sensor. </p>
@@ -219,6 +227,8 @@ Enumerations</h2></td></tr>
 <tr><td class="fieldname"><a id="a8c2a64f3fca3ac6b82e8df8cf44f6ca2ab546f9ad5f80e932f2fd1038bbaddaa8"></a>VREFL&#160;</td><td class="fielddoc"><p>Low <a class="el" href="namespace_v_r_e_f.html" title="Controls the Teensy internal voltage reference module (VREFV1)">VREF</a>. </p>
 </td></tr>
 </table>
+
+<p class="definition">Definition at line <a class="el" href="settings__defines_8h_source.html#l00268">268</a> of file <a class="el" href="settings__defines_8h_source.html">settings_defines.h</a>.</p>
 
 </div>
 </div>
@@ -242,7 +252,7 @@ Enumerations</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Voltage reference for the <a class="el" href="class_a_d_c.html">ADC</a>. </p>
+<p>Voltage reference for the <a class="el" href="class_a_d_c.html">ADC</a> default is the external, that is connected to the 3.3V supply. To use the external simply connect AREF to a different voltage alt is connected to the 1.2 V ref. </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a5f42fd9e070e88475ec7cee39bbf4f8dacbdca6103ed9d1895ad7cabeda125dac"></a>REF_3V3&#160;</td><td class="fielddoc"><p>3.3 volts </p>
 </td></tr>
@@ -251,6 +261,8 @@ Enumerations</h2></td></tr>
 <tr><td class="fieldname"><a id="a5f42fd9e070e88475ec7cee39bbf4f8da5f3cc7cfab06012c0aa6a4b8a5a77161"></a>REF_EXT&#160;</td><td class="fielddoc"><p>External <a class="el" href="namespace_v_r_e_f.html" title="Controls the Teensy internal voltage reference module (VREFV1)">VREF</a> </p>
 </td></tr>
 </table>
+
+<p class="definition">Definition at line <a class="el" href="settings__defines_8h_source.html#l00178">178</a> of file <a class="el" href="settings__defines_8h_source.html">settings_defines.h</a>.</p>
 
 </div>
 </div>
@@ -273,6 +285,7 @@ Enumerations</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
 <p><a class="el" href="class_a_d_c.html">ADC</a> sampling speed. It selects how many ADCK clock cycles to add. </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="af0d80a1aae7288f77b13f0e01d9da0d3a5afd4ce3e51232e5889cfd918354ff2d"></a>VERY_LOW_SPEED&#160;</td><td class="fielddoc"><p>is the lowest possible sampling speed (+24 ADCK). </p>
@@ -287,6 +300,8 @@ Enumerations</h2></td></tr>
 </td></tr>
 </table>
 
+<p class="definition">Definition at line <a class="el" href="settings__defines_8h_source.html#l00603">603</a> of file <a class="el" href="settings__defines_8h_source.html">settings_defines.h</a>.</p>
+
 </div>
 </div>
 </div><!-- contents -->
@@ -295,7 +310,7 @@ Enumerations</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespace_a_d_c__settings.html">ADC_settings</a></li>
-    <li class="footer">Generated on Sun Jan 19 2020 12:55:23 for ADC by
+    <li class="footer">Generated on Tue Nov 29 2022 23:16:13 for ADC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -26,9 +26,9 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">ADC
-   &#160;<span id="projectnumber">8.0</span>
+   &#160;<span id="projectnumber">9.2</span>
    </div>
-   <div id="projectbrief">Analog to Digital Conversor library for the Teensy microprocessor</div>
+   <div id="projectbrief">Analog to Digital Conversor library for the Teensy 3.5 microprocessor</div>
   </td>
  </tr>
  </tbody>
@@ -92,13 +92,19 @@ $(document).ready(function(){initNavTree('namespaceatomic.html',''); initResizab
 <a href="namespaceatomic.html#details">More...</a></p>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Atomic set, clear, change, or get bit in a register. </p>
+<p>Clear bit in address (make it zero), set bit (make it one), or return the value of that bit. <code>changeBitFlag</code> can change up to 2 bits in a flag at the same time</p>
+<p>We can change this functions depending on the board:</p><ul>
+<li>Teensy 3.x use bitband.</li>
+<li>Teensy LC has a more advanced bit manipulation engine.</li>
+<li>Teensy 4 also has bitband capabilities, but are not yet implemented, instead registers are set and cleared manually. TODO: fix this. </li>
+</ul>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespaceatomic.html">atomic</a></li>
-    <li class="footer">Generated on Sun Dec 29 2019 02:06:01 for ADC by
+    <li class="footer">Generated on Tue Nov 29 2022 23:16:23 for ADC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

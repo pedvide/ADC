@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">ADC
-   &#160;<span id="projectnumber">8.0</span>
+   &#160;<span id="projectnumber">9.2</span>
    </div>
    <div id="projectbrief">Analog to Digital Conversor library for the Teensy LC microprocessor</div>
   </td>
@@ -97,11 +97,23 @@ $(document).ready(function(){initNavTree('class_a_d_c.html',''); initResizable()
   <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#a4196bada3d9d28af2604175a8a79d872">analogRead</a>(ADC_INTERNAL_SOURCE pin, int8_t adc_num=-1)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
   <tr><td class="entry"><a class="el" href="class_a_d_c.html#a749efc928425a1eea18341ccfafd1819">analogReadContinuous</a>(int8_t adc_num=-1)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#aec3464cdb697f89cf162813b00b2e965">analogReadDifferential</a>(uint8_t pinP, uint8_t pinN, int8_t adc_num=-1)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="class_a_d_c.html#ae873ea32d672d2d3ea1549fa0ec50f97">channel2sc1aADC0</a></td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#a1b2c46ade5591fb8038961fb352506a3">diff_table_ADC0</a></td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
-  <tr><td class="entry"><a class="el" href="class_a_d_c.html#aee7423bfcbb03465bb0bd1e3c6474452">readSingle</a>(int8_t adc_num=-1)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#aa65014de31051e06a469982ca286496b">resetError</a>()</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="class_a_d_c.html#a4377c680975fe754de24b8f8617042de">sc1a2channelADC0</a></td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_a_d_c.html#ab790c1b44b90ff497cbf3e88f4580be8">channel2sc1aADC0</a></td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#a3ac941166af84754393ce2e3006a1c16">diff_table_ADC0</a></td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_a_d_c.html#ad48e3b4b69170965fc4fe70ef042c099">disableCompare</a>()</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#a58af22e8f95c1d2b1560153f906d1038">disableDMA</a>()</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_a_d_c.html#ad8acae7988973bdede138deea567623a">disableInterrupts</a>()</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#ad0737a1d21656cccc47851b85f4b3fc7">enableCompare</a>(int16_t compValue, bool greaterThan)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_a_d_c.html#aa2b5a656add303432afcd298f1a52110">enableCompareRange</a>(int16_t lowerLimit, int16_t upperLimit, bool insideRange, bool inclusive)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#a10b9e674ed487b81160687e38fafbb59">enableDMA</a>()</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_a_d_c.html#af81b3c7805c688558ab25d66a8adf982">enableInterrupts</a>(void(*isr)(void), uint8_t priority=255)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#aee7423bfcbb03465bb0bd1e3c6474452">readSingle</a>(int8_t adc_num=-1)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_a_d_c.html#aa65014de31051e06a469982ca286496b">resetError</a>()</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#aa3fc624721f8108ef8b77b45a857bdc6">sc1a2channelADC0</a></td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_a_d_c.html#aa80d9ebc6a60605e1b9a25f2db8734e9">setAveraging</a>(uint8_t num)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#acca4ab7812f804a09b28d7a76daff8fa">setConversionSpeed</a>(ADC_CONVERSION_SPEED speed)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_a_d_c.html#a4fe2513725fa0099460fc711b037f1e5">setReference</a>(ADC_REFERENCE type)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#a6b8f4f571b7729d9da50b72ab93ec023">setResolution</a>(uint8_t bits)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_a_d_c.html#ac7dad7a76bdd4965eced74692a5de886">setSamplingSpeed</a>(ADC_SAMPLING_SPEED speed)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#ad592f87ec644457b5056ae41c645ac0a">startContinuous</a>(uint8_t pin, int8_t adc_num=-1)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
   <tr><td class="entry"><a class="el" href="class_a_d_c.html#ae6179fc2e5ca7de1b0a3eb1f36985885">startContinuousDifferential</a>(uint8_t pinP, uint8_t pinN, int8_t adc_num=-1)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="class_a_d_c.html#ac1016c1d107118a0064c2b627dbd831b">startSingleDifferential</a>(uint8_t pinP, uint8_t pinN, int8_t adc_num=-1)</td><td class="entry"><a class="el" href="class_a_d_c.html">ADC</a></td><td class="entry"></td></tr>
@@ -112,7 +124,7 @@ $(document).ready(function(){initNavTree('class_a_d_c.html',''); initResizable()
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sun Jan 19 2020 12:56:35 for ADC by
+    <li class="footer">Generated on Tue Nov 29 2022 23:16:54 for ADC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

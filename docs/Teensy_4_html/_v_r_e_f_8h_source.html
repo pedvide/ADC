@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">ADC
-   &#160;<span id="projectnumber">8.0</span>
+   &#160;<span id="projectnumber">9.2</span>
    </div>
    <div id="projectbrief">Analog to Digital Conversor library for the Teensy 4 microprocessor</div>
   </td>
@@ -87,9 +87,9 @@ $(document).ready(function(){initNavTree('_v_r_e_f_8h_source.html',''); initResi
 <div class="title">VREF.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/* Teensy 4, 3.x, LC ADC library</span></div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/* Teensy 4.x, 3.x, LC ADC library</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> * https://github.com/pedvide/ADC</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> * Copyright (c) 2019 Pedro Villanueva</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> * Copyright (c) 2020 Pedro Villanueva</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> *</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> * Permission is hereby granted, free of charge, to any person obtaining</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> * a copy of this software and associated documentation files (the</span></div>
@@ -122,65 +122,64 @@ $(document).ready(function(){initNavTree('_v_r_e_f_8h_source.html',''); initResi
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#ifdef ADC_USE_INTERNAL_VREF</span></div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">namespace </span>VREF</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;{</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keyword">namespace </span>VREF {</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> start(uint8_t mode = VREF_SC_MODE_LV_HIGHPOWERBUF, uint8_t trim = 0x20) {</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        VREF_TRM = VREF_TRM_CHOPEN | (trim&amp;0x3F); <span class="comment">// enable module and set the trimmer to medium (max=0x3F=63)</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="comment">// enable 1.2 volt ref with all compensations in high power mode</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        VREF_SC = VREF_SC_VREFEN | VREF_SC_REGEN | VREF_SC_ICOMPEN | VREF_SC_MODE_LV(mode);</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="comment">// &quot;PMC_REGSC[BGEN] bit must be set if the VREF regulator is</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="comment">// required to remain operating in VLPx modes.&quot;</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="comment">// Also &quot;If the chop oscillator is to be used in very low power modes,</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="comment">// the system (bandgap) voltage reference must also be enabled.&quot;</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="comment">// enable bandgap, can be read directly with ADC_INTERNAL_SOURCE::BANDGAP</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        atomic::setBitFlag(PMC_REGSC, PMC_REGSC_BGBE);</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    }</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="keyword">inline</span> <span class="keywordtype">void</span> start(uint8_t mode = VREF_SC_MODE_LV_HIGHPOWERBUF,</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                  uint8_t trim = 0x20) {</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;  <span class="comment">// enable module and set the trimmer to medium (max=0x3F=63)</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;  VREF_TRM = VREF_TRM_CHOPEN | (trim &amp; 0x3F);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;  <span class="comment">// enable 1.2 volt ref with all compensations in high power mode</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;  VREF_SC =</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;      VREF_SC_VREFEN | VREF_SC_REGEN | VREF_SC_ICOMPEN | VREF_SC_MODE_LV(mode);</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> trim(uint8_t trim) {</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keywordtype">bool</span> chopen = atomic::getBitFlag(VREF_TRM, VREF_TRM_CHOPEN);</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        VREF_TRM = (chopen ? VREF_TRM_CHOPEN : 0) | (trim&amp;0x3F);</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    }</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    __attribute__((always_inline)) <span class="keyword">inline</span> <span class="keywordtype">void</span> stop(){</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        VREF_SC = 0;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        atomic::clearBitFlag(PMC_REGSC, PMC_REGSC_BGBE);</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    }</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    __attribute__((always_inline)) <span class="keyword">inline</span> <span class="keyword">volatile</span> <span class="keywordtype">bool</span> isStable() {</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        <span class="keywordflow">return</span> atomic::getBitFlag(VREF_SC, VREF_SC_VREFST);</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    }</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    __attribute__((always_inline)) <span class="keyword">inline</span> <span class="keyword">volatile</span> <span class="keywordtype">bool</span> isOn() {</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <span class="keywordflow">return</span> atomic::getBitFlag(VREF_SC, VREF_SC_VREFEN);</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    }</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> waitUntilStable() {</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        delay(35); <span class="comment">// see note in isStable()</span></div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        <span class="keywordflow">while</span>(isOn() &amp;&amp; !isStable()) {</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;            yield();</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        }</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    }</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;  <span class="comment">// &quot;PMC_REGSC[BGEN] bit must be set if the VREF regulator is</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;  <span class="comment">// required to remain operating in VLPx modes.&quot;</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;  <span class="comment">// Also &quot;If the chop oscillator is to be used in very low power modes,</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;  <span class="comment">// the system (bandgap) voltage reference must also be enabled.&quot;</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;  <span class="comment">// enable bandgap, can be read directly with ADC_INTERNAL_SOURCE::BANDGAP</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;  <a class="code" href="namespaceatomic.html#ae557d708b1629c90646e62be11ee7d1d">atomic::setBitFlag</a>(PMC_REGSC, PMC_REGSC_BGBE);</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;}</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;__attribute__((always_inline)) <span class="keyword">inline</span> <span class="keywordtype">void</span> trim(uint8_t trim) {</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;  <span class="keywordtype">bool</span> chopen = <a class="code" href="namespaceatomic.html#a50fed210e64d35067f9c2c21cc44c441">atomic::getBitFlag</a>(VREF_TRM, VREF_TRM_CHOPEN);</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;  VREF_TRM = (chopen ? VREF_TRM_CHOPEN : 0) | (trim &amp; 0x3F);</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;}</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;__attribute__((always_inline)) <span class="keyword">inline</span> <span class="keywordtype">void</span> stop() {</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;  VREF_SC = 0;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;  <a class="code" href="namespaceatomic.html#a344bd9c9adab533a4620fcac8474f662">atomic::clearBitFlag</a>(PMC_REGSC, PMC_REGSC_BGBE);</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;}</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;__attribute__((always_inline)) <span class="keyword">inline</span> <span class="keyword">volatile</span> <span class="keywordtype">bool</span> isStable() {</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;  <span class="keywordflow">return</span> <a class="code" href="namespaceatomic.html#a50fed210e64d35067f9c2c21cc44c441">atomic::getBitFlag</a>(VREF_SC, VREF_SC_VREFST);</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;}</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;__attribute__((always_inline)) <span class="keyword">inline</span> <span class="keyword">volatile</span> <span class="keywordtype">bool</span> isOn() {</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;  <span class="keywordflow">return</span> <a class="code" href="namespaceatomic.html#a50fed210e64d35067f9c2c21cc44c441">atomic::getBitFlag</a>(VREF_SC, VREF_SC_VREFEN);</div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;}</div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="preprocessor">#endif // ADC_USE_INTERNAL_VREF</span></div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="preprocessor">#endif // ADC_VREF_H</span></div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="keyword">inline</span> <span class="keywordtype">void</span> waitUntilStable() {</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;  delay(35); <span class="comment">// see note in isStable()</span></div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;  <span class="keywordflow">while</span> (isOn() &amp;&amp; !isStable()) {</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    yield();</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;  }</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;}</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160; </div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;} <span class="comment">// namespace VREF</span></div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160; </div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;<span class="preprocessor">#endif // ADC_USE_INTERNAL_VREF</span></div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160; </div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;<span class="preprocessor">#endif // ADC_VREF_H</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="anamespaceatomic_html_ae557d708b1629c90646e62be11ee7d1d"><div class="ttname"><a href="namespaceatomic.html#ae557d708b1629c90646e62be11ee7d1d">atomic::setBitFlag</a></div><div class="ttdeci">void setBitFlag(volatile T &amp;reg, T flag)</div><div class="ttdoc">Set the bits in the flag for reg.</div><div class="ttdef"><b>Definition:</b> <a href="atomic_8h_source.html#l00199">atomic.h:199</a></div></div>
+<div class="ttc" id="anamespaceatomic_html_a344bd9c9adab533a4620fcac8474f662"><div class="ttname"><a href="namespaceatomic.html#a344bd9c9adab533a4620fcac8474f662">atomic::clearBitFlag</a></div><div class="ttdeci">void clearBitFlag(volatile T &amp;reg, T flag)</div><div class="ttdoc">Clear the bits in the flag for reg.</div><div class="ttdef"><b>Definition:</b> <a href="atomic_8h_source.html#l00212">atomic.h:212</a></div></div>
+<div class="ttc" id="anamespaceatomic_html_a50fed210e64d35067f9c2c21cc44c441"><div class="ttname"><a href="namespaceatomic.html#a50fed210e64d35067f9c2c21cc44c441">atomic::getBitFlag</a></div><div class="ttdeci">volatile bool getBitFlag(volatile T &amp;reg, T flag)</div><div class="ttdoc">Get the bits in the flag for reg.</div><div class="ttdef"><b>Definition:</b> <a href="atomic_8h_source.html#l00261">atomic.h:261</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>VREF.h</b></li>
-    <li class="footer">Generated on Sun Jan 19 2020 12:56:24 for ADC by
+    <li class="footer">Generated on Tue Nov 29 2022 23:16:43 for ADC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

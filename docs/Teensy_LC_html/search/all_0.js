@@ -6,7 +6,7 @@ var searchData=
   ['adack_5f6_5f2_3',['ADACK_6_2',['../namespace_a_d_c__settings.html#aab853fc1fcb1992fd5d51408adf7688eac168966569a6773f0227ea1b761c6fd7',1,'ADC_settings']]],
   ['adc_4',['ADC',['../class_a_d_c.html',1,'ADC'],['../class_a_d_c.html#a03e1c7f64c02dec1976810a0a4967cf2',1,'ADC::adc()'],['../class_a_d_c.html#a60b6e21403b1f30984f63832c0562960',1,'ADC::ADC()']]],
   ['adc0_5',['adc0',['../class_a_d_c.html#a0d5b4dd16bbb03082daeeaadafec2474',1,'ADC']]],
-  ['adc_5fconfig_6',['ADC_Config',['../struct_a_d_c___module_1_1_a_d_c___config.html',1,'ADC_Module']]],
+  ['adc_5fconfig_6',['ADC_Config',['../struct_a_d_c___module_1_1_a_d_c___config.html',1,'ADC_Module::ADC_Config'],['../class_a_d_c___module.html#afcb1d826e94dad49e376bf3fe0334c39',1,'ADC_Module::adc_config()']]],
   ['adc_5fconversion_5fspeed_7',['ADC_CONVERSION_SPEED',['../namespace_a_d_c__settings.html#aab853fc1fcb1992fd5d51408adf7688e',1,'ADC_settings']]],
   ['adc_8',['ADC',['../adc_doc.html',1,'index']]],
   ['adc_5ferror_9',['ADC_Error',['../namespace_a_d_c___error.html',1,'ADC_Error'],['../namespace_a_d_c___error.html#ad050c44d1f3422d02e5f9726edeee8f0',1,'ADC_Error::ADC_ERROR()']]],
@@ -23,9 +23,10 @@ var searchData=
   ['analogread_20',['analogRead',['../class_a_d_c.html#aaf6079870b115d8b029d3613d44091dd',1,'ADC::analogRead(uint8_t pin, int8_t adc_num=-1)'],['../class_a_d_c.html#a4196bada3d9d28af2604175a8a79d872',1,'ADC::analogRead(ADC_INTERNAL_SOURCE pin, int8_t adc_num=-1)'],['../class_a_d_c___module.html#ad492adad4a9fa728625be82602bf1672',1,'ADC_Module::analogRead(uint8_t pin)'],['../class_a_d_c___module.html#a6eaddace77e00a063abeb7331fae6abe',1,'ADC_Module::analogRead(ADC_INTERNAL_SOURCE pin)']]],
   ['analogreadcontinuous_21',['analogReadContinuous',['../class_a_d_c.html#a749efc928425a1eea18341ccfafd1819',1,'ADC::analogReadContinuous()'],['../class_a_d_c___module.html#a8bddd248a9d52110b923fa94438f7f0a',1,'ADC_Module::analogReadContinuous()']]],
   ['analogreaddifferential_22',['analogReadDifferential',['../class_a_d_c.html#aec3464cdb697f89cf162813b00b2e965',1,'ADC::analogReadDifferential()'],['../class_a_d_c___module.html#a4a57f6a9b0e3884f3862062b33f1a447',1,'ADC_Module::analogReadDifferential()']]],
-  ['averages_5flist_23',['averages_list',['../namespace_a_d_c__util.html#a307171b253b7da9afe30eb6c2588d34b',1,'ADC_util']]],
-  ['adc_20error_20codes_24',['ADC error codes',['../error.html',1,'index']]],
-  ['adc_25',['ADC',['../index.html',1,'']]],
-  ['adc_20settings_26',['ADC Settings',['../settings.html',1,'index']]],
-  ['adc_20util_27',['ADC util',['../util.html',1,'index']]]
+  ['atomic_23',['atomic',['../namespaceatomic.html',1,'']]],
+  ['averages_5flist_24',['averages_list',['../namespace_a_d_c__util.html#a307171b253b7da9afe30eb6c2588d34b',1,'ADC_util']]],
+  ['adc_20error_20codes_25',['ADC error codes',['../error.html',1,'index']]],
+  ['adc_26',['ADC',['../index.html',1,'']]],
+  ['adc_20settings_27',['ADC Settings',['../settings.html',1,'index']]],
+  ['adc_20util_28',['ADC util',['../util.html',1,'index']]]
 ];
