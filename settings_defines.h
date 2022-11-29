@@ -554,6 +554,10 @@ constexpr uint32_t get_CFG_VERY_HIGH_SPEED(uint32_t f_adc_clock) {
  * to the conversion speed; any measurement takes several F_ADCK cycles to
  * complete including the sampling and conversion steps.
  *
+ * Note: ADACK_X_Y is useful if you are using the Teensy at a very low clock
+ * frequency but want faster conversions, but if F_BUS<F_ADCK, you can't use
+ * VERY_HIGH_SPEED for sampling speed.
+ *
  */
 enum class ADC_CONVERSION_SPEED : uint8_t {
 #if defined(ADC_TEENSY_4)
