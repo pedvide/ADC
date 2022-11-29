@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">ADC
-   &#160;<span id="projectnumber">8.0</span>
+   &#160;<span id="projectnumber">9.2</span>
    </div>
    <div id="projectbrief">Analog to Digital Conversor library for the Teensy 3.6 microprocessor</div>
   </td>
@@ -96,22 +96,23 @@ $(document).ready(function(){initNavTree('namespace_v_r_e_f.html',''); initResiz
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a569b07fd4d9cba8e5c6cb170b952c7ef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_v_r_e_f.html#a569b07fd4d9cba8e5c6cb170b952c7ef">start</a> (uint8_t mode=VREF_SC_MODE_LV_HIGHPOWERBUF, uint8_t <a class="el" href="namespace_v_r_e_f.html#adf9a5a3b3d7140ad45019141c2f054b4">trim</a>=0x20)</td></tr>
-<tr class="memdesc:a569b07fd4d9cba8e5c6cb170b952c7ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start the 1.2V internal reference (if present)  <a href="namespace_v_r_e_f.html#a569b07fd4d9cba8e5c6cb170b952c7ef">More...</a><br /></td></tr>
+<tr class="memdesc:a569b07fd4d9cba8e5c6cb170b952c7ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start the 1.2V internal reference (if present) This is called automatically by ADC_Module::setReference(ADC_REFERENCE::REF_1V2) Use it to switch on the internal reference on the VREF_OUT pin. You can measure it with adc-&gt;analogRead(ADC_INTERNAL_SOURCE::VREF_OUT).  <a href="namespace_v_r_e_f.html#a569b07fd4d9cba8e5c6cb170b952c7ef">More...</a><br /></td></tr>
 <tr class="separator:a569b07fd4d9cba8e5c6cb170b952c7ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf9a5a3b3d7140ad45019141c2f054b4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_v_r_e_f.html#adf9a5a3b3d7140ad45019141c2f054b4">trim</a> (uint8_t trim)</td></tr>
-<tr class="memdesc:adf9a5a3b3d7140ad45019141c2f054b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the trim.  <a href="namespace_v_r_e_f.html#adf9a5a3b3d7140ad45019141c2f054b4">More...</a><br /></td></tr>
+<tr class="memdesc:adf9a5a3b3d7140ad45019141c2f054b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the trim The change in the reference is about 0.5 mV per step.  <a href="namespace_v_r_e_f.html#adf9a5a3b3d7140ad45019141c2f054b4">More...</a><br /></td></tr>
 <tr class="separator:adf9a5a3b3d7140ad45019141c2f054b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac667e62e25fd2c9325f73dd0c6a6a3e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_v_r_e_f.html#ac667e62e25fd2c9325f73dd0c6a6a3e8">stop</a> ()</td></tr>
 <tr class="memdesc:ac667e62e25fd2c9325f73dd0c6a6a3e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stops the internal reference.  <a href="namespace_v_r_e_f.html#ac667e62e25fd2c9325f73dd0c6a6a3e8">More...</a><br /></td></tr>
 <tr class="separator:ac667e62e25fd2c9325f73dd0c6a6a3e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7a17a24c68ffc761a61750dd5c207336"><td class="memItemLeft" align="right" valign="top">volatile bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_v_r_e_f.html#a7a17a24c68ffc761a61750dd5c207336">isStable</a> ()</td></tr>
-<tr class="memdesc:a7a17a24c68ffc761a61750dd5c207336"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the internal reference has stabilized.  <a href="namespace_v_r_e_f.html#a7a17a24c68ffc761a61750dd5c207336">More...</a><br /></td></tr>
+<tr class="memdesc:a7a17a24c68ffc761a61750dd5c207336"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the internal reference has stabilized. NOTE: This is valid only when the chop oscillator is not being used. By default the chop oscillator IS used, so wait the maximum start-up time of 35 ms (as per datasheet). waitUntilStable waits 35 us. This should be polled after enabling the reference after reset, after changing its buffer mode from VREF_SC_MODE_LV_BANDGAPONLY to any of the buffered modes, or after changing the trim.  <a href="namespace_v_r_e_f.html#a7a17a24c68ffc761a61750dd5c207336">More...</a><br /></td></tr>
 <tr class="separator:a7a17a24c68ffc761a61750dd5c207336"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab1becdab4311ae08f2eb56e2542e9eb1"><td class="memItemLeft" align="right" valign="top">volatile bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_v_r_e_f.html#ab1becdab4311ae08f2eb56e2542e9eb1">isOn</a> ()</td></tr>
 <tr class="memdesc:ab1becdab4311ae08f2eb56e2542e9eb1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the internal reference is on.  <a href="namespace_v_r_e_f.html#ab1becdab4311ae08f2eb56e2542e9eb1">More...</a><br /></td></tr>
 <tr class="separator:ab1becdab4311ae08f2eb56e2542e9eb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a108f7c1b5a2073bc092eafcae58575b0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_v_r_e_f.html#a108f7c1b5a2073bc092eafcae58575b0">waitUntilStable</a> ()</td></tr>
-<tr class="memdesc:a108f7c1b5a2073bc092eafcae58575b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wait for the internal reference to stabilize.  <a href="namespace_v_r_e_f.html#a108f7c1b5a2073bc092eafcae58575b0">More...</a><br /></td></tr>
+<tr class="memitem:a108f7c1b5a2073bc092eafcae58575b0"><td class="memItemLeft" align="right" valign="top"><a id="a108f7c1b5a2073bc092eafcae58575b0"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_v_r_e_f.html#a108f7c1b5a2073bc092eafcae58575b0">waitUntilStable</a> ()</td></tr>
+<tr class="memdesc:a108f7c1b5a2073bc092eafcae58575b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wait for the internal reference to stabilize. This function can be called to wait for the internal reference to stabilize. It will block until the reference has stabilized, or return immediately if the reference is not enabled in the first place. <br /></td></tr>
 <tr class="separator:a108f7c1b5a2073bc092eafcae58575b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -143,6 +144,8 @@ Functions</h2></td></tr>
 <p>Check if the internal reference is on. </p>
 <dl class="section return"><dt>Returns</dt><dd>true if the <a class="el" href="namespace_v_r_e_f.html" title="Controls the Teensy internal voltage reference module (VREFV1)">VREF</a> module is switched on. </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="_v_r_e_f_8h_source.html#l00113">113</a> of file <a class="el" href="_v_r_e_f_8h_source.html">VREF.h</a>.</p>
+
 </div>
 </div>
 <a id="a7a17a24c68ffc761a61750dd5c207336"></a>
@@ -168,9 +171,10 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Check if the internal reference has stabilized. </p>
-<p>NOTE: This is valid only when the chop oscillator is not being used. By default the chop oscillator IS used, so wait the maximum start-up time of 35 ms (as per datasheet). waitUntilStable waits 35 us. This should be polled after enabling the reference after reset, after changing its buffer mode from VREF_SC_MODE_LV_BANDGAPONLY to any of the buffered modes, or after changing the trim.</p>
+<p>Check if the internal reference has stabilized. NOTE: This is valid only when the chop oscillator is not being used. By default the chop oscillator IS used, so wait the maximum start-up time of 35 ms (as per datasheet). waitUntilStable waits 35 us. This should be polled after enabling the reference after reset, after changing its buffer mode from VREF_SC_MODE_LV_BANDGAPONLY to any of the buffered modes, or after changing the trim. </p>
 <dl class="section return"><dt>Returns</dt><dd>true if the <a class="el" href="namespace_v_r_e_f.html" title="Controls the Teensy internal voltage reference module (VREFV1)">VREF</a> module is already in a stable condition and can be used. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="_v_r_e_f_8h_source.html#l00105">105</a> of file <a class="el" href="_v_r_e_f_8h_source.html">VREF.h</a>.</p>
 
 </div>
 </div>
@@ -208,14 +212,16 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Start the 1.2V internal reference (if present) </p>
-<p>This is called automatically by ADC_Module::setReference(ADC_REFERENCE::REF_1V2) Use it to switch on the internal reference on the VREF_OUT pin. You can measure it with adc-&gt;analogRead(ADC_INTERNAL_SOURCE::VREF_OUT). </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Start the 1.2V internal reference (if present) This is called automatically by ADC_Module::setReference(ADC_REFERENCE::REF_1V2) Use it to switch on the internal reference on the VREF_OUT pin. You can measure it with adc-&gt;analogRead(ADC_INTERNAL_SOURCE::VREF_OUT). </p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">mode</td><td>can be (these are defined in kinetis.h) VREF_SC_MODE_LV_BANDGAPONLY (0) for stand-by VREF_SC_MODE_LV_HIGHPOWERBUF (1) for high power buffer and VREF_SC_MODE_LV_LOWPOWERBUF (2) for low power buffer. </td></tr>
     <tr><td class="paramname">trim</td><td>adjusts the reference value, from 0 to 0x3F (63). Default is 32. </td></tr>
   </table>
   </dd>
 </dl>
+
+<p class="definition">Definition at line <a class="el" href="_v_r_e_f_8h_source.html#l00056">56</a> of file <a class="el" href="_v_r_e_f_8h_source.html">VREF.h</a>.</p>
 
 </div>
 </div>
@@ -243,7 +249,9 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Stops the internal reference. </p>
-<p>This is called automatically by ADC_Module::setReference(ref) when ref is any other than REF_1V2 </p>
+<p>This his is called automatically by ADC_Module::setReference(ref) when ref is any other than REF_1V2 </p>
+
+<p class="definition">Definition at line <a class="el" href="_v_r_e_f_8h_source.html#l00088">88</a> of file <a class="el" href="_v_r_e_f_8h_source.html">VREF.h</a>.</p>
 
 </div>
 </div>
@@ -271,41 +279,15 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Set the trim. </p>
-<p>Set the trim, the change in the reference is about 0.5 mV per step. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Set the trim The change in the reference is about 0.5 mV per step. </p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">trim</td><td>adjusts the reference value, from 0 to 0x3F (63). </td></tr>
   </table>
   </dd>
 </dl>
 
-</div>
-</div>
-<a id="a108f7c1b5a2073bc092eafcae58575b0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a108f7c1b5a2073bc092eafcae58575b0">&#9670;&nbsp;</a></span>waitUntilStable()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void VREF::waitUntilStable </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Wait for the internal reference to stabilize. </p>
-<p>This function can be called to wait for the internal reference to stabilize. It will block until the reference has stabilized, or return immediately if the reference is not enabled in the first place. </p>
+<p class="definition">Definition at line <a class="el" href="_v_r_e_f_8h_source.html#l00077">77</a> of file <a class="el" href="_v_r_e_f_8h_source.html">VREF.h</a>.</p>
 
 </div>
 </div>
@@ -315,7 +297,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespace_v_r_e_f.html">VREF</a></li>
-    <li class="footer">Generated on Sun Jan 19 2020 12:56:12 for ADC by
+    <li class="footer">Generated on Tue Nov 29 2022 23:16:33 for ADC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
