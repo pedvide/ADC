@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2020 Pedro Villanueva
+Copyright (c) 2022 Pedro Villanueva
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

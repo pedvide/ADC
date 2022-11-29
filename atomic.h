@@ -57,6 +57,7 @@
  * instead registers are set and cleared manually. TODO: fix this.
  */
 namespace atomic {
+
 #if defined(KINETISK) // Teensy 3.x
 /**
  * @brief Bitband address: Gets the aliased address of the bit-band register

@@ -37,7 +37,7 @@ Teensy 4.x, 3.x, LC ADC library
 This manual is divided in the following sections:
 - \subpage adc_doc "ADC"
 - \subpage adc_module "ADC Module"
-- \subpage settings "Board settings"
+- \subpage settings "ADC settings"
 - \subpage error "ADC error codes"
 - \subpage util "ADC util"
 

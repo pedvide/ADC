@@ -26,11 +26,6 @@
 #ifndef ADC_VREF_H
 #define ADC_VREF_H
 
-/**
- * @page VREF voltage reference module
- * Controls the Teensy internal voltage reference module (VREFV1)
- */
-
 #include <Arduino.h>
 
 #include <atomic.h>
@@ -86,6 +81,7 @@ __attribute__((always_inline)) inline void trim(uint8_t trim) {
 
 /**
  * @brief Stops the internal reference
+ *
  * This his is called automatically by ADC_Module::setReference(ref) when ref is
  * any other than REF_1V2
  */
