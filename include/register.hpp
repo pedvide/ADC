@@ -3,8 +3,8 @@ From https://github.com/kensmith/cortex-from-scratch/blob/master/reg_t.hpp
 */
 
 /*
-int __builtin_clz (unsigned int x)
-   Returns the number of leading 0-bits in x,
+int __builtin_ctzl (unsigned int x)
+   Returns the number of trailing 0-bits in x,
    starting at the most significant bit position.
    If x is 0, the result is undefined.
 */
@@ -15,7 +15,7 @@ using address_t = uint32_t;
 using value_t = uint32_t;
 
 template <typename mutability_policy_t, address_t address, address_t mask,
-          address_t offset = 31 - __builtin_clzl(mask)>
+          address_t offset = __builtin_ctzl(mask)>
 struct reg_t {
   /**
    * Read the subregister.
@@ -63,7 +63,7 @@ struct ro_t {
 };
 
 /**
- * A read-only mutability policy for use with reg_t.
+ * A read-write mutability policy for use with reg_t.
  */
 struct rw_t : ro_t {
   static void write(volatile address_t *address, address_t mask,
