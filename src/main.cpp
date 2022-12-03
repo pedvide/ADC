@@ -20,31 +20,21 @@ void setup() {
 }
 
 int value1 = 0, value2 = 0;
-int pin = 0;
+int pin = A0;
 
 void loop() {
 
-  if (Serial.available()) {
-    pin = Serial.parseInt();
-    if (pin > 0) {
-      Serial.print("Changing to pin ");
-      Serial.println(pin);
-      readPin = pin;
-    }
-  }
-
-  //   Serial.print("Pin: ");
-  //   Serial.print(readPin);
-  //   Serial.print(", ADC0 value: ");
-  //   value1 = adc->adc0->analogRead(readPin);
-  //   Serial.print(value1 * 3.3 / adc->adc0->getMaxValue(), DEC);
-  // #ifdef ADC_DUAL_ADCS
-  //   Serial.print(", ADC1 value: ");
-  //   value2 = adc->adc1->analogRead(readPin);
-  //   Serial.println(value2 * 3.3 / adc->adc0->getMaxValue(), DEC);
-  // #else
-  //   Serial.println();
-  // #endif
+  value1 = adc::adc_t::adc0::analogRead(A0);
+  Serial.print("ADC H0: ");
+  Serial.print(ADC1_HC0, HEX);
+  Serial.print(", value: ");
+  Serial.println(value1, DEC);
+  value1 = adc::adc_t::adc0::analogRead(A1);
+  Serial.print("ADC H0: ");
+  Serial.print(ADC1_HC0, HEX);
+  Serial.print(", value: ");
+  Serial.println(value1, DEC);
+  //   adc::adc_t::adc0::stopADC();
 
   digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
 
