@@ -1,9 +1,5 @@
 #include "adc_registers.hpp"
 
-template <std::size_t N, class T> constexpr std::size_t countof(T (&)[N]) {
-  return N;
-}
-
 namespace adc {
 enum class pin_t {
   A0 = PIN_A0,
