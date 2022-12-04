@@ -1,35 +1,79 @@
 #include "adc_registers.hpp"
 
 namespace adc {
-enum class pin_t {
-  A0 = PIN_A0,
-  A1,
-  A2,
-  A3,
-  A4,
-  A5,
-  A6,
-  A7,
-  A8,
-  A9,
-  A10,
-  A11,
-  A12,
-  A13
+
+template <uint8_t adc_num> struct pin_info_t {
+  static_assert(0 <= adc_num && adc_num <= 1, "invalid adc_num");
 };
 
-const uint8_t channel2sc1aADC0[] = {
-    7, 8, 12, 11, 6, 5, 15, 0, 13, 14, // 0-9, we treat them as A0-A9
-    1, 2, 31, 31,                      // 9-13, we treat them as A9-A13
-};
+template <> struct pin_info_t<0> {
+  enum class pin_t : uint8_t {
+    A0 = PIN_A0,
+    A1,
+    A2,
+    A3,
+    A4,
+    A5,
+    A6,
+    A7,
+    A8,
+    A9,
+    A10,
+    A11,
+    begin = A0,
+    end = A11
+  };
 
-template <int adc_num> struct adc_module_t {
+  static constexpr uint8_t channel2sc1a[] = {
+      7, 8, 12, 11, 6, 5, 15, 0, 13, 14, // A0-A9
+      1, 2                               // A10-A11
+  };
+};
+// make linker happy
+constexpr uint8_t adc::pin_info_t<0>::channel2sc1a[];
+
+template <> struct pin_info_t<1> {
+  enum class pin_t : uint8_t {
+    A0 = PIN_A0,
+    A1,
+    A2,
+    A3,
+    A4,
+    A5,
+    A6,
+    A7,
+    A8,
+    A9,
+    A12 = PIN_A12,
+    A13,
+    begin = A0,
+    end = A13
+  };
+
+  static constexpr uint8_t channel2sc1a[] = {
+      7,  8,  12, 11, 6, 5, 15, 0, 13, 14, // A0-A9
+      31, 31, 3,  4                        // A10, A11, A12, A13
+  };
+};
+// make linker happy
+constexpr uint8_t adc::pin_info_t<1>::channel2sc1a[];
+
+template <uint8_t adc_num> struct adc_module_t {
   static void init() {}
 
-  static bool start_measurement(pin_t pin) {
-    const uint8_t sc1a_channel = channel2sc1aADC0[static_cast<uint8_t>(pin)];
-    adc_module_reg_t<adc_num>::hc0::adch::write(sc1a_channel);
+  using pin_t = typename pin_info_t<adc_num>::pin_t;
 
+  static constexpr uint8_t const *channel2sc1a =
+      pin_info_t<adc_num>::channel2sc1a;
+
+  static bool start_measurement(pin_t pin) {
+    const uint8_t sc1a_channel =
+        channel2sc1a[static_cast<uint8_t>(pin) -
+                     static_cast<uint8_t>(pin_t::begin)];
+    if (sc1a_channel == 31) {
+      return false;
+    }
+    adc_module_reg_t<adc_num>::hc0::adch::write(sc1a_channel);
     return true;
   }
 
@@ -46,13 +90,14 @@ template <int adc_num> struct adc_module_t {
   template <typename return_policy_t, typename shot_policy_t>
   static int measure(pin_t pin) {
     shot_policy_t::single_or_continuous();
-    start_measurement(pin);
+    if (!start_measurement(pin)) {
+      return -1;
+    }
     return return_policy_t::return_or_wait();
   }
 
-  static int analogRead(uint8_t pin) {
-    return measure<wait_for_measurement_t, single_shot_t>(
-        static_cast<pin_t>(pin - static_cast<uint8_t>(pin_t::A0)));
+  static int analogRead(pin_t pin) {
+    return measure<wait_for_measurement_t, single_shot_t>(pin);
   }
 
   struct wait_for_measurement_t {
