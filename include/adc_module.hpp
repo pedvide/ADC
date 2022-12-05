@@ -7,8 +7,10 @@ template <uint8_t adc_num> struct pin_info_t {
 };
 
 template <> struct pin_info_t<0> {
+  static constexpr uint8_t num_pins = 12;
+
   enum class pin_t : uint8_t {
-    A0 = PIN_A0,
+    A0 = 0,
     A1,
     A2,
     A3,
@@ -20,21 +22,26 @@ template <> struct pin_info_t<0> {
     A9,
     A10,
     A11,
-    begin = A0,
-    end = A11
   };
 
-  static constexpr uint8_t channel2sc1a[] = {
+  static constexpr pin_t pins[num_pins] = {
+      pin_t::A0, pin_t::A1, pin_t::A2, pin_t::A3, pin_t::A4,  pin_t::A5,
+      pin_t::A6, pin_t::A7, pin_t::A8, pin_t::A9, pin_t::A10, pin_t::A11};
+
+  static constexpr uint8_t channel2sc1a[num_pins] = {
       7, 8, 12, 11, 6, 5, 15, 0, 13, 14, // A0-A9
       1, 2                               // A10-A11
   };
 };
 // make linker happy
 constexpr uint8_t adc::pin_info_t<0>::channel2sc1a[];
+constexpr adc::pin_info_t<0>::pin_t adc::pin_info_t<0>::pins[];
 
 template <> struct pin_info_t<1> {
+  static constexpr uint8_t num_pins = 12;
+
   enum class pin_t : uint8_t {
-    A0 = PIN_A0,
+    A0 = 0,
     A1,
     A2,
     A3,
@@ -44,55 +51,50 @@ template <> struct pin_info_t<1> {
     A7,
     A8,
     A9,
-    A12 = PIN_A12,
+    A12,
     A13,
-    begin = A0,
-    end = A13
   };
+  static constexpr pin_t pins[num_pins] = {
+      pin_t::A0, pin_t::A1, pin_t::A2, pin_t::A3, pin_t::A4,  pin_t::A5,
+      pin_t::A6, pin_t::A7, pin_t::A8, pin_t::A9, pin_t::A12, pin_t::A13};
 
-  static constexpr uint8_t channel2sc1a[] = {
-      7,  8,  12, 11, 6, 5, 15, 0, 13, 14, // A0-A9
-      31, 31, 3,  4                        // A10, A11, A12, A13
+  static constexpr uint8_t channel2sc1a[num_pins] = {
+      7, 8, 12, 11, 6, 5, 15, 0, 13, 14, // A0-A9
+      3, 4                               // A12, A13
   };
 };
 // make linker happy
 constexpr uint8_t adc::pin_info_t<1>::channel2sc1a[];
+constexpr adc::pin_info_t<1>::pin_t adc::pin_info_t<1>::pins[];
 
 template <uint8_t adc_num> struct adc_module_t {
+  using adc_module_reg = adc_module_reg_t<adc_num>;
+
+  using pin_info = pin_info_t<adc_num>;
+  using pin_t = typename pin_info::pin_t;
+
   static void init() {}
 
-  using pin_t = typename pin_info_t<adc_num>::pin_t;
-
-  static constexpr uint8_t const *channel2sc1a =
-      pin_info_t<adc_num>::channel2sc1a;
-
-  static bool start_measurement(pin_t pin) {
+  static void start_measurement(pin_t pin) {
     const uint8_t sc1a_channel =
-        channel2sc1a[static_cast<uint8_t>(pin) -
-                     static_cast<uint8_t>(pin_t::begin)];
-    if (sc1a_channel == 31) {
-      return false;
-    }
-    adc_module_reg_t<adc_num>::hc0::adch::write(sc1a_channel);
-    return true;
+        pin_info::channel2sc1a[static_cast<uint8_t>(pin)];
+    adc_module_reg::hc0::adch::write(sc1a_channel);
   }
 
   static value_t read_measurement() {
-    return adc_module_reg_t<adc_num>::r0::value::read();
+    return adc_module_reg::r0::value::read();
   }
 
   static bool measurement_ready() {
-    return adc_module_reg_t<adc_num>::hs::coco0::read() == 1;
+    return adc_module_reg::hs::coco0::read() == 1;
   }
 
+  // continuous vs single-shot
   // sync (wait for value) vs async (return inmediately)
-  // continuous vs sinlge-shot
   template <typename return_policy_t, typename shot_policy_t>
   static int measure(pin_t pin) {
     shot_policy_t::single_or_continuous();
-    if (!start_measurement(pin)) {
-      return -1;
-    }
+    start_measurement(pin);
     return return_policy_t::return_or_wait();
   }
 
