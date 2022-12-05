@@ -5,7 +5,7 @@ Import("env")
 env.AddPostAction(
     "$BUILD_DIR/${PROGNAME}.elf",
     env.VerboseAction(
-        "arm-none-eabi-objdump -d -S $BUILD_DIR/${PROGNAME}.elf > $BUILD_DIR/${PROGNAME}.s",
+        "arm-none-eabi-objdump -d -S -s $BUILD_DIR/${PROGNAME}.elf > $BUILD_DIR/${PROGNAME}.s",
         "Building ${PROGNAME}.s with objdump"
     )
 )
