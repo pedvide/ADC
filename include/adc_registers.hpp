@@ -54,69 +54,69 @@ template <int adc_num> struct adc_module_reg_t {
 
   struct hc0 {
     static constexpr address_t addr = base_addr + 0x00;
-    using aien = reg_t<rw_t, addr, ADC_HC_AIEN>;
-    using adch = reg_t<rw_t, addr, ADC_HC_ADCH(31)>;
+    using aien = reg_t<rw_t<>, addr, ADC_HC_AIEN>;
+    using adch = reg_t<rw_t<>, addr, ADC_HC_ADCH(31)>;
   };
 
   struct hs {
     static constexpr address_t addr = base_addr + 0x20;
-    using coco0 = reg_t<ro_t, addr, ADC_HS_COCO0>;
+    using coco0 = reg_t<ro_t<>, addr, ADC_HS_COCO0>;
   };
 
   struct r0 {
     static constexpr address_t addr = base_addr + 0x24;
-    using value = reg_t<ro_t, addr, 0xFFFFFFFF, 0>;
+    using value = reg_t<ro_t<>, addr, 0xFFFFFFFF, 0>;
   };
 
   struct cfg {
     static constexpr address_t addr = base_addr + 0x44;
-    using ovwren = reg_t<rw_t, addr, ADC_CFG_OVWREN>;
-    using avgs = reg_t<rw_t, addr, ADC_CFG_AVGS(3)>;
-    using adtrg = reg_t<rw_t, addr, ADC_CFG_ADTRG>;
-    using refsel = reg_t<rw_t, addr, ADC_CFG_REFSEL(3)>;
-    using adhsc = reg_t<rw_t, addr, ADC_CFG_ADHSC>;
-    using adsts = reg_t<rw_t, addr, ADC_CFG_ADSTS(3)>;
-    using adlpc = reg_t<rw_t, addr, ADC_CFG_ADLPC>;
-    using adiv = reg_t<rw_t, addr, ADC_CFG_ADIV(3)>;
-    using adlsmp = reg_t<rw_t, addr, ADC_CFG_ADLSMP>;
-    using mode = reg_t<rw_t, addr, ADC_CFG_MODE(3)>;
-    using adiclk = reg_t<rw_t, addr, ADC_CFG_ADICLK(3)>;
+    using ovwren = reg_t<rw_t<>, addr, ADC_CFG_OVWREN>;
+    using avgs = reg_t<rw_t<>, addr, ADC_CFG_AVGS(3)>;
+    using adtrg = reg_t<rw_t<>, addr, ADC_CFG_ADTRG>;
+    using refsel = reg_t<rw_t<>, addr, ADC_CFG_REFSEL(3)>;
+    using adhsc = reg_t<rw_t<>, addr, ADC_CFG_ADHSC>;
+    using adsts = reg_t<rw_t<>, addr, ADC_CFG_ADSTS(3)>;
+    using adlpc = reg_t<rw_t<>, addr, ADC_CFG_ADLPC>;
+    using adiv = reg_t<rw_t<>, addr, ADC_CFG_ADIV(3)>;
+    using adlsmp = reg_t<rw_t<>, addr, ADC_CFG_ADLSMP>;
+    using mode = reg_t<rw_t<>, addr, ADC_CFG_MODE(3)>;
+    using adiclk = reg_t<rw_t<>, addr, ADC_CFG_ADICLK(3)>;
   };
 
   struct gc {
     static constexpr address_t addr = base_addr + 0x48;
-    using cal = reg_t<rw_t, addr, ADC_GC_CAL>;
-    using adco = reg_t<rw_t, addr, ADC_GC_ADCO>;
-    using avge = reg_t<rw_t, addr, ADC_GC_AVGE>;
-    using acfe = reg_t<rw_t, addr, ADC_GC_ACFE>;
-    using acfgt = reg_t<rw_t, addr, ADC_GC_ACFGT>;
-    using acren = reg_t<rw_t, addr, ADC_GC_ACREN>;
-    using dmaen = reg_t<rw_t, addr, ADC_GC_DMAEN>;
-    using adacken = reg_t<rw_t, addr, ADC_GC_ADACKEN>;
+    using cal = reg_t<rw_t<>, addr, ADC_GC_CAL>;
+    using adco = reg_t<rw_t<>, addr, ADC_GC_ADCO>;
+    using avge = reg_t<rw_t<>, addr, ADC_GC_AVGE>;
+    using acfe = reg_t<rw_t<>, addr, ADC_GC_ACFE>;
+    using acfgt = reg_t<rw_t<>, addr, ADC_GC_ACFGT>;
+    using acren = reg_t<rw_t<>, addr, ADC_GC_ACREN>;
+    using dmaen = reg_t<rw_t<>, addr, ADC_GC_DMAEN>;
+    using adacken = reg_t<rw_t<>, addr, ADC_GC_ADACKEN>;
   };
 
   struct gs {
     static constexpr address_t addr = base_addr + 0x4C;
-    using awkst = reg_t<rw_t, addr, ADC_GS_AWKST>;
-    using calf = reg_t<rw_t, addr, ADC_GS_CALF>;
-    using adact = reg_t<rw_t, addr, ADC_GS_ADACT>;
+    using awkst = reg_t<rw_t<>, addr, ADC_GS_AWKST>;
+    using calf = reg_t<rw_t<>, addr, ADC_GS_CALF>;
+    using adact = reg_t<rw_t<>, addr, ADC_GS_ADACT>;
   };
 
   struct cv {
     static constexpr address_t addr = base_addr + 0x50;
-    using cv1 = reg_t<rw_t, addr, ADC_CV_CV1(0xFFF)>;
-    using cv2 = reg_t<rw_t, addr, ADC_CV_CV2(0xFFF)>;
+    using cv1 = reg_t<rw_t<>, addr, ADC_CV_CV1(0xFFF)>;
+    using cv2 = reg_t<rw_t<>, addr, ADC_CV_CV2(0xFFF)>;
   };
 
   struct ofs {
     static constexpr address_t addr = base_addr + 0x54;
-    using sign = reg_t<rw_t, addr, ADC_OFS_SIGN>;
-    using offset = reg_t<rw_t, addr, ADC_OFS_OFS(0xFFF)>;
+    using sign = reg_t<rw_t<>, addr, ADC_OFS_SIGN>;
+    using offset = reg_t<rw_t<>, addr, ADC_OFS_OFS(0xFFF)>;
   };
 
   struct cal {
     static constexpr address_t addr = base_addr + 0x58;
-    using code = reg_t<rw_t, addr, ADC_CAL_CAL_CODE(0x0F)>;
+    using code = reg_t<rw_t<>, addr, ADC_CAL_CAL_CODE(0x0F)>;
   };
 
 }; // struct adc_module
