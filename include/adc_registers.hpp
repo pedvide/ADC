@@ -53,20 +53,23 @@ template <int adc_num> struct adc_module_reg_t {
   static constexpr address_t base_addr = adc_module_base_addr<adc_num>::value;
 
   struct hc0 {
-    static constexpr address_t addr = base_addr + 0x00;
-    using aien = reg_t<rw_t<>, addr, ADC_HC_AIEN>;
-    using adch = reg_t<rw_t<>, addr, ADC_HC_ADCH(31)>;
+    using aien = reg_t<rw_t<>, base_addr + 0x00, ADC_HC_AIEN>;
+    using adch = reg_t<rw_t<>, base_addr + 0x00, ADC_HC_ADCH(31)>;
   };
+  using aien = typename hc0::aien;
+  using adch = typename hc0::adch;
 
   struct hs {
     static constexpr address_t addr = base_addr + 0x20;
     using coco0 = reg_t<ro_t<>, addr, ADC_HS_COCO0>;
   };
+  using coco0 = typename hs::coco0;
 
   struct r0 {
     static constexpr address_t addr = base_addr + 0x24;
     using value = reg_t<ro_t<>, addr, 0xFFFFFFFF, 0>;
   };
+  using value0 = typename r0::value;
 
   struct cfg {
     static constexpr address_t addr = base_addr + 0x44;
@@ -82,6 +85,17 @@ template <int adc_num> struct adc_module_reg_t {
     using mode = reg_t<rw_t<>, addr, ADC_CFG_MODE(3)>;
     using adiclk = reg_t<rw_t<>, addr, ADC_CFG_ADICLK(3)>;
   };
+  using ovwren = typename cfg::ovwren;
+  using avgs = typename cfg::avgs;
+  using adtrg = typename cfg::adtrg;
+  using refsel = typename cfg::refsel;
+  using adhsc = typename cfg::adhsc;
+  using adsts = typename cfg::adsts;
+  using adlpc = typename cfg::adlpc;
+  using adiv = typename cfg::adiv;
+  using adlsmp = typename cfg::adlsmp;
+  using mode = typename cfg::mode;
+  using adiclk = typename cfg::adiclk;
 
   struct gc {
     static constexpr address_t addr = base_addr + 0x48;
@@ -94,6 +108,14 @@ template <int adc_num> struct adc_module_reg_t {
     using dmaen = reg_t<rw_t<>, addr, ADC_GC_DMAEN>;
     using adacken = reg_t<rw_t<>, addr, ADC_GC_ADACKEN>;
   };
+  using cal = typename gc::cal;
+  using adco = typename gc::adco;
+  using avge = typename gc::avge;
+  using acfe = typename gc::acfe;
+  using acfgt = typename gc::acfgt;
+  using acren = typename gc::acren;
+  using dmaen = typename gc::dmaen;
+  using adacken = typename gc::adacken;
 
   struct gs {
     static constexpr address_t addr = base_addr + 0x4C;
@@ -101,6 +123,9 @@ template <int adc_num> struct adc_module_reg_t {
     using calf = reg_t<rw_t<>, addr, ADC_GS_CALF>;
     using adact = reg_t<rw_t<>, addr, ADC_GS_ADACT>;
   };
+  using awkst = typename gs::awkst;
+  using calf = typename gs::calf;
+  using adact = typename gs::adact;
 
   struct cv {
     static constexpr address_t addr = base_addr + 0x50;
@@ -114,7 +139,7 @@ template <int adc_num> struct adc_module_reg_t {
     using offset = reg_t<rw_t<>, addr, ADC_OFS_OFS(0xFFF)>;
   };
 
-  struct cal {
+  struct cal_data {
     static constexpr address_t addr = base_addr + 0x58;
     using code = reg_t<rw_t<>, addr, ADC_CAL_CAL_CODE(0x0F)>;
   };

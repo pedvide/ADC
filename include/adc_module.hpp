@@ -78,16 +78,12 @@ template <uint8_t adc_num> struct adc_module_t {
   static void start_measurement(pin_t pin) {
     const uint8_t sc1a_channel =
         pin_info::channel2sc1a[static_cast<uint8_t>(pin)];
-    adc_module_reg::hc0::adch::write(sc1a_channel);
+    adc_module_reg::adch::write(sc1a_channel);
   }
 
-  static value_t read_measurement() {
-    return adc_module_reg::r0::value::read();
-  }
+  static value_t read_measurement() { return adc_module_reg::value0::read(); }
 
-  static bool measurement_ready() {
-    return adc_module_reg::hs::coco0::read() == 1;
-  }
+  static bool measurement_ready() { return adc_module_reg::coco0::read() == 1; }
 
   // continuous vs single-shot
   // sync (wait for value) vs async (return inmediately)
