@@ -76,31 +76,33 @@ struct direct_access_t {
   }
 };
 
+using default_access_policy_t = direct_access_t;
+
 /**
  * A read-only mutability policy for use with reg_t.
  */
-template <class atomic_policy_t = direct_access_t> struct ro_t {
+template <typename access_policy_t = default_access_policy_t> struct ro_t {
   static value_t read(volatile address_t *address, address_t mask,
                       address_t offset) {
-    return atomic_policy_t::read(address, mask, offset);
+    return access_policy_t::read(address, mask, offset);
   }
 };
 
 /**
  * A read-write mutability policy for use with reg_t.
  */
-template <typename atomic_policy_t = direct_access_t>
-struct rw_t : ro_t<atomic_policy_t> {
+template <typename access_policy_t = default_access_policy_t>
+struct rw_t : ro_t<access_policy_t> {
   static void write(volatile address_t *address, address_t mask,
                     address_t offset, value_t value) {
-    atomic_policy_t::write(address, mask, offset, value);
+    access_policy_t::write(address, mask, offset, value);
   }
 
   static void set(volatile address_t *address, address_t mask) {
-    atomic_policy_t::set(address, mask);
+    access_policy_t::set(address, mask);
   }
 
   static void clear(volatile address_t *address, address_t mask) {
-    atomic_policy_t::clear(address, mask);
+    access_policy_t::clear(address, mask);
   }
 };
