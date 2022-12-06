@@ -53,7 +53,7 @@ struct reg_t {
 };
 
 /**
- * @brief Direct access atomic policy, always available, unlike bitbanding.
+ * @brief Direct access access policy, always available, unlike bitbanding.
  *
  */
 struct direct_access_t {
