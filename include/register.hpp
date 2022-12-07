@@ -14,7 +14,8 @@ int __builtin_ctzl (unsigned int x)
 using address_t = uint32_t;
 using value_t = uint32_t;
 
-template <typename mutability_policy_t, address_t address, address_t mask,
+template <template <typename> class mutability_policy_t,
+          typename access_policy_t, address_t address, address_t mask,
           address_t offset = __builtin_ctzl(mask)>
 struct reg_t {
   /**
@@ -22,7 +23,7 @@ struct reg_t {
    * @return the value
    */
   static value_t read() {
-    return mutability_policy_t::read(
+    return mutability_policy_t<access_policy_t>::read(
         reinterpret_cast<volatile address_t *>(address), mask, offset);
   }
 
@@ -31,24 +32,24 @@ struct reg_t {
    * @param value the new value
    */
   static void write(value_t value) {
-    mutability_policy_t::write(reinterpret_cast<volatile address_t *>(address),
-                               mask, offset, value);
+    mutability_policy_t<access_policy_t>::write(
+        reinterpret_cast<volatile address_t *>(address), mask, offset, value);
   }
 
   /**
    * Set all bits in the subregister to one.
    */
   static void set() {
-    mutability_policy_t::set(reinterpret_cast<volatile address_t *>(address),
-                             mask);
+    mutability_policy_t<access_policy_t>::set(
+        reinterpret_cast<volatile address_t *>(address), mask);
   }
 
   /**
    * Clear all bits in the subregister to zero.
    */
   static void clear() {
-    mutability_policy_t::clear(reinterpret_cast<volatile address_t *>(address),
-                               mask);
+    mutability_policy_t<access_policy_t>::clear(
+        reinterpret_cast<volatile address_t *>(address), mask);
   }
 };
 
@@ -76,12 +77,10 @@ struct direct_access_t {
   }
 };
 
-using default_access_policy_t = direct_access_t;
-
 /**
  * A read-only mutability policy for use with reg_t.
  */
-template <typename access_policy_t = default_access_policy_t> struct ro_t {
+template <typename access_policy_t> struct ro_t {
   static value_t read(volatile address_t *address, address_t mask,
                       address_t offset) {
     return access_policy_t::read(address, mask, offset);
@@ -91,8 +90,7 @@ template <typename access_policy_t = default_access_policy_t> struct ro_t {
 /**
  * A read-write mutability policy for use with reg_t.
  */
-template <typename access_policy_t = default_access_policy_t>
-struct rw_t : ro_t<access_policy_t> {
+template <typename access_policy_t> struct rw_t : ro_t<access_policy_t> {
   static void write(volatile address_t *address, address_t mask,
                     address_t offset, value_t value) {
     access_policy_t::write(address, mask, offset, value);
