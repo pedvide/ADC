@@ -1,56 +1,87 @@
+#pragma once
 /**
-Register definitions for the ADC
-
+Specializations for Teensy 4 and 4.1
 */
 
+#include "common_defs.hpp"
 #include "register.hpp"
-
-// #define ADC_HC_AIEN ((uint32_t)(1 << 7))
-// #define ADC_HC_ADCH(n) ((uint32_t)(((n)&0x1F) << 0))
-// #define ADC_HS_COCO0 ((uint32_t)(1 << 0))
-// #define ADC_CFG_OVWREN ((uint32_t)(1 << 16))
-// #define ADC_CFG_AVGS(n) ((uint32_t)(((n)&0x03) << 14))
-// #define ADC_CFG_ADTRG ((uint32_t)(1 << 13))
-// #define ADC_CFG_REFSEL(n) ((uint32_t)(((n)&0x03) << 11))
-// #define ADC_CFG_ADHSC ((uint32_t)(1 << 10))
-// #define ADC_CFG_ADSTS(n) ((uint32_t)(((n)&0x03) << 8))
-// #define ADC_CFG_ADLPC ((uint32_t)(1 << 7))
-// #define ADC_CFG_ADIV(n) ((uint32_t)(((n)&0x03) << 5))
-// #define ADC_CFG_ADLSMP ((uint32_t)(1 << 4))
-// #define ADC_CFG_MODE(n) ((uint32_t)(((n)&0x03) << 2))
-// #define ADC_CFG_ADICLK(n) ((uint32_t)(((n)&0x03) << 0))
-// #define ADC_GC_CAL ((uint32_t)(1 << 7))
-// #define ADC_GC_ADCO ((uint32_t)(1 << 6))
-// #define ADC_GC_AVGE ((uint32_t)(1 << 5))
-// #define ADC_GC_ACFE ((uint32_t)(1 << 4))
-// #define ADC_GC_ACFGT ((uint32_t)(1 << 3))
-// #define ADC_GC_ACREN ((uint32_t)(1 << 2))
-// #define ADC_GC_DMAEN ((uint32_t)(1 << 1))
-// #define ADC_GC_ADACKEN ((uint32_t)(1 << 0))
-// #define ADC_GS_AWKST ((uint32_t)(1 << 2))
-// #define ADC_GS_CALF ((uint32_t)(1 << 1))
-// #define ADC_GS_ADACT ((uint32_t)(1 << 0))
-// #define ADC_CV_CV2(n) ((uint32_t)(((n)&0xFFF) << 16))
-// #define ADC_CV_CV1(n) ((uint32_t)(((n)&0xFFF) << 0))
-// #define ADC_OFS_SIGN ((uint32_t)(1 << 12))
-// #define ADC_OFS_OFS(n) ((uint32_t)(((n)&0xFFF) << 0))
-// #define ADC_CAL_CAL_CODE(n) ((uint32_t)(((n)&0x0F) << 0))
 
 namespace adc {
 
-template <int adc_num> struct adc_module_base_addr {
-  static_assert(0 <= adc_num && adc_num <= 1, "invalid adc_num");
-};
+template <> struct pin_info_t<board_t::TEENSY_4, 0> {
+  static constexpr uint8_t num_pins = 12;
 
-template <> struct adc_module_base_addr<0> {
+  enum class pin_t : uint8_t {
+    A0 = 0,
+    A1,
+    A2,
+    A3,
+    A4,
+    A5,
+    A6,
+    A7,
+    A8,
+    A9,
+    A10,
+    A11,
+  };
+
+  static constexpr pin_t pins[num_pins] = {
+      pin_t::A0, pin_t::A1, pin_t::A2, pin_t::A3, pin_t::A4,  pin_t::A5,
+      pin_t::A6, pin_t::A7, pin_t::A8, pin_t::A9, pin_t::A10, pin_t::A11};
+
+  static constexpr uint8_t channel2sc1a[num_pins] = {
+      7, 8, 12, 11, 6, 5, 15, 0, 13, 14, // A0-A9
+      1, 2                               // A10-A11
+  };
+};
+// make linker happy
+constexpr uint8_t pin_info_t<board_t::TEENSY_4, 0>::channel2sc1a[];
+constexpr pin_info_t<board_t::TEENSY_4, 0>::pin_t
+    pin_info_t<board_t::TEENSY_4, 0>::pins[];
+
+template <> struct pin_info_t<board_t::TEENSY_4, 1> {
+  static constexpr uint8_t num_pins = 12;
+
+  enum class pin_t : uint8_t {
+    A0 = 0,
+    A1,
+    A2,
+    A3,
+    A4,
+    A5,
+    A6,
+    A7,
+    A8,
+    A9,
+    A12,
+    A13,
+  };
+  static constexpr pin_t pins[num_pins] = {
+      pin_t::A0, pin_t::A1, pin_t::A2, pin_t::A3, pin_t::A4,  pin_t::A5,
+      pin_t::A6, pin_t::A7, pin_t::A8, pin_t::A9, pin_t::A12, pin_t::A13};
+
+  static constexpr uint8_t channel2sc1a[num_pins] = {
+      7, 8, 12, 11, 6, 5, 15, 0, 13, 14, // A0-A9
+      3, 4                               // A12, A13
+  };
+};
+// make linker happy
+constexpr uint8_t pin_info_t<board_t::TEENSY_4, 1>::channel2sc1a[];
+constexpr pin_info_t<board_t::TEENSY_4, 1>::pin_t
+    pin_info_t<board_t::TEENSY_4, 1>::pins[];
+
+// Register definitions
+template <> struct adc_base_addr<board_t::TEENSY_4, 0> {
   static constexpr address_t value = 0x400C4000;
 };
-template <> struct adc_module_base_addr<1> {
+template <> struct adc_base_addr<board_t::TEENSY_4, 1> {
   static constexpr address_t value = 0x400C8000;
 };
 
-template <int adc_num> struct adc_module_reg_t {
-  static constexpr address_t base_addr = adc_module_base_addr<adc_num>::value;
+template <int adc_num> struct adc_module_reg_t<board_t::TEENSY_4, adc_num> {
+  static constexpr address_t base_addr =
+      adc_base_addr<board_t::TEENSY_4, adc_num>::value;
 
   struct hc0 {
     using aien = reg_t<rw_t, direct_access_t, base_addr + 0x00, ADC_HC_AIEN>;
@@ -147,4 +178,4 @@ template <int adc_num> struct adc_module_reg_t {
 
 }; // struct adc_module
 
-} // namespace adc
+}; // namespace adc

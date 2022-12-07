@@ -1,76 +1,13 @@
-#include "adc_registers.hpp"
+#pragma once
+
+#include "teensy4.hpp"
 
 namespace adc {
 
-template <uint8_t adc_num> struct pin_info_t {
-  static_assert(0 <= adc_num && adc_num <= 1, "invalid adc_num");
-};
+template <board_t board, uint8_t adc_num> struct adc_module_t {
+  using adc_module_reg = adc_module_reg_t<board, adc_num>;
 
-template <> struct pin_info_t<0> {
-  static constexpr uint8_t num_pins = 12;
-
-  enum class pin_t : uint8_t {
-    A0 = 0,
-    A1,
-    A2,
-    A3,
-    A4,
-    A5,
-    A6,
-    A7,
-    A8,
-    A9,
-    A10,
-    A11,
-  };
-
-  static constexpr pin_t pins[num_pins] = {
-      pin_t::A0, pin_t::A1, pin_t::A2, pin_t::A3, pin_t::A4,  pin_t::A5,
-      pin_t::A6, pin_t::A7, pin_t::A8, pin_t::A9, pin_t::A10, pin_t::A11};
-
-  static constexpr uint8_t channel2sc1a[num_pins] = {
-      7, 8, 12, 11, 6, 5, 15, 0, 13, 14, // A0-A9
-      1, 2                               // A10-A11
-  };
-};
-// make linker happy
-constexpr uint8_t adc::pin_info_t<0>::channel2sc1a[];
-constexpr adc::pin_info_t<0>::pin_t adc::pin_info_t<0>::pins[];
-
-template <> struct pin_info_t<1> {
-  static constexpr uint8_t num_pins = 12;
-
-  enum class pin_t : uint8_t {
-    A0 = 0,
-    A1,
-    A2,
-    A3,
-    A4,
-    A5,
-    A6,
-    A7,
-    A8,
-    A9,
-    A12,
-    A13,
-  };
-  static constexpr pin_t pins[num_pins] = {
-      pin_t::A0, pin_t::A1, pin_t::A2, pin_t::A3, pin_t::A4,  pin_t::A5,
-      pin_t::A6, pin_t::A7, pin_t::A8, pin_t::A9, pin_t::A12, pin_t::A13};
-
-  static constexpr uint8_t channel2sc1a[num_pins] = {
-      7, 8, 12, 11, 6, 5, 15, 0, 13, 14, // A0-A9
-      3, 4                               // A12, A13
-  };
-};
-// make linker happy
-constexpr uint8_t adc::pin_info_t<1>::channel2sc1a[];
-constexpr adc::pin_info_t<1>::pin_t adc::pin_info_t<1>::pins[];
-
-template <uint8_t adc_num> struct adc_module_t {
-  using adc_module_reg = adc_module_reg_t<adc_num>;
-
-  using pin_info = pin_info_t<adc_num>;
+  using pin_info = pin_info_t<board, adc_num>;
   using pin_t = typename pin_info::pin_t;
 
   static void init() {}
