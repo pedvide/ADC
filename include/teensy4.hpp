@@ -8,7 +8,7 @@ Specializations for Teensy 4 and 4.1
 
 namespace adc {
 
-template <> struct pin_info_t<board_t::TEENSY_4, 0> {
+template <> struct pin_info_t<board_t::TEENSY_4_0, 0> {
   static constexpr uint8_t num_pins = 12;
 
   enum class pin_t : uint8_t {
@@ -36,11 +36,11 @@ template <> struct pin_info_t<board_t::TEENSY_4, 0> {
   };
 };
 // make linker happy
-constexpr uint8_t pin_info_t<board_t::TEENSY_4, 0>::channel2sc1a[];
-constexpr pin_info_t<board_t::TEENSY_4, 0>::pin_t
-    pin_info_t<board_t::TEENSY_4, 0>::pins[];
+constexpr uint8_t pin_info_t<board_t::TEENSY_4_0, 0>::channel2sc1a[];
+constexpr pin_info_t<board_t::TEENSY_4_0, 0>::pin_t
+    pin_info_t<board_t::TEENSY_4_0, 0>::pins[];
 
-template <> struct pin_info_t<board_t::TEENSY_4, 1> {
+template <> struct pin_info_t<board_t::TEENSY_4_0, 1> {
   static constexpr uint8_t num_pins = 12;
 
   enum class pin_t : uint8_t {
@@ -67,21 +67,21 @@ template <> struct pin_info_t<board_t::TEENSY_4, 1> {
   };
 };
 // make linker happy
-constexpr uint8_t pin_info_t<board_t::TEENSY_4, 1>::channel2sc1a[];
-constexpr pin_info_t<board_t::TEENSY_4, 1>::pin_t
-    pin_info_t<board_t::TEENSY_4, 1>::pins[];
+constexpr uint8_t pin_info_t<board_t::TEENSY_4_0, 1>::channel2sc1a[];
+constexpr pin_info_t<board_t::TEENSY_4_0, 1>::pin_t
+    pin_info_t<board_t::TEENSY_4_0, 1>::pins[];
 
 // Register definitions
-template <> struct adc_base_addr<board_t::TEENSY_4, 0> {
+template <> struct adc_base_addr<board_t::TEENSY_4_0, 0> {
   static constexpr address_t value = 0x400C4000;
 };
-template <> struct adc_base_addr<board_t::TEENSY_4, 1> {
+template <> struct adc_base_addr<board_t::TEENSY_4_0, 1> {
   static constexpr address_t value = 0x400C8000;
 };
 
-template <int adc_num> struct adc_module_reg_t<board_t::TEENSY_4, adc_num> {
+template <int adc_num> struct adc_module_reg_t<board_t::TEENSY_4_0, adc_num> {
   static constexpr address_t base_addr =
-      adc_base_addr<board_t::TEENSY_4, adc_num>::value;
+      adc_base_addr<board_t::TEENSY_4_0, adc_num>::value;
 
   struct hc0 {
     using aien = reg_t<rw_t, direct_access_t, base_addr + 0x00, ADC_HC_AIEN>;
