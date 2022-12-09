@@ -1,6 +1,6 @@
 #pragma once
 
-#include "teensy4.hpp"
+#include "common_defs.hpp"
 
 namespace adc {
 

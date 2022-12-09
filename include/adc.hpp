@@ -2,6 +2,7 @@
 
 #include "adc_module.hpp"
 #include "common_defs.hpp"
+#include "teensy4.hpp"
 
 namespace adc {
 
