@@ -9,10 +9,9 @@ int __builtin_ctzl (unsigned int x)
    If x is 0, the result is undefined.
 */
 
-#include "Arduino.h"
+#include "common_defs.hpp"
 
-using address_t = uint32_t;
-using value_t = uint32_t;
+namespace adc {
 
 template <template <typename> class mutability_policy_t,
           typename access_policy_t, address_t address, address_t mask,
@@ -104,3 +103,5 @@ template <typename access_policy_t> struct rw_t : ro_t<access_policy_t> {
     access_policy_t::clear(address, mask);
   }
 };
+
+}; // namespace adc

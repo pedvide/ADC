@@ -7,6 +7,9 @@ Common structures
 
 namespace adc {
 
+using address_t = uint32_t;
+using value_t = uint32_t;
+
 enum class board_t : uint8_t { TEENSY_4, TEENSY_3, TEENSY_LC };
 
 template <board_t board, uint8_t adc_num> struct pin_info_t {
