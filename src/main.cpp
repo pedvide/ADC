@@ -48,17 +48,17 @@ void loop() {
 
   for (auto pin : adc::adc0::pin_info::pins) {
     value1 = adc::adc0::analogRead(pin);
-    // Serial.printf("Pin A%d: %d \n", (int)pin - (int)adc::adc0::pin_t::A0,
-    //               value1);
+    Serial.printf("Pin A%d: %d \n", adc::adc0::pin_info::pins2int[(int)pin],
+                  value1);
   }
 
-  //   Serial.print("ADC1 ADC_CFG_ADSTS: ");
-  //   Serial.println(ADC1_CFG & ADC_CFG_ADSTS(0x03), HEX);
+  // Serial.print("ADC1 ADC_CFG_ADSTS: ");
+  // Serial.println((ADC1_CFG & ADC_CFG_ADSTS(0x03)) >> 8, HEX);
 
-  //   Serial.print("ADC1 ADC_CFG_ADSTS: ");
-  //   Serial.println(adc::adc_module_reg_t<0>::cfg::adsts::read(), HEX);
+  // Serial.print("ADC1 ADC_CFG_ADSTS: ");
+  // Serial.println(adc::adc_module_reg_t<0>::adsts::read(), HEX);
 
-  //   digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
+  digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
 
-  //   delay(500);
+  delay(500);
 }

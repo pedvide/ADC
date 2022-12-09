@@ -30,6 +30,9 @@ template <> struct pin_info_t<board_t::TEENSY_4_0, 0> {
       pin_t::A0, pin_t::A1, pin_t::A2, pin_t::A3, pin_t::A4,  pin_t::A5,
       pin_t::A6, pin_t::A7, pin_t::A8, pin_t::A9, pin_t::A10, pin_t::A11};
 
+  static constexpr uint8_t pins2int[num_pins] = {0, 1, 2, 3, 4,  5,
+                                                 6, 7, 8, 9, 10, 11};
+
   static constexpr uint8_t channel2sc1a[num_pins] = {
       7, 8, 12, 11, 6, 5, 15, 0, 13, 14, // A0-A9
       1, 2                               // A10-A11
@@ -37,6 +40,7 @@ template <> struct pin_info_t<board_t::TEENSY_4_0, 0> {
 };
 // make linker happy
 constexpr uint8_t pin_info_t<board_t::TEENSY_4_0, 0>::channel2sc1a[];
+constexpr uint8_t pin_info_t<board_t::TEENSY_4_0, 0>::pins2int[];
 constexpr pin_info_t<board_t::TEENSY_4_0, 0>::pin_t
     pin_info_t<board_t::TEENSY_4_0, 0>::pins[];
 
@@ -61,6 +65,9 @@ template <> struct pin_info_t<board_t::TEENSY_4_0, 1> {
       pin_t::A0, pin_t::A1, pin_t::A2, pin_t::A3, pin_t::A4,  pin_t::A5,
       pin_t::A6, pin_t::A7, pin_t::A8, pin_t::A9, pin_t::A12, pin_t::A13};
 
+  static constexpr uint8_t pins2int[num_pins] = {0, 1, 2, 3, 4,  5,
+                                                 6, 7, 8, 9, 12, 13};
+
   static constexpr uint8_t channel2sc1a[num_pins] = {
       7, 8, 12, 11, 6, 5, 15, 0, 13, 14, // A0-A9
       3, 4                               // A12, A13
@@ -68,8 +75,89 @@ template <> struct pin_info_t<board_t::TEENSY_4_0, 1> {
 };
 // make linker happy
 constexpr uint8_t pin_info_t<board_t::TEENSY_4_0, 1>::channel2sc1a[];
+constexpr uint8_t pin_info_t<board_t::TEENSY_4_0, 1>::pins2int[];
 constexpr pin_info_t<board_t::TEENSY_4_0, 1>::pin_t
     pin_info_t<board_t::TEENSY_4_0, 1>::pins[];
+
+template <> struct pin_info_t<board_t::TEENSY_4_1, 0> {
+  static constexpr uint8_t num_pins = 14;
+
+  enum class pin_t : uint8_t {
+    A0 = 0,
+    A1,
+    A2,
+    A3,
+    A4,
+    A5,
+    A6,
+    A7,
+    A8,
+    A9,
+    A10,
+    A11,
+    A16,
+    A17
+  };
+
+  static constexpr pin_t pins[num_pins] = {
+      pin_t::A0,  pin_t::A1,  pin_t::A2,  pin_t::A3, pin_t::A4,
+      pin_t::A5,  pin_t::A6,  pin_t::A7,  pin_t::A8, pin_t::A9,
+      pin_t::A10, pin_t::A11, pin_t::A16, pin_t::A17};
+
+  static constexpr uint8_t pins2int[num_pins] = {0, 1, 2, 3,  4,  5,  6,
+                                                 7, 8, 9, 10, 11, 16, 17};
+
+  static constexpr uint8_t channel2sc1a[num_pins] = {
+      7, 8, 12, 11, 6, 5, 15, 0, 13, 14, // A0-A9
+      1, 2,                              // A10, A11
+      9, 10                              // A16, A17
+  };
+};
+// make linker happy
+constexpr uint8_t pin_info_t<board_t::TEENSY_4_1, 0>::channel2sc1a[];
+constexpr uint8_t pin_info_t<board_t::TEENSY_4_1, 0>::pins2int[];
+constexpr pin_info_t<board_t::TEENSY_4_1, 0>::pin_t
+    pin_info_t<board_t::TEENSY_4_1, 0>::pins[];
+
+template <> struct pin_info_t<board_t::TEENSY_4_1, 1> {
+  static constexpr uint8_t num_pins = 16;
+
+  enum class pin_t : uint8_t {
+    A0 = 0,
+    A1,
+    A2,
+    A3,
+    A4,
+    A5,
+    A6,
+    A7,
+    A8,
+    A9,
+    A12,
+    A13,
+    A14,
+    A15,
+    A16,
+    A17,
+  };
+  static constexpr pin_t pins[num_pins] = {
+      pin_t::A0,  pin_t::A1,  pin_t::A2,  pin_t::A3, pin_t::A4,  pin_t::A5,
+      pin_t::A6,  pin_t::A7,  pin_t::A8,  pin_t::A9, pin_t::A12, pin_t::A13,
+      pin_t::A14, pin_t::A15, pin_t::A16, pin_t::A17};
+
+  static constexpr uint8_t pins2int[num_pins] = {0, 1, 2,  3,  4,  5,  6,  7,
+                                                 8, 9, 12, 13, 14, 15, 16, 17};
+
+  static constexpr uint8_t channel2sc1a[num_pins] = {
+      7, 8, 12, 11, 6, 5, 15, 0, 13, 14, // A0-A9
+      3, 4, 1,  2,  9, 10                // A12-A17
+  };
+};
+// make linker happy
+constexpr uint8_t pin_info_t<board_t::TEENSY_4_1, 1>::channel2sc1a[];
+constexpr uint8_t pin_info_t<board_t::TEENSY_4_1, 1>::pins2int[];
+constexpr pin_info_t<board_t::TEENSY_4_1, 1>::pin_t
+    pin_info_t<board_t::TEENSY_4_1, 1>::pins[];
 
 // Register definitions
 template <> struct adc_base_addr<board_t::TEENSY_4_0, 0> {
@@ -177,5 +265,9 @@ template <int adc_num> struct adc_module_reg_t<board_t::TEENSY_4_0, adc_num> {
   };
 
 }; // struct adc_module
+
+template <int adc_num>
+struct adc_module_reg_t<board_t::TEENSY_4_1, adc_num>
+    : adc_module_reg_t<board_t::TEENSY_4_0, adc_num> {};
 
 }; // namespace adc
