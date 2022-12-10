@@ -10,12 +10,14 @@ template <board_t board, uint8_t adc_num> struct adc_module_t {
   using pin_info = pin_info_t<board, adc_num>;
   using pin_t = typename pin_info::pin_t;
 
+  static constexpr uint8_t pin2int(pin_t pin) {
+    return pin_info::pin2int[static_cast<uint8_t>(pin)];
+  }
+
   static void init() {}
 
   static void start_measurement(pin_t pin) {
-    const uint8_t sc1a_channel =
-        pin_info::channel2sc1a[static_cast<uint8_t>(pin)];
-    adc_module_reg::adch::write(sc1a_channel);
+    adc_module_reg::adch::write(static_cast<uint8_t>(pin));
   }
 
   static value_t read_measurement() { return adc_module_reg::value0::read(); }

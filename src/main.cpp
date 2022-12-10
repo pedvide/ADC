@@ -48,9 +48,11 @@ void loop() {
 
   for (auto pin : adc::adc0::pin_info::pins) {
     value1 = adc::adc0::analogRead(pin);
-    Serial.printf("Pin A%d: %d \n", adc::adc0::pin_info::pins2int[(int)pin],
-                  value1);
+    Serial.printf("Pin A%d: %d \n", adc::adc0::pin2int(pin), value1);
   }
+
+  // value1 = adc::adc0::analogRead(adc::adc0::pin_t::A1);
+  // value2 = adc::adc0::pin2int(adc::adc0::pin_t::A1);
 
   // Serial.print("ADC1 ADC_CFG_ADSTS: ");
   // Serial.println((ADC1_CFG & ADC_CFG_ADSTS(0x03)) >> 8, HEX);
