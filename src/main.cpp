@@ -9,26 +9,6 @@
 
 int readPin = A2; // ADC0
 
-void print_ADC_regs() {
-  Serial.print("ADC1 H0: ");
-  Serial.println(ADC1_HC0, HEX);
-
-  Serial.print("ADC1 HS: ");
-  Serial.println(ADC1_HS, HEX);
-
-  Serial.print("ADC1 R0: ");
-  Serial.println(ADC1_R0, HEX);
-
-  Serial.print("ADC1 CFG: ");
-  Serial.println(ADC1_CFG, HEX);
-
-  Serial.print("ADC1 GC: ");
-  Serial.println(ADC1_GC, HEX);
-
-  Serial.print("ADC1 GS: ");
-  Serial.println(ADC1_GS, HEX);
-}
-
 void setup() {
 
   pinMode(LED_BUILTIN, OUTPUT);
