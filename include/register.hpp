@@ -1,3 +1,4 @@
+#pragma once
 /**
 From https://github.com/kensmith/cortex-from-scratch/blob/master/reg_t.hpp
 */
