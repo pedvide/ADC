@@ -2,7 +2,7 @@
 
 #include "adc_module.hpp"
 #include "common_defs.hpp"
-#include "teensy4.hpp"
+#include "teensy4x.hpp"
 
 namespace adc {
 
