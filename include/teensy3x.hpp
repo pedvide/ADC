@@ -8,6 +8,10 @@ Specializations for Teensy 3.x: 3.0, 3.1, 3.2, 3.4, 3.5
 
 namespace adc {
 
+template <> struct traits_t<board_t::TEENSY_3_0> {
+  static constexpr bool has_differential = true;
+};
+
 template <> struct pin_info_t<board_t::TEENSY_3_0, 0> {
   static constexpr uint8_t num_pins = 12;
 
@@ -26,12 +30,15 @@ template <> struct pin_info_t<board_t::TEENSY_3_0, 0> {
     A11 = 19,
     A12 = 3,
     A13 = 21,
+    // Other sources
     TEMP_SENSOR = 26,
     VREF_OUT = 22,
     BANDGAP = 27,
     VREFH = 29,
     VREFL = 30
   };
+
+  enum class diff_pin_t : uint8_t { A10_11 = 0, A12_13 = 3 };
 
   static constexpr pin_t pins[] = {
       pin_t::A0,  pin_t::A1,  pin_t::A2,  pin_t::A3, pin_t::A4,
@@ -66,6 +73,7 @@ template <> struct pin_info_t<board_t::TEENSY_3_2, 0> {
     A12 = 3,
     // A13 not connected as a single-ended pin
     A14 = 23,
+    // Other sources
     TEMP_SENSOR = 26,
     VREF_OUT = 22,
     BANDGAP = 27,
@@ -105,9 +113,10 @@ template <int adc_num> struct adc_module_reg_t<board_t::TEENSY_3_0, adc_num> {
     using diff = reg_t<rw_t, direct_access_t, addr, ADC_SC1_DIFF>;
     using adch = reg_t<rw_t, direct_access_t, addr, ADC_SC1_ADCH(31)>;
   };
-  using aien = typename sc1a::aien;
-  using adch = typename sc1a::adch;
   using coco0 = typename sc1a::coco0;
+  using aien = typename sc1a::aien;
+  using diff = typename sc1a::diff;
+  using adch = typename sc1a::adch;
 
   struct cfg1 {
     static constexpr address_t addr = base_addr + 0x08;

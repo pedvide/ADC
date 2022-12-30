@@ -31,6 +31,9 @@ void loop() {
     Serial.printf("Pin A%d: %d \n", adc::adc0::pin2int(pin), value1);
   }
 
+  // adc::differential_t<adc::board, 0>::differentialMode();
+  adc::adc0::analogReadDifferential(adc::adc0::diff_pin_t::A10_11);
+
   // value1 = adc::adc0::analogRead(adc::adc0::pin_t::A1);
   // value2 = adc::adc0::pin2int(adc::adc0::pin_t::A1);
 
