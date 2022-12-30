@@ -16,7 +16,6 @@ template <> struct adc_base_addr<board_t::TEENSY_3_0, 0> {
 };
 
 template <int adc_num> struct adc_module_reg_t<board_t::TEENSY_3_0, adc_num> {
-  static_assert(adc_num == 0, "invalid adc_num");
 
   static constexpr address_t base_addr =
       adc_base_addr<board_t::TEENSY_3_0, adc_num>::value;
