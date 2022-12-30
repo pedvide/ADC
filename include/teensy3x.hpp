@@ -10,15 +10,17 @@ Specializations for Teensy 3.x: 3.0, 3.1, 3.2, 3.4, 3.5
 
 namespace adc {
 
-// Register definitions
-template <> struct adc_base_addr<board_t::TEENSY_3_0, 0> {
-  static constexpr address_t value = 0x4003B000;
-};
+template <board_t board, int adc_num>
+struct adc_module_reg_t<
+    board, adc_num,
+    typename std::enable_if<board == board_t::TEENSY_3_0 ||
+                            board == board_t::TEENSY_3_2>::type> {
+  static_assert((board == board_t::TEENSY_3_0 && adc_num == 0) ||
+                    (board == board_t::TEENSY_3_2 &&
+                     (0 <= adc_num && adc_num <= 1)),
+                "invalid adc_num");
 
-template <int adc_num> struct adc_module_reg_t<board_t::TEENSY_3_0, adc_num> {
-
-  static constexpr address_t base_addr =
-      adc_base_addr<board_t::TEENSY_3_0, adc_num>::value;
+  static constexpr address_t base_addr = adc_base_addr<board, adc_num>::value;
 
   struct sc1a {
     static constexpr address_t addr = base_addr + 0x00;
@@ -112,10 +114,5 @@ template <int adc_num> struct adc_module_reg_t<board_t::TEENSY_3_0, adc_num> {
   };
 
 }; // struct adc_module
-
-// All regs and addresses are the same as Teensy 3.0
-template <int adc_num>
-struct adc_module_reg_t<board_t::TEENSY_3_2, adc_num>
-    : adc_module_reg_t<board_t::TEENSY_3_0, adc_num> {};
 
 }; // namespace adc

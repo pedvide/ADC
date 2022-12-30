@@ -38,12 +38,8 @@ template <uint8_t adc_num> struct adc_base_addr<board_t::TEENSY_3_0, adc_num> {
   static_assert(adc_num == 0, "invalid adc_num");
 };
 
-template <board_t board, int adc_num> struct adc_module_reg_t {
+template <board_t board, int adc_num, typename = void> struct adc_module_reg_t {
   static_assert(0 <= adc_num && adc_num <= 1, "invalid adc_num");
-};
-template <uint8_t adc_num>
-struct adc_module_reg_t<board_t::TEENSY_3_0, adc_num> {
-  static_assert(adc_num == 0, "invalid adc_num");
 };
 
 }; // namespace adc
