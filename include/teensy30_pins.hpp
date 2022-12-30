@@ -7,6 +7,10 @@ Specializations for Teensy 3.0
 
 namespace adc {
 
+template <> struct adc_base_addr<board_t::TEENSY_3_0, 0> {
+  static constexpr address_t value = 0x4003B000;
+};
+
 template <> struct traits_t<board_t::TEENSY_3_0> {
   static constexpr bool has_differential = true;
 };
