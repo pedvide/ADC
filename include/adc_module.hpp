@@ -84,6 +84,7 @@ template <board_t board, uint8_t adc_num> struct adc_module_t {
 
   //! \name Measurement functions
   //!@{
+
   /**
    * @brief Start one single-ended measurement and return it
    *
@@ -108,6 +109,7 @@ template <board_t board, uint8_t adc_num> struct adc_module_t {
         static_cast<pin_t>(pin));
   }
   //! \endcond
+
   //!@}
 
   //! \cond internal

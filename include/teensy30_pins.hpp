@@ -15,34 +15,46 @@ template <> struct traits_t<board_t::TEENSY_3_0> {
   static constexpr bool has_differential = true;
 };
 
+/**
+ * @brief Information about the pins available to this module
+ *
+ */
 template <> struct pin_info_t<board_t::TEENSY_3_0, 0> {
   static constexpr uint8_t num_pins = 12;
 
+  /**
+   * @brief Pins available to this module
+   */
   enum class pin_t : uint8_t {
-    A0 = 5,
-    A1 = 14,
-    A2 = 8,
-    A3 = 9,
-    A4 = 13,
-    A5 = 12,
-    A6 = 6,
-    A7 = 7,
-    A8 = 15,
-    A9 = 4,
-    A10 = 0,
-    A11 = 19,
-    A12 = 3,
-    A13 = 21,
+    A0 = 5,   ///< A0
+    A1 = 14,  ///< A1
+    A2 = 8,   ///< A2
+    A3 = 9,   ///< A3
+    A4 = 13,  ///< A4
+    A5 = 12,  ///< A5
+    A6 = 6,   ///< A6
+    A7 = 7,   ///< A7
+    A8 = 15,  ///< A8
+    A9 = 4,   ///< A9
+    A10 = 0,  ///< A10
+    A11 = 19, ///< A11
+    A12 = 3,  ///< A12
+    A13 = 21, ///< A13
     // Other sources
-    TEMP_SENSOR = 26,
-    VREF_OUT = 22,
-    BANDGAP = 27,
-    VREFH = 29,
-    VREFL = 30
+    TEMP_SENSOR = 26, ///< Temperature sensor
+    VREF_OUT = 22,    ///< Voltage reference
+    BANDGAP = 27,     ///< Bandgap
+    VREFH = 29,       ///< Voltage reference high
+    VREFL = 30        ///< Voltage reference low
   };
 
-  enum class diff_pin_t : uint8_t { A10_11 = 0, A12_13 = 3 };
+  //! Differential pins
+  enum class diff_pin_t : uint8_t {
+    A10_11 = 0, ///< Differential A10-A11
+    A12_13 = 3  ///< Differential A12-A13
+  };
 
+  //! List of pins
   static constexpr pin_t pins[] = {
       pin_t::A0,  pin_t::A1,  pin_t::A2,  pin_t::A3, pin_t::A4,
       pin_t::A5,  pin_t::A6,  pin_t::A7,  pin_t::A8, pin_t::A9,
