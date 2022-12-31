@@ -12,6 +12,14 @@ namespace adc {
 
 using namespace reg;
 
+//! \cond internal
+
+/**
+ * @brief Defines the ADC registers for the Teensy 3.x boards
+ *
+ * @tparam board
+ * @tparam adc_num
+ */
 template <board_t board, int adc_num>
 struct adc_module_reg_t<
     board, adc_num,
@@ -116,5 +124,7 @@ struct adc_module_reg_t<
   };
 
 }; // struct adc_module
+
+//! \endcond
 
 }; // namespace adc
