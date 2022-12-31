@@ -80,7 +80,7 @@ template <board_t board, uint8_t adc_num> struct adc_module_t {
   };
 
   struct differential_t {
-    template <typename = void>
+    template <typename traits = traits_t<board>>
     static typename std::enable_if<traits::has_differential, void>::type
     single_or_differential() {
       adc_module_reg::diff::set();
