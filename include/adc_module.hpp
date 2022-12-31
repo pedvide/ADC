@@ -33,7 +33,7 @@ template <board_t board, uint8_t adc_num> struct adc_module_t {
             typename ended_policy_t>
   static int measure(pin_t pin) {
     ended_policy_t::single_or_differential();
-    shot_policy_t::single_or_continuous();
+    shot_policy_t::one_or_continuous();
     start_measurement(pin);
     return return_policy_t::return_or_wait();
   }
@@ -69,14 +69,10 @@ template <board_t board, uint8_t adc_num> struct adc_module_t {
   };
 
   struct single_shot_t {
-    static void single_or_continuous() {
-      // set single shot
-    }
+    static void one_or_continuous() { adc_module_reg::adco::clear(); }
   };
   struct continuous_shot_t {
-    static void single_or_continuous() {
-      // set continuous shot
-    }
+    static void one_or_continuous() { adc_module_reg::adco::set(); }
   };
 
   struct single_ended_t {
