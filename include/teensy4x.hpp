@@ -242,7 +242,7 @@ template <int adc_num> struct adc_module_reg_t<board_t::TEENSY_4_0, adc_num> {
 }; // struct adc_module
 
 // All regs and addresses asre the same as Teensy 4.0
-template <int adc_num>
+template <uint8_t adc_num>
 struct adc_module_reg_t<board_t::TEENSY_4_1, adc_num>
     : adc_module_reg_t<board_t::TEENSY_4_0, adc_num> {};
 

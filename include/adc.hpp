@@ -17,6 +17,10 @@
 #error "Board not supported!"
 #endif
 
+/**
+ * @brief Main ADC namespace, contains everything in this library
+ *
+ */
 namespace adc {
 
 #if defined(__MK20DX128__) // Teensy 3.0
@@ -39,7 +43,11 @@ static constexpr board_t board = board_t::TEENSY_4_0;
 #error "Board not supported!"
 #endif
 
+//! ADC0 module
 using adc0 = adc_module_t<board, 0>;
+#if !defined(__MK20DX128__)
+//! ADC1 module
 using adc1 = adc_module_t<board, 1>;
+#endif
 
 }; // namespace adc
