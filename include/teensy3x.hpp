@@ -10,6 +10,8 @@ Specializations for Teensy 3.x: 3.0, 3.1, 3.2, 3.4, 3.5
 
 namespace adc {
 
+using namespace reg;
+
 template <board_t board, int adc_num>
 struct adc_module_reg_t<
     board, adc_num,
