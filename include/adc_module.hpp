@@ -90,7 +90,7 @@ template <board_t board, uint8_t adc_num> struct adc_module_base_t {
    * @return The value
    */
   static int analogRead(pin_t pin) {
-    return measure<wait_for_measurement_t, single_shot_t, single_ended_t>(pin);
+    return measure<wait_for_measurement_t, one_shot_t, single_ended_t>(pin);
   }
 
   //!@}
@@ -108,7 +108,7 @@ template <board_t board, uint8_t adc_num> struct adc_module_base_t {
     static void return_or_wait() { return; }
   };
 
-  struct single_shot_t {
+  struct one_shot_t {
     static void one_or_continuous() { adc_module_reg::adco::clear(); }
   };
   struct continuous_shot_t {
@@ -150,7 +150,7 @@ struct adc_differential_t<board, adc_num, true> {
   static int analogReadDifferential(diff_pin_t pin) {
     return adc_module_base::template measure<
         typename adc_module_base::wait_for_measurement_t,
-        typename adc_module_base::single_shot_t, differential_t>(
+        typename adc_module_base::one_shot_t, differential_t>(
         static_cast<typename adc_module_base::pin_t>(pin));
   }
 
