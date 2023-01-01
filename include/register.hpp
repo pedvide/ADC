@@ -106,7 +106,7 @@ struct direct_access_t {
    * @param mask
    */
   static void set(volatile address_t *address, address_t mask) {
-    *address = mask;
+    *address |= mask;
   }
 };
 
