@@ -115,6 +115,7 @@ template <board_t board, uint8_t adc_num> struct adc_module_base_t {
     static void one_or_continuous() { adc_module_reg::adco::set(); }
   };
 
+  // TODO: simplify with `if constexpr` with next teensy update to gcc 11
   struct single_ended_t {
     template <typename traits = traits_t<board>,
               std::enable_if_t<traits::has_differential> * = nullptr>
@@ -129,17 +130,14 @@ template <board_t board, uint8_t adc_num> struct adc_module_base_t {
   //! \endcond
 };
 
-template <board_t board, uint8_t adc_num, bool enable>
-struct adc_differential_t {};
+template <typename adc_module_t, bool enable>
+struct adc_differential_t : adc_module_t {};
 
-template <board_t board, uint8_t adc_num>
-struct adc_differential_t<board, adc_num, true> {
+template <typename adc_module_t>
+struct adc_differential_t<adc_module_t, true> : adc_module_t {
 
-  //! \cond internal
-  using adc_module_base = adc_module_base_t<board, adc_num>;
-  //! \endcond
   //! Pins available to this module
-  using diff_pin_t = typename adc_module_base::pin_info::diff_pin_t;
+  using diff_pin_t = typename adc_module_t::pin_info::diff_pin_t;
 
   /**
    * @brief Start one differential measurement and return it
@@ -148,21 +146,21 @@ struct adc_differential_t<board, adc_num, true> {
    * @return The value
    */
   static int analogReadDifferential(diff_pin_t pin) {
-    return adc_module_base::template measure<
-        typename adc_module_base::wait_for_measurement_t,
-        typename adc_module_base::one_shot_t, differential_t>(
-        static_cast<typename adc_module_base::pin_t>(pin));
+    return adc_module_t::template measure<
+        typename adc_module_t::wait_for_measurement_t,
+        typename adc_module_t::one_shot_t, differential_t>(
+        static_cast<typename adc_module_t::pin_t>(pin));
   }
 
   struct differential_t {
     static void single_or_differential() {
-      adc_module_base::adc_module_reg::diff::set();
+      adc_module_t::adc_module_reg::diff::set();
     }
   };
 };
 
 template <board_t board, uint8_t adc_num>
-struct adc_module_t
-    : adc_module_base_t<board, adc_num>,
-      adc_differential_t<board, adc_num, traits_t<board>::has_differential> {};
+using adc_module_t = adc_differential_t<adc_module_base_t<board, adc_num>,
+                                        traits_t<board>::has_differential>;
+
 }; // namespace adc
