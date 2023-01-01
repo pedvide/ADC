@@ -11,14 +11,11 @@ namespace adc {
  * @tparam board
  * @tparam adc_num
  */
-template <board_t board, uint8_t adc_num> struct adc_module_t {
+template <board_t board, uint8_t adc_num> struct adc_module_base_t {
 
   //! \cond internal
   using adc_module_reg = adc_module_reg_t<board, adc_num>;
   using pin_info = pin_info_t<board, adc_num>;
-  //! \cond differential
-  using diff_pin_t = typename pin_info::diff_pin_t;
-  //! \endcond
   using traits = traits_t<board>;
   //! \endcond
   //! Pins available to this module
@@ -95,21 +92,6 @@ template <board_t board, uint8_t adc_num> struct adc_module_t {
     return measure<wait_for_measurement_t, single_shot_t, single_ended_t>(pin);
   }
 
-  //! \cond differential
-  /**
-   * @brief Start one differential measurement and return it
-   *
-   * @param pin
-   * @return The value
-   */
-  static int analogReadDifferential(diff_pin_t pin) {
-    static_assert(traits::has_differential,
-                  "This board doesn't have differential capabilities");
-    return measure<wait_for_measurement_t, single_shot_t, differential_t>(
-        static_cast<pin_t>(pin));
-  }
-  //! \endcond
-
   //!@}
 
   //! \cond internal
@@ -136,14 +118,43 @@ template <board_t board, uint8_t adc_num> struct adc_module_t {
     static void single_or_differential() { adc_module_reg::diff::clear(); }
   };
 
-  struct differential_t {
-    template <typename traits = traits_t<board>>
-    static typename std::enable_if<traits::has_differential, void>::type
-    single_or_differential() {
-      adc_module_reg::diff::set();
-    }
-  };
   //! \endcond
 };
 
+template <board_t board, uint8_t adc_num, bool enable>
+struct adc_differential_t {};
+
+template <board_t board, uint8_t adc_num>
+struct adc_differential_t<board, adc_num, true> {
+
+  //! \cond internal
+  using adc_module_base = adc_module_base_t<board, adc_num>;
+  //! \endcond
+  //! Pins available to this module
+  using diff_pin_t = typename adc_module_base::pin_info::diff_pin_t;
+
+  /**
+   * @brief Start one differential measurement and return it
+   *
+   * @param pin
+   * @return The value
+   */
+  static int analogReadDifferential(diff_pin_t pin) {
+    return adc_module_base::template measure<
+        typename adc_module_base::wait_for_measurement_t,
+        typename adc_module_base::single_shot_t, differential_t>(
+        static_cast<typename adc_module_base::pin_t>(pin));
+  }
+
+  struct differential_t {
+    static void single_or_differential() {
+      adc_module_base::adc_module_reg::diff::set();
+    }
+  };
+};
+
+template <board_t board, uint8_t adc_num>
+struct adc_module_t
+    : adc_module_base_t<board, adc_num>,
+      adc_differential_t<board, adc_num, traits_t<board>::has_differential> {};
 }; // namespace adc
