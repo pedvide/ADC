@@ -5,146 +5,23 @@ Specializations for Teensy 4 and 4.1
 
 #include "common_defs.hpp"
 #include "register.hpp"
+#include "teensy40_pins.hpp"
+#include "teensy41_pins.hpp"
 
 namespace adc {
 
-template <> struct pin_info_t<board_t::TEENSY_4_0, 0> {
-  static constexpr uint8_t num_pins = 12;
-
-  enum class pin_t : uint8_t {
-    A0 = 7,
-    A1 = 8,
-    A2 = 12,
-    A3 = 11,
-    A4 = 6,
-    A5 = 5,
-    A6 = 15,
-    A7 = 0,
-    A8 = 13,
-    A9 = 14,
-    A10 = 1,
-    A11 = 2,
-  };
-
-  static constexpr pin_t pins[num_pins] = {
-      pin_t::A0, pin_t::A1, pin_t::A2, pin_t::A3, pin_t::A4,  pin_t::A5,
-      pin_t::A6, pin_t::A7, pin_t::A8, pin_t::A9, pin_t::A10, pin_t::A11};
-
-  static constexpr uint8_t pin2int[] = {7, 10,  11,  255, 255, 5, 4, 0,
-                                        1, 255, 255, 3,   2,   8, 9};
-};
-// make linker happy
-constexpr uint8_t pin_info_t<board_t::TEENSY_4_0, 0>::pin2int[];
-constexpr pin_info_t<board_t::TEENSY_4_0, 0>::pin_t
-    pin_info_t<board_t::TEENSY_4_0, 0>::pins[];
-
-template <> struct pin_info_t<board_t::TEENSY_4_0, 1> {
-  static constexpr uint8_t num_pins = 12;
-
-  enum class pin_t : uint8_t {
-    A0 = 7,
-    A1 = 8,
-    A2 = 12,
-    A3 = 11,
-    A4 = 6,
-    A5 = 5,
-    A6 = 15,
-    A7 = 0,
-    A8 = 13,
-    A9 = 14,
-    A12 = 3,
-    A13 = 4,
-  };
-  static constexpr pin_t pins[num_pins] = {
-      pin_t::A0, pin_t::A1, pin_t::A2, pin_t::A3, pin_t::A4,  pin_t::A5,
-      pin_t::A6, pin_t::A7, pin_t::A8, pin_t::A9, pin_t::A12, pin_t::A13};
-
-  static constexpr uint8_t pin2int[] = {7, 255, 255, 12, 13, 5, 4, 0,
-                                        1, 255, 255, 3,  2,  8, 9};
-};
-// make linker happy
-constexpr uint8_t pin_info_t<board_t::TEENSY_4_0, 1>::pin2int[];
-constexpr pin_info_t<board_t::TEENSY_4_0, 1>::pin_t
-    pin_info_t<board_t::TEENSY_4_0, 1>::pins[];
-
-template <> struct pin_info_t<board_t::TEENSY_4_1, 0> {
-  static constexpr uint8_t num_pins = 14;
-
-  enum class pin_t : uint8_t {
-    A0 = 7,
-    A1 = 8,
-    A2 = 12,
-    A3 = 11,
-    A4 = 6,
-    A5 = 5,
-    A6 = 15,
-    A7 = 0,
-    A8 = 13,
-    A9 = 14,
-    A10 = 1,
-    A11 = 2,
-    A16 = 9,
-    A17 = 10
-  };
-
-  static constexpr pin_t pins[num_pins] = {
-      pin_t::A0,  pin_t::A1,  pin_t::A2,  pin_t::A3, pin_t::A4,
-      pin_t::A5,  pin_t::A6,  pin_t::A7,  pin_t::A8, pin_t::A9,
-      pin_t::A10, pin_t::A11, pin_t::A16, pin_t::A17};
-
-  static constexpr uint8_t pin2int[] = {7, 10, 11, 255, 255, 5, 4, 0,
-                                        1, 16, 17, 3,   2,   8, 9, 6};
-};
-// make linker happy
-constexpr uint8_t pin_info_t<board_t::TEENSY_4_1, 0>::pin2int[];
-constexpr pin_info_t<board_t::TEENSY_4_1, 0>::pin_t
-    pin_info_t<board_t::TEENSY_4_1, 0>::pins[];
-
-template <> struct pin_info_t<board_t::TEENSY_4_1, 1> {
-  static constexpr uint8_t num_pins = 16;
-
-  enum class pin_t : uint8_t {
-    A0 = 7,
-    A1 = 8,
-    A2 = 12,
-    A3 = 11,
-    A4 = 6,
-    A5 = 5,
-    A6 = 15,
-    A7 = 0,
-    A8 = 13,
-    A9 = 14,
-    A12 = 3,
-    A13 = 4,
-    A14 = 1,
-    A15 = 2,
-    A16 = 9,
-    A17 = 10
-  };
-  static constexpr pin_t pins[num_pins] = {
-      pin_t::A0,  pin_t::A1,  pin_t::A2,  pin_t::A3, pin_t::A4,  pin_t::A5,
-      pin_t::A6,  pin_t::A7,  pin_t::A8,  pin_t::A9, pin_t::A12, pin_t::A13,
-      pin_t::A14, pin_t::A15, pin_t::A16, pin_t::A17};
-
-  static constexpr uint8_t pin2int[] = {7, 14, 15, 12, 13, 5, 4, 0,
-                                        1, 16, 17, 3,  2,  8, 9};
-};
-// make linker happy
-constexpr uint8_t pin_info_t<board_t::TEENSY_4_1, 1>::pin2int[];
-constexpr pin_info_t<board_t::TEENSY_4_1, 1>::pin_t
-    pin_info_t<board_t::TEENSY_4_1, 1>::pins[];
+using namespace reg;
 
 // Register definitions
-template <> struct adc_base_addr<board_t::TEENSY_4_0, 0> {
-  static constexpr address_t value = 0x400C4000;
-};
-template <> struct adc_base_addr<board_t::TEENSY_4_0, 1> {
-  static constexpr address_t value = 0x400C8000;
-};
 
-template <int adc_num> struct adc_module_reg_t<board_t::TEENSY_4_0, adc_num> {
-  static constexpr address_t base_addr =
-      adc_base_addr<board_t::TEENSY_4_0, adc_num>::value;
+template <board_t board, uint8_t adc_num>
+struct adc_module_reg_t<
+    board, adc_num,
+    typename std::enable_if<board == board_t::TEENSY_4_0 ||
+                            board == board_t::TEENSY_4_1>::type> {
+  static_assert(adc_num <= 1, "invalid adc_num");
+
+  static constexpr address_t base_addr = adc_base_addr<board, adc_num>::value;
 
   struct hc0 {
     using aien = reg_t<rw_t, direct_access_t, base_addr + 0x00, ADC_HC_AIEN>;
@@ -240,10 +117,5 @@ template <int adc_num> struct adc_module_reg_t<board_t::TEENSY_4_0, adc_num> {
   };
 
 }; // struct adc_module
-
-// All regs and addresses asre the same as Teensy 4.0
-template <uint8_t adc_num>
-struct adc_module_reg_t<board_t::TEENSY_4_1, adc_num>
-    : adc_module_reg_t<board_t::TEENSY_4_0, adc_num> {};
 
 }; // namespace adc

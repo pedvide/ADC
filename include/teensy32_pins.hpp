@@ -38,8 +38,6 @@ template <> struct pin_info_t<board_t::TEENSY_3_2, 0> {
     VREFL = 30
   };
 
-  enum class diff_pin_t : uint8_t {};
-
   static constexpr pin_t pins[] = {
       pin_t::A0,  pin_t::A1,  pin_t::A2,  pin_t::A3, pin_t::A4,
       pin_t::A5,  pin_t::A6,  pin_t::A7,  pin_t::A8, pin_t::A9,
