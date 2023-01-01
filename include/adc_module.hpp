@@ -71,7 +71,8 @@ template <board_t board, uint8_t adc_num> struct adc_module_base_t {
    */
   template <typename return_policy_t, typename shot_policy_t,
             typename ended_policy_t>
-  static int measure(pin_t pin) {
+  static auto measure(pin_t pin)
+      -> decltype(return_policy_t::return_or_wait()) {
     ended_policy_t::single_or_differential();
     shot_policy_t::one_or_continuous();
     start_measurement(pin);
