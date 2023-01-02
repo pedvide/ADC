@@ -122,6 +122,28 @@ struct adc_module_reg_t<
     using offset = reg_t<rw_t, direct_access_t, addr, 0xFFF>;
   };
 
+  struct pgapg {
+    static constexpr address_t addr = base_addr + 0x2C;
+    using pg = reg_t<rw_t, direct_access_t, addr, 0xFFF>;
+  };
+
+  struct pgamg {
+    static constexpr address_t addr = base_addr + 0x30;
+    using mg = reg_t<rw_t, direct_access_t, addr, 0xFFF>;
+  };
+
+  /// TODO: plus- and minus-side general calibration value registers
+
+  struct pga {
+    static constexpr address_t addr = base_addr + 0x50;
+    using pgaen = reg_t<rw_t, direct_access_t, addr, ADC_PGA_PGAEN>;
+    using pgalpb = reg_t<rw_t, direct_access_t, addr, ADC_PGA_PGALPB>;
+    using pgag = reg_t<rw_t, direct_access_t, addr, ADC_PGA_PGAG(15)>;
+  };
+  using pgaen = typename pga::pgaen;
+  using pgalpb = typename pga::pgalpb;
+  using pgag = typename pga::pgag;
+
 }; // struct adc_module
 
 //! \endcond

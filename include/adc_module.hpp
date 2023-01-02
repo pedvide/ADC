@@ -175,6 +175,88 @@ struct adc_differential_t<adc_module_t, true> : adc_module_t {
   //! \endcond
 };
 
+//! \cond internal
+/**
+ * @brief Empty implementation for boards without differential
+ *
+ * @tparam adc_module_t
+ * @tparam enable
+ */
+template <typename adc_module_t, bool enable>
+struct adc_pga_t : adc_module_t {};
+//! \endcond
+
+/**
+ * @brief Implementation of PGA
+ *
+ * @tparam adc_module_t
+ */
+template <typename adc_module_t>
+struct adc_pga_t<adc_module_t, true> : adc_module_t {
+
+  /**
+   * @brief Enables the PGA and sets the gain
+   *
+   *  Use only for signals lower than 1.2 V and only in differential mode
+   *  @param gain can be 1, 2, 4, 8, 16, 32 or 64
+   */
+  static void enablePGA(uint8_t gain) {
+    uint8_t setting;
+    if (gain <= 1) {
+      setting = 0;
+    } else if (gain <= 2) {
+      setting = 1;
+    } else if (gain <= 4) {
+      setting = 2;
+    } else if (gain <= 8) {
+      setting = 3;
+    } else if (gain <= 16) {
+      setting = 4;
+    } else if (gain <= 32) {
+      setting = 5;
+    } else { // 64
+      setting = 6;
+    }
+    adc_module_t::adc_module_reg::pgaen::set();
+    adc_module_t::adc_module_reg::pgag::write(setting);
+  }
+
+  /**
+   * @brief Returns the PGA level
+   * @return PGA level from 1 to 64
+   */
+  static uint8_t getPGA() {
+    const uint8_t setting = adc_module_t::adc_module_reg::pgag::read();
+    if (setting == 0) {
+      return 1;
+    } else if (setting == 1) {
+      return 2;
+    } else if (setting == 2) {
+      return 4;
+    } else if (setting == 3) {
+      return 8;
+    } else if (setting == 4) {
+      return 16;
+    } else if (setting == 5) {
+      return 32;
+    } else if (setting == 6) {
+      return 64;
+    }
+    return 0;
+  }
+
+  /**
+   * @brief Is the PGA function enabled?
+   * @return true or false
+   */
+  static volatile bool isPGAEnabled() {
+    return adc_module_t::adc_module_reg::pgaen::read();
+  }
+
+  //! Disable PGA
+  static void disablePGA() { adc_module_t::adc_module_reg::pgaen::clear(); }
+};
+
 /**
  * @brief ADC module
  *
@@ -182,7 +264,9 @@ struct adc_differential_t<adc_module_t, true> : adc_module_t {
  * @tparam adc_num
  */
 template <board_t board, uint8_t adc_num>
-struct adc_module_t : adc_differential_t<adc_module_base_t<board, adc_num>,
-                                         traits_t<board>::differential> {};
+struct adc_module_t
+    : adc_pga_t<adc_module_base_t<board, adc_num>, traits_t<board>::pga>,
+      adc_differential_t<adc_module_base_t<board, adc_num>,
+                         traits_t<board>::differential> {};
 
 }; // namespace adc

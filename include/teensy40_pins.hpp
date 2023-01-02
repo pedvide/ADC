@@ -9,6 +9,7 @@ namespace adc {
 
 template <> struct traits_t<board_t::TEENSY_4_0> {
   static constexpr bool differential = false;
+  static constexpr bool pga = false;
 };
 
 // ADC0

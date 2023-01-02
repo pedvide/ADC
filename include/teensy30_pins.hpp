@@ -9,6 +9,7 @@ namespace adc {
 
 template <> struct traits_t<board_t::TEENSY_3_0> {
   static constexpr bool differential = true;
+  static constexpr bool pga = true;
 };
 
 template <> struct adc_base_addr<board_t::TEENSY_3_0, 0> {
