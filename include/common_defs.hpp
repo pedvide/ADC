@@ -27,8 +27,19 @@ template <uint8_t adc_num> struct pin_info_t<board_t::TEENSY_3_0, adc_num> {
   static_assert(adc_num == 0, "invalid adc_num");
 };
 
-// Don't define defaults
-template <board_t board> struct traits_t {};
+// Defaults: all false
+template <board_t board> struct traits_t {
+  //! Differential inputs
+  static constexpr bool differential = false;
+  //! DMA to trigger ADC
+  static constexpr bool dma = false;
+  //! Programmable Gain Amplifier
+  static constexpr bool pga = false;
+  //! Programmable Delay Block
+  static constexpr bool pdb = false;
+  //! Quad Timer
+  static constexpr bool quad_timer = false;
+};
 
 template <board_t board, uint8_t adc_num> struct adc_base_addr {
   static_assert(adc_num <= 1, "invalid adc_num");

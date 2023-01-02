@@ -118,12 +118,12 @@ template <board_t board, uint8_t adc_num> struct adc_module_base_t {
   // TODO: simplify with `if constexpr` with next teensy update to gcc 11
   struct single_ended_t {
     template <typename traits = traits_t<board>,
-              std::enable_if_t<traits::has_differential> * = nullptr>
+              std::enable_if_t<traits::differential> * = nullptr>
     static void single_or_differential() {
       adc_module_reg::diff::clear();
     }
     template <typename traits = traits_t<board>,
-              std::enable_if_t<!traits::has_differential> * = nullptr>
+              std::enable_if_t<!traits::differential> * = nullptr>
     static void single_or_differential() {}
   };
 
@@ -162,6 +162,6 @@ struct adc_differential_t<adc_module_t, true> : adc_module_t {
 
 template <board_t board, uint8_t adc_num>
 using adc_module_t = adc_differential_t<adc_module_base_t<board, adc_num>,
-                                        traits_t<board>::has_differential>;
+                                        traits_t<board>::differential>;
 
 }; // namespace adc

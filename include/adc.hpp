@@ -43,6 +43,8 @@ static constexpr board_t board = board_t::TEENSY_4_0;
 #error "Board not supported!"
 #endif
 
+using traits = traits_t<board>;
+
 //! ADC0 module
 using adc0 = adc_module_t<board, 0>;
 #if !defined(__MK20DX128__)

@@ -7,6 +7,10 @@ Specializations for Teensy 4.1
 
 namespace adc {
 
+template <> struct traits_t<board_t::TEENSY_4_1> {
+  static constexpr bool differential = false;
+};
+
 // ADC0
 
 template <> struct adc_base_addr<board_t::TEENSY_4_1, 0> {
