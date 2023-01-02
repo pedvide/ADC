@@ -161,7 +161,7 @@ struct adc_differential_t<adc_module_t, true> : adc_module_t {
 };
 
 template <board_t board, uint8_t adc_num>
-using adc_module_t = adc_differential_t<adc_module_base_t<board, adc_num>,
-                                        traits_t<board>::differential>;
+struct adc_module_t : adc_differential_t<adc_module_base_t<board, adc_num>,
+                                         traits_t<board>::differential> {};
 
 }; // namespace adc
