@@ -130,6 +130,7 @@ template <board_t board, uint8_t adc_num> struct adc_module_base_t {
   //! \endcond
 };
 
+// Empty implementation for boards without differential
 template <typename adc_module_t, bool enable>
 struct adc_differential_t : adc_module_t {};
 
