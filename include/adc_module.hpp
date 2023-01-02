@@ -6,7 +6,7 @@
 namespace adc {
 
 /**
- * @brief ADC module
+ * @brief ADC module base functionality
  *
  * @tparam board
  * @tparam adc_num
@@ -130,10 +130,22 @@ template <board_t board, uint8_t adc_num> struct adc_module_base_t {
   //! \endcond
 };
 
-// Empty implementation for boards without differential
+//! \cond internal
+/**
+ * @brief Empty implementation for boards without differential
+ *
+ * @tparam adc_module_t
+ * @tparam enable
+ */
 template <typename adc_module_t, bool enable>
 struct adc_differential_t : adc_module_t {};
+//! \endcond
 
+/**
+ * @brief Implementation of differential mode
+ *
+ * @tparam adc_module_t
+ */
 template <typename adc_module_t>
 struct adc_differential_t<adc_module_t, true> : adc_module_t {
 
@@ -153,13 +165,22 @@ struct adc_differential_t<adc_module_t, true> : adc_module_t {
         static_cast<typename adc_module_t::pin_t>(pin));
   }
 
+  //! \cond internal
+  //! Policy for differential mode.
   struct differential_t {
     static void single_or_differential() {
       adc_module_t::adc_module_reg::diff::set();
     }
   };
+  //! \endcond
 };
 
+/**
+ * @brief ADC module
+ *
+ * @tparam board
+ * @tparam adc_num
+ */
 template <board_t board, uint8_t adc_num>
 struct adc_module_t : adc_differential_t<adc_module_base_t<board, adc_num>,
                                          traits_t<board>::differential> {};
